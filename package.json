@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.113.0",
+    "@aws-sdk/util-dynamodb": "^3.113.0",
     "apollo-server": "^3.9.0",
     "graphql": "^16.5.0",
     "require-dir": "^1.2.0"

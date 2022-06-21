@@ -6,6 +6,7 @@ const query = gql`
         project(
             limit: Int
         ): [ProjectData]
+        users: [User]
     }
 `;
 
