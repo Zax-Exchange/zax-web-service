@@ -1,7 +1,7 @@
 const { gql } = require("apollo-server");
 
-const projectData = gql`
-  type ProjectData {
+const project = gql`
+  type Project {
     customerName: String,
     projectName: String,
     estimatedTime: String,
@@ -11,4 +11,4 @@ const projectData = gql`
   }
 `;
 
-module.exports = projectData;
+module.exports = project;
