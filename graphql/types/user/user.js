@@ -16,6 +16,12 @@ const user = gql`
     companyId: Int
     isAdmin: Boolean
   }
+
+  input UpdateUserInput {
+    id: Int
+    name: String
+    email: String
+  }
 `;
 
 module.exports = user;
