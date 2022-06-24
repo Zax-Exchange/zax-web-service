@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server");
+import { gql } from "apollo-server";
 
 const appNews = gql`
   type AppNews {
@@ -8,4 +8,4 @@ const appNews = gql`
   }
 `;
 
-module.exports = appNews;
+export default appNews;

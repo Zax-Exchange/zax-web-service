@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server");
+import { gql } from "apollo-server";
 
 const project = gql`
   type Project {
@@ -11,4 +11,4 @@ const project = gql`
   }
 `;
 
-module.exports = project;
+export default project;

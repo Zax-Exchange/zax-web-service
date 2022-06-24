@@ -1,8 +1,7 @@
-const appNews = require('./appNews/appNews');
-const getAllUsers = require("./user/getAllUsers");
-const getAllCompanies = require("./company/getAllCompanies");
+import getAllUsers from "./user/getAllUsers.js";
+import getAllCompanies from "./company/getAllCompanies.js";
 
-module.exports = {
+export default {
     getAllUsers,
     getAllCompanies
 };

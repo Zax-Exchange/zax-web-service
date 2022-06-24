@@ -1,7 +1,7 @@
-const createUserApi = require("../../../api/user/createUser");
+import { createUser as createUserApi } from "../../../api/user/userApis.js";
 
 const createUser = (parent, args, context) => {
   return createUserApi(args);
 };
 
-module.exports = createUser;
+export default createUser;

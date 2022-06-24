@@ -1,7 +1,7 @@
-const updateUserApi = require("../../../api/user/updateUser");
+import { updateUser as updateUserApi } from "../../../api/user/userApis.js";
 
 const updateUser = (parent, args, context) => {
   return updateUserApi(args);
 }
 
-module.exports = updateUser;
+export default updateUser;

@@ -1,8 +1,7 @@
-const getAllCompaniesApi = require("../../../api/company/getAllCompanies");
+import { getAllCompanies as getAllCompaniesApi } from "../../../api/company/companyApis.js";
 
 const getAllCompanies = () => {
-  console.log("1111")
   return getAllCompaniesApi();
 }
 
-module.exports = getAllCompanies;
+export default getAllCompanies;

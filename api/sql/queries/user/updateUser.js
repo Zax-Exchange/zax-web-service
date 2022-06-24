@@ -8,4 +8,4 @@ where
 `
 
 
-module.exports = query;
+export default query;

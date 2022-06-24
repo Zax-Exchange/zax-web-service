@@ -15,5 +15,5 @@ const testAppNews = [{
     message: "test app news message 2"
 }];
 
-module.exports = appNews
+export default appNews
 

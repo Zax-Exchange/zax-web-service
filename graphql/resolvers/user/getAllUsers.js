@@ -1,6 +1,6 @@
-const getUserApi = require("../../../api/user/getAllUsers");
+import { getAllUsers as getAllUsersApi } from "../../../api/user/userApis.js";
 
 
-const getUser = () => getUserApi()
+const getAllUsers = () => getAllUsersApi()
 
-module.exports = getUser;
+export default getAllUsers;

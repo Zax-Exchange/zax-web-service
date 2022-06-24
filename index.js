@@ -1,9 +1,10 @@
+import dotenv from "dotenv";
 if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
+  dotenv.config();
 }
-const { ApolloServer, gql } = require('apollo-server');
-const resolvers = require("./graphql/resolvers");
-const typeDefs = require("./graphql/types");
+import { ApolloServer, gql } from "apollo-server";
+import resolvers from "./graphql/resolvers/index.js";
+import typeDefs from "./graphql/types/index.js";
 
 
 const server = new ApolloServer({

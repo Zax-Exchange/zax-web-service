@@ -1,4 +1,4 @@
-const mysql = require("mysql");
+import mysql from "mysql";
 
 const pool = mysql.createPool({
   host     : process.env.RDS_HOSTNAME,
@@ -9,4 +9,4 @@ const pool = mysql.createPool({
 });
 
 
-module.exports = pool;
+export default pool;

@@ -1,8 +1,8 @@
-const appNews = require("./appNews/appNews");
-const user = require("./user/user");
-const project = require("./project/project");
-const company = require("./company/company");
-const query = require("./query");
-const mutation = require("./mutation");
+import appNews from "./appNews/appNews.js";
+import user from "./user/user.js";
+import project from "./project/project.js";
+import company from "./company/company.js";
+import query from "./query.js";
+import mutation from "./mutation.js";
 
-module.exports = [query, user, company, mutation];
+export default [query, user, company, mutation];

@@ -1,4 +1,4 @@
 const query = `select * from Users`;
 
 
-module.exports = query;
+export default query;

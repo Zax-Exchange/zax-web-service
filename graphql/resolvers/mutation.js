@@ -1,7 +1,7 @@
-const createUser = require("./user/createUser");
-const updateUser = require("./user/updateUser");
+import createUser from "./user/createUser.js";
+import updateUser from "./user/updateUser.js";
 
-module.exports = {
+export default {
   createUser,
   updateUser
 };
