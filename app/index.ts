@@ -1,7 +1,7 @@
 import { ApolloServer, gql } from "apollo-server-express";
 import express from "express";
-import resolvers from "./graphql/resolvers/index.js";
-import typeDefs from "./graphql/types/index.js";
+import resolvers from "./graphql/resolvers";
+import typeDefs from "./graphql/types";
 
 const PORT = process.env.PORT || 4000;
 
@@ -20,6 +20,5 @@ const startServer = async() => {
   });
 };
 
-startServer();
-
+startServer()
 export default startServer;

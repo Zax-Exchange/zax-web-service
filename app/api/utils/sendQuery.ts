@@ -1,4 +1,4 @@
-import sql from "./dbconnection.js";
+import sql from "./dbconnection";
 
 const sendQueryWithVars = async (query: string, variables: any[]): Promise<Boolean> => new Promise((res, rej) => {
   

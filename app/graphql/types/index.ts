@@ -1,8 +1,8 @@
-import appNews from "./appNews/appNews.js";
-import user from "./user/user.js";
-import project from "./project/project.js";
-import company from "./company/company.js";
-import query from "./query.js";
-import mutation from "./mutation.js";
+import appNews from "./appNews/appNews";
+import user from "./user/user";
+import project from "./project/project";
+import company from "./company/company";
+import query from "./query";
+import mutation from "./mutation";
 
-export default [query, user, company, mutation];
+export default [query, user, company, mutation, project];

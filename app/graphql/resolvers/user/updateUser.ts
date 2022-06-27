@@ -1,4 +1,4 @@
-import { updateUser as updateUserApi } from "../../../api/user/userApis.js";
+import { updateUser as updateUserApi } from "../../../api/user/userApis";
 
 const updateUser = async(parent: any, args: UpdateUserInput, context:any) => {
   const res = await updateUserApi(args)

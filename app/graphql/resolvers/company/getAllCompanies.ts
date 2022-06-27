@@ -1,4 +1,4 @@
-import { getAllCompanies as getAllCompaniesApi } from "../../../api/company/companyApis.js";
+import { getAllCompanies as getAllCompaniesApi } from "../../../api/company/companyApis";
 
 const getAllCompanies = () => {
   return getAllCompaniesApi();

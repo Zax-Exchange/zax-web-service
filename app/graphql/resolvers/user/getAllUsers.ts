@@ -1,4 +1,4 @@
-import { getAllUsers as getAllUsersApi } from "../../../api/user/userApis.js";
+import { getAllUsers as getAllUsersApi } from "../../../api/user/userApis";
 
 
 const getAllUsers = () => getAllUsersApi()

@@ -1,4 +1,4 @@
-import sql from "../utils/dbconnection.js";
+import sql from "../utils/dbconnection";
 
 const getAllCompanies = async() => {
   try {

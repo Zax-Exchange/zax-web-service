@@ -1,9 +1,8 @@
-import { CreateUserInput } from "../../graphql/resolvers/user/createUser.js";
-import { UpdateUserInput } from "../../graphql/resolvers/user/updateUser.js";
-import sql from "../utils/dbconnection.js";
+import { CreateUserInput } from "../../graphql/resolvers/user/createUser";
+import { UpdateUserInput } from "../../graphql/resolvers/user/updateUser";
+import sql from "../utils/dbconnection";
 
 const createUser = async(data: any) => {
-
   const {name, email, companyId, isAdmin, password} = data.createUserInput;
   try {
     await sql`
@@ -39,6 +38,7 @@ const updateUser = async(data: any) => {
 };
 
 const getAllUsers = async() => {
+
   try {
     return await sql`select * from users`;
   } catch (e) {
