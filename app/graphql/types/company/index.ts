@@ -1,6 +1,6 @@
 import { gql } from "apollo-server-express";
 
-const user = gql`
+const company = gql`
   type Company {
     id: Int
     name: String
@@ -22,4 +22,4 @@ const user = gql`
   }
 `;
 
-export default user;
+export default company;

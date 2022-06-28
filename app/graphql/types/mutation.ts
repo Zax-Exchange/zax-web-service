@@ -5,6 +5,9 @@ const mutation = gql`
         createUser(createUserInput: CreateUserInput): Boolean
         updateUser(updateUserInput: UpdateUserInput): Boolean
         createProject(createProjectInput: CreateProjectInput): Boolean
+        createProjectBid(createProjectBidInput: CreateProjectBidInput): Boolean
+        updateProject(updateProjectInput: UpdateProjectInput): Boolean
+        updateProjectComponent(updateProjectComponent: UpdateProjectComponentInput): Boolean
     }
 `;
 
