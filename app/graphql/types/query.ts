@@ -4,6 +4,8 @@ const query = gql`
     type Query {
         getAllUsers: [User]
         getAllCompanies: [Company]
+        getProjectsWithUserId(id: Int): [PermissionedProject]
+        getProjectsWithProjectId(id: Int): [PermissionedProject]
     }
 `;
 

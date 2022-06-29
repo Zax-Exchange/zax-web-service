@@ -7,7 +7,7 @@ const createUser = async(data: any) => {
   try {
     await sql`
       insert into users
-        (name, email, "companyId", isAdmin, password)
+        (name, email, company_id, is_admin, password)
       values
         (${name}, ${email}, ${companyId}, ${isAdmin}, ${password})
     `;

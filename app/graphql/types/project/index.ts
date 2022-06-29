@@ -14,6 +14,20 @@ const project = gql`
     updatedAt: String!
   }
 
+  type PermissionedProject {
+    id: Int!
+    userId: Int!
+    name: String!
+    deliveryDate: String!
+    deliveryLocation: String!
+    budget: Int!
+    design: String!
+    isActive: Boolean!
+    permission: String!
+    createdAt: String!
+    updatedAt: String!
+  }
+
   type ProjectComponent {
     id: Int!
     projectId: Int!
@@ -58,7 +72,7 @@ const project = gql`
   input CreateProjectBidInput {
     userId: Int!
     projectId: Int!
-    comments: String
+    comments: String!
     components: [CreateProjectComponentBidInput!]!
   }
 
@@ -73,19 +87,37 @@ const project = gql`
 
   input UpdateProjectInput {
     id: Int!
-    name: String
-    deliveryDate: String
-    deliveryLocation: String
-    budget: Int
-    design: String
+    name: String!
+    deliveryDate: String!
+    deliveryLocation: String!
+    budget: Int!
+    design: String!
+    components: [UpdateProjectComponentInput!]!
   }
 
   input UpdateProjectComponentInput {
     id: Int!
-    name: String
-    materials: [String]
-    dimension: String
-    postProcess: String
+    name: String!
+    materials: [String!]!
+    dimension: String!
+    postProcess: String!
+  }
+
+  input UpdateProjectBidInput {
+    id: Int!
+    comments: String!
+    components: [UpdateProjectComponentBidInput!]!
+  }
+
+  input UpdateProjectComponentBidInput {
+    id: Int!
+    quantityPrices: [QuantityPrice!]!
+  }
+
+  input CreateProjectPermissionInput {
+    userId: Int!
+    projectId: Int!
+    permission: String!
   }
 `;
 

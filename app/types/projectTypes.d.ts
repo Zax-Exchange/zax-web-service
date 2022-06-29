@@ -1,3 +1,20 @@
+
+export interface Project {
+  id: number;
+  userId: number;
+  name: string;
+  deliveryDate: string;
+  deliveryLocation: string;
+  budget: string;
+  design: BinaryType | null;
+  isActive: boolean;
+  permission: ProjectPermission;
+  createdAt: string;
+  updatedAt: string;
+}
+
+
+
 export interface CreateProjectInput {
   userId: number;
   name: string;
@@ -18,7 +35,7 @@ export interface CreateProjectComponentInput {
 export interface CreateProjectBidInput {
   userId: number;
   projectId: number;
-  comments: string;
+  comments: string | "";
   components: CreateProjectComponentBidInput[];
 }
 
@@ -42,6 +59,7 @@ export interface UpdateProjectInput {
   deliveryLocation: string;
   budget: number;
   design: BinaryType | null;
+  components: UpdateProjectComponentInput[];
 }
 
 export interface UpdateProjectComponentInput {
@@ -50,4 +68,21 @@ export interface UpdateProjectComponentInput {
   materials: string[];
   dimension: string;
   postProcess: string;
+}
+
+export interface UpdateProjectBidInput {
+  id: number;
+  comments: string | "";
+  components: UpdateProjectComponentBidInput[];
+}
+
+export interface UpdateProjectComponentBidInput {
+  id: number;
+  quantityPrices: QuantityPrice[];
+}
+
+export interface CreateProjectPermissionInput {
+  userId: number;
+  projectId: number;
+  permission: ProjectPermission;
 }

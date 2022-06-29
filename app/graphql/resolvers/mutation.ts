@@ -3,7 +3,8 @@ import updateUser from "./user/updateUser";
 import createProject from "./project/create/createProject";
 import createProjectBid from "./project/create/createProjectBid";
 import updateProject from "./project/update/updateProject";
-import updateProjectComponent from "./project/update/updateProjectComponent";
+import updateProjectBid from "./project/update/updateProjectBid";
+import createProjectPermission from "./project/create/createProjectPermission";
 
 export default {
   createUser,
@@ -11,5 +12,6 @@ export default {
   createProject,
   createProjectBid,
   updateProject,
-  updateProjectComponent
+  updateProjectBid,
+  createProjectPermission
 };
