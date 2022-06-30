@@ -2,51 +2,60 @@ import sql from "../utils/dbconnection";
 import * as projectTypes from "../../types/projectTypes";
 import * as enums from "../../types/enums"
 import ProjectApiUtils from "./utils";
+import sequelize from "../utils/dbconnection";
+import { Op } from "sequelize";
+
 
 
 const getProjectsWithUserId = async(id: number): Promise<projectTypes.Project[] | [] | any> => {
+  const projects = sequelize.models.projects;
+
   try {
-    const ownedProjects = await sql`
-      select * from projects where user_id=${id}
-    `;
-    const viewableProjects = await sql`
-      select * 
-      from projects
-      where id in  (
-        select project_id
-        from project_permissions
-        where user_id=${id} and permission='viewer'
-      )
-    `;
+    const ownIds = await getProjectIdsByPermission(id, enums.ProjectPermission.OWNER);
+    const viewIds = await getProjectIdsByPermission(id, enums.ProjectPermission.VIEWER);
+    const editIds = await getProjectIdsByPermission(id, enums.ProjectPermission.EDITOR);
 
-    const editableProjects = await sql`
-      select * 
-      from projects
-      where id in  (
-        select project_id
-        from project_permissions
-        where user_id=${id} and permission='editor'
-      )
-    `;
-    const p1 = ProjectApiUtils.processProjectRows(ownedProjects, enums.ProjectPermission.OWNER);
-    const p2 = ProjectApiUtils.processProjectRows(viewableProjects, enums.ProjectPermission.VIEWER);
-    const p3 = ProjectApiUtils.processProjectRows(editableProjects, enums.ProjectPermission.EDITOR);
+    const userProjects = await projects.findAll({
+      where: {
+        id: {
+          [Op.in]: [...ownIds, ...viewIds, ...editIds]
+        }
+      }
+    })
 
-    return Promise.resolve([...p1, ...p2, ...p3]);
+    return Promise.resolve(ProjectApiUtils.processProjects(userProjects)); 
   } catch (e) {
     return Promise.reject(e)
   }
 };
 
-const getProjectWithProjectId = async(id: number) => {
+const getProjectIdsByPermission = async(userId: number, permission: enums.ProjectPermission): Promise<number[]> => {
+  const project_permissions = sequelize.models.project_permissions;
   try {
-    const rows = await sql`
-      select * from projects where id=${id}
-    `;
-    const project = ProjectApiUtils.processProjectRow(rows[0]);
-    return Promise.resolve(project);
+    return await project_permissions.findAll({
+      attributes: ["projectId"],
+      where: {
+        userId,
+        permission
+      }
+    }).then(data => data.map(row => row.getDataValue("projectId")));
   } catch (e) {
-    return Promise.reject(e)
+    return Promise.reject(e);
+  }
+}
+const getProjectWithProjectId = async(data: projectTypes.getProjectWithProjectIdInput) => {
+  const projects = sequelize.models.projects;
+  const {userId, projectId } = data;
+  try {
+    const project = await projects.findOne({
+      where: {
+        id: projectId
+      }
+    });
+    return project
+  } catch (e) {
+    
+    return Promise.resolve(false)
   }
 };
 

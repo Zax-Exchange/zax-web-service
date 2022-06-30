@@ -4,6 +4,7 @@ const project = gql`
   type Project {
     id: Int!
     userId: Int!
+    companyId: Int!
     name: String!
     deliveryDate: String!
     deliveryLocation: String!
@@ -118,6 +119,17 @@ const project = gql`
     userId: Int!
     projectId: Int!
     permission: String!
+  }
+
+  input CreateProjectBidPermissionInput {
+    userId: Int!
+    projectBidId: Int!
+    permission: String!
+  }
+
+  input GetProjectWithProjectIdInput {
+    userId: Int!
+    projectId: Int!
   }
 `;
 

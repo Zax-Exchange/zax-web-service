@@ -2,7 +2,7 @@ import { createProject as createProjectApi } from "../../../../api/project/creat
 import { CreateProjectInput } from "../../../../types/projectTypes";
 
 const createProject = (parent: any, args: Record<string, CreateProjectInput>, context: any, info: any) => {
-  return createProjectApi(args);
+  return createProjectApi(args.data);
 };
 
 export default createProject;

@@ -5,7 +5,7 @@ const query = gql`
         getAllUsers: [User]
         getAllCompanies: [Company]
         getProjectsWithUserId(id: Int): [PermissionedProject]
-        getProjectsWithProjectId(id: Int): [PermissionedProject]
+        getProjectWithProjectId(data: GetProjectWithProjectIdInput): PermissionedProject
     }
 `;
 

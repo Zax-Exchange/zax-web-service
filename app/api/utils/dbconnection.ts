@@ -1,4 +1,4 @@
-import postgres from "postgres";
+import { Sequelize } from 'sequelize-typescript'
 import dotenv from "dotenv";
 
 if (process.env.NODE_ENV !== 'production') {
@@ -7,12 +7,19 @@ if (process.env.NODE_ENV !== 'production') {
 
 const port = parseInt(process.env.RDS_PORT || "4000");
 
-const sql = postgres({
-  hostname : process.env.RDS_HOSTNAME,
-  user     : process.env.RDS_USERNAME,
-  password : process.env.RDS_PASSWORD,
-  port     : port,
-  db : process.env.RDS_NAME
-});
+const sequelize = new Sequelize({
+  database: process.env.RDS_NAME,
+  dialect: 'postgres',
+  username: process.env.RDS_USERNAME,
+  password: process.env.RDS_PASSWORD,
+  host: process.env.RDS_HOSTNAME,
+  storage: ':memory:',
+  port: port,
+  models: ["../models/*.ts"],
+  logging: true
+})
 
-export default sql;
+
+
+
+export default sequelize;

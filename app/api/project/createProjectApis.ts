@@ -1,20 +1,25 @@
-import sql from "../utils/dbconnection";
+import sequelize from "../utils/dbconnection";
 import * as projectTypes from "../../types/projectTypes";
+import * as enums from "../../types/enums";
 
-const createProject = async(data: Record<string, projectTypes.CreateProjectInput>) => {
-  const {userId, name, deliveryDate, deliveryLocation, budget, design, components} = data.createProjectInput;
+const createProject = async(data: projectTypes.CreateProjectInput) => {
+  const projects = sequelize.models.projects;
+  const project_permissions = sequelize.models.project_permissions;
+
+  const {userId, name, deliveryDate, deliveryLocation, budget, design, components} = data;
 
   try {
-    const project = await sql`
-      insert into projects
-        (name, user_id, delivery_date, delivery_location, budget, design)
-      values
-        (${name}, ${userId}, ${deliveryDate}, ${deliveryLocation}, ${budget}, ${design})
-      returning id
-    `;
-
-    await createProjectComponent(project[0].id, components)
-   
+    
+    const project = await projects.create({
+      userId, name, deliveryDate, deliveryLocation, budget, design
+    })
+    const projectId = project.getDataValue("id");
+    await createProjectComponent(projectId, components)
+    await project_permissions.create({
+      userId,
+      projectId,
+      permission: enums.ProjectPermission.OWNER
+    })
     return Promise.resolve(true);
   } catch (e) {
     console.error(e);
@@ -22,16 +27,16 @@ const createProject = async(data: Record<string, projectTypes.CreateProjectInput
   }
 };
 
-const createProjectComponent = async(id: number, components: projectTypes.CreateProjectComponentInput[]) => {
+const createProjectComponent = async(projectId: number, components: projectTypes.CreateProjectComponentInput[]) => {
+  const project_components = sequelize.models.project_components;
+  
   try {
     for (let component of components) {
-      const {name, materials, dimension, postProcess} = component;
-      await sql`
-        insert into project_components
-          (project_id, name, materials, dimension, post_process)
-        values
-          (${id}, ${name}, ${materials}, ${dimension}, ${postProcess})
-      `;
+
+      await project_components.create({
+        projectId,
+        ...component
+      })
     }
     return Promise.resolve(true);
   } catch (e) {
@@ -39,17 +44,23 @@ const createProjectComponent = async(id: number, components: projectTypes.Create
   }
 };
 
-const createProjectBid = async(data: Record<string, projectTypes.CreateProjectBidInput>) => {
-  const { userId, projectId, comments, components } = data.createProjectBidInput;
+const createProjectBid = async(data: projectTypes.CreateProjectBidInput) => {
+  const project_bids = sequelize.models.project_bids;
+  const project_bid_permissions = sequelize.models.project_bid_permissions;
+  const { userId, projectId, comments, components } = data;
   try {
-    const projectBid = await sql`
-      insert into project_bids
-        (user_id, project_id, comments)
-      values
-        (${userId}, ${projectId}, ${comments})
-      returning id
-    `;
-    await createProjectComponentBid(projectBid[0].id, components)
+    const projectBid = await project_bids.create({
+      userId, 
+      projectId, 
+      comments
+    });
+    const projectBidId = projectBid.getDataValue("id");
+    await createProjectComponentBid(projectBidId, components);
+    await project_bid_permissions.create({
+      projectBidId,
+      userId,
+      permission: enums.ProjectPermission.OWNER
+    })
     return Promise.resolve(true);
   } catch (e) {
     console.error(e);
@@ -58,19 +69,17 @@ const createProjectBid = async(data: Record<string, projectTypes.CreateProjectBi
 };
 
 const createProjectComponentBid = async(projectBidId: number, components: projectTypes.CreateProjectComponentBidInput[]) => {
-  
+  const project_component_bids = sequelize.models.project_component_bids;
   try {
     for (let component of components) {
       for (let componentBidQuantityPrice of component.componentBidQuantityPrices) {
         const { projectComponentId, quantityPrices } = componentBidQuantityPrice;
-        const quantityPricesJson = JSON.stringify(quantityPrices);
-
-        await sql`
-        insert into project_component_bids
-          (project_bid_id, project_component_id, quantity_prices)
-        values
-          (${projectBidId}, ${projectComponentId}, ${quantityPricesJson}::json)
-      `;
+        await project_component_bids.create({
+          projectBidId,
+          projectComponentId,
+          quantityPrices
+        })  
+        
       }
     }
     return Promise.resolve(true);
@@ -80,15 +89,32 @@ const createProjectComponentBid = async(projectBidId: number, components: projec
   }
 };
 
-const createProjectPermission = async(data: Record<string, projectTypes.CreateProjectPermissionInput>) => {
-  const { userId, projectId, permission } = data.createProjectPermissionInput;
+const createProjectPermission = async(data: projectTypes.CreateProjectPermissionInput) => {
+  const { userId, projectId, permission } = data;
+  const project_permissions = sequelize.models.project_permissions;
+
   try {
-    await sql`
-      insert into project_permissions
-        (user_id, project_id, permission)
-      values
-        (${userId}, ${projectId}, ${permission})
-    `;
+    await project_permissions.create({
+      userId,
+      projectId,
+      permission
+    })
+    return Promise.resolve(true);
+  } catch (e) {
+    return Promise.resolve(false);
+  }
+};
+
+const createProjectBidPermission = async(data: projectTypes.CreateProjectBidPermissionInput) => {
+  const { userId, projectBidId, permission } = data;
+  const project_bid_permissions = sequelize.models.project_bid_permissions;
+
+  try {
+    await project_bid_permissions.create({
+      userId,
+      projectBidId,
+      permission
+    })
     return Promise.resolve(true);
   } catch (e) {
     return Promise.resolve(false);
@@ -100,5 +126,6 @@ export {
   createProjectBid,
   createProjectComponent,
   createProjectComponentBid,
-  createProjectPermission
+  createProjectPermission,
+  createProjectBidPermission
 }

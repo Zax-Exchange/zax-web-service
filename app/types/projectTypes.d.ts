@@ -2,6 +2,22 @@
 export interface Project {
   id: number;
   userId: number;
+  companyId: number;
+  name: string;
+  deliveryDate: string;
+  deliveryLocation: string;
+  budget: string;
+  design: BinaryType | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+
+export interface PermissionedProject {
+  id: number;
+  userId: number;
+  companyId: number;
   name: string;
   deliveryDate: string;
   deliveryLocation: string;
@@ -85,4 +101,16 @@ export interface CreateProjectPermissionInput {
   userId: number;
   projectId: number;
   permission: ProjectPermission;
+}
+
+export interface CreateProjectBidPermissionInput {
+  userId: number;
+  projectBidId: number;
+  permission: ProjectPermission;
+}
+
+
+export interface getProjectWithProjectIdInput {
+  projectId: number;
+  userId: number;
 }

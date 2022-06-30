@@ -1,11 +1,11 @@
-import getAllUsers from "./user/getAllUsers";
+import getAllUsers from "./user/get/getAllUsers";
 import getAllCompanies from "./company/getAllCompanies";
-import { getProjectsWithProjectId, getProjectsWithUserId } from "./project/get/getProject";
+import { getProjectWithProjectId, getProjectsWithUserId } from "./project/get/getProject";
 
 export default {
     getAllUsers,
     getAllCompanies,
-    getProjectsWithProjectId,
+    getProjectWithProjectId,
     getProjectsWithUserId
 };
 

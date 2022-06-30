@@ -23,6 +23,9 @@ const user = gql`
     id: Int
     name: String
     email: String
+    password: String
+    companyId: Int
+    isAdmin: Boolean
   }
 `;
 
