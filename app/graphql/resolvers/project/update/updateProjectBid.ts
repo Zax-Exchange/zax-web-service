@@ -3,7 +3,7 @@ import { UpdateProjectBidInput } from "../../../../types/projectTypes";
 
 const updateProjectBid = (parent: any, args: Record<string, UpdateProjectBidInput>, context: any, info: any) => {
   
-  return updateProjectBidApi(args);
+  return updateProjectBidApi(args.data);
 };
 
 export default updateProjectBid;

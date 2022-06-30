@@ -1,3 +1,4 @@
+import * as enums from "./enums";
 
 export interface Project {
   id: number;
@@ -8,9 +9,9 @@ export interface Project {
   deliveryLocation: string;
   budget: string;
   design: BinaryType | null;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  status: enums.ProjectStatus;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 
@@ -23,10 +24,10 @@ export interface PermissionedProject {
   deliveryLocation: string;
   budget: string;
   design: BinaryType | null;
-  isActive: boolean;
-  permission: ProjectPermission;
-  createdAt: string;
-  updatedAt: string;
+  status: enums.ProjectStatus;
+  permission: enums.ProjectPermission;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 
@@ -75,6 +76,7 @@ export interface UpdateProjectInput {
   deliveryLocation: string;
   budget: number;
   design: BinaryType | null;
+  status: string;
   components: UpdateProjectComponentInput[];
 }
 
@@ -97,20 +99,25 @@ export interface UpdateProjectComponentBidInput {
   quantityPrices: QuantityPrice[];
 }
 
-export interface CreateProjectPermissionInput {
+export interface CreateOrUpdateProjectPermissionInput {
   userId: number;
   projectId: number;
-  permission: ProjectPermission;
+  permission: enums.ProjectPermission;
 }
 
-export interface CreateProjectBidPermissionInput {
+export interface CreateOrUpdateProjectBidPermissionInput {
   userId: number;
   projectBidId: number;
-  permission: ProjectPermission;
+  permission: enums.ProjectPermission;
 }
 
 
 export interface getProjectWithProjectIdInput {
+  projectId: number;
+  userId: number;
+}
+
+export interface DeleteProjectInput {
   projectId: number;
   userId: number;
 }

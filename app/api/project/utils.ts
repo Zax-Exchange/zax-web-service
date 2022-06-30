@@ -6,13 +6,13 @@ import { Model } from "sequelize";
 
 class ProjectApiUtils {
 
-  static processProjects = (projects: Model<any, any>[]) => {
-     return projects.map((project) => {
+  static processProjects = (projects: projectTypes.Project[]): projectTypes.PermissionedProject[] => {
+    return projects.map((project: projectTypes.Project) => {
         return {
           ...project,
-          permission: "viewer"
+          permission: enums.ProjectPermission.VIEWER
         }
-      })
+    });
   };
   
 

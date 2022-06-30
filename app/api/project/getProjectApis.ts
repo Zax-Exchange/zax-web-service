@@ -1,4 +1,3 @@
-import sql from "../utils/dbconnection";
 import * as projectTypes from "../../types/projectTypes";
 import * as enums from "../../types/enums"
 import ProjectApiUtils from "./utils";
@@ -6,8 +5,7 @@ import sequelize from "../utils/dbconnection";
 import { Op } from "sequelize";
 
 
-
-const getProjectsWithUserId = async(id: number): Promise<projectTypes.Project[] | [] | any> => {
+const getProjectsWithUserId = async(id: number): Promise<projectTypes.Project[] | [] | Error> => {
   const projects = sequelize.models.projects;
 
   try {
@@ -15,13 +13,18 @@ const getProjectsWithUserId = async(id: number): Promise<projectTypes.Project[] 
     const viewIds = await getProjectIdsByPermission(id, enums.ProjectPermission.VIEWER);
     const editIds = await getProjectIdsByPermission(id, enums.ProjectPermission.EDITOR);
 
-    const userProjects = await projects.findAll({
+    let userProjects: any = await projects.findAll({
       where: {
         id: {
           [Op.in]: [...ownIds, ...viewIds, ...editIds]
         }
       }
     })
+
+    userProjects = userProjects.map((project: any) => {
+      return project.get({ plain: true });
+    })
+
 
     return Promise.resolve(ProjectApiUtils.processProjects(userProjects)); 
   } catch (e) {

@@ -10,7 +10,7 @@ const project = gql`
     deliveryLocation: String!
     budget: Int!
     design: String!
-    isActive: Boolean!
+    status: String!
     createdAt: String!
     updatedAt: String!
   }
@@ -23,7 +23,7 @@ const project = gql`
     deliveryLocation: String!
     budget: Int!
     design: String!
-    isActive: Boolean!
+    status: String!
     permission: String!
     createdAt: String!
     updatedAt: String!
@@ -115,19 +115,24 @@ const project = gql`
     quantityPrices: [QuantityPrice!]!
   }
 
-  input CreateProjectPermissionInput {
+  input CreateOrUpdateProjectPermissionInput {
     userId: Int!
     projectId: Int!
     permission: String!
   }
 
-  input CreateProjectBidPermissionInput {
+  input CreateOrUpdateProjectBidPermissionInput {
     userId: Int!
     projectBidId: Int!
     permission: String!
   }
 
   input GetProjectWithProjectIdInput {
+    userId: Int!
+    projectId: Int!
+  }
+
+  input DeleteProjectInput {
     userId: Int!
     projectId: Int!
   }

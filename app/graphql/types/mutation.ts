@@ -6,10 +6,11 @@ const mutation = gql`
         updateUser(data: UpdateUserInput): Boolean
         createProject(data: CreateProjectInput): Boolean
         createProjectBid(data: CreateProjectBidInput): Boolean
-        createProjectPermission(data: CreateProjectPermissionInput): Boolean
-        createProjectBidPermission(data: CreateProjectBidPermissionInput): Boolean
+        createOrUpdateProjectPermission(data: CreateOrUpdateProjectPermissionInput): Boolean
+        createOrUpdateProjectBidPermission(data: CreateOrUpdateProjectBidPermissionInput): Boolean
         updateProject(data: UpdateProjectInput): Boolean
         updateProjectBid(data: UpdateProjectBidInput): Boolean
+        deleteProject(data: DeleteProjectInput): Boolean
     }
 `;
 

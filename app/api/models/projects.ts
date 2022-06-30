@@ -1,5 +1,6 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import type { companies, companiesId } from './companies';
 import type { project_bids, project_bidsId } from './project_bids';
 import type { project_components, project_componentsId } from './project_components';
 import type { project_permissions, project_permissionsId } from './project_permissions';
@@ -15,12 +16,13 @@ export interface projectsAttributes {
   createdAt: Date;
   updatedAt: Date;
   userId: number;
-  isActive: boolean;
+  status: string;
+  companyId?: number;
 }
 
 export type projectsPk = "id";
 export type projectsId = projects[projectsPk];
-export type projectsOptionalAttributes = "design" | "createdAt" | "updatedAt" | "isActive";
+export type projectsOptionalAttributes = "design" | "createdAt" | "updatedAt" | "companyId";
 export type projectsCreationAttributes = Optional<projectsAttributes, projectsOptionalAttributes>;
 
 export class projects extends Model<projectsAttributes, projectsCreationAttributes> implements projectsAttributes {
@@ -33,8 +35,14 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
   createdAt!: Date;
   updatedAt!: Date;
   userId!: number;
-  isActive!: boolean;
+  status!: string;
+  companyId?: number;
 
+  // projects belongsTo companies via companyId
+  company!: companies;
+  getCompany!: Sequelize.BelongsToGetAssociationMixin<companies>;
+  setCompany!: Sequelize.BelongsToSetAssociationMixin<companies, companiesId>;
+  createCompany!: Sequelize.BelongsToCreateAssociationMixin<companies>;
   // projects hasMany project_bids via projectId
   project_bids!: project_bids[];
   getProject_bids!: Sequelize.HasManyGetAssociationsMixin<project_bids>;
@@ -114,10 +122,17 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
         key: 'id'
       }
     },
-    isActive: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: true
+    status: {
+      type: DataTypes.STRING(20),
+      allowNull: false
+    },
+    companyId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'companies',
+        key: 'id'
+      }
     }
   }, {
     tableName: 'projects',

@@ -1,87 +1,128 @@
-import sql from "../utils/dbconnection";
+import sequelize from "../utils/dbconnection";
 import * as projectTypes from "../../types/projectTypes";
+import * as enums from "../../types/enums";
+import { Transaction } from "sequelize/types";
 
-const updateProject = async(data: Record<string, projectTypes.UpdateProjectInput>) => {
-  const { id, name, deliveryDate, deliveryLocation, budget, design, components } = data.updateProjectInput;
-  return true;
-  // try {
-  //   await sql`
-  //     update projects
-  //       set name=${name}, 
-  //         delivery_date=${deliveryDate}, 
-  //         delivery_location=${deliveryLocation}, 
-  //         budget=${budget}, 
-  //         design=${design}
-  //     where id=${id}
-  //   `;
-  //   await updateProjectComponent(components);
-  //   return Promise.resolve(true);
-  // } catch (e) {
-  //   console.error(e);
-  //   return Promise.resolve(false);
-  // }
+const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<boolean | Error> => {
+  const { id, name, deliveryDate, deliveryLocation, budget, design, status, components } = data;
+  const projects = sequelize.models.projects;
+  try {
+    await sequelize.transaction(async transaction => {
+      await projects.update({
+        name,
+        deliveryDate,
+        deliveryLocation,
+        budget,
+        design,
+        status
+      }, {
+        where: {
+          id,
+        },
+        transaction
+      });
+      return await updateProjectComponent(components, transaction);
+    });
+    return Promise.resolve(true);
+  }
+  catch (e) {
+    console.error(e);
+    return Promise.reject(e);
+  }
 };
 
-const updateProjectComponent = async(components: projectTypes.UpdateProjectComponentInput[]) => {
-  return true;
-  // try {
-  //   for (let component of components) {
-  //     const { id, name, materials, dimension, postProcess } = component;
-  //       await sql`
-  //         update project_components
-  //           set name=${name}, 
-  //             materials=${materials}, 
-  //             post_process=${postProcess}, 
-  //             dimension=${dimension}
-  //         where id=${id}
-  //       `;
-  //     }
-  //     return Promise.resolve(true);
-  // } catch (e) {
-  //   console.error(e);
-  //   return Promise.resolve(false);
-  // }
+const updateProjectComponent = async(components: projectTypes.UpdateProjectComponentInput[], transaction?: Transaction): Promise<boolean | Error> => {
+  const project_components = sequelize.models.project_components;
+  try {
+    for (let component of components) {
+      const { id, name, materials, dimension, postProcess } = component;
+      await project_components.update({
+        name,
+        materials,
+        dimension,
+        postProcess
+      }, {
+        where: {
+          id
+        },
+        transaction
+      });
+    }
+    return Promise.resolve(true);
+  } catch (e) {
+    console.error(e);
+    return Promise.reject(e);
+  }
 };
 
-const updateProjectBid = async(data: Record<string, projectTypes.UpdateProjectBidInput>) => {
-  const { id, comments, components } = data.updateProjectBidInput;
-  return true;
-  // try {
-  //   await sql`
-  //     update project_bids
-  //       set comments=${comments}
-  //     where id=${id}
-  //   `;
-  //   await updateProjectComponentBid(components);
-  //   return Promise.resolve(true);
-  // } catch (e) {
-  //   console.error(e);
-  //   return Promise.resolve(false);
-  // }
+const updateProjectBid = async(data: projectTypes.UpdateProjectBidInput): Promise<boolean | Error> => {
+  const { id, comments, components } = data;
+  const project_bids = sequelize.models.project_bids;
+
+  try {
+    await sequelize.transaction(async (transaction) => {
+      await project_bids.update({
+        comments
+      }, {
+        where: {
+          id
+        },
+        transaction
+      })
+      await updateProjectComponentBid(components, transaction);
+
+    });
+    return Promise.resolve(true);
+  } catch (e) {
+    console.error(e);
+    return Promise.reject(e);
+  }
 };
 
-const updateProjectComponentBid = async(components: projectTypes.UpdateProjectComponentBidInput[]) => {
-  return true;
-  // try {
-  //   for (let component of components) {
-  //     const { id, quantityPrices } = component;
-  //     const qp = JSON.stringify(quantityPrices);
-  //     await sql`
-  //       update project_component_bids
-  //         set quantity_prices=${qp}
-  //       where id=${id}
-  //     `;
-  //   }
-  //   Promise.resolve(true);
-  // } catch (e) {
-  //   console.error(e);
-  //   Promise.reject(e); 
-  // }
+const updateProjectComponentBid = async(components: projectTypes.UpdateProjectComponentBidInput[], transaction?: Transaction): Promise<boolean | Error> => {
+  const project_component_bids = sequelize.models.project_component_bids;
+
+  try {
+    for (let component of components) {
+      const { id, quantityPrices } = component;
+      await project_component_bids.update({
+        quantityPrices
+      }, {
+        where: {
+          id
+        },
+        transaction
+      });
+    }
+    return Promise.resolve(true);
+  } catch (e) {
+    console.error(e);
+    return Promise.reject(e); 
+  }
+};
+
+const updateProjectStatus = async (projectId: number, status: enums.ProjectStatus, transaction?: Transaction): Promise<boolean | Error> => {
+  const projects = sequelize.models.projects;
+  try {
+    await projects.update({
+      status
+    }, {
+      where: {
+        id: projectId
+      },
+      transaction
+    });
+    return Promise.resolve(true);
+  } catch(e) {
+    console.error(e);
+    return Promise.reject(e);
+  }
 };
 
 export {
   updateProject,
   updateProjectComponent,
   updateProjectBid,
-  updateProjectComponentBid
+  updateProjectComponentBid,
+  updateProjectStatus
 }

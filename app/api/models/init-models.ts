@@ -76,6 +76,8 @@ export function initModels(sequelize: Sequelize) {
 
   company_product_types.belongsTo(companies, { as: "company", foreignKey: "companyId"});
   companies.hasMany(company_product_types, { as: "company_product_types", foreignKey: "companyId"});
+  projects.belongsTo(companies, { as: "company", foreignKey: "companyId"});
+  companies.hasMany(projects, { as: "projects", foreignKey: "companyId"});
   users.belongsTo(companies, { as: "company", foreignKey: "companyId"});
   companies.hasMany(users, { as: "users", foreignKey: "companyId"});
   companies.belongsTo(plan_types, { as: "plan", foreignKey: "planId"});
