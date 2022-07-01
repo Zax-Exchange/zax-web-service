@@ -17,12 +17,12 @@ export interface projectsAttributes {
   updatedAt: Date;
   userId: number;
   status: string;
-  companyId?: number;
+  companyId: number;
 }
 
 export type projectsPk = "id";
 export type projectsId = projects[projectsPk];
-export type projectsOptionalAttributes = "design" | "createdAt" | "updatedAt" | "companyId";
+export type projectsOptionalAttributes = "design" | "createdAt" | "updatedAt";
 export type projectsCreationAttributes = Optional<projectsAttributes, projectsOptionalAttributes>;
 
 export class projects extends Model<projectsAttributes, projectsCreationAttributes> implements projectsAttributes {
@@ -36,7 +36,7 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
   updatedAt!: Date;
   userId!: number;
   status!: string;
-  companyId?: number;
+  companyId!: number;
 
   // projects belongsTo companies via companyId
   company!: companies;
@@ -128,7 +128,7 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
     },
     companyId: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       references: {
         model: 'companies',
         key: 'id'

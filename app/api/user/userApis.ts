@@ -1,16 +1,21 @@
 import * as userTypes from "../../types/userTypes";
 import sequelize from "../utils/dbconnection";
+import UserApiUtils from "./utils";
 
-const createUser = async(data: Record<string, userTypes.CreateUserInput>) => {
+const createUser = async(data: userTypes.CreateUserInput) => {
   const users = sequelize.models.users;
-  const {name, email, companyId, isAdmin, password} = data.createUserInput;
+  const {name, email, companyId, password} = data;
   try {
+    const isFirst = await UserApiUtils.isUserFirstInCompany(companyId);
+    const userType = await UserApiUtils.getUserType(companyId);
+
     await users.create({
       name,
       email,
       companyId,
-      isAdmin,
-      password
+      password,
+      isAdmin: isFirst,
+      userType
     })
     return Promise.resolve(true);
   } catch (e) {

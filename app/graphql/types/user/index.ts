@@ -7,6 +7,8 @@ const user = gql`
     email: String
     password: String
     companyId: Int
+    userType: String
+    isAdmin: Boolean
     createdAt: String
     updatedAt: String
   }
@@ -16,7 +18,6 @@ const user = gql`
     email: String
     password: String
     companyId: Int
-    isAdmin: Boolean
   }
 
   input UpdateUserInput {
@@ -24,7 +25,10 @@ const user = gql`
     name: String
     email: String
     password: String
-    companyId: Int
+  }
+
+  input UpdateUserPower {
+    id: Int
     isAdmin: Boolean
   }
 `;

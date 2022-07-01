@@ -5,7 +5,12 @@ export enum ProjectPermission {
 }
 
 export enum ProjectStatus {
-  ACTIVE = "ACTIVE",
+  OPEN = "OPEN",
   IN_PROGRESS = "IN_PROGRESS",
   CLOSED = "CLOSED"
+}
+
+export enum UserType {
+  CUSTOMER = "CUSTOMER",
+  VENDOR = "VENDOR"
 }

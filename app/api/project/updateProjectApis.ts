@@ -2,6 +2,7 @@ import sequelize from "../utils/dbconnection";
 import * as projectTypes from "../../types/projectTypes";
 import * as enums from "../../types/enums";
 import { Transaction } from "sequelize/types";
+import { createOrUpdateProjectPermission, createOrUpdateProjectBidPermission } from "./createProjectApis";
 
 const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<boolean | Error> => {
   const { id, name, deliveryDate, deliveryLocation, budget, design, status, components } = data;
@@ -21,7 +22,7 @@ const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<bool
         },
         transaction
       });
-      return await updateProjectComponent(components, transaction);
+      return await updateProjectComponents(components, transaction);
     });
     return Promise.resolve(true);
   }
@@ -31,7 +32,8 @@ const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<bool
   }
 };
 
-const updateProjectComponent = async(components: projectTypes.UpdateProjectComponentInput[], transaction?: Transaction): Promise<boolean | Error> => {
+// this goes with update project
+const updateProjectComponents = async(components: projectTypes.UpdateProjectComponentInput[], transaction?: Transaction): Promise<boolean | Error> => {
   const project_components = sequelize.models.project_components;
   try {
     for (let component of components) {
@@ -69,7 +71,7 @@ const updateProjectBid = async(data: projectTypes.UpdateProjectBidInput): Promis
         },
         transaction
       })
-      await updateProjectComponentBid(components, transaction);
+      await updateProjectComponentsBid(components, transaction);
 
     });
     return Promise.resolve(true);
@@ -79,7 +81,8 @@ const updateProjectBid = async(data: projectTypes.UpdateProjectBidInput): Promis
   }
 };
 
-const updateProjectComponentBid = async(components: projectTypes.UpdateProjectComponentBidInput[], transaction?: Transaction): Promise<boolean | Error> => {
+// this goes with update project bid
+const updateProjectComponentsBid = async(components: projectTypes.UpdateProjectComponentBidInput[], transaction?: Transaction): Promise<boolean | Error> => {
   const project_component_bids = sequelize.models.project_component_bids;
 
   try {
@@ -98,6 +101,37 @@ const updateProjectComponentBid = async(components: projectTypes.UpdateProjectCo
   } catch (e) {
     console.error(e);
     return Promise.reject(e); 
+  }
+};
+
+// bulk create or update project permissions
+const updateProjectPermissions = async (data: projectTypes.UpdateProjectPermissionsInput): Promise<boolean | Error> => {
+  const { userIds, projectId, permission } = data;
+  try {
+    await sequelize.transaction(async (transaction) => {
+      for (let userId of userIds) {
+        await createOrUpdateProjectPermission({userId, projectId, permission}, transaction);
+      }
+    });
+    return Promise.resolve(true);
+  } catch(e) {
+    console.error(e);
+    return Promise.reject(e);
+  }
+};
+
+const updateProjectBidPermissions = async (data: projectTypes.UpdateProjectBidPermissionsInput): Promise<boolean | Error> => {
+  const { userIds, projectBidId, permission } = data;
+  try {
+    await sequelize.transaction(async (transaction) => {
+      for (let userId of userIds) {
+        await createOrUpdateProjectBidPermission({userId, projectBidId, permission}, transaction);
+      }
+    });
+    return Promise.resolve(true);
+  } catch(e) {
+    console.error(e);
+    return Promise.reject(e);
   }
 };
 
@@ -121,8 +155,10 @@ const updateProjectStatus = async (projectId: number, status: enums.ProjectStatu
 
 export {
   updateProject,
-  updateProjectComponent,
+  updateProjectComponents,
   updateProjectBid,
-  updateProjectComponentBid,
-  updateProjectStatus
+  updateProjectComponentsBid,
+  updateProjectStatus,
+  updateProjectPermissions,
+  updateProjectBidPermissions
 }

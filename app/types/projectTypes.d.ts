@@ -30,6 +30,22 @@ export interface PermissionedProject {
   updatedAt: Date;
 }
 
+export interface ProjectBid {
+  id: number;
+  userId: number;
+  projectId: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface PermissionedProjectBid {
+  id: number;
+  userId: number;
+  projectId: number;
+  permission: enums.ProjectPermission;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 
 export interface CreateProjectInput {
@@ -81,7 +97,7 @@ export interface UpdateProjectInput {
 }
 
 export interface UpdateProjectComponentInput {
-  id: number;
+  id: number[];
   name: string;
   materials: string[];
   dimension: string;
@@ -120,4 +136,43 @@ export interface getProjectWithProjectIdInput {
 export interface DeleteProjectInput {
   projectId: number;
   userId: number;
+}
+
+export interface DeleteProjectComponentsInput {
+  projectComponentIds: number[];
+  projectId: number;
+  userId: number
+}
+
+export interface DeleteProjectBidInput {
+  projectBidId: number;
+  userId: number;
+}
+
+export interface DeleteProjectComponentsBidInput {
+  projectComponentBidIds: number[];
+  projectBidId: number;
+  userId: number;
+}
+
+export interface UpdateProjectPermissionsInput {
+  userIds: number[];
+  projectId: number;
+  permission: enums.ProjectPermission;
+}
+
+export interface UpdateProjectBidPermissionsInput {
+  userIds: number[];
+  projectBidId: number;
+  permission: enums.ProjectPermission;
+}
+
+export interface DeleteProjectPermissionsInput {
+  userIds: number[];
+  projectId: number;
+}
+
+export interface DeleteProjectBidPermissionsInput {
+  userIds: number[];
+  projectBidId: number;
 }

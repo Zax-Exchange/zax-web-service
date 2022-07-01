@@ -4,6 +4,7 @@ import * as enums from "../../types/enums";
 import { Transaction } from "sequelize/types";
 import { updateProjectStatus } from "./updateProjectApis";
 
+//TODO: add other user permissions when creating project?
 const createProject = async(data: projectTypes.CreateProjectInput): Promise<boolean | Error> => {
   const projects = sequelize.models.projects;
   const users = sequelize.models.users;
@@ -25,7 +26,7 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
         budget,
         design,
         companyId: user?.getDataValue("companyId"),
-        status: enums.ProjectStatus.ACTIVE
+        status: enums.ProjectStatus.OPEN
       }, { transaction });
       const projectId = project.getDataValue("id");
       await createProjectComponent(projectId, components, transaction);
