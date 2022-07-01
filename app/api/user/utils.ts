@@ -19,7 +19,7 @@ class UserApiUtils {
     }
   }
 
-  static async getUserType(id: number): Promise<enums.UserType | Error> {
+  static async getUserTypeWithCompanyId(id: number): Promise<enums.UserType | Error> {
     const companies = sequelize.models.companies;
     try {
       const company = await companies.findOne({
@@ -36,6 +36,20 @@ class UserApiUtils {
     } catch(e) {
       console.error(e);
       return Promise.reject(e);
+    }
+  }
+
+  static async isVendorWithUserId (id: number): Promise<boolean | Error> {
+    const users = sequelize.models.users;
+    try {
+      const user = await users.findOne({
+        attributes: ["userType"],
+        where: {id}
+      });
+      
+      return Promise.resolve(user?.getDataValue("userType") === enums.UserType.VENDOR);
+    } catch(e) {
+      return Promise.resolve(false);
     }
   }
 }

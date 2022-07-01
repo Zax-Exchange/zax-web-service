@@ -7,7 +7,7 @@ const createUser = async(data: userTypes.CreateUserInput) => {
   const {name, email, companyId, password} = data;
   try {
     const isFirst = await UserApiUtils.isUserFirstInCompany(companyId);
-    const userType = await UserApiUtils.getUserType(companyId);
+    const userType = await UserApiUtils.getUserTypeWithCompanyId(companyId);
 
     await users.create({
       name,

@@ -1,6 +1,7 @@
 import * as projectTypes from "../../types/projectTypes";
 import * as enums from "../../types/enums"
 import { Model, ModelStatic } from "sequelize";
+import sequelize from "../utils/dbconnection";
 
 class ProjectApiUtils {
 

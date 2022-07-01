@@ -1,6 +1,7 @@
 import * as projectTypes from "../../types/projectTypes";
 import * as enums from "../../types/enums"
 import ProjectApiUtils from "./utils";
+import UserApiUtils from "../user/utils";
 import sequelize from "../utils/dbconnection";
 import { Op, Model, ModelStatic } from "sequelize";
 
@@ -56,7 +57,6 @@ const getProjectPermission = async(userId: number, projectId: number): Promise<e
       }
     });
     const res = permission?.get().permission;
-    console.log(res)
     return Promise.resolve(res);
   } catch(e) {
     return Promise.reject(e)
@@ -65,18 +65,35 @@ const getProjectPermission = async(userId: number, projectId: number): Promise<e
 
 
 // get specific project with user permission
+// vendor should be able to see all projects
+// customer should NOT see other customers' projects
+// this method needs to determine user type, if user type is vendor, project permission is VIEWER
+// if user type is customer, this method should fail
 const getProjectWithProjectId = async(data: projectTypes.getProjectWithProjectIdInput): Promise<projectTypes.PermissionedProject | Error> => {
   const projects = sequelize.models.projects;
   
   const {userId, projectId } = data;
   try {
-    getProjectPermission(userId, projectId);
+    const isVendor = await UserApiUtils.isVendorWithUserId(userId);
+    if (!isVendor) {
+      return Promise.reject(new Error("Permission denied."));
+    }
+
+    // separating from above as user could be a vendor
+    const userPermission = await getProjectPermission(userId, projectId);
+    const permission = userPermission ? userPermission : "VIEWER";
+
     const project = await projects.findOne({
       where: {
         id: projectId
       }
-    });
-    return project?.get({ plain: true });
+    }).then(p => p?.get({ plain: true }));
+    
+    const res = {
+      ...project,
+      permission
+    }
+    return Promise.resolve(res);
   } catch (e) {
     
     return Promise.reject(e);
