@@ -1,64 +1,37 @@
-import * as projectTypes from "../../types/projectTypes";
-import * as enums from "../../types/enums"
+import * as commonProjectTypes from "../../types/common/projectTypes";
+import * as getProjectTypes from "../../types/get/projectTypes";
+import * as enums from "../../types/common/enums"
 import ProjectApiUtils from "./utils";
 import UserApiUtils from "../user/utils";
 import sequelize from "../utils/dbconnection";
-import { Op, Model, ModelStatic } from "sequelize";
+import { Op, Model, ModelStatic, Transaction } from "sequelize";
 
 // allows user to see all projects within permission
-const getProjectsWithUserId = async(id: number): Promise<projectTypes.Project[] | [] | Error> => {
+const getProjectsWithUserId = async(id: number): Promise<commonProjectTypes.Project[] | [] | Error> => {
   const projects = sequelize.models.projects;
   const project_permissions = sequelize.models.project_permissions;
   try {
-    const ownIds = await getIdsByPermission(id, enums.ProjectPermission.OWNER, project_permissions, "projectId");
-    const viewIds = await getIdsByPermission(id, enums.ProjectPermission.VIEWER, project_permissions, "projectId");
-    const editIds = await getIdsByPermission(id, enums.ProjectPermission.EDITOR, project_permissions, "projectId");
-
-    const userProjects = await projects.findAll({
+    const projectIds: number[] = await ProjectApiUtils.getAllPermissions(id, project_permissions, "projectId");
+    const res = [];
+    const userProjects: commonProjectTypes.Project[] = await projects.findAll({
       where: {
         id: {
-          [Op.in]: [...ownIds, ...viewIds, ...editIds]
+          [Op.in]: projectIds
         }
       }
-    })
-    const res: projectTypes.Project[] = [];
-    userProjects.forEach((project) => {
-      res.push(project.get({ plain: true }));
-    })
-    return res;
-  } catch (e) {
-    return Promise.reject(e)
-  }
-};
-
-// get projectIds/projectBidIds by user permission
-const getIdsByPermission = async(userId: number, permission: enums.ProjectPermission, model: ModelStatic<Model<any, any>>, attr: string): Promise<number[]> => {
-
-  try {
-    return await model.findAll({
-      attributes: [attr],
-      where: {
-        userId,
-        permission
-      }
-    }).then(data => data.map(row => row.getDataValue(attr)));
-  } catch (e) {
-    return Promise.reject(e);
-  }
-}
-const getProjectPermission = async(userId: number, projectId: number): Promise<enums.ProjectPermission | null | Error> => {
-  const project_permissions = sequelize.models.project_permissions;
-  try {
-    const permission = await project_permissions.findOne({
-      attributes: ["permission"],
-      where: {
-        userId,
-        projectId
-      }
+    }).then(projects => {
+      return projects.map(p => p.get({ plain:true }));
     });
-    const res = permission?.get().permission;
+
+    for (let project of userProjects) {
+      const components = await ProjectApiUtils.getProjectComponents(project.id);
+      res.push({
+        ...project,
+        components
+      } as commonProjectTypes.Project);
+    }
     return Promise.resolve(res);
-  } catch(e) {
+  } catch (e) {
     return Promise.reject(e)
   }
 };
@@ -67,32 +40,31 @@ const getProjectPermission = async(userId: number, projectId: number): Promise<e
 // get specific project with user permission
 // vendor should be able to see all projects
 // customer should NOT see other customers' projects
-// this method needs to determine user type, if user type is vendor, project permission is VIEWER
-// if user type is customer, this method should fail
-const getProjectWithProjectId = async(data: projectTypes.getProjectWithProjectIdInput): Promise<projectTypes.PermissionedProject | Error> => {
+// if user type is vendor, project permission is VIEWER
+// if user type is customer, should only see his/her viewable/editable/owned projects
+const getProjectWithProjectId = async(data: getProjectTypes.getProjectWithProjectIdInput): Promise<commonProjectTypes.PermissionedProject | Error> => {
   const projects = sequelize.models.projects;
-  
-  const {userId, projectId } = data;
+
+  const {userId, projectId, isVendor } = data;
   try {
-    const isVendor = await UserApiUtils.isVendorWithUserId(userId);
-    if (!isVendor) {
-      return Promise.reject(new Error("Permission denied."));
-    }
-
-    // separating from above as user could be a vendor
-    const userPermission = await getProjectPermission(userId, projectId);
-    const permission = userPermission ? userPermission : "VIEWER";
-
+    const userPermission = await ProjectApiUtils.getProjectPermission(userId, projectId);
     const project = await projects.findOne({
       where: {
         id: projectId
       }
     }).then(p => p?.get({ plain: true }));
+
+    if (!isVendor && !userPermission) {
+      // user is customer and no permission, meaning user is other customers
+      return Promise.reject(new Error("Permission denied"));
+    }
+    const components = await ProjectApiUtils.getProjectComponents(projectId);
     
     const res = {
       ...project,
-      permission
-    }
+      components,
+      permission: userPermission ? userPermission : "VIEWER"
+    };
     return Promise.resolve(res);
   } catch (e) {
     
@@ -100,35 +72,101 @@ const getProjectWithProjectId = async(data: projectTypes.getProjectWithProjectId
   }
 };
 
-//TODO: implement varius getProjectBids emthods
-const getProjectBidByUserId = async(id: number): Promise<projectTypes.PermissionedProjectBid[] | [] | Error> => {
+const getProjectBidsWithUserId = async(id: number): Promise<commonProjectTypes.ProjectBid[] | Error> => {
   const project_bids = sequelize.models.project_bids;
   const project_bid_permissions = sequelize.models.project_bid_permissions;
-  try {
-    const ownIds = await getIdsByPermission(id, enums.ProjectPermission.OWNER, project_bid_permissions, "projectBidId");
-    const viewIds = await getIdsByPermission(id, enums.ProjectPermission.VIEWER, project_bid_permissions, "projectBidId");
-    const editIds = await getIdsByPermission(id, enums.ProjectPermission.EDITOR, project_bid_permissions, "projectBidId");
 
-    let userProjectBids: any = await project_bids.findAll({
+  try {
+    const projectBidIds: number[] = await ProjectApiUtils.getAllPermissions(id, project_bid_permissions, "projectBidId");
+
+    const userProjectBids: commonProjectTypes.ProjectBid[] = await project_bids.findAll({
       where: {
         id: {
-          [Op.in]: [...ownIds, ...viewIds, ...editIds]
+          [Op.in]: projectBidIds
         }
       }
-    })
+    }).then((projectBids) => {
+      return projectBids.map(bid => bid.get({ plain:true }));
+    });
 
-    userProjectBids = userProjectBids.map((project: any) => {
-      return project.get({ plain: true });
-    })
+    const res = [];
 
-return []
-    // return Promise.resolve(ProjectApiUtils.processProjectBids(userProjects)); 
+    for (let projectBid of userProjectBids) {
+      const componentsBid = await ProjectApiUtils.getProjectComponentsBid(projectBid.id);
+      res.push({
+        ...projectBid,
+        componentsBid
+      } as commonProjectTypes.ProjectBid);
+    }
+
+    return Promise.resolve(res); 
   } catch (e) {
     return Promise.reject(e)
   }
+};
+
+// only customers that have access to this project can view
+// only vendor that own/view/edit the projectbid can view
+const getProjectBidWithProjectBidId = async(data: getProjectTypes.getProjectBidWithProjectBidIdInput): Promise<commonProjectTypes.PermissionedProjectBid | Error> => {
+  const project_bids = sequelize.models.project_bids;
+  const project_bid_permissions = sequelize.models.project_bid_permissions;
+  const project_permissions = sequelize.models.project_permissions;
+  const { userId, projectBidId, isVendor } = data;
+
+  if (!isVendor) {
+    // projectBid for customer
+    // if customer permissions contain projectId that matches projectBid's projectId
+    const projectIds: number[] = await ProjectApiUtils.getAllPermissions(userId, project_permissions, "projectId");
+    const bid = await project_bids.findOne({
+      where: {
+        id: projectBidId,
+        userId
+      }
+    }).then(b => b?.get({ plain:true }));
+    
+    if (projectIds.includes(bid.projectId)) {
+      // customer viewable/editable/owned projects contains this bid's corresponding project
+      return Promise.resolve({
+        ...bid,
+        permission: enums.ProjectPermission.VIEWER
+      });
+    } else {
+      return Promise.reject(new Error("Permission denied"));
+    }
+  } else {
+    // projectBid for vendor
+    const permission: enums.ProjectPermission = await project_bid_permissions.findOne({
+      attributes: ["permission"],
+      where: {
+        userId,
+        projectBidId
+      }
+    }).then(p => p?.get({ plain:true }));
+
+    if (!permission) {
+      return Promise.reject(new Error("Permission denied"));
+    }
+
+    const projectBid = await project_bids.findOne({
+      where: {
+        id: projectBidId
+      }
+    }).then(b => b?.get({ plain:true }));
+
+    const componentsBid = await ProjectApiUtils.getProjectComponentsBid(projectBid.id);
+    
+    return {
+      ...projectBid,
+      componentsBid,
+      permission
+    }
+  }
 }
+
 
 export {
   getProjectsWithUserId,
-  getProjectWithProjectId
+  getProjectWithProjectId,
+  getProjectBidsWithUserId,
+  getProjectBidWithProjectBidId
 }

@@ -1,5 +1,5 @@
 import { updateProjectBid as updateProjectBidApi } from "../../../../api/project/updateProjectApis";
-import { UpdateProjectBidInput } from "../../../../types/projectTypes";
+import { UpdateProjectBidInput } from "../../../../types/update/projectTypes";
 
 const updateProjectBid = (parent: any, args: Record<string, UpdateProjectBidInput>, context: any, info: any) => {
   

@@ -15,7 +15,7 @@ export interface usersAttributes {
   isAdmin: boolean;
   createdAt: Date;
   updatedAt: Date;
-  userType: string;
+  isVendor: boolean;
 }
 
 export type usersPk = "id";
@@ -32,7 +32,7 @@ export class users extends Model<usersAttributes, usersCreationAttributes> imple
   isAdmin!: boolean;
   createdAt!: Date;
   updatedAt!: Date;
-  userType!: string;
+  isVendor!: boolean;
 
   // users belongsTo companies via companyId
   company!: companies;
@@ -122,8 +122,8 @@ export class users extends Model<usersAttributes, usersCreationAttributes> imple
       type: DataTypes.BOOLEAN,
       allowNull: false
     },
-    userType: {
-      type: DataTypes.STRING(20),
+    isVendor: {
+      type: DataTypes.BOOLEAN,
       allowNull: false
     }
   }, {

@@ -1,6 +1,6 @@
 import sequelize from "../utils/dbconnection";
-import * as projectTypes from "../../types/projectTypes";
-import * as enums from "../../types/enums";
+import * as projectTypes from "../../types/update/projectTypes";
+import * as enums from "../../types/common/enums";
 import { Transaction } from "sequelize/types";
 import { createOrUpdateProjectPermission, createOrUpdateProjectBidPermission } from "./createProjectApis";
 
@@ -22,7 +22,7 @@ const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<bool
         },
         transaction
       });
-      return await updateProjectComponents(components, transaction);
+      await updateProjectComponents(components, transaction);
     });
     return Promise.resolve(true);
   }

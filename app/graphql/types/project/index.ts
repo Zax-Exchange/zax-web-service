@@ -11,6 +11,7 @@ const project = gql`
     budget: Int!
     design: String!
     status: String!
+    components: [ProjectComponent!]!
     createdAt: String!
     updatedAt: String!
   }
@@ -24,6 +25,18 @@ const project = gql`
     budget: Int!
     design: String!
     status: String!
+    components: [ProjectComponent!]!
+    permission: String!
+    createdAt: String!
+    updatedAt: String!
+  }
+
+  type PermissionedProjectBid {
+    id: Int!
+    userId: Int!
+    projectId: Int!
+    project: Project!
+    components: [ProjectComponentBid!]!
     permission: String!
     createdAt: String!
     updatedAt: String!
@@ -41,13 +54,29 @@ const project = gql`
   }
 
   type ProjectBid {
+    id: Int!
     userId: Int!
     projectId: Int!
     comments: String!
+    project: Project!
+    componentBids: [ProjectComponentBid!]!
     createdAt: String!
     updatedAt: String!
   }
 
+  type ProjectComponentBid {
+    id: Int!
+    projectBidId: Int!
+    projectComponentId: Int!
+    quantityPrices: [QuantityPrice!]!
+    createdAt: String!
+    updatedAt: String!
+  }
+
+  type QuantityPrice {
+    quantity: Int!
+    price: Int!
+  }
   input CreateProjectComponentInput {
     name: String!
     materials: [String!]!
@@ -65,7 +94,7 @@ const project = gql`
     components: [CreateProjectComponentInput!]!
   }
 
-  input QuantityPrice {
+  input QuantityPriceInput {
     quantity: Int!
     price: Int!
   }
@@ -83,7 +112,7 @@ const project = gql`
 
   input ComponentBidQuantityPrice {
     projectComponentId: Int!
-    quantityPrices: [QuantityPrice!]!
+    quantityPrices: [QuantityPriceInput!]!
   }
 
   input UpdateProjectInput {
@@ -112,17 +141,17 @@ const project = gql`
 
   input UpdateProjectComponentBidInput {
     id: Int!
-    quantityPrices: [QuantityPrice!]!
+    quantityPrices: [QuantityPriceInput!]!
   }
 
-  input CreateOrUpdateProjectPermissionInput {
-    userId: Int!
+  input UpdateProjectPermissionsInput {
+    userId: [Int]!
     projectId: Int!
     permission: String!
   }
 
-  input CreateOrUpdateProjectBidPermissionInput {
-    userId: Int!
+  input UpdateProjectBidPermissionsInput {
+    userId: [Int]!
     projectBidId: Int!
     permission: String!
   }
@@ -130,6 +159,13 @@ const project = gql`
   input GetProjectWithProjectIdInput {
     userId: Int!
     projectId: Int!
+    isVendor: Boolean!
+  }
+
+  input GetProjectBidWithProjectBidIdInput {
+    userId: Int!
+    projectBidId: Int!
+    isVendor: Boolean!
   }
 
   input DeleteProjectInput {

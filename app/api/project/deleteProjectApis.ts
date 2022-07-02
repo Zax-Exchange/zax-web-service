@@ -1,6 +1,6 @@
 import sequelize from "../utils/dbconnection";
-import * as projectTypes from "../../types/projectTypes";
-import * as enums from "../../types/enums";
+import * as projectTypes from "../../types/delete/projectTypes";
+import * as enums from "../../types/common/enums";
 import { Op, Transaction } from "sequelize";
 import ProjectUtils from "./utils";
 
@@ -116,6 +116,7 @@ const deleteProjectComponentsBid = async(data: projectTypes.DeleteProjectCompone
 const deleteProjectPermissions = async (data: projectTypes.DeleteProjectPermissionsInput): Promise<boolean | Error> => {
   const { userIds, projectId } = data;
   const project_permissions = sequelize.models.project_permissions;
+  //TODO: should also check if user performing action is allowed
   try {
     await sequelize.transaction(async (transaction) => {
       for (let userId of userIds) {
@@ -123,7 +124,8 @@ const deleteProjectPermissions = async (data: projectTypes.DeleteProjectPermissi
           where: {
             userId,
             projectId
-          }
+          },
+          transaction
         });
       }
     });
@@ -144,7 +146,8 @@ const deleteProjectBidPermissions = async (data: projectTypes.DeleteProjectBidPe
           where: {
             userId,
             projectBidId
-          }
+          },
+          transaction
         });
       }
     });

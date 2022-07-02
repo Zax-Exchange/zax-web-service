@@ -1,6 +1,6 @@
 import sequelize from "../utils/dbconnection";
-import * as projectTypes from "../../types/projectTypes";
-import * as enums from "../../types/enums";
+import * as projectTypes from "../../types/create/projectTypes";
+import * as enums from "../../types/common/enums";
 import { Transaction } from "sequelize/types";
 import { updateProjectStatus } from "./updateProjectApis";
 

@@ -1,4 +1,4 @@
-import sql from "../utils/dbconnection";
+import sequelize from "../utils/dbconnection";
 
 //TODO: should be get all vendors/customers
 const getAllCompanies = async() => {

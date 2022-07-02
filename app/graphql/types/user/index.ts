@@ -2,26 +2,26 @@ import { gql } from "apollo-server-express";
 
 const user = gql`
   type User {
-    id: Int
-    name: String
-    email: String
-    password: String
-    companyId: Int
-    userType: String
-    isAdmin: Boolean
-    createdAt: String
-    updatedAt: String
+    id: Int!
+    name: String!
+    email: String!
+    password: String!
+    companyId: Int!
+    isVendor: Boolean!
+    isAdmin: Boolean!
+    createdAt: String!
+    updatedAt: String!
   }
 
   input CreateUserInput {
-    name: String
-    email: String
-    password: String
-    companyId: Int
+    name: String!
+    email: String!
+    password: String!
+    companyId: Int!
   }
 
   input UpdateUserInput {
-    id: Int
+    id: Int!
     name: String
     email: String
     password: String

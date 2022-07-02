@@ -4,8 +4,8 @@ import createProject from "./project/create/createProject";
 import createProjectBid from "./project/create/createProjectBid";
 import updateProject from "./project/update/updateProject";
 import updateProjectBid from "./project/update/updateProjectBid";
-import createOrUpdateProjectPermission from "./project/create/createOrUpdateProjectPermission";
-import createOrUpdateProjectBidPermission from "./project/create/createOrUpdateProjectBidPermission";
+import updateProjectBidPermissions from "./project/update/updateProjectBidPermissions";
+import updateProjectPermissions from "./project/update/updateProjectPermissions";
 import deleteProject from "./project/delete/deleteProject";
 export default {
   createUser,
@@ -14,7 +14,7 @@ export default {
   createProjectBid,
   updateProject,
   updateProjectBid,
-  createOrUpdateProjectPermission,
-  createOrUpdateProjectBidPermission,
+  updateProjectPermissions,
+  updateProjectBidPermissions,
   deleteProject
 };
