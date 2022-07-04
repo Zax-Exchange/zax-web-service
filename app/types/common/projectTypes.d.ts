@@ -21,7 +21,8 @@ export interface Project {
   updatedAt: Date;
 }
 
-export interface VendorProject extends Project {
+export interface VendorProject extends PermissionedProject {
+
   bidInfo: PermissionedProjectBid | null;
 }
 

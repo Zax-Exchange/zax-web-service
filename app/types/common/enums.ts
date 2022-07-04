@@ -10,7 +10,7 @@ export enum ProjectStatus {
   CLOSED = "CLOSED"
 }
 
-export enum UserType {
-  CUSTOMER = "CUSTOMER",
-  VENDOR = "VENDOR"
+export enum CompanyPermission {
+  ADMIN = "ADMIN",
+  USER = "USER"
 }

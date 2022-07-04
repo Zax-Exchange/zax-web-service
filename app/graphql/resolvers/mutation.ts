@@ -7,8 +7,15 @@ import updateProjectBid from "./project/update/updateProjectBid";
 import updateProjectBidPermissions from "./project/update/updateProjectBidPermissions";
 import updateProjectPermissions from "./project/update/updateProjectPermissions";
 import deleteProject from "./project/delete/deleteProject";
+import createCompany from "./company/createCompany";
+import {
+  updateCompany,
+  updateCompanyPlan
+} from "./company/updateCompany";
+
 export default {
   createUser,
+  createCompany,
   updateUser,
   createProject,
   createProjectBid,
@@ -16,5 +23,7 @@ export default {
   updateProjectBid,
   updateProjectPermissions,
   updateProjectBidPermissions,
-  deleteProject
+  deleteProject,
+  updateCompany,
+  updateCompanyPlan
 };

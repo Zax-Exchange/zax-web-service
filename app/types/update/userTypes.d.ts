@@ -1,8 +1,8 @@
 export interface UpdateUserInput {
   id: number;
-  email: string?;
-  password: string?;
-  isAdmin: boolean?;
+  email: string;
+  password: string;
+  isAdmin: boolean;
 }
 
 export interface UpdateUserPowerInput {

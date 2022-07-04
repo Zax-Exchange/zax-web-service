@@ -41,6 +41,7 @@ const project = gql`
     budget: Int!
     design: String
     status: String!
+    permission: String!
     components: [ProjectComponent!]!
     bidInfo: ProjectBid
     createdAt: String!
@@ -57,6 +58,7 @@ const project = gql`
     budget: Int!
     design: String
     status: String!
+    permission: String!
     components: [ProjectComponent!]!
     bids: [ProjectBid]
     createdAt: String!

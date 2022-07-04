@@ -20,10 +20,8 @@ const getAllUsers = async(): Promise<userTypes.User[]> => {
 const getUserWithUserId = async(id: number): Promise<userTypes.User> => {
   const users = sequelize.models.users;
   try {
-    const user = await users.findOne({
-      where: {id}
-    });
-    return user?.get({ plain:true });
+    const user = await users.findByPk(id).then(u => u?.get({ plain:true }));
+    return user
   } catch (e) {
     console.error(e)
     return Promise.reject(e);

@@ -9,11 +9,11 @@ export interface companiesAttributes {
   name: string;
   logo?: any;
   phone: string;
-  fax: string;
-  creditCardNumber?: string;
-  creditCardExp?: string;
-  creditCardCvv?: string;
-  country?: string;
+  fax?: string;
+  creditCardNumber: string;
+  creditCardExp: string;
+  creditCardCvv: string;
+  country: string;
   isActive: boolean;
   isVendor: boolean;
   isVerified: boolean;
@@ -26,18 +26,18 @@ export interface companiesAttributes {
 
 export type companiesPk = "id";
 export type companiesId = companies[companiesPk];
-export type companiesOptionalAttributes = "logo" | "creditCardNumber" | "creditCardExp" | "creditCardCvv" | "country" | "companyUrl" | "leadTime" | "createdAt" | "updatedAt";
+export type companiesOptionalAttributes = "logo" | "fax" | "companyUrl" | "leadTime" | "createdAt" | "updatedAt";
 export type companiesCreationAttributes = Optional<companiesAttributes, companiesOptionalAttributes>;
 
 export class companies extends Model<companiesAttributes, companiesCreationAttributes> implements companiesAttributes {
   name!: string;
   logo?: any;
   phone!: string;
-  fax!: string;
-  creditCardNumber?: string;
-  creditCardExp?: string;
-  creditCardCvv?: string;
-  country?: string;
+  fax?: string;
+  creditCardNumber!: string;
+  creditCardExp!: string;
+  creditCardCvv!: string;
+  country!: string;
   isActive!: boolean;
   isVendor!: boolean;
   isVerified!: boolean;
@@ -113,24 +113,24 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
     },
     fax: {
       type: DataTypes.STRING(255),
-      allowNull: false
+      allowNull: true
     },
     creditCardNumber: {
       type: DataTypes.STRING(255),
-      allowNull: true,
+      allowNull: false,
       unique: "companies_creditCardNumber_key"
     },
     creditCardExp: {
       type: DataTypes.STRING(10),
-      allowNull: true
+      allowNull: false
     },
     creditCardCvv: {
       type: DataTypes.STRING(4),
-      allowNull: true
+      allowNull: false
     },
     country: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false
     },
     isActive: {
       type: DataTypes.BOOLEAN,

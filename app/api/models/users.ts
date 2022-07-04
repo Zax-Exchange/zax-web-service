@@ -16,11 +16,12 @@ export interface usersAttributes {
   createdAt: Date;
   updatedAt: Date;
   isVendor: boolean;
+  isActive: boolean;
 }
 
 export type usersPk = "id";
 export type usersId = users[usersPk];
-export type usersOptionalAttributes = "createdAt" | "updatedAt";
+export type usersOptionalAttributes = "createdAt" | "updatedAt" | "isActive";
 export type usersCreationAttributes = Optional<usersAttributes, usersOptionalAttributes>;
 
 export class users extends Model<usersAttributes, usersCreationAttributes> implements usersAttributes {
@@ -33,6 +34,7 @@ export class users extends Model<usersAttributes, usersCreationAttributes> imple
   createdAt!: Date;
   updatedAt!: Date;
   isVendor!: boolean;
+  isActive!: boolean;
 
   // users belongsTo companies via companyId
   company!: companies;
@@ -125,6 +127,11 @@ export class users extends Model<usersAttributes, usersCreationAttributes> imple
     isVendor: {
       type: DataTypes.BOOLEAN,
       allowNull: false
+    },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true
     }
   }, {
     tableName: 'users',

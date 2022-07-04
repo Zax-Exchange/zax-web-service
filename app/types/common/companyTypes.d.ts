@@ -1,4 +1,5 @@
 import * as planTypes from "./planTypes";
+import * as enums from "./enums";
 
 export interface Company {
   id: number;
@@ -20,4 +21,21 @@ export interface Company {
   updatedAt: Date;
 }
 
+export interface PermissionedCompany extends Company {
+  isAdmin: boolean
+}
+
+export interface GeneralCompany {
+  id: number;
+  name: string;
+  logo: string;
+  phone: string;
+  fax: string;
+  isVendor: boolean;
+  isVerified: boolean;
+  leadTime: number;
+  companyUrl: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
