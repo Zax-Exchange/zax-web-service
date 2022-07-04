@@ -1,10 +1,12 @@
 import type { Sequelize } from "sequelize";
 import { companies as _companies } from "./companies";
 import type { companiesAttributes, companiesCreationAttributes } from "./companies";
+import { company_plans as _company_plans } from "./company_plans";
+import type { company_plansAttributes, company_plansCreationAttributes } from "./company_plans";
 import { company_product_types as _company_product_types } from "./company_product_types";
 import type { company_product_typesAttributes, company_product_typesCreationAttributes } from "./company_product_types";
-import { plan_types as _plan_types } from "./plan_types";
-import type { plan_typesAttributes, plan_typesCreationAttributes } from "./plan_types";
+import { plans as _plans } from "./plans";
+import type { plansAttributes, plansCreationAttributes } from "./plans";
 import { product_types as _product_types } from "./product_types";
 import type { product_typesAttributes, product_typesCreationAttributes } from "./product_types";
 import { project_bid_permissions as _project_bid_permissions } from "./project_bid_permissions";
@@ -24,8 +26,9 @@ import type { usersAttributes, usersCreationAttributes } from "./users";
 
 export {
   _companies as companies,
+  _company_plans as company_plans,
   _company_product_types as company_product_types,
-  _plan_types as plan_types,
+  _plans as plans,
   _product_types as product_types,
   _project_bid_permissions as project_bid_permissions,
   _project_bids as project_bids,
@@ -39,10 +42,12 @@ export {
 export type {
   companiesAttributes,
   companiesCreationAttributes,
+  company_plansAttributes,
+  company_plansCreationAttributes,
   company_product_typesAttributes,
   company_product_typesCreationAttributes,
-  plan_typesAttributes,
-  plan_typesCreationAttributes,
+  plansAttributes,
+  plansCreationAttributes,
   product_typesAttributes,
   product_typesCreationAttributes,
   project_bid_permissionsAttributes,
@@ -63,8 +68,9 @@ export type {
 
 export function initModels(sequelize: Sequelize) {
   const companies = _companies.initModel(sequelize);
+  const company_plans = _company_plans.initModel(sequelize);
   const company_product_types = _company_product_types.initModel(sequelize);
-  const plan_types = _plan_types.initModel(sequelize);
+  const plans = _plans.initModel(sequelize);
   const product_types = _product_types.initModel(sequelize);
   const project_bid_permissions = _project_bid_permissions.initModel(sequelize);
   const project_bids = _project_bids.initModel(sequelize);
@@ -74,14 +80,16 @@ export function initModels(sequelize: Sequelize) {
   const projects = _projects.initModel(sequelize);
   const users = _users.initModel(sequelize);
 
+  company_plans.belongsTo(companies, { as: "company", foreignKey: "companyId"});
+  companies.hasMany(company_plans, { as: "company_plans", foreignKey: "companyId"});
   company_product_types.belongsTo(companies, { as: "company", foreignKey: "companyId"});
   companies.hasMany(company_product_types, { as: "company_product_types", foreignKey: "companyId"});
   projects.belongsTo(companies, { as: "company", foreignKey: "companyId"});
   companies.hasMany(projects, { as: "projects", foreignKey: "companyId"});
   users.belongsTo(companies, { as: "company", foreignKey: "companyId"});
   companies.hasMany(users, { as: "users", foreignKey: "companyId"});
-  companies.belongsTo(plan_types, { as: "plan", foreignKey: "planId"});
-  plan_types.hasMany(companies, { as: "companies", foreignKey: "planId"});
+  company_plans.belongsTo(plans, { as: "plan", foreignKey: "planId"});
+  plans.hasMany(company_plans, { as: "company_plans", foreignKey: "planId"});
   company_product_types.belongsTo(product_types, { as: "productType", foreignKey: "productTypeId"});
   product_types.hasMany(company_product_types, { as: "company_product_types", foreignKey: "productTypeId"});
   project_bid_permissions.belongsTo(project_bids, { as: "projectBid", foreignKey: "projectBidId"});
@@ -107,8 +115,9 @@ export function initModels(sequelize: Sequelize) {
 
   return {
     companies: companies,
+    company_plans: company_plans,
     company_product_types: company_product_types,
-    plan_types: plan_types,
+    plans: plans,
     product_types: product_types,
     project_bid_permissions: project_bid_permissions,
     project_bids: project_bids,

@@ -1,12 +1,10 @@
-export interface getProjectWithProjectIdInput {
+export interface getProjectInput {
   projectId: number;
   userId: number;
-  isVendor: boolean;
 }
 
 
-export interface getProjectBidWithProjectBidIdInput {
+export interface getProjectBidInput {
   projectBidId: number;
   userId: number;
-  isVendor: boolean;
 }

@@ -1,7 +1,7 @@
-import { getAllCompanies as getAllCompaniesApi } from "../../../api/company/companyApis";
 
-const getAllCompanies = () => {
-  return getAllCompaniesApi();
+
+const getCompany = () => {
+  return []
 };
 
-export default getAllCompanies;
+export default getCompany;

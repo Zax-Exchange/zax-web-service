@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import type { company_plans, company_plansId } from './company_plans';
 import type { company_product_types, company_product_typesId } from './company_product_types';
-import type { plan_types, plan_typesId } from './plan_types';
 import type { projects, projectsId } from './projects';
 import type { users, usersId } from './users';
 
@@ -14,7 +14,6 @@ export interface companiesAttributes {
   creditCardExp?: string;
   creditCardCvv?: string;
   country?: string;
-  planId?: number;
   isActive: boolean;
   isVendor: boolean;
   isVerified: boolean;
@@ -27,7 +26,7 @@ export interface companiesAttributes {
 
 export type companiesPk = "id";
 export type companiesId = companies[companiesPk];
-export type companiesOptionalAttributes = "logo" | "creditCardNumber" | "creditCardExp" | "creditCardCvv" | "country" | "planId" | "companyUrl" | "leadTime" | "createdAt" | "updatedAt";
+export type companiesOptionalAttributes = "logo" | "creditCardNumber" | "creditCardExp" | "creditCardCvv" | "country" | "companyUrl" | "leadTime" | "createdAt" | "updatedAt";
 export type companiesCreationAttributes = Optional<companiesAttributes, companiesOptionalAttributes>;
 
 export class companies extends Model<companiesAttributes, companiesCreationAttributes> implements companiesAttributes {
@@ -39,7 +38,6 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
   creditCardExp?: string;
   creditCardCvv?: string;
   country?: string;
-  planId?: number;
   isActive!: boolean;
   isVendor!: boolean;
   isVerified!: boolean;
@@ -49,6 +47,18 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
   createdAt!: Date;
   updatedAt!: Date;
 
+  // companies hasMany company_plans via companyId
+  company_plans!: company_plans[];
+  getCompany_plans!: Sequelize.HasManyGetAssociationsMixin<company_plans>;
+  setCompany_plans!: Sequelize.HasManySetAssociationsMixin<company_plans, company_plansId>;
+  addCompany_plan!: Sequelize.HasManyAddAssociationMixin<company_plans, company_plansId>;
+  addCompany_plans!: Sequelize.HasManyAddAssociationsMixin<company_plans, company_plansId>;
+  createCompany_plan!: Sequelize.HasManyCreateAssociationMixin<company_plans>;
+  removeCompany_plan!: Sequelize.HasManyRemoveAssociationMixin<company_plans, company_plansId>;
+  removeCompany_plans!: Sequelize.HasManyRemoveAssociationsMixin<company_plans, company_plansId>;
+  hasCompany_plan!: Sequelize.HasManyHasAssociationMixin<company_plans, company_plansId>;
+  hasCompany_plans!: Sequelize.HasManyHasAssociationsMixin<company_plans, company_plansId>;
+  countCompany_plans!: Sequelize.HasManyCountAssociationsMixin;
   // companies hasMany company_product_types via companyId
   company_product_types!: company_product_types[];
   getCompany_product_types!: Sequelize.HasManyGetAssociationsMixin<company_product_types>;
@@ -85,11 +95,6 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
   hasUser!: Sequelize.HasManyHasAssociationMixin<users, usersId>;
   hasUsers!: Sequelize.HasManyHasAssociationsMixin<users, usersId>;
   countUsers!: Sequelize.HasManyCountAssociationsMixin;
-  // companies belongsTo plan_types via planId
-  plan!: plan_types;
-  getPlan!: Sequelize.BelongsToGetAssociationMixin<plan_types>;
-  setPlan!: Sequelize.BelongsToSetAssociationMixin<plan_types, plan_typesId>;
-  createPlan!: Sequelize.BelongsToCreateAssociationMixin<plan_types>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof companies {
     return sequelize.define('companies', {
@@ -126,14 +131,6 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
     country: {
       type: DataTypes.STRING(255),
       allowNull: true
-    },
-    planId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'plan_types',
-        key: 'id'
-      }
     },
     isActive: {
       type: DataTypes.BOOLEAN,

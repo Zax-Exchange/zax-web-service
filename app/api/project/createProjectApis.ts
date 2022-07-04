@@ -3,14 +3,20 @@ import * as projectTypes from "../../types/create/projectTypes";
 import * as enums from "../../types/common/enums";
 import { Transaction } from "sequelize/types";
 import { updateProjectStatus } from "./updateProjectApis";
+import ProjectApiUtils from "./utils";
+import UserApiUtils from "../user/utils";
 
 //TODO: add other user permissions when creating project?
-const createProject = async(data: projectTypes.CreateProjectInput): Promise<boolean | Error> => {
+const createProject = async(data: projectTypes.CreateProjectInput): Promise<boolean> => {
   const projects = sequelize.models.projects;
   const users = sequelize.models.users;
 
   const {userId, name, deliveryDate, deliveryLocation, budget, design, components} = data;
   try {
+    const isVendor = await UserApiUtils.isVendorWithUserId(userId);
+    if (isVendor) {
+      return Promise.reject(new Error("Action not allowed."));
+    }
     await sequelize.transaction(async transaction => {
       const user = await users.findOne({
         where: {
@@ -39,7 +45,7 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
   }
 };
 
-const createProjectComponent = async(projectId: number, components: projectTypes.CreateProjectComponentInput[], transaction: Transaction): Promise<boolean | Error> => {
+const createProjectComponent = async(projectId: number, components: projectTypes.CreateProjectComponentInput[], transaction: Transaction): Promise<boolean> => {
   const project_components = sequelize.models.project_components;
   
   try {
@@ -55,9 +61,15 @@ const createProjectComponent = async(projectId: number, components: projectTypes
   }
 };
 
-const createProjectBid = async(data: projectTypes.CreateProjectBidInput): Promise<boolean | Error> => {
+const createProjectBid = async(data: projectTypes.CreateProjectBidInput): Promise<boolean> => {
   const project_bids = sequelize.models.project_bids;
   const { userId, projectId, comments, components } = data;
+
+  const isVendor = await UserApiUtils.isVendorWithUserId(userId);
+  if (!isVendor) {
+    return Promise.reject(new Error("Action not allowed."));
+  }
+
   try {
     await sequelize.transaction(async transaction => {
       const bid = await project_bids.create({
@@ -66,7 +78,7 @@ const createProjectBid = async(data: projectTypes.CreateProjectBidInput): Promis
         comments
       }, { transaction });
       const projectBidId = bid.getDataValue("id");
-      await createProjectComponentBid(projectBidId, components, transaction);
+      await createProjectComponentsBid(projectBidId, components, transaction);
       await createOrUpdateProjectBidPermission({ userId, projectBidId, permission: enums.ProjectPermission.OWNER }, transaction);
       await updateProjectStatus(projectId, enums.ProjectStatus.IN_PROGRESS);
     });
@@ -77,7 +89,7 @@ const createProjectBid = async(data: projectTypes.CreateProjectBidInput): Promis
   }
 };
 
-const createProjectComponentBid = async(projectBidId: number, components: projectTypes.CreateProjectComponentBidInput[], transaction: Transaction): Promise<boolean | Error> => {
+const createProjectComponentsBid = async(projectBidId: number, components: projectTypes.CreateProjectComponentBidInput[], transaction: Transaction): Promise<boolean> => {
   const project_component_bids = sequelize.models.project_component_bids;
   try {
     for (let component of components) {
@@ -97,34 +109,17 @@ const createProjectComponentBid = async(projectBidId: number, components: projec
   }
 };
 
-const createOrUpdateProjectPermission = async(data: projectTypes.CreateOrUpdateProjectPermissionInput, transaction?: Transaction): Promise<boolean | Error> => {
+const createOrUpdateProjectPermission = async(data: projectTypes.CreateOrUpdateProjectPermissionInput, transaction?: Transaction): Promise<boolean> => {
   const { userId, projectId, permission } = data;
   const project_permissions = sequelize.models.project_permissions;
 
   try {
-    const foundPermission = await project_permissions.findOne({
-      where: {
-        userId,
-        projectId
-      },
-      transaction
-    });
+    const foundPermission = await ProjectApiUtils.getProjectOrBidPermission(project_permissions, "projectId", userId, projectId, transaction);
+    
     if (!foundPermission) {
-      await project_permissions.create({
-        userId,
-        projectId,
-        permission
-      }, {transaction});
+      await ProjectApiUtils.createPermission(project_permissions, "projectId", userId, projectId, permission, transaction);
     } else {
-      await project_permissions.update({
-        permission
-      }, {
-        where: {
-          userId,
-          projectId,
-        },
-        transaction
-      });
+      await ProjectApiUtils.updatePermission(project_permissions, "projectId", userId, projectId, permission, transaction);
     }
     return Promise.resolve(true);
   } catch (e) {
@@ -133,47 +128,30 @@ const createOrUpdateProjectPermission = async(data: projectTypes.CreateOrUpdateP
   }
 };
 
-const createOrUpdateProjectBidPermission = async(data: projectTypes.CreateOrUpdateProjectBidPermissionInput, transaction?: Transaction): Promise<boolean | Error> => {
+const createOrUpdateProjectBidPermission = async(data: projectTypes.CreateOrUpdateProjectBidPermissionInput, transaction?: Transaction): Promise<boolean> => {
   const { userId, projectBidId, permission } = data;
   const project_bid_permissions = sequelize.models.project_bid_permissions;
 
   try {
-    const foundPermission = await project_bid_permissions.findOne({
-      where: {
-        userId,
-        projectBidId
-      },
-      transaction
-    });
+    const foundPermission = await ProjectApiUtils.getProjectOrBidPermission(project_bid_permissions, "projectBidId", userId, projectBidId);
     if (!foundPermission) {
-      await project_bid_permissions.create({
-        userId,
-        projectBidId,
-        permission
-      }, {transaction});
+      await ProjectApiUtils.createPermission(project_bid_permissions, "projectBidId", userId, projectBidId, permission, transaction);
     } else {
-      await project_bid_permissions.update({
-        permission
-      }, {
-        where: {
-          userId,
-          projectBidId,
-        },
-        transaction
-      });
+      await ProjectApiUtils.updatePermission(project_bid_permissions, "projectBidId", userId, projectBidId, permission, transaction);
     }
     return Promise.resolve(true);
   } catch (e) {
     console.error(e);
     return Promise.reject(e);
   }
+
 };
 
 export {
   createProject,
   createProjectBid,
   createProjectComponent,
-  createProjectComponentBid,
+  createProjectComponentsBid,
   createOrUpdateProjectPermission,
   createOrUpdateProjectBidPermission
 }

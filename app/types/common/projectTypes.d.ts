@@ -21,6 +21,14 @@ export interface Project {
   updatedAt: Date;
 }
 
+export interface VendorProject extends Project {
+  bidInfo: PermissionedProjectBid | null;
+}
+
+export interface CustomerProject extends PermissionedProject {
+  bids: PermissionedProjectBid[] | null;
+}
+
 export interface ProjectComponent {
   id: number;
   name: string;
@@ -49,7 +57,7 @@ export interface ProjectBid {
   id: number;
   userId: number;
   projectId: number;
-  componentsBid: ProjectComponentsBid[];
+  components: ProjectComponentsBid[];
   project: Project;
   createdAt: Date;
   updatedAt: Date;
@@ -65,8 +73,7 @@ export interface PermissionedProjectBid {
   id: number;
   userId: number;
   projectId: number;
-  project: Project;
-  componentsBid: ProjectComponentBid[];
+  components: ProjectComponentBid[];
   permission: enums.ProjectPermission;
   createdAt: Date;
   updatedAt: Date;

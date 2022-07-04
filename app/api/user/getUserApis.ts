@@ -3,7 +3,7 @@ import sequelize from "../utils/dbconnection";
 import UserApiUtils from "./utils";
 
 
-const getAllUsers = async(): Promise<userTypes.User[] | Error> => {
+const getAllUsers = async(): Promise<userTypes.User[]> => {
   const users = sequelize.models.users;
   try {
     const userList = await users.findAll().then(users => {

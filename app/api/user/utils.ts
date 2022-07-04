@@ -3,7 +3,7 @@ import * as enums from "../../types/common/enums";
 import sequelize from "../utils/dbconnection";
 
 class UserApiUtils {
-  static async isUserFirstInCompany(companyId: number): Promise<boolean | Error> {
+  static async isUserFirstInCompany(companyId: number): Promise<boolean> {
     const users = sequelize.models.users;
     try {
       const foundUsers = await users.findAll({
@@ -18,7 +18,7 @@ class UserApiUtils {
     }
   }
 
-  static async getUserTypeWithCompanyId(id: number): Promise<boolean | Error> {
+  static async getUserTypeWithCompanyId(id: number): Promise<boolean> {
     const companies = sequelize.models.companies;
     try {
       const company = await companies.findOne({
@@ -34,21 +34,20 @@ class UserApiUtils {
     }
   }
 
-  static async isVendorWithUserId (id: number): Promise<boolean | Error> {
+  static async isVendorWithUserId (id: number): Promise<boolean> {
     const users = sequelize.models.users;
     try {
       const user = await users.findOne({
         attributes: ["isVendor"],
         where: {id}
       });
-      
       return Promise.resolve(user?.getDataValue("isVendor"));
     } catch(e) {
-      return Promise.resolve(false);
+      return Promise.reject(e);
     }
   }
 
-  static async isUserAdmin(id: number): Promise<boolean | Error> {
+  static async isUserAdmin(id: number): Promise<boolean> {
     const users = sequelize.models.users;
     try {
       const user = await users.findOne({

@@ -2,12 +2,10 @@ import { gql } from "apollo-server-express";
 
 const query = gql`
     type Query {
-        getAllUsers: [User]
+        getUserWithUserId: User
         getAllCompanies: [Company]
-        getProjectsWithUserId(id: Int): [Project]
-        getProjectWithProjectId(data: GetProjectWithProjectIdInput): PermissionedProject
-        getProjectBidsWithUserId(id: Int): [ProjectBid]
-        getProjectBidWithProjectBidId(data: GetProjectBidWithProjectBidIdInput): PermissionedProjectBid
+        getVendorProjects(data: GetProjectInput): [VendorProject]
+        getCustomerProjects(data: GetProjectInput): [CustomerProject]
     }
 `;
 

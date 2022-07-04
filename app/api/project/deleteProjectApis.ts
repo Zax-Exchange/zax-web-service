@@ -4,17 +4,18 @@ import * as enums from "../../types/common/enums";
 import { Op, Transaction } from "sequelize";
 import ProjectUtils from "./utils";
 
-const deleteProject = async(data: projectTypes.DeleteProjectInput): Promise<boolean | Error> => {
+const deleteProject = async(data: projectTypes.DeleteProjectInput): Promise<boolean> => {
   const projects = sequelize.models.projects;
   const project_permissions = sequelize.models.project_permissions;
 
   const { userId, projectId } = data;
   
-  const userAllowed = await ProjectUtils.checkProjectEditableByUser(project_permissions, userId, projectId);
+  const permission = await ProjectUtils.getProjectOrBidPermission(project_permissions, "projectId", userId, projectId);
 
-  if (!userAllowed) {
+  if (!permission || permission === enums.ProjectPermission.VIEWER) {
     return Promise.reject(new Error("Permission denied"))
   }
+  
   try {
     await projects.destroy({
       where: {
@@ -29,15 +30,15 @@ const deleteProject = async(data: projectTypes.DeleteProjectInput): Promise<bool
   }
 };
 
-const deleteProjectComponents = async(data: projectTypes.DeleteProjectComponentsInput): Promise<boolean | Error> => {
+const deleteProjectComponents = async(data: projectTypes.DeleteProjectComponentsInput): Promise<boolean> => {
   const project_components = sequelize.models.project_components;
   const project_permissions = sequelize.models.project_permissions;
 
   const { projectComponentIds, projectId, userId } = data;
 
-  const userAllowed = await ProjectUtils.checkProjectEditableByUser(project_permissions, userId, projectId);
+  const permission = await ProjectUtils.getProjectOrBidPermission(project_permissions, "projectId", userId, projectId);
 
-  if (!userAllowed) {
+  if (!permission || permission === enums.ProjectPermission.VIEWER) {
     return Promise.reject(new Error("Permission denied"))
   }
 
@@ -59,17 +60,18 @@ const deleteProjectComponents = async(data: projectTypes.DeleteProjectComponents
   }
 };
 
-const deleteProjectBid = async(data: projectTypes.DeleteProjectBidInput): Promise<boolean | Error> => {
+const deleteProjectBid = async(data: projectTypes.DeleteProjectBidInput): Promise<boolean> => {
   const project_bids = sequelize.models.project_bids;
   const project_bid_permissions = sequelize.models.project_bid_permissions;
 
   const { userId, projectBidId } = data;
   
-  const userAllowed = await ProjectUtils.checkProjectEditableByUser(project_bid_permissions, userId, projectBidId);
+  const permission = await ProjectUtils.getProjectOrBidPermission(project_bid_permissions, "projectBidId", userId, projectBidId);
 
-  if (!userAllowed) {
+  if (!permission || permission === enums.ProjectPermission.VIEWER) {
     return Promise.reject(new Error("Permission denied"))
   }
+
   try {
     await project_bids.destroy({
       where: {
@@ -83,15 +85,15 @@ const deleteProjectBid = async(data: projectTypes.DeleteProjectBidInput): Promis
   }
 };
 
-const deleteProjectComponentsBid = async(data: projectTypes.DeleteProjectComponentsBidInput): Promise<boolean | Error> => {
+const deleteProjectComponentsBid = async(data: projectTypes.DeleteProjectComponentsBidInput): Promise<boolean> => {
   const project_components = sequelize.models.project_components;
-  const project_permissions = sequelize.models.project_permissions;
+  const project_bid_permissions = sequelize.models.project_bid_permissions;
 
   const { projectComponentBidIds, projectBidId, userId } = data;
 
-  const userAllowed = await ProjectUtils.checkProjectBidEditableByUser(project_permissions, userId, projectBidId);
+  const permission = await ProjectUtils.getProjectOrBidPermission(project_bid_permissions, "projectBidId", userId, projectBidId);
 
-  if (!userAllowed) {
+  if (!permission || permission === enums.ProjectPermission.VIEWER) {
     return Promise.reject(new Error("Permission denied"))
   }
 
@@ -113,7 +115,7 @@ const deleteProjectComponentsBid = async(data: projectTypes.DeleteProjectCompone
   }
 };
 
-const deleteProjectPermissions = async (data: projectTypes.DeleteProjectPermissionsInput): Promise<boolean | Error> => {
+const deleteProjectPermissions = async (data: projectTypes.DeleteProjectPermissionsInput): Promise<boolean> => {
   const { userIds, projectId } = data;
   const project_permissions = sequelize.models.project_permissions;
   //TODO: should also check if user performing action is allowed
@@ -136,7 +138,7 @@ const deleteProjectPermissions = async (data: projectTypes.DeleteProjectPermissi
   }
 };
 
-const deleteProjectBidPermissions = async (data: projectTypes.DeleteProjectBidPermissionsInput): Promise<boolean | Error> => {
+const deleteProjectBidPermissions = async (data: projectTypes.DeleteProjectBidPermissionsInput): Promise<boolean> => {
   const { userIds, projectBidId } = data;
   const project_bid_permissions = sequelize.models.project_bid_permissions;
   try {

@@ -4,7 +4,7 @@ import * as enums from "../../types/common/enums";
 import { Transaction } from "sequelize/types";
 import { createOrUpdateProjectPermission, createOrUpdateProjectBidPermission } from "./createProjectApis";
 
-const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<boolean | Error> => {
+const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<boolean> => {
   const { id, name, deliveryDate, deliveryLocation, budget, design, status, components } = data;
   const projects = sequelize.models.projects;
   try {
@@ -33,7 +33,7 @@ const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<bool
 };
 
 // this goes with update project
-const updateProjectComponents = async(components: projectTypes.UpdateProjectComponentInput[], transaction?: Transaction): Promise<boolean | Error> => {
+const updateProjectComponents = async(components: projectTypes.UpdateProjectComponentInput[], transaction?: Transaction): Promise<boolean> => {
   const project_components = sequelize.models.project_components;
   try {
     for (let component of components) {
@@ -57,7 +57,7 @@ const updateProjectComponents = async(components: projectTypes.UpdateProjectComp
   }
 };
 
-const updateProjectBid = async(data: projectTypes.UpdateProjectBidInput): Promise<boolean | Error> => {
+const updateProjectBid = async(data: projectTypes.UpdateProjectBidInput): Promise<boolean> => {
   const { id, comments, components } = data;
   const project_bids = sequelize.models.project_bids;
 
@@ -82,7 +82,7 @@ const updateProjectBid = async(data: projectTypes.UpdateProjectBidInput): Promis
 };
 
 // this goes with update project bid
-const updateProjectComponentsBid = async(components: projectTypes.UpdateProjectComponentBidInput[], transaction?: Transaction): Promise<boolean | Error> => {
+const updateProjectComponentsBid = async(components: projectTypes.UpdateProjectComponentBidInput[], transaction?: Transaction): Promise<boolean> => {
   const project_component_bids = sequelize.models.project_component_bids;
 
   try {
@@ -105,7 +105,7 @@ const updateProjectComponentsBid = async(components: projectTypes.UpdateProjectC
 };
 
 // bulk create or update project permissions
-const updateProjectPermissions = async (data: projectTypes.UpdateProjectPermissionsInput): Promise<boolean | Error> => {
+const updateProjectPermissions = async (data: projectTypes.UpdateProjectPermissionsInput): Promise<boolean> => {
   const { userIds, projectId, permission } = data;
   try {
     await sequelize.transaction(async (transaction) => {
@@ -120,7 +120,7 @@ const updateProjectPermissions = async (data: projectTypes.UpdateProjectPermissi
   }
 };
 
-const updateProjectBidPermissions = async (data: projectTypes.UpdateProjectBidPermissionsInput): Promise<boolean | Error> => {
+const updateProjectBidPermissions = async (data: projectTypes.UpdateProjectBidPermissionsInput): Promise<boolean> => {
   const { userIds, projectBidId, permission } = data;
   try {
     await sequelize.transaction(async (transaction) => {
@@ -135,7 +135,7 @@ const updateProjectBidPermissions = async (data: projectTypes.UpdateProjectBidPe
   }
 };
 
-const updateProjectStatus = async (projectId: number, status: enums.ProjectStatus, transaction?: Transaction): Promise<boolean | Error> => {
+const updateProjectStatus = async (projectId: number, status: enums.ProjectStatus, transaction?: Transaction): Promise<boolean> => {
   const projects = sequelize.models.projects;
   try {
     await projects.update({
