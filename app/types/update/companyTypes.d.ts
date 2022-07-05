@@ -1,5 +1,6 @@
 export interface UpdateCompanyInput {
   id: number;
+  userId: number;
   data: UpdateCompanyData
 }
 

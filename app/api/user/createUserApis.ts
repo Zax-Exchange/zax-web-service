@@ -11,9 +11,12 @@ const createUser = async(data: userTypes.CreateUserInput) => {
   const {name, email, companyId, password} = data;
   try {
     const isFirst = await UserApiUtils.isUserFirstInCompany(companyId);
-    const isVendor = await UserApiUtils.getUserTypeWithCompanyId(companyId);
+    const isVendor = await CompanyApiUtils.isVendorWithCompanyId(companyId);
     const companyPlan = await CompanyApiUtils.getCompanyPlan(companyId);
 
+    if (!companyPlan) {
+      throw new Error("No company plan found.");
+    }
     if (companyPlan.remainingQuota <= 0) {
       throw new Error("No more licensed users allowed.");
     }
@@ -30,10 +33,10 @@ const createUser = async(data: userTypes.CreateUserInput) => {
       }, {transaction});
       await decreaseCompanyQuota(companyId, companyPlan.remainingQuota - 1, transaction);
     })
-    return Promise.resolve(true);
+    return true;
   } catch (e) {
     console.error(e);
-    return Promise.resolve(false);
+    return Promise.reject(e);
   }
 };
 

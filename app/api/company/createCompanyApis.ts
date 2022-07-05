@@ -14,6 +14,10 @@ const createCompany = async (data: createCompanyTypes.CreateCompanyInput): Promi
     await sequelize.transaction(async (transaction) => {
 
       await CompanyApiUtils.checkCreditCardValidity(creditCardNumber, creditCardCvv, creditCardExp);
+      const isDuplicate = await CompanyApiUtils.isDuplicateCompanyNames(name);
+      if (isDuplicate) {
+        throw new Error("Duplicate company names");
+      }
       const companyId = await companies.create({
         name,
         logo,

@@ -15,7 +15,7 @@ class CompanyApiUtils {
       }
     }).then(p => p?.get({ plain:true }));
     
-    return Promise.resolve(plan);
+    return plan;
   }
 
   // should charge card with $1.00 first to see if card is valid
@@ -23,12 +23,38 @@ class CompanyApiUtils {
     return true;
   }
 
-  static async getCompany(id: number): Promise<commonCompanyTypes.Company> {
+  static async getCompanyWithCompanyId(id: number): Promise<commonCompanyTypes.Company> {
     const companies = sequelize.models.companies;
     try {
-      const company = await companies.findByPk(id).then(comp => comp?.get({ plain:true }));
-      return Promise.resolve(company);
+      return await companies.findByPk(id).then(comp => comp?.get({ plain:true }));
     } catch(e) {
+      return Promise.reject(e);
+    }
+  }
+
+  static async isDuplicateCompanyNames(name: string) {
+    const companies = sequelize.models.companies;
+    try {
+      const foundCompany = await companies.findOne({ where: {name}}).then(c => c?.get());
+      if (foundCompany) {
+        return true;
+      }
+    } catch(e) {
+      return Promise.reject(e);
+    }
+  }
+
+  static async isVendorWithCompanyId(id: number): Promise<boolean> {
+    const companies = sequelize.models.companies;
+    try {
+      return await companies.findOne({
+        attributes: ["isVendor"],
+        where: {
+          id
+        }
+      }).then(c => c?.getDataValue("isVendor"));
+    } catch(e) {
+      console.error(e);
       return Promise.reject(e);
     }
   }

@@ -18,22 +18,6 @@ class UserApiUtils {
     }
   }
 
-  static async getUserTypeWithCompanyId(id: number): Promise<boolean> {
-    const companies = sequelize.models.companies;
-    try {
-      const company = await companies.findOne({
-        attributes: ["isVendor"],
-        where: {
-          id
-        }
-      });
-      return Promise.resolve(company?.getDataValue("isVendor"));
-    } catch(e) {
-      console.error(e);
-      return Promise.reject(e);
-    }
-  }
-
   static async isVendorWithUserId (id: number): Promise<boolean> {
     const users = sequelize.models.users;
     try {
@@ -50,11 +34,9 @@ class UserApiUtils {
   static async isUserAdmin(id: number): Promise<boolean> {
     const users = sequelize.models.users;
     try {
-      const user = await users.findOne({
+      return await users.findOne({
         where: { id }
-      });
-      const isAdmin: boolean = user?.getDataValue("isAdmin");
-      return Promise.resolve(isAdmin);
+      }).then(u => u?.get("isAdmin") as boolean);
     } catch(e) {
       return Promise.reject(e);
     }

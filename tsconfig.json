@@ -8,7 +8,7 @@
     "module": "es6",
     "target": "es6",
     "strict": true,
-    "rootDir": "app",
+    "rootDir": "./",
     "outDir": "dist",
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -17,15 +17,18 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "typeRoots": [
-      "node_modules/@types",
-      "app/test/typings"
+      "./node_modules/@types",
+      "./test/typings"
     ],
     "paths": {
-      "sequelize-test-helpers": ["./app/test/typings/sequelize-test-helpers.d.ts"]
+      "sequelize-test-helpers": ["./test/typings/sequelize-test-helpers.d.ts"],
+      // "proxyquire": ["./app/test/typings/proxyquire.d.ts"]
     }
   },
   "exclude": [
-    "app/api/models",
-    "app/types/**"
+    "./app/types/**/*.d.ts",
+    "./app/types/**/*.ts",
+    "./test",
+    "./node_modules"
   ]
 }

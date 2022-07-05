@@ -6,9 +6,8 @@ import UserApiUtils from "./utils";
 const updateUser = async(data: userTypes.UpdateUserInput) => {
   const users = sequelize.models.users;
   const id = data.id; 
-
   try {
-    await users.update(data, {
+    await users.update(data.data, {
       where: { id }
     });
     return Promise.resolve(true);
@@ -21,11 +20,13 @@ const updateUser = async(data: userTypes.UpdateUserInput) => {
 const updateUserPower = async(data: userTypes.UpdateUserPowerInput) => {
   const isAdmin = UserApiUtils.isUserAdmin(data.fromId);
   if (!isAdmin) {
-    throw new Error("Permission denied.");
+    throw new Error("Permission denied");
   }
   return await updateUser({
     id: data.targetId,
-    isAdmin: data.isAdmin
+    data: {
+      isAdmin: data.isAdmin
+    }
   } as userTypes.UpdateUserInput);
 };
 

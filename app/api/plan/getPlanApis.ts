@@ -5,8 +5,7 @@ import { Transaction } from "sequelize/types";
 const getPlanWithPlanId = async (id: number, transaction?: Transaction): Promise<commonPlanTypes.Plan> => {
   const plans = sequelize.models.plans;
   try {
-    const plan = await plans.findByPk(id, {transaction}).then(p => p?.get({ plain:true }));
-    return plan
+    return await plans.findByPk(id, {transaction}).then(p => p?.get({ plain:true }));
   } catch(e) {
     return Promise.reject(e);
   }

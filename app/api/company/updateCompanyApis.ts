@@ -5,11 +5,19 @@ import * as updatePlanTypes from "../../types/update/planTypes";
 import CompanyApiUtils from "./utils";
 import { getPlanWithPlanId } from "../plan/getPlanApis";
 import { Transaction } from "sequelize/types";
+import UserApiUtils from "../user/utils";
 
 const updateCompany = async (data: updateCompanyTypes.UpdateCompanyInput) => {
   const companies = sequelize.models.companies;
   const id = data.id;
+  const userId = data.userId;
+
   try {
+    const isAdmin = await UserApiUtils.isUserAdmin(userId);
+
+    if (!isAdmin) {
+      throw new Error("Permission denied")
+    }
     await companies.update(data.data, {
       where: {
         id
@@ -28,7 +36,7 @@ const updateCompanyPlan = async (data: updatePlanTypes.UpdateCompanyPlanInput) =
   try {
     const newPlanQuota = await plans.findByPk(planId).then(p => p?.getDataValue("licensedUsers"));
     const companyPlan = await CompanyApiUtils.getCompanyPlan(companyId);
-    const previousPlanQuota = (await getPlanWithPlanId(companyPlan.id)).licensedUsers;
+    const previousPlanQuota = (await getPlanWithPlanId(companyPlan.planId)).licensedUsers;
 
     const used = previousPlanQuota - companyPlan.remainingQuota;
 

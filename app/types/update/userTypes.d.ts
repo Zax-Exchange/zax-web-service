@@ -1,6 +1,10 @@
 export interface UpdateUserInput {
   id: number;
-  email: string;
+  data: UpdateUserInputData
+}
+
+export interface UpdateUserInputData {
+  name: string;
   password: string;
   isAdmin: boolean;
 }

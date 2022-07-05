@@ -6,9 +6,13 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const port = parseInt(process.env.RDS_PORT || "4000");
+let database = process.env.RDS_NAME;
 
+if (process.env.NODE_ENV === "test") {
+  database = process.env.TEST_RDS_NAME;
+}
 const sequelize = new Sequelize({
-  database: process.env.RDS_NAME,
+  database,
   dialect: 'postgres',
   username: process.env.RDS_USERNAME,
   password: process.env.RDS_PASSWORD,
@@ -16,7 +20,7 @@ const sequelize = new Sequelize({
   storage: ':memory:',
   port: port,
   models: ["../models/*.ts"],
-  logging: true
+  logging: false
 })
 
 
