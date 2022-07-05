@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
-import type { company_plans, company_plansId } from './company_plans';
+import type { company_plans, company_plansCreationAttributes, company_plansId } from './company_plans';
 import type { company_product_types, company_product_typesId } from './company_product_types';
 import type { projects, projectsId } from './projects';
 import type { users, usersId } from './users';
@@ -47,18 +47,11 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
   createdAt!: Date;
   updatedAt!: Date;
 
-  // companies hasMany company_plans via companyId
-  company_plans!: company_plans[];
-  getCompany_plans!: Sequelize.HasManyGetAssociationsMixin<company_plans>;
-  setCompany_plans!: Sequelize.HasManySetAssociationsMixin<company_plans, company_plansId>;
-  addCompany_plan!: Sequelize.HasManyAddAssociationMixin<company_plans, company_plansId>;
-  addCompany_plans!: Sequelize.HasManyAddAssociationsMixin<company_plans, company_plansId>;
-  createCompany_plan!: Sequelize.HasManyCreateAssociationMixin<company_plans>;
-  removeCompany_plan!: Sequelize.HasManyRemoveAssociationMixin<company_plans, company_plansId>;
-  removeCompany_plans!: Sequelize.HasManyRemoveAssociationsMixin<company_plans, company_plansId>;
-  hasCompany_plan!: Sequelize.HasManyHasAssociationMixin<company_plans, company_plansId>;
-  hasCompany_plans!: Sequelize.HasManyHasAssociationsMixin<company_plans, company_plansId>;
-  countCompany_plans!: Sequelize.HasManyCountAssociationsMixin;
+  // companies hasOne company_plans via companyId
+  company_plan!: company_plans;
+  getCompany_plan!: Sequelize.HasOneGetAssociationMixin<company_plans>;
+  setCompany_plan!: Sequelize.HasOneSetAssociationMixin<company_plans, company_plansId>;
+  createCompany_plan!: Sequelize.HasOneCreateAssociationMixin<company_plans>;
   // companies hasMany company_product_types via companyId
   company_product_types!: company_product_types[];
   getCompany_product_types!: Sequelize.HasManyGetAssociationsMixin<company_product_types>;

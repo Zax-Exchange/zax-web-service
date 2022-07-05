@@ -16,21 +16,6 @@ const project = gql`
     updatedAt: String!
   }
 
-  type PermissionedProject {
-    id: Int!
-    userId: Int!
-    name: String!
-    deliveryDate: String!
-    deliveryLocation: String!
-    budget: Int!
-    design: String
-    status: String!
-    components: [ProjectComponent!]!
-    permission: String!
-    createdAt: String!
-    updatedAt: String!
-  }
-
   type VendorProject {
     id: Int!
     userId: Int!
@@ -42,8 +27,7 @@ const project = gql`
     design: String
     status: String!
     permission: String!
-    components: [ProjectComponent!]!
-    bidInfo: ProjectBid
+    bidInfo: PermissionedProjectBid!
     createdAt: String!
     updatedAt: String!
   }
@@ -60,7 +44,7 @@ const project = gql`
     status: String!
     permission: String!
     components: [ProjectComponent!]!
-    bids: [ProjectBid]
+    bids: [PermissionedProjectBid]
     createdAt: String!
     updatedAt: String!
   }
@@ -69,7 +53,6 @@ const project = gql`
     id: Int!
     userId: Int!
     projectId: Int!
-    project: Project!
     components: [ProjectComponentBid!]!
     permission: String!
     createdAt: String!

@@ -4,6 +4,7 @@ import * as enums from "../../types/common/enums"
 import UserApiUtils from "../user/utils";
 import { Model, ModelStatic, Transaction } from "sequelize";
 import sequelize from "../utils/dbconnection";
+import { project_bids } from "../models/project_bids";
 
 class ProjectApiUtils {
   static async getIdsByPermission(userId: number, permission: enums.ProjectPermission, model: ModelStatic<Model<any, any>>, attr: string): Promise<number[]> {
@@ -127,7 +128,7 @@ class ProjectApiUtils {
         const permission = await ProjectApiUtils.getProjectOrBidPermission(project_bid_permissions, "projectBidId", userId, bid.id);
         res.push({
           ...bid,
-          permission
+          permission: enums.ProjectPermission.VIEWER
         });
       }
       return Promise.resolve(res);
@@ -145,7 +146,8 @@ class ProjectApiUtils {
           [type]: id
         },
         transaction
-      }).then(p => p?.getDataValue("permission"));
+      }).then(p => p?.get("permission")) as enums.ProjectPermission;
+
       return Promise.resolve(permission);
     } catch(e) {
       return Promise.reject(e)
@@ -212,29 +214,15 @@ class ProjectApiUtils {
 
   // for vendor, gets a single projectBid with projectBidId
   static async getPermissionedProjectBid(userId: number, projectBidId: number): Promise<commonProjectTypes.PermissionedProjectBid> {
-    const project_bids = sequelize.models.project_bids;
+    const bidModel = sequelize.models.project_bids;
     const project_bid_permissions = sequelize.models.project_bid_permissions;
     const project_permissions = sequelize.models.project_permissions;
-
-    const bid = await ProjectApiUtils.getProjectBid(projectBidId) as commonProjectTypes.ProjectBid;
-    const componentsBid = await ProjectApiUtils.getProjectComponentsBid(bid.id) as commonProjectTypes.ProjectComponentsBid[];
-    const isVendor = await UserApiUtils.isVendorWithUserId(userId);
-    if (!isVendor) {
-      // projectBid for customer
-      // if customer permissions contain projectId that matches projectBid's projectId
-      const projectIds: number[] = await ProjectApiUtils.getAllUserProjectOrBidIds(userId, project_permissions, "projectId");
+    try {
+      const rawUserBid = await bidModel.findByPk(projectBidId);
+      const components = await (rawUserBid as project_bids).getProject_component_bids().then(comps => comps.map(comp => comp.get({ plain:true }))) as commonProjectTypes.ProjectComponentsBid[]; 
       
-      if (!projectIds.includes(bid.projectId)) {
-        return Promise.reject(new Error("Permission denied"));
-        
-      }
-      // customer viewable/editable/owned projects contains this bid's corresponding project
-      return Promise.resolve({
-        ...bid,
-        components: componentsBid,
-        permission: enums.ProjectPermission.VIEWER
-      });
-    } else {
+      const userBid = rawUserBid?.get({ plain:true });
+    
       // projectBid for vendor
       const permission = await ProjectApiUtils.getProjectOrBidPermission(project_bid_permissions, "projectBidId", userId, projectBidId) as enums.ProjectPermission;
 
@@ -243,10 +231,13 @@ class ProjectApiUtils {
       }
       
       return {
-        ...bid,
-        components: componentsBid,
+        ...userBid,
+        components,
         permission
       }
+      
+    } catch(e) {
+      return Promise.reject(e);
     }
   }
 }

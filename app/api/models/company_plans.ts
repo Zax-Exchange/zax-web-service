@@ -59,7 +59,8 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
       references: {
         model: 'companies',
         key: 'id'
-      }
+      },
+      unique: "company_plans_companyId_key"
     },
     remainingQuota: {
       type: DataTypes.INTEGER,
@@ -70,6 +71,13 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
     schema: 'public',
     timestamps: true,
     indexes: [
+      {
+        name: "company_plans_companyId_key",
+        unique: true,
+        fields: [
+          { name: "companyId" },
+        ]
+      },
       {
         name: "company_plans_pkey",
         unique: true,

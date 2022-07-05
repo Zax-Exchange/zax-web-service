@@ -5,8 +5,8 @@ import type { users, usersId } from './users';
 
 export interface project_permissionsAttributes {
   id: number;
-  userId?: number;
-  projectId?: number;
+  userId: number;
+  projectId: number;
   createdAt: Date;
   updatedAt: Date;
   permission: string;
@@ -14,13 +14,13 @@ export interface project_permissionsAttributes {
 
 export type project_permissionsPk = "id";
 export type project_permissionsId = project_permissions[project_permissionsPk];
-export type project_permissionsOptionalAttributes = "userId" | "projectId" | "createdAt" | "updatedAt";
+export type project_permissionsOptionalAttributes = "createdAt" | "updatedAt";
 export type project_permissionsCreationAttributes = Optional<project_permissionsAttributes, project_permissionsOptionalAttributes>;
 
 export class project_permissions extends Model<project_permissionsAttributes, project_permissionsCreationAttributes> implements project_permissionsAttributes {
   id!: number;
-  userId?: number;
-  projectId?: number;
+  userId!: number;
+  projectId!: number;
   createdAt!: Date;
   updatedAt!: Date;
   permission!: string;
@@ -47,7 +47,7 @@ export class project_permissions extends Model<project_permissionsAttributes, pr
     },
     userId: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       references: {
         model: 'users',
         key: 'id'
@@ -56,7 +56,7 @@ export class project_permissions extends Model<project_permissionsAttributes, pr
     },
     projectId: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       references: {
         model: 'projects',
         key: 'id'

@@ -35,7 +35,7 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
         status: enums.ProjectStatus.OPEN
       }, { transaction });
       const projectId = project.getDataValue("id");
-      await createProjectComponent(projectId, components, transaction);
+      await createProjectComponents(projectId, components, transaction);
       await createOrUpdateProjectPermission({ userId, projectId, permission: enums.ProjectPermission.OWNER }, transaction);
     });
     return Promise.resolve(true);
@@ -45,7 +45,7 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
   }
 };
 
-const createProjectComponent = async(projectId: number, components: projectTypes.CreateProjectComponentInput[], transaction: Transaction): Promise<boolean> => {
+const createProjectComponents = async(projectId: number, components: projectTypes.CreateProjectComponentInput[], transaction: Transaction): Promise<boolean> => {
   const project_components = sequelize.models.project_components;
   
   try {
@@ -150,8 +150,6 @@ const createOrUpdateProjectBidPermission = async(data: projectTypes.CreateOrUpda
 export {
   createProject,
   createProjectBid,
-  createProjectComponent,
-  createProjectComponentsBid,
   createOrUpdateProjectPermission,
   createOrUpdateProjectBidPermission
 }

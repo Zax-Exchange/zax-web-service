@@ -15,9 +15,17 @@
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "typeRoots": [
+      "node_modules/@types",
+      "app/test/typings"
+    ],
+    "paths": {
+      "sequelize-test-helpers": ["./app/test/typings/sequelize-test-helpers.d.ts"]
+    }
   },
   "exclude": [
-    "app/api/models"
+    "app/api/models",
+    "app/types/**"
   ]
 }
