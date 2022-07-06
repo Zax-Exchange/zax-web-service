@@ -6,6 +6,8 @@
 export default {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
+  // globalSetup: "./test/jestGlobalSetup.ts",
+
   "extensionsToTreatAsEsm": [".ts"],
   // Stop running tests after `n` failures
   // bail: 0,

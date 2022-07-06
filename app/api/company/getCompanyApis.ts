@@ -11,7 +11,7 @@ const getPermissionedCompany = async (data: getCompanyTypes.GetPermissionedCompa
   const { companyId, userId } = data;
 
   try {
-    const company = await CompanyApiUtils.getCompany(companyId);
+    const company = await CompanyApiUtils.getCompanyWithCompanyId(companyId);
     const companyPlan = await CompanyApiUtils.getCompanyPlan(companyId);
     const isAdmin = await UserApiUtils.isUserAdmin(userId);
 
@@ -29,7 +29,7 @@ const getPermissionedCompany = async (data: getCompanyTypes.GetPermissionedCompa
 // company public view
 const getGeneralCompany = async (companyId: number): Promise<commonCompanyTypes.GeneralCompany> => {
 try {
-    const company = await CompanyApiUtils.getCompany(companyId);
+    const company = await CompanyApiUtils.getCompanyWithCompanyId(companyId);
     const { id, name, logo, phone, fax, isVendor, isVerified, leadTime, companyUrl, createdAt, updatedAt } = company;
     const res = {
       id, 

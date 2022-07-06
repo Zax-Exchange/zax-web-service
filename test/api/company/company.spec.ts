@@ -1,6 +1,7 @@
 
 import { createUser } from "../../../app/api/user/createUserApis";
 import { createCompany } from "../../../app/api/company/createCompanyApis";
+import { getPermissionedCompany, getGeneralCompany } from "../../../app/api/company/getCompanyApis";
 import { updateCompany, updateCompanyPlan } from "../../../app/api/company/updateCompanyApis";
 import { CreateCompanyInput } from '../../../app/types/create/companyTypes';
 import { initModels } from '../../../app/api/models/init-models';
@@ -13,6 +14,8 @@ import {
   BASIC_PLAN_NAME
 } from "../../constants";
 import { UpdateCompanyData, UpdateCompanyInput } from "../../../app/types/update/companyTypes";
+import * as enums from "../../../app/types/common/enums";
+import type { PermissionedCompany } from "../../../app/types/common/companyTypes";
 
 process.env.NODE_ENV = "test";
 
@@ -142,6 +145,17 @@ describe('company tests', () => {
     }
   });
 
+  it("should get permissioned company based on user power", async () => {
+    const userId = await sequelize.models.users.findOne({where: {email: NON_ADMIN_EMAILS[1]}}).then(u => u?.get("id") as number);
+    const companyId = await sequelize.models.companies.findOne({where:{name: VENDOR_COMPANY_NAME}}).then(c => c!.get("id") as number);
+    
+    const res = await getPermissionedCompany({
+      companyId,
+      userId
+    });
+    expect(res).toHaveProperty(["isAdmin"], false);
+  });
+
   it("should not allow non-admins to make changes to company data", async () => {
     const companyId = await sequelize.models.companies.findOne({where:{name: VENDOR_COMPANY_NAME}}).then(c => c!.get("id") as number);
     const userId = await sequelize.models.users.findOne({where: {email: NON_ADMIN_EMAILS[1]}}).then(u => u?.get("id") as number);
@@ -175,7 +189,6 @@ describe('company tests', () => {
       "id": companyId,
       userId
     })).resolves.toEqual(true);
-   
   });
 })
 

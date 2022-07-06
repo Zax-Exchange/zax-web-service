@@ -5,12 +5,11 @@ export interface UpdateProjectInput {
   deliveryLocation: string;
   budget: number;
   design: BinaryType | null;
-  status: string;
   components: UpdateProjectComponentInput[];
 }
 
 export interface UpdateProjectComponentInput {
-  id: number[];
+  id: number;
   name: string;
   materials: string[];
   dimension: string;

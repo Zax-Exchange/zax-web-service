@@ -240,6 +240,24 @@ class ProjectApiUtils {
       return Promise.reject(e);
     }
   }
+
+  static async updateProjectStatus(projectId: number, status: enums.ProjectStatus, transaction?: Transaction): Promise<boolean> {
+    const projects = sequelize.models.projects;
+    try {
+      await projects.update({
+        status
+      }, {
+        where: {
+          id: projectId
+        },
+        transaction
+      });
+      return Promise.resolve(true);
+    } catch(e) {
+      console.error(e);
+      return Promise.reject(e);
+    }
+  }
 }
 
 export default ProjectApiUtils;

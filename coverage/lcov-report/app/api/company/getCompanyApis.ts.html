@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for app/api/user/utils.ts</title>
+    <title>Code coverage report for app/api/company/getCompanyApis.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">app/api/user</a> utils.ts</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">app/api/company</a> getCompanyApis.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">47.82% </span>
+                <span class="strong">58.92% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>22/46</span>
+                <span class='fraction'>33/56</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/3</span>
+                <span class='fraction'>1/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">47.82% </span>
+                <span class="strong">58.92% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>22/46</span>
+                <span class='fraction'>33/56</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -108,12 +108,54 @@
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -129,83 +171,71 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
-import * as enums from "../../types/common/enums";
-import sequelize from "../utils/dbconnection";
+<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import sequelize from "../utils/dbconnection";
+import * as getCompanyTypes from "../../types/get/companyTypes";
+import * as commonCompanyTypes from "../../types/common/companyTypes";
+import * as commonPlanTyes from "../../types/common/planTypes";
+import { getPlanWithPlanId } from "../plan/getPlanApis";
+import CompanyApiUtils from "./utils";
+import UserApiUtils from "../user/utils";
 &nbsp;
-class UserApiUtils {
-  static async isUserFirstInCompany<span class="fstat-no" title="function not covered" >(companyId: number): Promise&lt;boolean&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    const users = sequelize.models.users;</span>
-<span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      const foundUsers = await users.findAll({</span>
-<span class="cstat-no" title="statement not covered" >        where: {</span>
-<span class="cstat-no" title="statement not covered" >          companyId</span>
-<span class="cstat-no" title="statement not covered" >        }</span>
-<span class="cstat-no" title="statement not covered" >      });</span>
-<span class="cstat-no" title="statement not covered" >      return Promise.resolve(foundUsers.length === 0);</span>
-<span class="cstat-no" title="statement not covered" >    } catch(e) {</span>
-<span class="cstat-no" title="statement not covered" >      console.error(e);</span>
-<span class="cstat-no" title="statement not covered" >      return Promise.reject(e);</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+// should only be called with user within the company
+const getPermissionedCompany = async (data: getCompanyTypes.GetPermissionedCompanyInput): Promise&lt;commonCompanyTypes.PermissionedCompany&gt; =&gt; {
+  const { companyId, userId } = data;
+&nbsp;
+  try {
+    const company = await CompanyApiUtils.getCompanyWithCompanyId(companyId);
+    const companyPlan = await CompanyApiUtils.getCompanyPlan(companyId);
+    const isAdmin = await UserApiUtils.isUserAdmin(userId);
+&nbsp;
+    const res = {
+      ...company,
+      planInfo: companyPlan,
+      isAdmin
+    };
+    return Promise.resolve(res);
+  } <span class="branch-0 cbranch-no" title="branch not covered" >catch(e) {</span>
+<span class="cstat-no" title="statement not covered" >    return Promise.reject(e);</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
+};
 &nbsp;
-  static async isVendorWithUserId (id: number): Promise&lt;boolean&gt; {
-    const users = sequelize.models.users;
-    try {
-      const user = await users.findOne({
-        attributes: ["isVendor"],
-        where: {id}
-      });
-      return Promise.resolve(user?.getDataValue("isVendor"));
-    } <span class="branch-0 cbranch-no" title="branch not covered" >catch(e) {</span>
-<span class="cstat-no" title="statement not covered" >      return Promise.reject(e);</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
-  }
-&nbsp;
-  static async isUserAdmin<span class="fstat-no" title="function not covered" >(id: number): Promise&lt;boolean&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    const users = sequelize.models.users;</span>
-<span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      return await users.findOne({</span>
-<span class="cstat-no" title="statement not covered" >        where: { id }</span>
-<span class="cstat-no" title="statement not covered" >      }).then(u =&gt; u?.get("isAdmin") as boolean);</span>
-<span class="cstat-no" title="statement not covered" >    } catch(e) {</span>
-<span class="cstat-no" title="statement not covered" >      return Promise.reject(e);</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+// company public view
+const getGeneralCompany = <span class="fstat-no" title="function not covered" >async (companyId: number): Promise&lt;commonCompanyTypes.GeneralCompany&gt; =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >try {</span>
+<span class="cstat-no" title="statement not covered" >    const company = await CompanyApiUtils.getCompanyWithCompanyId(companyId);</span>
+<span class="cstat-no" title="statement not covered" >    const { id, name, logo, phone, fax, isVendor, isVerified, leadTime, companyUrl, createdAt, updatedAt } = company;</span>
+<span class="cstat-no" title="statement not covered" >    const res = {</span>
+<span class="cstat-no" title="statement not covered" >      id, </span>
+<span class="cstat-no" title="statement not covered" >      name, </span>
+<span class="cstat-no" title="statement not covered" >      logo,</span>
+<span class="cstat-no" title="statement not covered" >      phone, </span>
+<span class="cstat-no" title="statement not covered" >      fax, </span>
+<span class="cstat-no" title="statement not covered" >      isVendor, </span>
+<span class="cstat-no" title="statement not covered" >      isVerified, </span>
+<span class="cstat-no" title="statement not covered" >      leadTime, </span>
+<span class="cstat-no" title="statement not covered" >      companyUrl,</span>
+<span class="cstat-no" title="statement not covered" >      createdAt, </span>
+<span class="cstat-no" title="statement not covered" >      updatedAt</span>
+<span class="cstat-no" title="statement not covered" >    };</span>
+<span class="cstat-no" title="statement not covered" >    return Promise.resolve(res);</span>
+<span class="cstat-no" title="statement not covered" >  } catch(e) {</span>
+<span class="cstat-no" title="statement not covered" >    return Promise.reject(e);</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
-}
+<span class="cstat-no" title="statement not covered" >};</span>
 &nbsp;
-export default UserApiUtils;</pre></td></tr></table></pre>
+export {
+  getPermissionedCompany,
+  getGeneralCompany
+}</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at Tue Jul 05 2022 23:52:19 GMT-0700 (Pacific Daylight Time)
+                at Tue Jul 05 2022 17:40:46 GMT-0700 (Pacific Daylight Time)
             </div>
         <script src="../../../prettify.js"></script>
         <script>

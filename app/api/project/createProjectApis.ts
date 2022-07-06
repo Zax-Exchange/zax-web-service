@@ -2,7 +2,6 @@ import sequelize from "../utils/dbconnection";
 import * as projectTypes from "../../types/create/projectTypes";
 import * as enums from "../../types/common/enums";
 import { Transaction } from "sequelize/types";
-import { updateProjectStatus } from "./updateProjectApis";
 import ProjectApiUtils from "./utils";
 import UserApiUtils from "../user/utils";
 
@@ -80,7 +79,7 @@ const createProjectBid = async(data: projectTypes.CreateProjectBidInput): Promis
       const projectBidId = bid.getDataValue("id");
       await createProjectComponentsBid(projectBidId, components, transaction);
       await createOrUpdateProjectBidPermission({ userId, projectBidId, permission: enums.ProjectPermission.OWNER }, transaction);
-      await updateProjectStatus(projectId, enums.ProjectStatus.IN_PROGRESS);
+      await ProjectApiUtils.updateProjectStatus(projectId, enums.ProjectStatus.IN_PROGRESS);
     });
     return Promise.resolve(true);
   } catch(e) {

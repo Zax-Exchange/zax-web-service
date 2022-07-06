@@ -3,9 +3,10 @@ import * as projectTypes from "../../types/update/projectTypes";
 import * as enums from "../../types/common/enums";
 import { Transaction } from "sequelize/types";
 import { createOrUpdateProjectPermission, createOrUpdateProjectBidPermission } from "./createProjectApis";
+import { Op } from "sequelize";
 
 const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<boolean> => {
-  const { id, name, deliveryDate, deliveryLocation, budget, design, status, components } = data;
+  const { id, name, deliveryDate, deliveryLocation, budget, design, components } = data;
   const projects = sequelize.models.projects;
   try {
     await sequelize.transaction(async transaction => {
@@ -15,10 +16,10 @@ const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<bool
         deliveryLocation,
         budget,
         design,
-        status
       }, {
         where: {
           id,
+          status: enums.ProjectStatus.OPEN
         },
         transaction
       });
@@ -135,30 +136,13 @@ const updateProjectBidPermissions = async (data: projectTypes.UpdateProjectBidPe
   }
 };
 
-const updateProjectStatus = async (projectId: number, status: enums.ProjectStatus, transaction?: Transaction): Promise<boolean> => {
-  const projects = sequelize.models.projects;
-  try {
-    await projects.update({
-      status
-    }, {
-      where: {
-        id: projectId
-      },
-      transaction
-    });
-    return Promise.resolve(true);
-  } catch(e) {
-    console.error(e);
-    return Promise.reject(e);
-  }
-};
+
 
 export {
   updateProject,
   updateProjectComponents,
   updateProjectBid,
   updateProjectComponentsBid,
-  updateProjectStatus,
   updateProjectPermissions,
   updateProjectBidPermissions
 }
