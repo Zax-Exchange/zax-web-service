@@ -138,8 +138,7 @@ describe("project tests", () => {
       "deliveryLocation": "USA",
       "name": TEST_PROJECT_NAMES[0],
       "design": null,
-      id: projectId,
-      status: enums.ProjectStatus.OPEN
+      id: projectId
     })).resolves.toEqual(true); 
   });
 
