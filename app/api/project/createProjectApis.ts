@@ -5,7 +5,7 @@ import { Transaction } from "sequelize/types";
 import ProjectApiUtils from "./utils";
 import UserApiUtils from "../user/utils";
 
-//TODO: add other user permissions when creating project?
+//TODO: findOrCreate product or materials when creating project
 const createProject = async(data: projectTypes.CreateProjectInput): Promise<boolean> => {
   const projects = sequelize.models.projects;
   const users = sequelize.models.users;

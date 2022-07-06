@@ -34,17 +34,17 @@ describe('user tests', () => {
     done()
   });
 
-  it("should not create user without company", async () => {
-    await createUser({
-      name: "joe",
-      email: "123@email.com",
-      companyId: 1,
-      password: "123"
-    })
-    .catch(e => {
-      expect(e).toEqual(Error("No company plan found."));
-    })
-  });
+  // it("should not create user without company", async () => {
+  //   await createUser({
+  //     name: "joe",
+  //     email: "123@email.com",
+  //     companyId: 1,
+  //     password: "123"
+  //   })
+  //   .catch(e => {
+  //     expect(e).toEqual(Error("No company plan found."));
+  //   })
+  // });
 
   it("should create user with company and decrease company quota", async () => {
     const planId = await sequelize.models.plans.findOne({where: {name: FREE_PLAN_NAME}}).then(p => p!.get("id"));
@@ -63,28 +63,28 @@ describe('user tests', () => {
     
     const companyId = await sequelize.models.companies.findOne({where:{name: VENDOR_COMPANY_NAME}}).then(c => c!.get("id") as number);
 
-    await createUser({
+    await expect(createUser({
       name: "test",
       email: ADMIN_EMAILS[0],
       companyId,
       password: "123"
-    });
+    })).resolves.toEqual(true);
 
     // should not allow duplicate user emails
-    await createUser({
+    await expect(createUser({
       name: "test",
       email: ADMIN_EMAILS[0],
       companyId,
       password: "123"
-    }).catch(e => expect(e).toBeTruthy());
+    })).rejects.toBeInstanceOf(Error)
 
 
-    await createUser({
+    await expect(createUser({
       name: "test",
       email: NON_ADMIN_EMAILS[0],
       companyId,
       password: "123"
-    });
+    })).resolves.toEqual(true);
 
 
     const user1Id = await sequelize.models.users.findOne({ where: {email: ADMIN_EMAILS[0]}}).then(u => u?.get("id") as number);
@@ -98,53 +98,39 @@ describe('user tests', () => {
   });
 
 
-  it("should update user data", async () => {
+  it("should allow update user data", async () => {
     const userId = await sequelize.models.users.findOne({ where: {email: ADMIN_EMAILS[0]}}).then(u => u?.get("id") as number);
 
-    const res1 = await updateUser({
+    await expect(updateUser({
       id: userId,
       data: {
 
       } as UpdateUserInputData
-    });
+    })).resolves.toEqual(true);
 
-    const res2 = await updateUser({
+    await expect(updateUser({
       id: userId,
       data: {
         name: "updated name",
       } as UpdateUserInputData
-    });
+    })).resolves.toEqual(true);
 
-    const res3 = await updateUser({
+    await expect(updateUser({
       id: userId,
       data: {
         password: "321"
       } as UpdateUserInputData
-    });
-
-    expect(res1).toEqual(true);
-    expect(res2).toEqual(true);
-    expect(res3).toEqual(true);
+    })).resolves.toEqual(true);
   });
 
   it("should allow user power update from admin user", async() => {
     const adminUserId = await sequelize.models.users.findOne({ where: {email: ADMIN_EMAILS[0]}}).then(u => u?.get("id") as number);
     const nonAdminUser1Id = await sequelize.models.users.findOne({ where: {email: NON_ADMIN_EMAILS[0]}}).then(u => u?.get("id") as number);
 
-    const res1 = await updateUserPower({
+    await expect(updateUserPower({
       isAdmin: true,
       fromId: adminUserId,
       targetId: nonAdminUser1Id
-    });
-    expect(res1).toEqual(true);
-
-    //now nonAdminUser1 is an admin, should be allowed to update other user powers
-    const res2 = await updateUserPower({
-      isAdmin: true,
-      fromId: nonAdminUser1Id,
-      targetId: adminUserId
-    });
-    expect(res2).toEqual(true);
-   
+    })).resolves.toEqual(true);
   });
 });

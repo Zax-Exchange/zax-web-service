@@ -10,18 +10,19 @@ const deleteProject = async(data: projectTypes.DeleteProjectInput): Promise<bool
 
   const { userId, projectId } = data;
   
-  const permission = await ProjectUtils.getProjectOrBidPermission(project_permissions, "projectId", userId, projectId);
+  // const permission = await ProjectUtils.getProjectOrBidPermission(project_permissions, "projectId", userId, projectId);
 
-  if (!permission || permission === enums.ProjectPermission.VIEWER) {
-    return Promise.reject(new Error("Permission denied"))
-  }
+  // if (!permission || permission === enums.ProjectPermission.VIEWER) {
+  //   return Promise.reject(new Error("Permission denied"))
+  // }
   
   try {
     await projects.destroy({
       where: {
         id: projectId,
         status: enums.ProjectStatus.OPEN
-      }
+      },
+      truncate: true
     });
     return Promise.resolve(true);
   } catch(e) {
@@ -36,11 +37,11 @@ const deleteProjectComponents = async(data: projectTypes.DeleteProjectComponents
 
   const { projectComponentIds, projectId, userId } = data;
 
-  const permission = await ProjectUtils.getProjectOrBidPermission(project_permissions, "projectId", userId, projectId);
+  // const permission = await ProjectUtils.getProjectOrBidPermission(project_permissions, "projectId", userId, projectId);
 
-  if (!permission || permission === enums.ProjectPermission.VIEWER) {
-    return Promise.reject(new Error("Permission denied"))
-  }
+  // if (!permission || permission === enums.ProjectPermission.VIEWER) {
+  //   return Promise.reject(new Error("Permission denied"))
+  // }
 
   try {
     await sequelize.transaction(async (transaction: Transaction) => {
@@ -60,6 +61,7 @@ const deleteProjectComponents = async(data: projectTypes.DeleteProjectComponents
   }
 };
 
+// TODO: should be withdraw bid? add a status to project bid?
 const deleteProjectBid = async(data: projectTypes.DeleteProjectBidInput): Promise<boolean> => {
   const project_bids = sequelize.models.project_bids;
   const project_bid_permissions = sequelize.models.project_bid_permissions;

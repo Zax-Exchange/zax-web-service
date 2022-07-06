@@ -28,6 +28,7 @@ const getUserWithUserId = async(id: number): Promise<userTypes.User> => {
   }
 }
 
+// get user with companyid
 export {
   getAllUsers,
   getUserWithUserId

@@ -18,8 +18,7 @@ const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<bool
         design,
       }, {
         where: {
-          id,
-          status: enums.ProjectStatus.OPEN
+          id
         },
         transaction
       });

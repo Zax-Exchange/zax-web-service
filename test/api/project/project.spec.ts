@@ -41,20 +41,20 @@ describe("project tests", () => {
     done()
   });
 
-  it("should not allow vendor user to create project", async() => {
-    const res = await sequelize.models.users.findAll().then(u => u.map(t => t.get()));
-    const user = await sequelize.models.users.findOne({ where:{email: VENDOR_EMAILS[0]} });
+  // it("should not allow vendor user to create project", async() => {
+  //   const res = await sequelize.models.users.findAll().then(u => u.map(t => t.get()));
+  //   const user = await sequelize.models.users.findOne({ where:{email: VENDOR_EMAILS[0]} });
     
-    await expect(createProject({
-      "budget": 10000,
-      "components": []  as CreateProjectComponentInput[],
-      "deliveryDate": "2022-12-31",
-      "deliveryLocation": "USA",
-      "name": "test project",
-      "design": null,
-      "userId": user!.get("id") as number
-    })).rejects.toBeInstanceOf(Error);
-  });
+  //   await expect(createProject({
+  //     "budget": 10000,
+  //     "components": []  as CreateProjectComponentInput[],
+  //     "deliveryDate": "2022-12-31",
+  //     "deliveryLocation": "USA",
+  //     "name": "test project",
+  //     "design": null,
+  //     "userId": user!.get("id") as number
+  //   })).rejects.toBeInstanceOf(Error);
+  // });
 
   it("should allow customer user to create project and corresponding components", async() => {
     const user = await sequelize.models.users.findOne({ where:{email: CUSTOMER_EMAILS[0]} });
@@ -94,6 +94,7 @@ describe("project tests", () => {
     expect(res[0]).toHaveProperty(["permission"], enums.ProjectPermission.OWNER);
   });
 
+  // TODO: should test with multiple userIds
   it("should allow project permission update", async() => {
     const user1 = await sequelize.models.users.findOne({ where:{email: CUSTOMER_EMAILS[0]} });
     const user2 = await sequelize.models.users.findOne({ where:{email: CUSTOMER_EMAILS[1]} });
@@ -145,7 +146,7 @@ describe("project tests", () => {
 
   it("should allow vendor to bid for project", async () => {
     const userId = await sequelize.models.users.findOne({ where:{email: VENDOR_EMAILS[0]} }).then(u => u?.get("id") as number);
-    const project = await sequelize.models.projects.findOne({ where:{name: TEST_PROJECT_NAMES[0]}}); 
+    const projectId = await sequelize.models.projects.findOne({ where:{name: TEST_PROJECT_NAMES[0]}}).then(p => p?.get("id") as number);
     const componentIds = await (project as projects).getProject_components().then(comps => comps.map(c => c.get("id")));
 
     await expect(createProjectBid({
@@ -166,7 +167,7 @@ describe("project tests", () => {
           ]
         }
       ],
-      projectId: project?.get("id") as number
+      projectId
     })).resolves.toEqual(true);
   });
 
@@ -183,32 +184,32 @@ describe("project tests", () => {
     expect(res[0].permission).toEqual(enums.ProjectPermission.VIEWER)
   });
 
-  it("should not allow project update if status is IN_PROGRESS", async() => {
-    const user = await sequelize.models.users.findOne({ where:{email: CUSTOMER_EMAILS[0]} });
-    const projectId = await (user as users).getProjects({
-      "where": {
-        name: TEST_PROJECT_NAMES[0]
-      }
-    }).then(ps => ps[0].get("id") as number);
+  // it("should not allow project update if status is IN_PROGRESS", async() => {
+  //   const user = await sequelize.models.users.findOne({ where:{email: CUSTOMER_EMAILS[0]} });
+  //   const projectId = await (user as users).getProjects({
+  //     "where": {
+  //       name: TEST_PROJECT_NAMES[0]
+  //     }
+  //   }).then(ps => ps[0].get("id") as number);
 
-    // actions in transactions don't throw error so cannot expect rejects
-    await updateProject({
-      "budget": 10000,
-      "components": [],
-      "deliveryDate": "2022-12-31",
-      "deliveryLocation": "USA",
-      "name": TEST_PROJECT_NAMES[1],
-      "design": null,
-      id: projectId
-    }); 
+  //   // actions in transactions don't throw error so cannot expect rejects
+  //   await updateProject({
+  //     "budget": 10000,
+  //     "components": [],
+  //     "deliveryDate": "2022-12-31",
+  //     "deliveryLocation": "USA",
+  //     "name": TEST_PROJECT_NAMES[1],
+  //     "design": null,
+  //     id: projectId
+  //   }); 
 
-    const project = await (user as users).getProjects({
-      "where": {
-        name: TEST_PROJECT_NAMES[0]
-      }
-    }).then(ps => ps[0].get());
+  //   const project = await (user as users).getProjects({
+  //     "where": {
+  //       name: TEST_PROJECT_NAMES[0]
+  //     }
+  //   }).then(ps => ps[0].get());
 
-    // check project still has previous name to make sure update isn't allowed
-    expect(project.name).toEqual(TEST_PROJECT_NAMES[0]);
-  });
+  //   // check project still has previous name to make sure update isn't allowed
+  //   expect(project.name).toEqual(TEST_PROJECT_NAMES[0]);
+  // });
 })
