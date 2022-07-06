@@ -10,7 +10,7 @@
     "start": "nodemon --experimental-specifier-resolution=node --loader ts-node/esm app/index.ts",
     "generate": "node scripts/generateModels.js",
     "seedAll": "npm --prefix ../zax-exchange-db run seedAll",
-    "unseedAll": "npm --prefix ../zax-exchange-db run unseedAll",
+    "unseed-users": "npm --prefix ../zax-exchange-db run unseed-users",
     "jest-setup-project-testing": "npm --prefix ../zax-exchange-db run seed-users"
   },
   "keywords": [],

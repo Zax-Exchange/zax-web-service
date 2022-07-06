@@ -23,7 +23,7 @@ import ProjectApiUtils from "../../../app/api/project/utils";
 process.env.NODE_ENV = "test";
 
 // need to wait for script to run to seed db
-jest.setTimeout(10000);
+jest.setTimeout(100000);
 
 describe("project tests", () => {
   beforeAll((done) => {
@@ -35,10 +35,9 @@ describe("project tests", () => {
 
   afterAll((done) => {
     sequelize.models.companies.destroy({ truncate: true ,cascade: true });
-    series([
-      () => exec("npm run unseedAll")
-    ]);
-    done()
+    exec("npm run unseed-users", () => {
+      done();
+    });
   });
 
   // it("should not allow vendor user to create project", async() => {
