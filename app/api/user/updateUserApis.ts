@@ -18,10 +18,6 @@ const updateUser = async(data: userTypes.UpdateUserInput) => {
 };
 
 const updateUserPower = async(data: userTypes.UpdateUserPowerInput) => {
-  const isAdmin = UserApiUtils.isUserAdmin(data.fromId);
-  if (!isAdmin) {
-    throw new Error("Permission denied");
-  }
   return await updateUser({
     id: data.targetId,
     data: {

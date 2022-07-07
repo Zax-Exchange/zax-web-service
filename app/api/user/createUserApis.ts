@@ -14,9 +14,6 @@ const createUser = async(data: userTypes.CreateUserInput) => {
     const isVendor = await CompanyApiUtils.isVendorWithCompanyId(companyId);
     const companyPlan = await CompanyApiUtils.getCompanyPlan(companyId);
 
-    if (!companyPlan) {
-      throw new Error("No company plan found.");
-    }
     if (companyPlan.remainingQuota <= 0) {
       throw new Error("No more licensed users allowed.");
     }

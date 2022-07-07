@@ -21,13 +21,16 @@ export interface Project {
   updatedAt: Date;
 }
 
-export interface VendorProject extends PermissionedProject {
+export interface PermissionedProject extends Project {
+  permission: enums.ProjectPermission;
+}
 
+export interface VendorProject extends PermissionedProject {
   bidInfo: PermissionedProjectBid | null;
 }
 
 export interface CustomerProject extends PermissionedProject {
-  bids: PermissionedProjectBid[] | null;
+  bids: PermissionedProjectBid[] | [];
 }
 
 export interface ProjectComponent {
@@ -38,44 +41,22 @@ export interface ProjectComponent {
   postProcess: string;
 }
 
-export interface PermissionedProject {
-  id: number;
-  userId: number;
-  companyId: number;
-  name: string;
-  deliveryDate: string;
-  deliveryLocation: string;
-  budget: string;
-  design: BinaryType | null;
-  status: enums.ProjectStatus;
-  components: ProjectComponent[];
-  permission: enums.ProjectPermission;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export interface ProjectBid {
   id: number;
   userId: number;
   projectId: number;
-  components: ProjectComponentsBid[];
-  project: Project;
+  components: ProjectBidComponent[];
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface ProjectComponentsBid {
+export interface ProjectBidComponent {
   id: number;
   projectComponentId: number;
   quantityPrices: QuantityPrice[];
 }
 
-export interface PermissionedProjectBid {
-  id: number;
-  userId: number;
-  projectId: number;
-  components: ProjectComponentBid[];
+export interface PermissionedProjectBid extends ProjectBid{
   permission: enums.ProjectPermission;
-  createdAt: Date;
-  updatedAt: Date;
+
 }

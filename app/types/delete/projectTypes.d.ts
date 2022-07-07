@@ -14,8 +14,8 @@ export interface DeleteProjectBidInput {
   userId: number;
 }
 
-export interface DeleteProjectComponentsBidInput {
-  projectComponentBidIds: number[];
+export interface DeleteProjectBidComponentsInput {
+  projectBidComponentIds: number[];
   projectBidId: number;
   userId: number;
 }

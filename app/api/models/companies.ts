@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import type { company_materials, company_materialsId } from './company_materials';
 import type { company_plans, company_plansCreationAttributes, company_plansId } from './company_plans';
-import type { company_product_types, company_product_typesId } from './company_product_types';
 import type { projects, projectsId } from './projects';
 import type { users, usersId } from './users';
 
@@ -47,23 +47,23 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
   createdAt!: Date;
   updatedAt!: Date;
 
+  // companies hasMany company_materials via companyId
+  company_materials!: company_materials[];
+  getCompany_materials!: Sequelize.HasManyGetAssociationsMixin<company_materials>;
+  setCompany_materials!: Sequelize.HasManySetAssociationsMixin<company_materials, company_materialsId>;
+  addCompany_material!: Sequelize.HasManyAddAssociationMixin<company_materials, company_materialsId>;
+  addCompany_materials!: Sequelize.HasManyAddAssociationsMixin<company_materials, company_materialsId>;
+  createCompany_material!: Sequelize.HasManyCreateAssociationMixin<company_materials>;
+  removeCompany_material!: Sequelize.HasManyRemoveAssociationMixin<company_materials, company_materialsId>;
+  removeCompany_materials!: Sequelize.HasManyRemoveAssociationsMixin<company_materials, company_materialsId>;
+  hasCompany_material!: Sequelize.HasManyHasAssociationMixin<company_materials, company_materialsId>;
+  hasCompany_materials!: Sequelize.HasManyHasAssociationsMixin<company_materials, company_materialsId>;
+  countCompany_materials!: Sequelize.HasManyCountAssociationsMixin;
   // companies hasOne company_plans via companyId
   company_plan!: company_plans;
   getCompany_plan!: Sequelize.HasOneGetAssociationMixin<company_plans>;
   setCompany_plan!: Sequelize.HasOneSetAssociationMixin<company_plans, company_plansId>;
   createCompany_plan!: Sequelize.HasOneCreateAssociationMixin<company_plans>;
-  // companies hasMany company_product_types via companyId
-  company_product_types!: company_product_types[];
-  getCompany_product_types!: Sequelize.HasManyGetAssociationsMixin<company_product_types>;
-  setCompany_product_types!: Sequelize.HasManySetAssociationsMixin<company_product_types, company_product_typesId>;
-  addCompany_product_type!: Sequelize.HasManyAddAssociationMixin<company_product_types, company_product_typesId>;
-  addCompany_product_types!: Sequelize.HasManyAddAssociationsMixin<company_product_types, company_product_typesId>;
-  createCompany_product_type!: Sequelize.HasManyCreateAssociationMixin<company_product_types>;
-  removeCompany_product_type!: Sequelize.HasManyRemoveAssociationMixin<company_product_types, company_product_typesId>;
-  removeCompany_product_types!: Sequelize.HasManyRemoveAssociationsMixin<company_product_types, company_product_typesId>;
-  hasCompany_product_type!: Sequelize.HasManyHasAssociationMixin<company_product_types, company_product_typesId>;
-  hasCompany_product_types!: Sequelize.HasManyHasAssociationsMixin<company_product_types, company_product_typesId>;
-  countCompany_product_types!: Sequelize.HasManyCountAssociationsMixin;
   // companies hasMany projects via companyId
   projects!: projects[];
   getProjects!: Sequelize.HasManyGetAssociationsMixin<projects>;
@@ -110,8 +110,7 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
     },
     creditCardNumber: {
       type: DataTypes.STRING(255),
-      allowNull: false,
-      unique: "companies_creditCardNumber_key"
+      allowNull: false
     },
     creditCardExp: {
       type: DataTypes.STRING(10),
@@ -158,13 +157,6 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
     hasTrigger: true,
     timestamps: true,
     indexes: [
-      {
-        name: "companies_creditCardNumber_key",
-        unique: true,
-        fields: [
-          { name: "creditCardNumber" },
-        ]
-      },
       {
         name: "companies_name_key",
         unique: true,

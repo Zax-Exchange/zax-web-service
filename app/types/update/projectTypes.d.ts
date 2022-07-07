@@ -1,15 +1,24 @@
 export interface UpdateProjectInput {
   id: number;
+  projectData: UpdateProjectInputData;
+  componentsInput: UpdateProjectComponentsInput;
+}
+
+export interface UpdateProjectInputData {
   name: string;
   deliveryDate: string;
   deliveryLocation: string;
   budget: number;
   design: BinaryType | null;
-  components: UpdateProjectComponentInput[];
 }
 
-export interface UpdateProjectComponentInput {
-  id: number;
+export interface UpdateProjectComponentsInput {
+  toFindOrCreate: UpdateProjectComponentInputData[];
+  toDelete: number[];
+}
+
+export interface UpdateProjectComponentInputData {
+  id: number | undefined; //if user is creating a new component, id should be undefined
   name: string;
   materials: string[];
   dimension: string;
@@ -19,10 +28,10 @@ export interface UpdateProjectComponentInput {
 export interface UpdateProjectBidInput {
   id: number;
   comments: string | "";
-  components: UpdateProjectComponentBidInput[];
+  components: UpdateProjectBidComponentInput[];
 }
 
-export interface UpdateProjectComponentBidInput {
+export interface UpdateProjectBidComponentInput {
   id: number;
   quantityPrices: QuantityPrice[];
 }

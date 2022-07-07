@@ -1,16 +1,18 @@
 import * as userTypes from "../../types/common/userTypes";
+import { companies } from "../models/companies";
 import sequelize from "../utils/dbconnection";
 import UserApiUtils from "./utils";
 
 
-const getAllUsers = async(): Promise<userTypes.User[]> => {
-  const users = sequelize.models.users;
+// returns a list of users with user power
+const getAllUsersWithinCompany = async(companyId: number): Promise<userTypes.User[]> => {
+  const companies = sequelize.models.companies;
   try {
-    const userList = await users.findAll().then(users => {
-      return users.map(u => u.get({ plain:true }));
+    const userList: any = await companies.findByPk(companyId).then(async comp => {
+      return await (comp as companies).getUsers().then(list => list.map(u => u.get({plain:true})))
     })
-    
-    return Promise.resolve(userList);
+  
+    return userList;
   } catch (e) {
     console.error(e)
     return Promise.reject(e);
@@ -30,6 +32,6 @@ const getUserWithUserId = async(id: number): Promise<userTypes.User> => {
 
 // get user with companyid
 export {
-  getAllUsers,
+  getAllUsersWithinCompany,
   getUserWithUserId
 }

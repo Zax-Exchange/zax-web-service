@@ -6,23 +6,19 @@ import { createOrUpdateProjectPermission, createOrUpdateProjectBidPermission } f
 import { Op } from "sequelize";
 
 const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<boolean> => {
-  const { id, name, deliveryDate, deliveryLocation, budget, design, components } = data;
+  const { id, projectData, componentsInput } = data;
+  const { toFindOrCreate, toDelete } = componentsInput;
   const projects = sequelize.models.projects;
+
   try {
     await sequelize.transaction(async transaction => {
-      await projects.update({
-        name,
-        deliveryDate,
-        deliveryLocation,
-        budget,
-        design,
-      }, {
+      await projects.update(projectData, {
         where: {
           id
         },
         transaction
       });
-      await updateProjectComponents(components, transaction);
+      await updateProjectComponents(toFindOrCreate, transaction);
     });
     return Promise.resolve(true);
   }
@@ -33,21 +29,30 @@ const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<bool
 };
 
 // this goes with update project
-const updateProjectComponents = async(components: projectTypes.UpdateProjectComponentInput[], transaction?: Transaction): Promise<boolean> => {
+const updateProjectComponents = async(components: projectTypes.UpdateProjectComponentInputData[], transaction?: Transaction): Promise<boolean> => {
   const project_components = sequelize.models.project_components;
   try {
     for (let component of components) {
       const { id, name, materials, dimension, postProcess } = component;
-      await project_components.update({
-        name,
-        materials,
-        dimension,
-        postProcess
-      }, {
-        where: {
-          id
+
+      await project_components.findOrCreate({
+        where: {id: id}, 
+        defaults: {
+          name, 
+          materials, 
+          dimension, 
+          postProcess
         },
-        transaction
+        transaction 
+      }).then(async ([comp, created]) => {
+        if (!created) {
+          await comp.update({
+            name,
+            materials,
+            dimension,
+            postProcess
+          }, {transaction});
+        }
       });
     }
     return Promise.resolve(true);
@@ -71,7 +76,7 @@ const updateProjectBid = async(data: projectTypes.UpdateProjectBidInput): Promis
         },
         transaction
       })
-      await updateProjectComponentsBid(components, transaction);
+      await updateProjectBidComponents(components, transaction);
 
     });
     return Promise.resolve(true);
@@ -82,13 +87,13 @@ const updateProjectBid = async(data: projectTypes.UpdateProjectBidInput): Promis
 };
 
 // this goes with update project bid
-const updateProjectComponentsBid = async(components: projectTypes.UpdateProjectComponentBidInput[], transaction?: Transaction): Promise<boolean> => {
-  const project_component_bids = sequelize.models.project_component_bids;
+const updateProjectBidComponents = async(components: projectTypes.UpdateProjectBidComponentInput[], transaction?: Transaction): Promise<boolean> => {
+  const project_bid_components = sequelize.models.project_bid_components;
 
   try {
     for (let component of components) {
       const { id, quantityPrices } = component;
-      await project_component_bids.update({
+      await project_bid_components.update({
         quantityPrices
       }, {
         where: {
@@ -141,7 +146,7 @@ export {
   updateProject,
   updateProjectComponents,
   updateProjectBid,
-  updateProjectComponentsBid,
+  updateProjectBidComponents,
   updateProjectPermissions,
   updateProjectBidPermissions
 }

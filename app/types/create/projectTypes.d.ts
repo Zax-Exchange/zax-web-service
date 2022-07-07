@@ -21,16 +21,18 @@ export interface CreateProjectComponentInput {
 export interface CreateProjectBidInput {
   userId: number;
   projectId: number;
-  comments: string | "";
-  components: CreateProjectComponentBidInput[];
+  comments: string;
+  components: CreateProjectBidComponentInput[];
 }
 
-export interface ComponentBidQuantityPriceInput {
+export interface CreateProjectBidComponentInput {
   projectComponentId: number;
-  quantityPrices: QuantityPrice[];
+  quantityPrices: QuantityPriceInput[];
 }
-export interface CreateProjectComponentBidInput {
-  componentBidQuantityPrices: ComponentBidQuantityPriceInput[];
+
+export interface QuantityPriceInput {
+  price: number;
+  quantity: number;
 }
 
 export interface CreateOrUpdateProjectPermissionInput {

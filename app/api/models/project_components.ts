@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
-import type { project_component_bids, project_component_bidsId } from './project_component_bids';
+import type { project_bid_components, project_bid_componentsId } from './project_bid_components';
 import type { projects, projectsId } from './projects';
 
 export interface project_componentsAttributes {
@@ -29,18 +29,18 @@ export class project_components extends Model<project_componentsAttributes, proj
   createdAt!: Date;
   updatedAt!: Date;
 
-  // project_components hasMany project_component_bids via projectComponentId
-  project_component_bids!: project_component_bids[];
-  getProject_component_bids!: Sequelize.HasManyGetAssociationsMixin<project_component_bids>;
-  setProject_component_bids!: Sequelize.HasManySetAssociationsMixin<project_component_bids, project_component_bidsId>;
-  addProject_component_bid!: Sequelize.HasManyAddAssociationMixin<project_component_bids, project_component_bidsId>;
-  addProject_component_bids!: Sequelize.HasManyAddAssociationsMixin<project_component_bids, project_component_bidsId>;
-  createProject_component_bid!: Sequelize.HasManyCreateAssociationMixin<project_component_bids>;
-  removeProject_component_bid!: Sequelize.HasManyRemoveAssociationMixin<project_component_bids, project_component_bidsId>;
-  removeProject_component_bids!: Sequelize.HasManyRemoveAssociationsMixin<project_component_bids, project_component_bidsId>;
-  hasProject_component_bid!: Sequelize.HasManyHasAssociationMixin<project_component_bids, project_component_bidsId>;
-  hasProject_component_bids!: Sequelize.HasManyHasAssociationsMixin<project_component_bids, project_component_bidsId>;
-  countProject_component_bids!: Sequelize.HasManyCountAssociationsMixin;
+  // project_components hasMany project_bid_components via projectComponentId
+  project_bid_components!: project_bid_components[];
+  getProject_bid_components!: Sequelize.HasManyGetAssociationsMixin<project_bid_components>;
+  setProject_bid_components!: Sequelize.HasManySetAssociationsMixin<project_bid_components, project_bid_componentsId>;
+  addProject_bid_component!: Sequelize.HasManyAddAssociationMixin<project_bid_components, project_bid_componentsId>;
+  addProject_bid_components!: Sequelize.HasManyAddAssociationsMixin<project_bid_components, project_bid_componentsId>;
+  createProject_bid_component!: Sequelize.HasManyCreateAssociationMixin<project_bid_components>;
+  removeProject_bid_component!: Sequelize.HasManyRemoveAssociationMixin<project_bid_components, project_bid_componentsId>;
+  removeProject_bid_components!: Sequelize.HasManyRemoveAssociationsMixin<project_bid_components, project_bid_componentsId>;
+  hasProject_bid_component!: Sequelize.HasManyHasAssociationMixin<project_bid_components, project_bid_componentsId>;
+  hasProject_bid_components!: Sequelize.HasManyHasAssociationsMixin<project_bid_components, project_bid_componentsId>;
+  countProject_bid_components!: Sequelize.HasManyCountAssociationsMixin;
   // project_components belongsTo projects via projectId
   project!: projects;
   getProject!: Sequelize.BelongsToGetAssociationMixin<projects>;

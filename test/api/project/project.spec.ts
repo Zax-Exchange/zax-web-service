@@ -35,6 +35,7 @@ describe("project tests", () => {
 
   afterAll((done) => {
     sequelize.models.companies.destroy({ truncate: true ,cascade: true });
+    sequelize.models.materials.destroy({ truncate: true ,cascade: true });
     exec("npm run unseed-users", () => {
       done();
     });
@@ -124,28 +125,36 @@ describe("project tests", () => {
     const components = await ProjectApiUtils.getProjectComponents(projectId);
 
     await expect(updateProject({
-      "budget": 10000,
-      "components": [
-        { 
-          id: components[0].id,
-          "name": "component 1",
-          "dimension": "10x10x15",
-          "materials": ["paper", "plastic"],
-          "postProcess": "glossy finish"
-        }, 
-      ],
-      "deliveryDate": "2022-12-31",
-      "deliveryLocation": "USA",
-      "name": TEST_PROJECT_NAMES[0],
-      "design": null,
-      id: projectId
+      "projectData": {
+        "budget": 10000,
+        "deliveryDate": "2022-12-31",
+        "deliveryLocation": "USA",
+        "name": TEST_PROJECT_NAMES[0],
+        "design": null,
+      },
+      id: projectId,
+      "componentsInput": {
+        "toFindOrCreate":[
+          { 
+            id: components[0].id,
+            "name": "component 1",
+            "dimension": "10x10x15",
+            "materials": ["paper", "plastic"],
+            "postProcess": "glossy finish"
+          }
+        ],
+        "toDelete": []
+      }
     })).resolves.toEqual(true); 
+
+    await expect(sequelize.models.materials.findAll()).resolves.toHaveLength(2);
+    await expect(sequelize.models.company_materials.findAll()).resolves.toHaveLength(2);
   });
 
 
   it("should allow vendor to bid for project", async () => {
     const userId = await sequelize.models.users.findOne({ where:{email: VENDOR_EMAILS[0]} }).then(u => u?.get("id") as number);
-    const projectId = await sequelize.models.projects.findOne({ where:{name: TEST_PROJECT_NAMES[0]}}).then(p => p?.get("id") as number);
+    const project = await sequelize.models.projects.findOne({ where:{name: TEST_PROJECT_NAMES[0]}});
     const componentIds = await (project as projects).getProject_components().then(comps => comps.map(c => c.get("id")));
 
     await expect(createProjectBid({
@@ -153,20 +162,16 @@ describe("project tests", () => {
       "comments": "",
       "components": [
         {
-          "componentBidQuantityPrices": [
+          "projectComponentId": componentIds[0],
+          "quantityPrices": [
             {
-              "projectComponentId": componentIds[0],
-              "quantityPrices": [
-                {
-                  "price": 10000,
-                  "quantity": 5000
-                }
-              ]
+              "price": 10000,
+              "quantity": 5000
             }
           ]
         }
       ],
-      projectId
+      projectId: project?.get("id") as number
     })).resolves.toEqual(true);
   });
 

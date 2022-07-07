@@ -10,12 +10,6 @@ const deleteProject = async(data: projectTypes.DeleteProjectInput): Promise<bool
 
   const { userId, projectId } = data;
   
-  // const permission = await ProjectUtils.getProjectOrBidPermission(project_permissions, "projectId", userId, projectId);
-
-  // if (!permission || permission === enums.ProjectPermission.VIEWER) {
-  //   return Promise.reject(new Error("Permission denied"))
-  // }
-  
   try {
     await projects.destroy({
       where: {
@@ -64,15 +58,8 @@ const deleteProjectComponents = async(data: projectTypes.DeleteProjectComponents
 // TODO: should be withdraw bid? add a status to project bid?
 const deleteProjectBid = async(data: projectTypes.DeleteProjectBidInput): Promise<boolean> => {
   const project_bids = sequelize.models.project_bids;
-  const project_bid_permissions = sequelize.models.project_bid_permissions;
 
   const { userId, projectBidId } = data;
-  
-  const permission = await ProjectUtils.getProjectOrBidPermission(project_bid_permissions, "projectBidId", userId, projectBidId);
-
-  if (!permission || permission === enums.ProjectPermission.VIEWER) {
-    return Promise.reject(new Error("Permission denied"))
-  }
 
   try {
     await project_bids.destroy({
@@ -87,21 +74,15 @@ const deleteProjectBid = async(data: projectTypes.DeleteProjectBidInput): Promis
   }
 };
 
-const deleteProjectComponentsBid = async(data: projectTypes.DeleteProjectComponentsBidInput): Promise<boolean> => {
+const deleteProjectBidComponents = async(data: projectTypes.DeleteProjectBidComponentsInput): Promise<boolean> => {
   const project_components = sequelize.models.project_components;
   const project_bid_permissions = sequelize.models.project_bid_permissions;
 
-  const { projectComponentBidIds, projectBidId, userId } = data;
-
-  const permission = await ProjectUtils.getProjectOrBidPermission(project_bid_permissions, "projectBidId", userId, projectBidId);
-
-  if (!permission || permission === enums.ProjectPermission.VIEWER) {
-    return Promise.reject(new Error("Permission denied"))
-  }
+  const { projectBidComponentIds, projectBidId, userId } = data;
 
   try {
     await sequelize.transaction(async (transaction: Transaction) => {
-      for (let id of projectComponentBidIds) {
+      for (let id of projectBidComponentIds) {
         await project_components.destroy({
           where: {
             id
@@ -166,7 +147,7 @@ export {
   deleteProject,
   deleteProjectComponents,
   deleteProjectBid,
-  deleteProjectComponentsBid,
+  deleteProjectBidComponents,
   deleteProjectPermissions,
   deleteProjectBidPermissions
 }
