@@ -1,11 +1,11 @@
-import sequelize from "../utils/dbconnection";
+import sequelize from "../../postgres/dbconnection";
 import * as updateCompanyTypes from "../../types/update/companyTypes";
 import * as commonPlanTyes from "../../types/common/planTypes";
 import * as updatePlanTypes from "../../types/update/planTypes";
-import CompanyApiUtils from "./utils";
+import CompanyApiUtils from "../utils/companyUtils";
 import { getPlanWithPlanId } from "../plan/getPlanApis";
 import { Transaction } from "sequelize/types";
-import UserApiUtils from "../user/utils";
+import UserApiUtils from "../utils/userUtils";
 
 const updateCompany = async (data: updateCompanyTypes.UpdateCompanyInput) => {
   const companies = sequelize.models.companies;

@@ -5,7 +5,7 @@ import { getPermissionedCompany, getGeneralCompany } from "../../../app/api/comp
 import { updateCompany, updateCompanyPlan } from "../../../app/api/company/updateCompanyApis";
 import { CreateCompanyInput } from '../../../app/types/create/companyTypes';
 import { initModels } from '../../../app/api/models/init-models';
-import sequelize from "../../../app/api/utils/dbconnection";
+import sequelize from "../../../app/postgres/dbconnection";
 import {
   FREE_PLAN_NAME,
   ADMIN_EMAILS,

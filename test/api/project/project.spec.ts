@@ -1,5 +1,5 @@
 import { initModels, projects, users } from '../../../app/api/models/init-models';
-import sequelize from "../../../app/api/utils/dbconnection";
+import sequelize from "../../../app/postgres/dbconnection";
 import { exec } from 'child_process';
 import {series} from 'async';
 import {
@@ -18,7 +18,7 @@ import {
 import { getCustomerProjects, getVendorProjects } from "../../../app/api/project/getProjectApis";
 import { CreateProjectComponentInput } from '../../../app/types/create/projectTypes';
 import * as enums from "../../../app/types/common/enums";
-import ProjectApiUtils from "../../../app/api/project/utils";
+import ProjectApiUtils from "../../../app/api/utils/projectUtils";
 
 process.env.NODE_ENV = "test";
 
@@ -40,21 +40,6 @@ describe("project tests", () => {
       done();
     });
   });
-
-  // it("should not allow vendor user to create project", async() => {
-  //   const res = await sequelize.models.users.findAll().then(u => u.map(t => t.get()));
-  //   const user = await sequelize.models.users.findOne({ where:{email: VENDOR_EMAILS[0]} });
-    
-  //   await expect(createProject({
-  //     "budget": 10000,
-  //     "components": []  as CreateProjectComponentInput[],
-  //     "deliveryDate": "2022-12-31",
-  //     "deliveryLocation": "USA",
-  //     "name": "test project",
-  //     "design": null,
-  //     "userId": user!.get("id") as number
-  //   })).rejects.toBeInstanceOf(Error);
-  // });
 
   it("should allow customer user to create project and corresponding components", async() => {
     const user = await sequelize.models.users.findOne({ where:{email: CUSTOMER_EMAILS[0]} });
@@ -187,33 +172,4 @@ describe("project tests", () => {
     expect(res[0].bids).toHaveLength(1);
     expect(res[0].permission).toEqual(enums.ProjectPermission.VIEWER)
   });
-
-  // it("should not allow project update if status is IN_PROGRESS", async() => {
-  //   const user = await sequelize.models.users.findOne({ where:{email: CUSTOMER_EMAILS[0]} });
-  //   const projectId = await (user as users).getProjects({
-  //     "where": {
-  //       name: TEST_PROJECT_NAMES[0]
-  //     }
-  //   }).then(ps => ps[0].get("id") as number);
-
-  //   // actions in transactions don't throw error so cannot expect rejects
-  //   await updateProject({
-  //     "budget": 10000,
-  //     "components": [],
-  //     "deliveryDate": "2022-12-31",
-  //     "deliveryLocation": "USA",
-  //     "name": TEST_PROJECT_NAMES[1],
-  //     "design": null,
-  //     id: projectId
-  //   }); 
-
-  //   const project = await (user as users).getProjects({
-  //     "where": {
-  //       name: TEST_PROJECT_NAMES[0]
-  //     }
-  //   }).then(ps => ps[0].get());
-
-  //   // check project still has previous name to make sure update isn't allowed
-  //   expect(project.name).toEqual(TEST_PROJECT_NAMES[0]);
-  // });
 })

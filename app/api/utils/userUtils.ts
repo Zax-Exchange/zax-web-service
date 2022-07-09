@@ -1,6 +1,6 @@
 
 import * as enums from "../../types/common/enums";
-import sequelize from "../utils/dbconnection";
+import sequelize from "../../postgres/dbconnection";
 
 class UserApiUtils {
   static async isUserFirstInCompany(companyId: number): Promise<boolean> {

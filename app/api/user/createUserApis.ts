@@ -1,7 +1,7 @@
 import * as userTypes from "../../types/create/userTypes";
-import sequelize from "../utils/dbconnection";
-import UserApiUtils from "./utils";
-import CompanyApiUtils from "../company/utils";
+import sequelize from "../../postgres/dbconnection";
+import UserApiUtils from "../utils/userUtils";
+import CompanyApiUtils from "../utils/companyUtils";
 import { decreaseCompanyQuota } from "../company/updateCompanyApis";
 import { Transaction } from "sequelize/types";
 

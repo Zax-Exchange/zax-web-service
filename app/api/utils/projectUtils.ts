@@ -1,13 +1,14 @@
 import * as commonProjectTypes from "../../types/common/projectTypes";
 import * as getProjectTypes from "../../types/get/projectTypes";
 import * as enums from "../../types/common/enums"
-import UserApiUtils from "../user/utils";
-import { Model, ModelStatic, Transaction } from "sequelize";
-import sequelize from "../utils/dbconnection";
+import UserApiUtils from "./userUtils";
+import { Model, ModelStatic, Op, Transaction } from "sequelize";
+import sequelize from "../../postgres/dbconnection";
 import { project_bids } from "../models/project_bids";
 import { users } from "../models/users";
 import { project_bid_permissionsAttributes } from "../models/project_bid_permissions";
 import { project_permissionsAttributes } from "../models/project_permissions";
+import { projectsAttributes } from "../models/projects";
 
 class ProjectApiUtils {
   static async getBidPermissions(userId: number): Promise<project_bid_permissionsAttributes[]> {
@@ -126,7 +127,7 @@ class ProjectApiUtils {
   static async getPermissionedProjectBid(projectBidId: number, permission: enums.ProjectPermission): Promise<commonProjectTypes.PermissionedProjectBid> {
     try {
       const rawUserBid = await sequelize.models.project_bids.findByPk(projectBidId);
-      const components = await (rawUserBid as project_bids).getProject_component_bids().then(comps => comps.map(comp => comp.get({ plain:true }))) as commonProjectTypes.ProjectBidComponent[]; 
+      const components = await (rawUserBid as project_bids).getProject_bid_components().then(comps => comps.map(comp => comp.get({ plain:true }))) as commonProjectTypes.ProjectBidComponent[]; 
       
       const userBid = rawUserBid?.get({ plain:true });
       
@@ -155,6 +156,20 @@ class ProjectApiUtils {
       return Promise.resolve(true);
     } catch(e) {
       console.error(e);
+      return Promise.reject(e);
+    }
+  }
+
+  static async getProjectsByIds(projectIds: number[]): Promise<projectsAttributes[]> {
+    try {
+      return await sequelize.models.projects.findAll({
+        where: {
+          id: {
+            [Op.in]: projectIds
+          }
+        }
+      }).then(ps => ps.map(p => p.get({plain:true})));
+    } catch(e) {
       return Promise.reject(e);
     }
   }

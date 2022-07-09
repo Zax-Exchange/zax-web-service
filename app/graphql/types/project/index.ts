@@ -1,6 +1,17 @@
 import { gql } from "apollo-server-express";
 
 const project = gql`
+  type ProjectOverview {
+    id: Int!
+    companyId: Int!
+    name: String!
+    deliveryDate: String!
+    deliveryLocation: String!
+    budget: Int!
+    materials: [String!]!
+    createdAt: String!
+  }
+
   type Project {
     id: Int!
     userId: Int!

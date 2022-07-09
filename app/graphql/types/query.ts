@@ -7,6 +7,7 @@ const query = gql`
         getGeneralCompany(companyId: Int): GeneralCompany
         getVendorProjects(userId: Int): [VendorProject]
         getCustomerProjects(userId: Int): [CustomerProject]
+        searchCustomerProjects(searchQuery: String): [ProjectOverview]
     }
 `;
 

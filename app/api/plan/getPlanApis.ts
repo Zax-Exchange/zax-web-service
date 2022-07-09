@@ -1,4 +1,4 @@
-import sequelize from "../utils/dbconnection";
+import sequelize from "../../postgres/dbconnection";
 import * as commonPlanTypes from "../../types/common/planTypes";
 import { Transaction } from "sequelize/types";
 

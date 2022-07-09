@@ -7,7 +7,7 @@ import { getUserWithUserId } from "../../../app/api/user/getUserApis";
 import { createCompany } from "../../../app/api/company/createCompanyApis";
 import { CreateCompanyInput } from '../../../app/types/create/companyTypes';
 import { initModels } from '../../../app/api/models/init-models';
-import sequelize from "../../../app/api/utils/dbconnection";
+import sequelize from "../../../app/postgres/dbconnection";
 import { UpdateUserInput, UpdateUserInputData } from "../../../app/types/update/userTypes";
 // import * as jest from "ts-jest";
 
@@ -132,5 +132,7 @@ describe('user tests', () => {
       fromId: adminUserId,
       targetId: nonAdminUser1Id
     })).resolves.toEqual(true);
+
+    await expect(getUserWithUserId(nonAdminUser1Id)).resolves.toHaveProperty("isAdmin", true);
   });
 });

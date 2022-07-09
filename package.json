@@ -8,7 +8,7 @@
     "test": "jest -i",
     "build": "tsc",
     "start": "nodemon --experimental-specifier-resolution=node --loader ts-node/esm app/index.ts",
-    "generate": "node scripts/generateModels.js",
+    "generate": "node --loader ts-node/esm scripts/generateModels.ts",
     "seedAll": "npm --prefix ../zax-exchange-db run seedAll",
     "unseed-users": "npm --prefix ../zax-exchange-db run unseed-users",
     "jest-setup-project-testing": "npm --prefix ../zax-exchange-db run seed-users"
@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@elastic/elasticsearch": "~8.2.1",
     "apollo-server-express": "3.9.0",
     "dotenv": "16.0.1",
     "express": "4.18.1",

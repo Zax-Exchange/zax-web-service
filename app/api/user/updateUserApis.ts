@@ -1,6 +1,6 @@
 import * as userTypes from "../../types/update/userTypes";
-import sequelize from "../utils/dbconnection";
-import UserApiUtils from "./utils";
+import sequelize from "../../postgres/dbconnection";
+import UserApiUtils from "../utils/userUtils";
 
 
 const updateUser = async(data: userTypes.UpdateUserInput) => {

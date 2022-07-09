@@ -1,16 +1,29 @@
-import sequelize from "../utils/dbconnection";
+import sequelize from "../../postgres/dbconnection";
 import * as projectTypes from "../../types/update/projectTypes";
 import * as enums from "../../types/common/enums";
 import { Transaction } from "sequelize/types";
 import { createOrUpdateProjectPermission, createOrUpdateProjectBidPermission } from "./createProjectApis";
 import { Op } from "sequelize";
+import ElasticProjectService from "../../elastic/project/ElasticProjectService";
 
 const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<boolean> => {
   const { id, projectData, componentsInput } = data;
   const { toFindOrCreate, toDelete } = componentsInput;
+  const {
+    deliveryDate,
+    deliveryLocation,
+    budget
+  } = projectData;
   const projects = sequelize.models.projects;
+  const materials = [];
+  for (let comp of toFindOrCreate) {
+    for (let mat of comp.materials) {
+      materials.push(mat);
+    }
+  }
 
   try {
+    ElasticProjectService.updateProjectDocument({projectId:id, deliveryDate, deliveryLocation, budget, materials});
     await sequelize.transaction(async transaction => {
       await projects.update(projectData, {
         where: {
@@ -20,7 +33,8 @@ const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<bool
       });
       await updateProjectComponents(toFindOrCreate, transaction);
     });
-    return Promise.resolve(true);
+    
+    return true;
   }
   catch (e) {
     console.error(e);
@@ -54,6 +68,7 @@ const updateProjectComponents = async(components: projectTypes.UpdateProjectComp
           }, {transaction});
         }
       });
+
     }
     return Promise.resolve(true);
   } catch (e) {

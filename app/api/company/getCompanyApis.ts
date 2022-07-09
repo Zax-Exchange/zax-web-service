@@ -1,10 +1,10 @@
-import sequelize from "../utils/dbconnection";
+import sequelize from "../../postgres/dbconnection";
 import * as getCompanyTypes from "../../types/get/companyTypes";
 import * as commonCompanyTypes from "../../types/common/companyTypes";
 import * as commonPlanTyes from "../../types/common/planTypes";
 import { getPlanWithPlanId } from "../plan/getPlanApis";
-import CompanyApiUtils from "./utils";
-import UserApiUtils from "../user/utils";
+import CompanyApiUtils from "../utils/companyUtils";
+import UserApiUtils from "../utils/userUtils";
 
 // should only be called with user within the company
 const getPermissionedCompany = async (data: getCompanyTypes.GetPermissionedCompanyInput): Promise<commonCompanyTypes.PermissionedCompany> => {
@@ -49,6 +49,7 @@ try {
     return Promise.reject(e);
   }
 };
+
 
 export {
   getPermissionedCompany,

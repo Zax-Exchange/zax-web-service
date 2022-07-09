@@ -4,7 +4,7 @@ import * as createCompanyTypes from "../../types/create/companyTypes";
 import * as commonPlanTypes from "../../types/common/planTypes";
 import * as enums from "../../types/common/enums"
 import { Model, ModelStatic, Transaction } from "sequelize";
-import sequelize from "../utils/dbconnection";
+import sequelize from "../../postgres/dbconnection";
 
 class CompanyApiUtils {
   static async getCompanyPlan(companyId: number): Promise<commonPlanTypes.CompanyPlan> {
@@ -18,7 +18,7 @@ class CompanyApiUtils {
     return plan;
   }
 
-  // should charge card with $1.00 first to see if card is valid
+  // TODO: should charge card with $1.00 first to see if card is valid
   static async checkCreditCardValidity(cardNumber: string, cardExp: string, cardCvv: string) {
     return true;
   }

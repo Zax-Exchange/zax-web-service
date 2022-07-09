@@ -1,9 +1,10 @@
-import sequelize from "../utils/dbconnection";
+import sequelize from "../../postgres/dbconnection";
 import * as projectTypes from "../../types/create/projectTypes";
 import * as enums from "../../types/common/enums";
 import { Transaction } from "sequelize/types";
-import ProjectApiUtils from "./utils";
-import UserApiUtils from "../user/utils";
+import ProjectApiUtils from "../utils/projectUtils";
+import UserApiUtils from "../utils/userUtils";
+import ElasticProjectService from "../../elastic/project/ElasticProjectService";
 
 //TODO: findOrCreate product or materials when creating project
 const createProject = async(data: projectTypes.CreateProjectInput): Promise<boolean> => {
@@ -27,12 +28,21 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
         budget,
         design,
         companyId,
-        status: enums.ProjectStatus.OPEN
+        status: enums.ProjectStatus.OPEN  
       }, { transaction });
       const projectId = project.getDataValue("id");
+      const materials = [];
+      for (let comp of components) {
+        for (let mat of comp.materials) {
+          materials.push(mat);
+        }
+      }
+      ElasticProjectService.createProjectDocument({projectId, deliveryDate, deliveryLocation, budget, materials});
       await createProjectComponents(projectId, components, companyId, transaction);
       await createOrUpdateProjectPermission({ userId, projectId, permission: enums.ProjectPermission.OWNER }, transaction);
     });
+
+
     return Promise.resolve(true);
   } catch(e) {
     console.error(e);

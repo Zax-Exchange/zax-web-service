@@ -3,15 +3,15 @@ import express from "express";
 import resolvers from "./graphql/resolvers";
 import typeDefs from "./graphql/types";
 import SequelizeAuto from "sequelize-auto";
-import sequelize from "./api/utils/dbconnection";
+import sequelize from "./postgres/dbconnection";
 import { initModels } from "./api/models/init-models";
 import dotenv from "dotenv";
 
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
 }
-const startServer = async() => {
-  
+
+const startServer = async() => {  
   
   initModels(sequelize);
  

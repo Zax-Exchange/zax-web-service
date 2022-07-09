@@ -1,7 +1,7 @@
 import * as userTypes from "../../types/common/userTypes";
 import { companies } from "../models/companies";
-import sequelize from "../utils/dbconnection";
-import UserApiUtils from "./utils";
+import sequelize from "../../postgres/dbconnection";
+import UserApiUtils from "../utils/userUtils";
 
 
 // returns a list of users with user power

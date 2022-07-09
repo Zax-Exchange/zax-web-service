@@ -1,12 +1,6 @@
 import * as commonProjectTypes from "../../types/common/projectTypes";
-import * as getProjectTypes from "../../types/get/projectTypes";
 import * as enums from "../../types/common/enums"
-import ProjectApiUtils from "./utils";
-import UserApiUtils from "../user/utils";
-import sequelize from "../utils/dbconnection";
-import { Op, Model, ModelStatic, Transaction } from "sequelize";
-import { users } from "../models/users";
-
+import ProjectApiUtils from "../utils/projectUtils";
 
 const getVendorProjects = async(userId:number): Promise<commonProjectTypes.VendorProject[]> => {
   // projectBidPermissions -> projectBidId -> projectBid -> projectId -> project
