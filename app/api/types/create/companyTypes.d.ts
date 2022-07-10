@@ -4,7 +4,7 @@ export interface CreateCompanyInput {
   name: string;
   logo: string;
   phone: string;
-  fax: string | undefined;
+  fax: string | null;
   creditCardNumber: string;
   creditCardExp: string;
   creditCardCvv: string;
@@ -12,7 +12,9 @@ export interface CreateCompanyInput {
   isActive: boolean;
   isVendor: boolean;
   isVerified: boolean;
-  leadTime: number | undefined;
+  leadTime: number | null;
+  locations: string[] | null;
+  moq: number | null;
   companyUrl: string;
   planId: number;
 }

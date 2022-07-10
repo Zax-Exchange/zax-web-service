@@ -1,6 +1,6 @@
 import sequelize from "../../postgres/dbconnection";
-import * as projectTypes from "../../types/create/projectTypes";
-import * as enums from "../../types/common/enums";
+import * as projectTypes from "../types/create/projectTypes";
+import * as enums from "../types/common/enums";
 import { Transaction } from "sequelize/types";
 import ProjectApiUtils from "../utils/projectUtils";
 import UserApiUtils from "../utils/userUtils";
@@ -37,9 +37,9 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
           materials.push(mat);
         }
       }
-      ElasticProjectService.createProjectDocument({projectId, deliveryDate, deliveryLocation, budget, materials});
       await createProjectComponents(projectId, components, companyId, transaction);
       await createOrUpdateProjectPermission({ userId, projectId, permission: enums.ProjectPermission.OWNER }, transaction);
+      ElasticProjectService.createProjectDocument({ projectId, deliveryDate, deliveryLocation, budget, materials });
     });
 
 
@@ -65,11 +65,15 @@ const createProjectComponents = async(projectId: number, components: projectType
           },
           transaction
         }).then(async ([found, created]) => {
+          // if found, could mean other customers also have same materials
           if(created) {
-            await company_materials.create({
-              companyId,
-              materialId: found.get("id")
-            }, {transaction});
+            await company_materials.findOrCreate({
+              where: {
+                companyId,
+                materialId: found.get("id")
+              },
+              transaction
+            });
           }
         })
       }

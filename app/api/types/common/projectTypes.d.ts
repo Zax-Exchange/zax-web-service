@@ -6,6 +6,17 @@ export interface QuantityPrice {
   price: number;
 }
 
+export interface ProjectOverview {
+  id: number;
+  companyId: number;
+  name: string;
+  deliveryDate: string;
+  deliveryLocation: string;
+  budget: number;
+  materials: string[];
+  createdAt: Date;
+}
+
 export interface Project {
   id: number;
   userId: number;
@@ -35,10 +46,13 @@ export interface CustomerProject extends PermissionedProject {
 
 export interface ProjectComponent {
   id: number;
+  projectId: number;
   name: string;
   materials: string[];
   dimension: string;
   postProcess: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface ProjectBid {

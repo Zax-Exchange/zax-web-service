@@ -1,4 +1,4 @@
-import * as userTypes from "../../types/create/userTypes";
+import * as userTypes from "../types/create/userTypes";
 import sequelize from "../../postgres/dbconnection";
 import UserApiUtils from "../utils/userUtils";
 import CompanyApiUtils from "../utils/companyUtils";

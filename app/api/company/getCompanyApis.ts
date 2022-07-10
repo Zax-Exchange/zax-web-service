@@ -1,7 +1,7 @@
 import sequelize from "../../postgres/dbconnection";
-import * as getCompanyTypes from "../../types/get/companyTypes";
-import * as commonCompanyTypes from "../../types/common/companyTypes";
-import * as commonPlanTyes from "../../types/common/planTypes";
+import * as getCompanyTypes from "../types/get/companyTypes";
+import * as commonCompanyTypes from "../types/common/companyTypes";
+import * as commonPlanTyes from "../types/common/planTypes";
 import { getPlanWithPlanId } from "../plan/getPlanApis";
 import CompanyApiUtils from "../utils/companyUtils";
 import UserApiUtils from "../utils/userUtils";

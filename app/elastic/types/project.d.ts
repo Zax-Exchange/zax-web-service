@@ -5,14 +5,3 @@ export interface ProjectDocument {
   budget: number;
   materials: string[];
 }
-
-export interface ProjectOverview {
-  id: number;
-  companyId: number;
-  name: string;
-  deliveryDate: string;
-  deliveryLocation: string;
-  budget: number;
-  materials: string[];
-  createdAt: Date;
-}

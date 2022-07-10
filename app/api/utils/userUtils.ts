@@ -1,5 +1,5 @@
 
-import * as enums from "../../types/common/enums";
+import * as enums from "../types/common/enums";
 import sequelize from "../../postgres/dbconnection";
 
 class UserApiUtils {

@@ -15,7 +15,7 @@ import {
   updateProjectComponents,
   updateProjectPermissions,
 } from "../../../app/api/project/updateProjectApis";
-import { getCustomerProjects, getVendorProjects } from "../../../app/api/project/getProjectApis";
+import { getCustomerProjects, getVendorProjects, getProjectDetail } from "../../../app/api/project/getProjectApis";
 import { CreateProjectComponentInput } from '../../../app/types/create/projectTypes';
 import * as enums from "../../../app/types/common/enums";
 import ProjectApiUtils from "../../../app/api/utils/projectUtils";
@@ -28,9 +28,13 @@ jest.setTimeout(100000);
 describe("project tests", () => {
   beforeAll((done) => {
     initModels(sequelize);
-    exec("npm run jest-setup-project-testing", () => {
-      done();
-    });
+    series([
+      exec("npm run unseedAll", () => {
+      }),
+      exec("npm run jest-setup-project-testing", () => {
+        done();
+      })
+    ]);
   });
 
   afterAll((done) => {
@@ -63,6 +67,21 @@ describe("project tests", () => {
     const projects = await getCustomerProjects(user?.get("id") as number);
 
     expect(projects.length).toEqual(1);
+  });
+
+  it("should get project detail", async () => {
+    const project = await sequelize.models.projects.findOne({ where: {name: TEST_PROJECT_NAMES[0]} }).then(p => p?.get({plain:true}));
+    const userProject = await getProjectDetail(project.id);
+    expect(userProject).toBeTruthy();
+
+    expect(userProject).toHaveProperty("budget", 10000);
+    expect(userProject).toHaveProperty("deliveryDate", "2022-12-31");
+    expect(userProject).toHaveProperty("deliveryLocation", "USA");
+    expect(userProject).toHaveProperty("name", TEST_PROJECT_NAMES[0]);
+    expect(userProject).toHaveProperty("userId");
+    expect(userProject).toHaveProperty("design", null);
+    expect(userProject.components).toHaveLength(1);
+    expect(userProject.components[0].materials).toEqual(["paper", "plastic"]);
   });
 
   it("should not allow non project-related customers to see project", async() => {

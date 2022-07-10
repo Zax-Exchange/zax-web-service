@@ -1,8 +1,8 @@
 
-import * as commonCompanyTypes from "../../types/common/companyTypes";
-import * as createCompanyTypes from "../../types/create/companyTypes";
-import * as commonPlanTypes from "../../types/common/planTypes";
-import * as enums from "../../types/common/enums"
+import * as commonCompanyTypes from "../types/common/companyTypes";
+import * as createCompanyTypes from "../types/create/companyTypes";
+import * as commonPlanTypes from "../types/common/planTypes";
+import * as enums from "../types/common/enums"
 import { Model, ModelStatic, Transaction } from "sequelize";
 import sequelize from "../../postgres/dbconnection";
 

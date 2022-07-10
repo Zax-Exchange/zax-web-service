@@ -22,11 +22,13 @@ export interface companiesAttributes {
   id: number;
   createdAt: Date;
   updatedAt: Date;
+  locations?: string[];
+  moq?: number;
 }
 
 export type companiesPk = "id";
 export type companiesId = companies[companiesPk];
-export type companiesOptionalAttributes = "logo" | "fax" | "companyUrl" | "leadTime" | "createdAt" | "updatedAt";
+export type companiesOptionalAttributes = "logo" | "fax" | "companyUrl" | "leadTime" | "createdAt" | "updatedAt" | "locations" | "moq";
 export type companiesCreationAttributes = Optional<companiesAttributes, companiesOptionalAttributes>;
 
 export class companies extends Model<companiesAttributes, companiesCreationAttributes> implements companiesAttributes {
@@ -46,6 +48,8 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
   id!: number;
   createdAt!: Date;
   updatedAt!: Date;
+  locations?: string[];
+  moq?: number;
 
   // companies hasMany company_materials via companyId
   company_materials!: company_materials[];
@@ -150,6 +154,14 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
+    },
+    locations: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true
+    },
+    moq: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     }
   }, {
     tableName: 'companies',

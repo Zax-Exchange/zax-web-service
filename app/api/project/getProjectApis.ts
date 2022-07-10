@@ -1,5 +1,5 @@
-import * as commonProjectTypes from "../../types/common/projectTypes";
-import * as enums from "../../types/common/enums"
+import * as commonProjectTypes from "../types/common/projectTypes";
+import * as enums from "../types/common/enums"
 import ProjectApiUtils from "../utils/projectUtils";
 
 const getVendorProjects = async(userId:number): Promise<commonProjectTypes.VendorProject[]> => {
@@ -44,7 +44,16 @@ const getCustomerProjects = async(userId: number): Promise<commonProjectTypes.Cu
   }
 };
 
+const getProjectDetail = async(id: number): Promise<commonProjectTypes.Project> => {
+  try {
+    return await ProjectApiUtils.getProject(id);
+  } catch(e) {
+    return Promise.reject(e);
+  }
+};
+
 export {
   getVendorProjects,
-  getCustomerProjects
+  getCustomerProjects,
+  getProjectDetail
 }

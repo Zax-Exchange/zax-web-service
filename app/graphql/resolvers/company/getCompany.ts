@@ -1,4 +1,4 @@
-import * as getCompanyTypes from "../../../types/get/companyTypes";
+import * as getCompanyTypes from "../../../api/types/get/companyTypes";
 import { 
   getPermissionedCompany as getPermissionedCompanyApi,
   getGeneralCompany as getGeneralCompanyApi

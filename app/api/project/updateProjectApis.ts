@@ -1,6 +1,6 @@
 import sequelize from "../../postgres/dbconnection";
-import * as projectTypes from "../../types/update/projectTypes";
-import * as enums from "../../types/common/enums";
+import * as projectTypes from "../types/update/projectTypes";
+import * as enums from "../types/common/enums";
 import { Transaction } from "sequelize/types";
 import { createOrUpdateProjectPermission, createOrUpdateProjectBidPermission } from "./createProjectApis";
 import { Op } from "sequelize";

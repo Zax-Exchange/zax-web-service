@@ -1,5 +1,5 @@
-import * as updatePlanTypes from "../../../types/update/planTypes";
-import * as updateCompanyTypes from "../../../types/update/companyTypes";
+import * as updatePlanTypes from "../../../api/types/update/planTypes";
+import * as updateCompanyTypes from "../../../api/types/update/companyTypes";
 import { 
   updateCompany as updateCompanyApi,
   updateCompanyPlan as updateCompanyPlanApi

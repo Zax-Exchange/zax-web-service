@@ -1,5 +1,6 @@
 import elasticClient from "../elasticConnection";
 import * as projectTypes from "../types/project";
+import * as companyTypes from "../types/company";
 
 export default class ElasticProjectService {
   static async createProjectDocument(data: projectTypes.ProjectDocument) {
@@ -10,35 +11,43 @@ export default class ElasticProjectService {
       budget,
       materials
     } = data
-    const exist = await elasticClient.indices.exists({ index: "project" }).catch(e => console.error(e));
 
-    await elasticClient.indices.create({
-      "index": "project",
-      mappings: {
-        "properties": {
-          id: { type: "text" },
-          deliveryDate: { type: "date" },
-          deliveryLocation: { type: "text"},
-          budget: { type: "integer" },
-          materials: { type: "text" }
-        },
+    try {
+      await elasticClient.indices.delete({
+        "index": "project"
+      })
+      const exist = await elasticClient.indices.exists({ index: "project" });
+  
+      if (!exist) {
+        await elasticClient.indices.create({
+          "index": "project",
+          mappings: {
+            "properties": {
+              id: { type: "text" },
+              deliveryDate: { type: "date" },
+              deliveryLocation: { type: "text"},
+              budget: { type: "integer" },
+              materials: { type: "text" }
+            },
+          }
+        });
       }
-    }).catch(e => console.error(e))
-    if (!exist) {
+  
+      await elasticClient.index({
+        index: "project",
+        id: projectId.toString(),
+        document: {
+          deliveryLocation,
+          deliveryDate,
+          budget,
+          materials
+        },
+        refresh: true
+      })
+    } catch(e) {
+      console.error(e);
     }
-
-    await elasticClient.index({
-      index: "project",
-      id: projectId.toString(),
-      document: {
-        deliveryLocation,
-        deliveryDate,
-        budget,
-        materials
-      },
-      refresh: true
-    })
-    .catch(e => console.error(e));
+ 
   }
 
   static async updateProjectDocument(data: projectTypes.ProjectDocument) {

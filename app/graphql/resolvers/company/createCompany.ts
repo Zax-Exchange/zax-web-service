@@ -1,4 +1,4 @@
-import * as createCompanyTypes from "../../../types/create/companyTypes";
+import * as createCompanyTypes from "../../../api/types/create/companyTypes";
 import { createCompany as createCompanyApi } from "../../../api/company/createCompanyApis";
 
 const createCompany = (parents: any, args: Record<string, createCompanyTypes.CreateCompanyInput>, context: any) => {

@@ -1,6 +1,6 @@
-import * as commonProjectTypes from "../../types/common/projectTypes";
-import * as getProjectTypes from "../../types/get/projectTypes";
-import * as enums from "../../types/common/enums"
+import * as commonProjectTypes from "../types/common/projectTypes";
+import * as getProjectTypes from "../types/get/projectTypes";
+import * as enums from "../types/common/enums"
 import UserApiUtils from "./userUtils";
 import { Model, ModelStatic, Op, Transaction } from "sequelize";
 import sequelize from "../../postgres/dbconnection";
@@ -8,7 +8,7 @@ import { project_bids } from "../models/project_bids";
 import { users } from "../models/users";
 import { project_bid_permissionsAttributes } from "../models/project_bid_permissions";
 import { project_permissionsAttributes } from "../models/project_permissions";
-import { projectsAttributes } from "../models/projects";
+import { projects, projectsAttributes } from "../models/projects";
 
 class ProjectApiUtils {
   static async getBidPermissions(userId: number): Promise<project_bid_permissionsAttributes[]> {
@@ -62,11 +62,23 @@ class ProjectApiUtils {
     }
   }
 
+  /**
+   * Returns a generic project information
+   * @param id 
+   * @returns Project
+   */
   static async getProject(id: number): Promise<commonProjectTypes.Project> {
     const projects = sequelize.models.projects;
 
     try {
-      return await projects.findByPk(id).then(p => p?.get({ plain:true }));
+
+      return await projects.findByPk(id).then(async p => {
+        const components = await (p as projects)?.getProject_components().then(comps => comps.map(comp => comp.get({plain:true})));
+        return {
+          ...p?.get({plain: true}),
+          components
+        }
+      });
     } catch(e) {
       return Promise.reject(e);
     }
