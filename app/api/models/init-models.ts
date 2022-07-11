@@ -1,8 +1,6 @@
 import type { Sequelize } from "sequelize";
 import { companies as _companies } from "./companies";
 import type { companiesAttributes, companiesCreationAttributes } from "./companies";
-import { company_materials as _company_materials } from "./company_materials";
-import type { company_materialsAttributes, company_materialsCreationAttributes } from "./company_materials";
 import { company_plans as _company_plans } from "./company_plans";
 import type { company_plansAttributes, company_plansCreationAttributes } from "./company_plans";
 import { materials as _materials } from "./materials";
@@ -26,7 +24,6 @@ import type { usersAttributes, usersCreationAttributes } from "./users";
 
 export {
   _companies as companies,
-  _company_materials as company_materials,
   _company_plans as company_plans,
   _materials as materials,
   _plans as plans,
@@ -42,8 +39,6 @@ export {
 export type {
   companiesAttributes,
   companiesCreationAttributes,
-  company_materialsAttributes,
-  company_materialsCreationAttributes,
   company_plansAttributes,
   company_plansCreationAttributes,
   materialsAttributes,
@@ -68,7 +63,6 @@ export type {
 
 export function initModels(sequelize: Sequelize) {
   const companies = _companies.initModel(sequelize);
-  const company_materials = _company_materials.initModel(sequelize);
   const company_plans = _company_plans.initModel(sequelize);
   const materials = _materials.initModel(sequelize);
   const plans = _plans.initModel(sequelize);
@@ -80,16 +74,12 @@ export function initModels(sequelize: Sequelize) {
   const projects = _projects.initModel(sequelize);
   const users = _users.initModel(sequelize);
 
-  company_materials.belongsTo(companies, { as: "company", foreignKey: "companyId"});
-  companies.hasMany(company_materials, { as: "company_materials", foreignKey: "companyId"});
   company_plans.belongsTo(companies, { as: "company", foreignKey: "companyId"});
   companies.hasOne(company_plans, { as: "company_plan", foreignKey: "companyId"});
   projects.belongsTo(companies, { as: "company", foreignKey: "companyId"});
   companies.hasMany(projects, { as: "projects", foreignKey: "companyId"});
   users.belongsTo(companies, { as: "company", foreignKey: "companyId"});
   companies.hasMany(users, { as: "users", foreignKey: "companyId"});
-  company_materials.belongsTo(materials, { as: "material", foreignKey: "materialId"});
-  materials.hasMany(company_materials, { as: "company_materials", foreignKey: "materialId"});
   company_plans.belongsTo(plans, { as: "plan", foreignKey: "planId"});
   plans.hasMany(company_plans, { as: "company_plans", foreignKey: "planId"});
   project_bid_components.belongsTo(project_bids, { as: "projectBid", foreignKey: "projectBidId"});
@@ -115,7 +105,6 @@ export function initModels(sequelize: Sequelize) {
 
   return {
     companies: companies,
-    company_materials: company_materials,
     company_plans: company_plans,
     materials: materials,
     plans: plans,

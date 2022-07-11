@@ -10,7 +10,7 @@ export interface projectsAttributes {
   id: number;
   name: string;
   deliveryDate: string;
-  deliveryLocation: string;
+  deliveryCountry: string;
   budget: number;
   design?: any;
   createdAt: Date;
@@ -19,6 +19,7 @@ export interface projectsAttributes {
   status: string;
   companyId: number;
   comments?: string;
+  deliveryCity: string;
 }
 
 export type projectsPk = "id";
@@ -30,7 +31,7 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
   id!: number;
   name!: string;
   deliveryDate!: string;
-  deliveryLocation!: string;
+  deliveryCountry!: string;
   budget!: number;
   design?: any;
   createdAt!: Date;
@@ -39,6 +40,7 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
   status!: string;
   companyId!: number;
   comments?: string;
+  deliveryCity!: string;
 
   // projects belongsTo companies via companyId
   company!: companies;
@@ -104,7 +106,7 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
       type: DataTypes.DATEONLY,
       allowNull: false
     },
-    deliveryLocation: {
+    deliveryCountry: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -139,6 +141,10 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
     comments: {
       type: DataTypes.STRING,
       allowNull: true
+    },
+    deliveryCity: {
+      type: DataTypes.STRING,
+      allowNull: false
     }
   }, {
     tableName: 'projects',

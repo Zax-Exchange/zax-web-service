@@ -1,9 +1,9 @@
 
 import { createUser } from "../../../app/api/user/createUserApis";
 import { createCompany } from "../../../app/api/company/createCompanyApis";
-import { getPermissionedCompany, getGeneralCompany } from "../../../app/api/company/getCompanyApis";
+import { getPermissionedCompany } from "../../../app/api/company/getCompanyApis";
 import { updateCompany, updateCompanyPlan } from "../../../app/api/company/updateCompanyApis";
-import { CreateCompanyInput } from '../../../app/types/create/companyTypes';
+import { CreateCompanyInput } from '../../../app/api/types/create/companyTypes';
 import { initModels } from '../../../app/api/models/init-models';
 import sequelize from "../../../app/postgres/dbconnection";
 import {
@@ -13,9 +13,9 @@ import {
   VENDOR_COMPANY_NAME,
   BASIC_PLAN_NAME
 } from "../../constants";
-import { UpdateCompanyData, UpdateCompanyInput } from "../../../app/types/update/companyTypes";
-import * as enums from "../../../app/types/common/enums";
-import type { PermissionedCompany } from "../../../app/types/common/companyTypes";
+import { UpdateCompanyData, UpdateCompanyInput } from "../../../app/api/types/update/companyTypes";
+import * as enums from "../../../app/api/types/common/enums";
+import type { PermissionedCompany } from "../../../app/api/types/common/companyTypes";
 
 process.env.NODE_ENV = "test";
 

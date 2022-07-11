@@ -6,29 +6,24 @@ export interface QuantityPrice {
   price: number;
 }
 
+// project for public view
 export interface ProjectOverview {
   id: number;
   companyId: number;
   name: string;
   deliveryDate: string;
-  deliveryLocation: string;
+  deliveryCountry: string;
+  deliveryCity: string;
   budget: number;
   materials: string[];
   createdAt: Date;
 }
 
-export interface Project {
-  id: number;
+export interface Project extends ProjectOverview{
   userId: number;
-  companyId: number;
-  name: string;
-  deliveryDate: string;
-  deliveryLocation: string;
-  budget: string;
   design: BinaryType | null;
   status: enums.ProjectStatus;
   components: ProjectComponent[];
-  createdAt: Date;
   updatedAt: Date;
 }
 
@@ -73,4 +68,12 @@ export interface ProjectBidComponent {
 export interface PermissionedProjectBid extends ProjectBid{
   permission: enums.ProjectPermission;
 
+}
+
+export interface SearchProjectInput {
+  userInput: string; // should contain material names
+  deliveryCountries?: string[];
+  deliveryCities?: string[];
+  budget?: number; // <= 10000, <= 30000, <= 50000, <= 100000
+  leadTime?: number; // 3, 6, 9, 12
 }

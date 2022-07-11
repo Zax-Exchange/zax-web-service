@@ -1,6 +1,7 @@
 export interface ProjectDocument {
   projectId: number;
-  deliveryLocation: string;
+  deliveryCountry: string;
+  deliveryCity: string;
   deliveryDate: string;
   budget: number;
   materials: string[];

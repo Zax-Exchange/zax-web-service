@@ -5,8 +5,9 @@ import { getPlanWithPlanId } from "../plan/getPlanApis";
 import CompanyApiUtils from "../utils/companyUtils";
 import ElasticCompanyService from "../../elastic/company/ElasticCompanyService";
 
+
 const createCompany = async (data: createCompanyTypes.CreateCompanyInput): Promise<boolean> => {
-  const { name, logo, phone, fax, creditCardNumber, creditCardCvv, creditCardExp, country, isActive, isVendor, isVerified, leadTime, companyUrl, planId, locations, moq} = data;
+  const { name, logo, phone, fax, creditCardNumber, creditCardCvv, creditCardExp, country, isActive, isVendor, isVerified, leadTime, companyUrl, planId, locations, moq, materials} = data;
 
   const companies = sequelize.models.companies;
   const company_plans = sequelize.models.company_plans;
@@ -34,7 +35,8 @@ const createCompany = async (data: createCompanyTypes.CreateCompanyInput): Promi
         leadTime,
         companyUrl,
         locations, 
-        moq
+        moq,
+        materials
       }, {transaction}).then(c => c.getDataValue("id"));
       const plan = await getPlanWithPlanId(planId, transaction);
       
@@ -44,7 +46,15 @@ const createCompany = async (data: createCompanyTypes.CreateCompanyInput): Promi
         remainingQuota: plan.licensedUsers
       }, {transaction});
 
-      await ElasticCompanyService.createVendorDocument({ companyId, name, leadTime, locations, moq });
+      if (isVendor) {
+        await ElasticCompanyService.createVendorDocument({ 
+          id: companyId, 
+          leadTime: leadTime || "NULL", 
+          locations: locations || "NULL",
+          moq: moq || "NULL",
+          materials: materials || "NULL"
+        });
+      }
     });
     return Promise.resolve(true);
   } catch(e) {

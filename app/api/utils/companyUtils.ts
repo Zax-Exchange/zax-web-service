@@ -5,6 +5,7 @@ import * as commonPlanTypes from "../types/common/planTypes";
 import * as enums from "../types/common/enums"
 import { Model, ModelStatic, Transaction } from "sequelize";
 import sequelize from "../../postgres/dbconnection";
+import { companiesAttributes } from "../models/companies";
 
 class CompanyApiUtils {
   static async getCompanyPlan(companyId: number): Promise<commonPlanTypes.CompanyPlan> {
@@ -23,10 +24,24 @@ class CompanyApiUtils {
     return true;
   }
 
-  static async getCompanyWithCompanyId(id: number): Promise<commonCompanyTypes.Company> {
+  static async getCompanyWithCompanyId(id: number): Promise<companiesAttributes> {
     const companies = sequelize.models.companies;
     try {
       return await companies.findByPk(id).then(comp => comp?.get({ plain:true }));
+    } catch(e) {
+      return Promise.reject(e);
+    }
+  }
+
+  static async getCompanyByIds(ids: number[]): Promise<companiesAttributes[]>{
+    const companies = sequelize.models.companies;
+    try {
+      const res = [];
+      for (let id of ids) {
+        const comp = await CompanyApiUtils.getCompanyWithCompanyId(id);
+        res.push(comp);
+      }
+      return res;
     } catch(e) {
       return Promise.reject(e);
     }

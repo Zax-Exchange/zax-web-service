@@ -17,7 +17,7 @@ import {
 } from "../../../app/api/project/updateProjectApis";
 import { getCustomerProjects, getVendorProjects, getProjectDetail } from "../../../app/api/project/getProjectApis";
 import { CreateProjectComponentInput } from '../../../app/types/create/projectTypes';
-import * as enums from "../../../app/types/common/enums";
+import * as enums from "../../../app/api/types/common/enums";
 import ProjectApiUtils from "../../../app/api/utils/projectUtils";
 
 process.env.NODE_ENV = "test";
@@ -28,13 +28,9 @@ jest.setTimeout(100000);
 describe("project tests", () => {
   beforeAll((done) => {
     initModels(sequelize);
-    series([
-      exec("npm run unseedAll", () => {
-      }),
-      exec("npm run jest-setup-project-testing", () => {
-        done();
-      })
-    ]);
+    exec("npm run jest-setup-project-testing", () => {
+      done();
+    })
   });
 
   afterAll((done) => {
@@ -58,7 +54,8 @@ describe("project tests", () => {
         },  
       ],
       "deliveryDate": "2022-12-31",
-      "deliveryLocation": "USA",
+      "deliveryCountry": "USA",
+      "deliveryCity": "Los Angeles",
       "name": TEST_PROJECT_NAMES[0],
       "design": null,
       "userId": user!.get("id") as number
@@ -76,7 +73,7 @@ describe("project tests", () => {
 
     expect(userProject).toHaveProperty("budget", 10000);
     expect(userProject).toHaveProperty("deliveryDate", "2022-12-31");
-    expect(userProject).toHaveProperty("deliveryLocation", "USA");
+    expect(userProject).toHaveProperty("deliveryCountry", "USA");
     expect(userProject).toHaveProperty("name", TEST_PROJECT_NAMES[0]);
     expect(userProject).toHaveProperty("userId");
     expect(userProject).toHaveProperty("design", null);
@@ -132,7 +129,8 @@ describe("project tests", () => {
       "projectData": {
         "budget": 10000,
         "deliveryDate": "2022-12-31",
-        "deliveryLocation": "USA",
+         "deliveryCountry": "USA",
+        "deliveryCity": "Seattle",
         "name": TEST_PROJECT_NAMES[0],
         "design": null,
       },
@@ -152,7 +150,6 @@ describe("project tests", () => {
     })).resolves.toEqual(true); 
 
     await expect(sequelize.models.materials.findAll()).resolves.toHaveLength(2);
-    await expect(sequelize.models.company_materials.findAll()).resolves.toHaveLength(2);
   });
 
 

@@ -16,9 +16,23 @@ const company = gql`
     isVendor: Boolean!
     isVerified: Boolean!
     leadTime: Int
-    companyUrl: String!
+    locations: [String]
+    moq: Int
+    materials: [String]
+    companyUrl: String
     createdAt: String!
     updatedAt: String!
+  }
+
+  type CompanyOverview {
+    id: Int!
+    name: String!
+    logo: String
+    country: String!
+    isVendor: Boolean!
+    isVerified: Boolean!
+    locations: [String]
+    materials: [String]
   }
 
   type PermissionedCompany {
@@ -72,6 +86,9 @@ const company = gql`
     isVendor: Boolean!
     isVerified: Boolean!
     leadTime: Int
+    locations: [String]
+    moq: Int
+    materials: [String]
     companyUrl: String
   }
 
@@ -105,6 +122,13 @@ const company = gql`
   input GetPermissionedCompanyInput {
     companyId: Int!
     userId: Int!
+  }
+
+  input SearchCompanyInput {
+    userInput: String!
+    locations: [String]
+    moq: Int
+    leadTime: Int
   }
 `;
 

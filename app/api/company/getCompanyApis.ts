@@ -20,38 +20,44 @@ const getPermissionedCompany = async (data: getCompanyTypes.GetPermissionedCompa
       planInfo: companyPlan,
       isAdmin
     };
-    return Promise.resolve(res);
+    return res;
   } catch(e) {
     return Promise.reject(e);
   }
 };
 
 // company public view
-const getGeneralCompany = async (companyId: number): Promise<commonCompanyTypes.GeneralCompany> => {
+const getCompanyDetail = async (companyId: number): Promise<commonCompanyTypes.Company> => {
 try {
     const company = await CompanyApiUtils.getCompanyWithCompanyId(companyId);
-    const { id, name, logo, phone, fax, isVendor, isVerified, leadTime, companyUrl, createdAt, updatedAt } = company;
+    const { id, name, logo, phone, fax, country, isActive, isVendor, isVerified, leadTime, companyUrl, createdAt, updatedAt, moq, locations, materials } = company;
     const res = {
       id, 
       name, 
       logo,
+      country,
       phone, 
       fax, 
       isVendor, 
       isVerified, 
+      isActive,
       leadTime, 
+      moq, 
+      locations, 
+      materials,
       companyUrl,
       createdAt, 
       updatedAt
     };
-    return Promise.resolve(res);
+    return res;
   } catch(e) {
     return Promise.reject(e);
   }
 };
 
 
+
 export {
   getPermissionedCompany,
-  getGeneralCompany
+  getCompanyDetail
 }

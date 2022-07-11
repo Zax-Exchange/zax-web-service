@@ -1,15 +1,12 @@
 export interface VendorDocument {
-  companyId: number;
-  name: string;
-  moq: number | null;
-  locations: string[] | null;
-  leadTime: number | null;
+  id: number;
+  moq: number | string;
+  locations: string[] | string;
+  materials: string[] | string;
+  leadTime: number | string;
 }
 
 export interface CustomerDocument {
-  companyId: number;
+  id: number;
   name: string;
-  moq: number | null;
-  locations: string[] | null;
-  leadTime: number | null;
 }

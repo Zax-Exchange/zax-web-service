@@ -6,7 +6,8 @@ const project = gql`
     companyId: Int!
     name: String!
     deliveryDate: String!
-    deliveryLocation: String!
+    deliveryCountry: String!
+    deliveryCity: String!
     budget: Int!
     materials: [String!]!
     createdAt: String!
@@ -18,7 +19,8 @@ const project = gql`
     companyId: Int!
     name: String!
     deliveryDate: String!
-    deliveryLocation: String!
+    deliveryCountry: String!
+    deliveryCity: String!
     budget: Int!
     design: String
     status: String!
@@ -33,7 +35,8 @@ const project = gql`
     companyId: Int!
     name: String!
     deliveryDate: String!
-    deliveryLocation: String!
+    deliveryCountry: String!
+    deliveryCity: String!
     budget: Int!
     design: String
     status: String!
@@ -49,7 +52,8 @@ const project = gql`
     companyId: Int!
     name: String!
     deliveryDate: String!
-    deliveryLocation: String!
+    deliveryCountry: String!
+    deliveryCity: String!
     budget: Int!
     design: String
     status: String!
@@ -116,7 +120,8 @@ const project = gql`
     userId: Int!
     name: String!
     deliveryDate: String!
-    deliveryLocation: String!
+    deliveryCountry: String!
+    deliveryCity: String!
     budget: Int!
     design: String
     components: [CreateProjectComponentInput!]!
@@ -147,7 +152,8 @@ const project = gql`
     id: Int!
     name: String!
     deliveryDate: String!
-    deliveryLocation: String!
+    deliveryCountry: String!
+    deliveryCity: String!
     budget: Int!
     design: String!
     components: [UpdateProjectComponentInput!]!
@@ -197,6 +203,14 @@ const project = gql`
   input DeleteProjectInput {
     userId: Int!
     projectId: Int!
+  }
+
+  input SearchProjectInput {
+    userInput: String!
+    deliveryCountries: [String]
+    deliveryCities: [String]
+    budget: Int
+    leadTime: Int
   }
 `;
 

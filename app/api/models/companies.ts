@@ -1,6 +1,5 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
-import type { company_materials, company_materialsId } from './company_materials';
 import type { company_plans, company_plansCreationAttributes, company_plansId } from './company_plans';
 import type { projects, projectsId } from './projects';
 import type { users, usersId } from './users';
@@ -24,11 +23,12 @@ export interface companiesAttributes {
   updatedAt: Date;
   locations?: string[];
   moq?: number;
+  materials?: string[];
 }
 
 export type companiesPk = "id";
 export type companiesId = companies[companiesPk];
-export type companiesOptionalAttributes = "logo" | "fax" | "companyUrl" | "leadTime" | "createdAt" | "updatedAt" | "locations" | "moq";
+export type companiesOptionalAttributes = "logo" | "fax" | "companyUrl" | "leadTime" | "createdAt" | "updatedAt" | "locations" | "moq" | "materials";
 export type companiesCreationAttributes = Optional<companiesAttributes, companiesOptionalAttributes>;
 
 export class companies extends Model<companiesAttributes, companiesCreationAttributes> implements companiesAttributes {
@@ -50,19 +50,8 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
   updatedAt!: Date;
   locations?: string[];
   moq?: number;
+  materials?: string[];
 
-  // companies hasMany company_materials via companyId
-  company_materials!: company_materials[];
-  getCompany_materials!: Sequelize.HasManyGetAssociationsMixin<company_materials>;
-  setCompany_materials!: Sequelize.HasManySetAssociationsMixin<company_materials, company_materialsId>;
-  addCompany_material!: Sequelize.HasManyAddAssociationMixin<company_materials, company_materialsId>;
-  addCompany_materials!: Sequelize.HasManyAddAssociationsMixin<company_materials, company_materialsId>;
-  createCompany_material!: Sequelize.HasManyCreateAssociationMixin<company_materials>;
-  removeCompany_material!: Sequelize.HasManyRemoveAssociationMixin<company_materials, company_materialsId>;
-  removeCompany_materials!: Sequelize.HasManyRemoveAssociationsMixin<company_materials, company_materialsId>;
-  hasCompany_material!: Sequelize.HasManyHasAssociationMixin<company_materials, company_materialsId>;
-  hasCompany_materials!: Sequelize.HasManyHasAssociationsMixin<company_materials, company_materialsId>;
-  countCompany_materials!: Sequelize.HasManyCountAssociationsMixin;
   // companies hasOne company_plans via companyId
   company_plan!: company_plans;
   getCompany_plan!: Sequelize.HasOneGetAssociationMixin<company_plans>;
@@ -161,6 +150,10 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
     },
     moq: {
       type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    materials: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true
     }
   }, {

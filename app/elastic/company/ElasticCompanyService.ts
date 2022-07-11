@@ -4,38 +4,67 @@ import * as companyTypes from "../types/company";
 export default class ElasticCompanyService {
   static async createVendorDocument(data: companyTypes.VendorDocument) {
     try {
-      await elasticClient.indices.delete({
-        "index": "vendor"
-      });
-      const exist = await elasticClient.indices.exists({ index: "vendor" });;
+      
+      const exist = await elasticClient.indices.exists({ index: "vendor" });
+      console.log({exist})
       if (!exist) {
         await elasticClient.indices.create({
           "index": "vendor",
           mappings: {
             "properties": {
               id: { type: "text" },
-              name: { type:"text" },
               moq: { type: "integer" },
               locations: { type: "text"},
               leadTime: { type: "integer" },
+              materials: { type: "text" }
             },
           }
         });
       }
   
-      const { companyId, name, moq, locations, leadTime } = data;
+      const { id, moq, locations, leadTime, materials } = data;
       await elasticClient.index({
         index: "vendor",
-        id: companyId.toString(),
+        id: id.toString(),
         document: {
-          name,
-          moq: moq ? moq : "NULL",
-          locations: locations? locations : "NULL",
-          leadTime: leadTime? leadTime : "NULL"
+          moq,
+          locations,
+          leadTime,
+          materials
         }
       });
     } catch(e) {
       console.error(e);
     }
+  }
+
+  static async updateVendorDocument(data: companyTypes.VendorDocument) {
+    try {
+      const { id, moq, locations, leadTime, materials } = data;
+      await elasticClient.update({
+        index: "vendor",
+        id: id.toString(),
+        doc: {
+          moq,
+          locations,
+          leadTime,
+          materials
+        }
+      });
+    } catch(e) {
+      console.error(e);
+    }
+  }
+
+  static async searchVendorDocuments(query: any) {
+    return await elasticClient.search({
+      "index": "vendor",
+      "query": query
+    }).then((res) => {
+      return res.hits.hits;
+    }).catch(e => {
+      console.error(e);
+      return Promise.reject(e);
+    });
   }
 }

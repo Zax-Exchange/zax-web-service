@@ -1,10 +1,15 @@
 import ElasticProjectService from "../../elastic/project/ElasticProjectService";
 import * as projectTypes from "../types/common/projectTypes";
 import ProjectApiUtils from "../utils/projectUtils";
+import QueryBuilder from "./queryBuilder";
+
+
 // search by project materials
-// search by customer company name
-const searchCustomerProjects = async (query: string): Promise<projectTypes.ProjectOverview[]> => {
+const searchCustomerProjects = async (data: projectTypes.SearchProjectInput): Promise<projectTypes.ProjectOverview[]> => {
   try {
+    // ProjectDocument -> ProjectOverview -> Project
+    //TODO: build query
+    const query = QueryBuilder.buildProjectSearchQuery(data);
     const projectDocs = await ElasticProjectService.searchProjectDocuments(query);
     const res: projectTypes.ProjectOverview[] = [];
     const ids = [];
@@ -23,7 +28,8 @@ const searchCustomerProjects = async (query: string): Promise<projectTypes.Proje
         companyId: project.companyId,
         name: project.name,
         deliveryDate: project.deliveryDate,
-        deliveryLocation: project.deliveryLocation,
+        deliveryCountry: project.deliveryCountry,
+        deliveryCity: project.deliveryCity,
         budget: project.budget,
         materials: idToMaterialsMap[project.id],
         createdAt: project.createdAt
@@ -35,10 +41,6 @@ const searchCustomerProjects = async (query: string): Promise<projectTypes.Proje
     return Promise.reject(e);
   }
 };
-
-const searchCustomerCompanys = async(data: any) => {
-
-}
 
 export {
   searchCustomerProjects

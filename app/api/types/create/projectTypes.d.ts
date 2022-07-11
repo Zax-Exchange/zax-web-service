@@ -5,7 +5,8 @@ export interface CreateProjectInput {
   userId: number;
   name: string;
   deliveryDate: string; 
-  deliveryLocation: string;
+  deliveryCountry: string;
+  deliveryCity: string;
   budget: number;
   design: BinaryType | null;
   components: CreateProjectComponentInput[]

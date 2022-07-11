@@ -1,4 +1,3 @@
-import appNews from "./appNews/appNews";
 import user from "./user";
 import project from "./project";
 import company from "./company";

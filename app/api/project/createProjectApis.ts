@@ -10,7 +10,7 @@ import ElasticProjectService from "../../elastic/project/ElasticProjectService";
 const createProject = async(data: projectTypes.CreateProjectInput): Promise<boolean> => {
   const projects = sequelize.models.projects;
   const users = sequelize.models.users;
-  const {userId, name, deliveryDate, deliveryLocation, budget, design, components} = data;
+  const {userId, name, deliveryDate, deliveryCountry, deliveryCity, budget, design, components} = data;
   try {
     await sequelize.transaction(async transaction => {
       const user = await users.findOne({
@@ -24,7 +24,8 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
         userId,
         name,
         deliveryDate,
-        deliveryLocation,
+        deliveryCountry,
+        deliveryCity,
         budget,
         design,
         companyId,
@@ -39,7 +40,7 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
       }
       await createProjectComponents(projectId, components, companyId, transaction);
       await createOrUpdateProjectPermission({ userId, projectId, permission: enums.ProjectPermission.OWNER }, transaction);
-      ElasticProjectService.createProjectDocument({ projectId, deliveryDate, deliveryLocation, budget, materials });
+      ElasticProjectService.createProjectDocument({ projectId, deliveryDate, deliveryCountry, deliveryCity, budget, materials });
     });
 
 
@@ -53,7 +54,6 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
 const createProjectComponents = async(projectId: number, components: projectTypes.CreateProjectComponentInput[], companyId: number, transaction: Transaction): Promise<boolean> => {
   const project_components = sequelize.models.project_components;
   const materialsModel = sequelize.models.materials;
-  const company_materials = sequelize.models.company_materials;
 
   try {
     for (let component of components) {
@@ -64,18 +64,7 @@ const createProjectComponents = async(projectId: number, components: projectType
             name: material
           },
           transaction
-        }).then(async ([found, created]) => {
-          // if found, could mean other customers also have same materials
-          if(created) {
-            await company_materials.findOrCreate({
-              where: {
-                companyId,
-                materialId: found.get("id")
-              },
-              transaction
-            });
-          }
-        })
+        });
       }
       await project_components.create({
         projectId,

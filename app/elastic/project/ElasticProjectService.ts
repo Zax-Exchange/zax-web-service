@@ -6,18 +6,17 @@ export default class ElasticProjectService {
   static async createProjectDocument(data: projectTypes.ProjectDocument) {
     const {
       projectId,
-      deliveryLocation,
+      deliveryCountry,
+      deliveryCity,
       deliveryDate,
       budget,
       materials
     } = data
 
     try {
-      await elasticClient.indices.delete({
-        "index": "project"
-      })
       const exist = await elasticClient.indices.exists({ index: "project" });
-  
+      
+     
       if (!exist) {
         await elasticClient.indices.create({
           "index": "project",
@@ -25,19 +24,20 @@ export default class ElasticProjectService {
             "properties": {
               id: { type: "text" },
               deliveryDate: { type: "date" },
-              deliveryLocation: { type: "text"},
+              deliveryCountry: { type: "text"},
+              deliveryCity: { type: "text"},
               budget: { type: "integer" },
               materials: { type: "text" }
             },
           }
         });
       }
-  
       await elasticClient.index({
         index: "project",
         id: projectId.toString(),
         document: {
-          deliveryLocation,
+          deliveryCountry,
+          deliveryCity,
           deliveryDate,
           budget,
           materials
@@ -53,7 +53,8 @@ export default class ElasticProjectService {
   static async updateProjectDocument(data: projectTypes.ProjectDocument) {
     const {
       projectId,
-      deliveryLocation,
+      deliveryCountry,
+      deliveryCity,
       deliveryDate,
       budget,
       materials
@@ -62,7 +63,8 @@ export default class ElasticProjectService {
       index: "project",
       id: projectId.toString(),
       doc: {
-        deliveryLocation,
+        deliveryCountry,
+        deliveryCity,
         deliveryDate,
         budget,
         materials
@@ -70,16 +72,10 @@ export default class ElasticProjectService {
     }).catch(e => console.error(e));
   }
 
-  static async searchProjectDocuments(query: string) {
+  static async searchProjectDocuments(query: any) {
     return await elasticClient.search({
       "index": "project",
-      "query": {
-        "query_string": {
-          query
-        }
-        
-      
-      }
+      "query": query
     }).then((res) => {
       return res.hits.hits;
     }).catch(e => {
