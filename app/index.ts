@@ -6,6 +6,7 @@ import SequelizeAuto from "sequelize-auto";
 import sequelize from "./postgres/dbconnection";
 import { initModels } from "./api/models/init-models";
 import dotenv from "dotenv";
+import cors from "cors";
 
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
@@ -26,8 +27,9 @@ const startServer = async() => {
     resolvers
   });
   const app = express();
+  app.use(cors({ credentials: true, origin: "http://localhost:4001" }));
   await server.start();
-  server.applyMiddleware({app});
+  server.applyMiddleware({app, cors: false});
 
   app.listen({port: 4000}, () => {
     console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)

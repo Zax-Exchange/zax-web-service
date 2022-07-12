@@ -5,6 +5,4 @@ export interface User {
     companyId: number;
     isVendor: boolean;
     isAdmin: boolean;
-    createdAt: string;
-    updatedAt: string;
   }

@@ -5,12 +5,9 @@ const user = gql`
     id: Int!
     name: String!
     email: String!
-    password: String!
     companyId: Int!
     isVendor: Boolean!
     isAdmin: Boolean!
-    createdAt: String!
-    updatedAt: String!
   }
 
   input CreateUserInput {

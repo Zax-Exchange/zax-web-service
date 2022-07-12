@@ -50,6 +50,9 @@ const company = gql`
     isVendor: Boolean!
     isVerified: Boolean!
     leadTime: Int
+    locations: [String]
+    moq: Int
+    materials: [String]
     isAdmin: Boolean!
     companyUrl: String!
     createdAt: String!
@@ -67,6 +70,9 @@ const company = gql`
     isVendor: Boolean!
     isVerified: Boolean!
     leadTime: Int
+    locations: [String]
+    moq: Int
+    materials: [String]
     companyUrl: String!
     createdAt: String!
     updatedAt: String!
