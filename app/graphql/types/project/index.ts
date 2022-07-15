@@ -41,6 +41,7 @@ const project = gql`
     design: String
     status: String!
     permission: String!
+    components: [ProjectComponent!]!
     bidInfo: PermissionedProjectBid!
     createdAt: String!
     updatedAt: String!
@@ -68,7 +69,7 @@ const project = gql`
     id: Int!
     userId: Int!
     projectId: Int!
-    components: [ProjectComponentBid!]!
+    components: [ProjectBidComponent!]!
     permission: String!
     createdAt: String!
     updatedAt: String!
@@ -91,12 +92,12 @@ const project = gql`
     projectId: Int!
     comments: String!
     project: Project!
-    componentBids: [ProjectComponentBid!]!
+    components: [ProjectBidComponent!]!
     createdAt: String!
     updatedAt: String!
   }
 
-  type ProjectComponentBid {
+  type ProjectBidComponent {
     id: Int!
     projectBidId: Int!
     projectComponentId: Int!
@@ -136,14 +137,10 @@ const project = gql`
     userId: Int!
     projectId: Int!
     comments: String!
-    components: [CreateProjectComponentBidInput!]!
+    components: [CreateProjectBidComponentInput!]!
   }
 
-  input CreateProjectComponentBidInput {
-    componentBidQuantityPrices: [ComponentBidQuantityPrice!]!
-  }
-
-  input ComponentBidQuantityPrice {
+  input CreateProjectBidComponentInput {
     projectComponentId: Int!
     quantityPrices: [QuantityPriceInput!]!
   }
@@ -170,10 +167,10 @@ const project = gql`
   input UpdateProjectBidInput {
     id: Int!
     comments: String!
-    components: [UpdateProjectComponentBidInput!]!
+    components: [UpdateProjectBidComponentInput!]!
   }
 
-  input UpdateProjectComponentBidInput {
+  input UpdateProjectBidComponentInput {
     id: Int!
     quantityPrices: [QuantityPriceInput!]!
   }

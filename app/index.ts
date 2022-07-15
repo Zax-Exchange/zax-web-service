@@ -27,9 +27,12 @@ const startServer = async() => {
     resolvers
   });
   const app = express();
-  app.use(cors({ credentials: true, origin: "http://localhost:4001" }));
+  // app.use(cors({ credentials: true, origin: ["http://localhost:4001", "https://studio.apollographql.com"] }));
+
   await server.start();
-  server.applyMiddleware({app, cors: false});
+  server.applyMiddleware({app, cors: {
+    origin: ["http://localhost:4001", "https://studio.apollographql.com"]
+  }});
 
   app.listen({port: 4000}, () => {
     console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
