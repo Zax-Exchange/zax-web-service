@@ -82,16 +82,16 @@ const createProjectComponents = async(projectId: number, components: projectType
 const createProjectBid = async(data: projectTypes.CreateProjectBidInput): Promise<boolean> => {
   const project_bids = sequelize.models.project_bids;
   const { userId, projectId, comments, components } = data;
-
-  const isVendor = await UserApiUtils.isVendorWithUserId(userId);
-  if (!isVendor) {
-    return Promise.reject(new Error("Action not allowed."));
-  }
-
+  
   try {
     await sequelize.transaction(async transaction => {
+      const user = await sequelize.models.users.findByPk(userId, {
+        transaction
+      });
+      const companyId = await user?.getDataValue("companyId");
       const bid = await project_bids.create({
         userId,
+        companyId,
         projectId,
         comments
       }, { transaction });
@@ -141,7 +141,7 @@ const createOrUpdateProjectPermission = async(data: projectTypes.CreateOrUpdateP
       transaction
     }).then(async ([foundPermission, created]) => {
       if (!created) {
-        await foundPermission.update("permission", permission, {transaction});
+        await foundPermission.update({"permission": permission}, {transaction});
       }
     });
     return true;
@@ -167,7 +167,7 @@ const createOrUpdateProjectBidPermission = async(data: projectTypes.CreateOrUpda
       transaction
     }).then(async ([foundPermission, created]) => {
       if (!created) {
-        await foundPermission.update("permission", permission, {transaction});
+        await foundPermission.update({"permission": permission}, {transaction});
       }
     });
     return true;

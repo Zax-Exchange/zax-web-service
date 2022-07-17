@@ -6,7 +6,6 @@ export default class ElasticCompanyService {
     try {
       
       const exist = await elasticClient.indices.exists({ index: "vendor" });
-      console.log({exist})
       if (!exist) {
         await elasticClient.indices.create({
           "index": "vendor",

@@ -13,7 +13,6 @@ const searchVendorCompanies = async(data: companyTypes.SearchVendorInput): Promi
     const companyDocs = await ElasticCompanyService.searchVendorDocuments(query);
     const res: companyTypes.CompanyOverview[] = [];
     const ids: number[] = [];
-    console.log(companyDocs)
     for (let comp of companyDocs) {
       ids.push(parseInt(comp._id, 10));
     }

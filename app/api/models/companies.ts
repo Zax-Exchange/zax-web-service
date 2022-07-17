@@ -1,6 +1,7 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { company_plans, company_plansCreationAttributes, company_plansId } from './company_plans';
+import type { project_bids, project_bidsId } from './project_bids';
 import type { projects, projectsId } from './projects';
 import type { users, usersId } from './users';
 
@@ -57,6 +58,18 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
   getCompany_plan!: Sequelize.HasOneGetAssociationMixin<company_plans>;
   setCompany_plan!: Sequelize.HasOneSetAssociationMixin<company_plans, company_plansId>;
   createCompany_plan!: Sequelize.HasOneCreateAssociationMixin<company_plans>;
+  // companies hasMany project_bids via companyId
+  project_bids!: project_bids[];
+  getProject_bids!: Sequelize.HasManyGetAssociationsMixin<project_bids>;
+  setProject_bids!: Sequelize.HasManySetAssociationsMixin<project_bids, project_bidsId>;
+  addProject_bid!: Sequelize.HasManyAddAssociationMixin<project_bids, project_bidsId>;
+  addProject_bids!: Sequelize.HasManyAddAssociationsMixin<project_bids, project_bidsId>;
+  createProject_bid!: Sequelize.HasManyCreateAssociationMixin<project_bids>;
+  removeProject_bid!: Sequelize.HasManyRemoveAssociationMixin<project_bids, project_bidsId>;
+  removeProject_bids!: Sequelize.HasManyRemoveAssociationsMixin<project_bids, project_bidsId>;
+  hasProject_bid!: Sequelize.HasManyHasAssociationMixin<project_bids, project_bidsId>;
+  hasProject_bids!: Sequelize.HasManyHasAssociationsMixin<project_bids, project_bidsId>;
+  countProject_bids!: Sequelize.HasManyCountAssociationsMixin;
   // companies hasMany projects via companyId
   projects!: projects[];
   getProjects!: Sequelize.HasManyGetAssociationsMixin<projects>;

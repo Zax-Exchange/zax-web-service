@@ -32,7 +32,7 @@ const getCustomerProjects = async(userId: number): Promise<commonProjectTypes.Cu
     const res = [];
     for (let permission of projectPermissions) {
       const project = await ProjectApiUtils.getPermissionedProject(userId, permission.projectId, permission.permission as enums.ProjectPermission);
-      const bids = await ProjectApiUtils.getPermissionedProjectBids(permission.projectId);
+      const bids = await ProjectApiUtils.getProjectBidsByProjectId(permission.projectId);
       res.push({
         ...project,
         bids
@@ -52,8 +52,26 @@ const getProjectDetail = async(id: number): Promise<commonProjectTypes.Project> 
   }
 };
 
+const getProjectUsers = async(projectId: number): Promise<commonProjectTypes.UserPermission[]> => {
+try {
+    return await ProjectApiUtils.getProjectUsers(projectId);
+  } catch(e) {
+    return Promise.reject(e);
+  }
+};
+
+const getProjectBidUsers = async(projectBidId: number): Promise<commonProjectTypes.UserPermission[]> => {
+try {
+    return await ProjectApiUtils.getProjectBidUsers(projectBidId);
+  } catch(e) {
+    return Promise.reject(e);
+  }
+};
+
 export {
   getVendorProjects,
   getCustomerProjects,
-  getProjectDetail
+  getProjectDetail,
+  getProjectUsers,
+  getProjectBidUsers
 }

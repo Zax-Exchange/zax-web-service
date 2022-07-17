@@ -60,7 +60,7 @@ const project = gql`
     status: String!
     permission: String!
     components: [ProjectComponent!]!
-    bids: [PermissionedProjectBid]
+    bids: [ProjectBid]
     createdAt: String!
     updatedAt: String!
   }
@@ -69,6 +69,7 @@ const project = gql`
     id: Int!
     userId: Int!
     projectId: Int!
+    companyId: Int!
     components: [ProjectBidComponent!]!
     permission: String!
     createdAt: String!
@@ -89,6 +90,7 @@ const project = gql`
   type ProjectBid {
     id: Int!
     userId: Int!
+    companyId: Int!
     projectId: Int!
     comments: String!
     project: Project!
@@ -104,6 +106,13 @@ const project = gql`
     quantityPrices: [QuantityPrice!]!
     createdAt: String!
     updatedAt: String!
+  }
+
+  type UserPermission {
+    userId: Int!
+    email: String!
+    name: String!
+    permission: String!
   }
 
   type QuantityPrice {
@@ -176,12 +185,22 @@ const project = gql`
   }
 
   input UpdateProjectPermissionsInput {
+    viewers: UpdateProjectPermissionsInputData!
+    editors: UpdateProjectPermissionsInputData!
+  }
+
+  input UpdateProjectPermissionsInputData {
     userIds: [Int]!
     projectId: Int!
     permission: String!
   }
 
   input UpdateProjectBidPermissionsInput {
+    viewers: UpdateProjectBidPermissionsInputData!
+    editors: UpdateProjectBidPermissionsInputData!
+  }
+
+  input UpdateProjectBidPermissionsInputData {
     userIds: [Int]!
     projectBidId: Int!
     permission: String!
@@ -208,6 +227,16 @@ const project = gql`
     deliveryCities: [String]
     budget: Int
     leadTime: Int
+  }
+
+  input DeleteProjectPermissionsInput {
+    userIds: [Int!]!
+    projectId: Int!
+  }
+
+  input DeleteProjectBidPermissionsInput {
+    userIds: [Int!]!
+    projectBidId: Int!
   }
 `;
 

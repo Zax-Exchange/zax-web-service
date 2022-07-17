@@ -36,7 +36,7 @@ export interface VendorProject extends PermissionedProject {
 }
 
 export interface CustomerProject extends PermissionedProject {
-  bids: PermissionedProjectBid[] | [];
+  bids: ProjectBid[] | [];
 }
 
 export interface ProjectComponent {
@@ -53,6 +53,7 @@ export interface ProjectComponent {
 export interface ProjectBid {
   id: number;
   userId: number;
+  companyId: number;
   projectId: number;
   components: ProjectBidComponent[];
   createdAt: Date;
@@ -76,4 +77,12 @@ export interface SearchProjectInput {
   deliveryCities?: string[];
   budget?: number; // <= 10000, <= 30000, <= 50000, <= 100000
   leadTime?: number; // 3, 6, 9, 12
+}
+
+
+export interface UserPermission {
+  userId: number;
+  email: string;
+  name: string;
+  permission: enums.ProjectPermission;
 }

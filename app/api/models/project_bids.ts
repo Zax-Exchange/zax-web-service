@@ -1,5 +1,6 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import type { companies, companiesId } from './companies';
 import type { project_bid_components, project_bid_componentsId } from './project_bid_components';
 import type { project_bid_permissions, project_bid_permissionsId } from './project_bid_permissions';
 import type { projects, projectsId } from './projects';
@@ -12,6 +13,7 @@ export interface project_bidsAttributes {
   comments?: string;
   createdAt: Date;
   updatedAt: Date;
+  companyId: number;
 }
 
 export type project_bidsPk = "id";
@@ -26,7 +28,13 @@ export class project_bids extends Model<project_bidsAttributes, project_bidsCrea
   comments?: string;
   createdAt!: Date;
   updatedAt!: Date;
+  companyId!: number;
 
+  // project_bids belongsTo companies via companyId
+  company!: companies;
+  getCompany!: Sequelize.BelongsToGetAssociationMixin<companies>;
+  setCompany!: Sequelize.BelongsToSetAssociationMixin<companies, companiesId>;
+  createCompany!: Sequelize.BelongsToCreateAssociationMixin<companies>;
   // project_bids hasMany project_bid_components via projectBidId
   project_bid_components!: project_bid_components[];
   getProject_bid_components!: Sequelize.HasManyGetAssociationsMixin<project_bid_components>;
@@ -77,8 +85,7 @@ export class project_bids extends Model<project_bidsAttributes, project_bidsCrea
       references: {
         model: 'users',
         key: 'id'
-      },
-      unique: "project_bids_userId_projectId_key"
+      }
     },
     projectId: {
       type: DataTypes.INTEGER,
@@ -87,11 +94,20 @@ export class project_bids extends Model<project_bidsAttributes, project_bidsCrea
         model: 'projects',
         key: 'id'
       },
-      unique: "project_bids_userId_projectId_key"
+      unique: "project_bids_projectId_companyId_key"
     },
     comments: {
       type: DataTypes.TEXT,
       allowNull: true
+    },
+    companyId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'companies',
+        key: 'id'
+      },
+      unique: "project_bids_projectId_companyId_key"
     }
   }, {
     tableName: 'project_bids',
@@ -107,11 +123,11 @@ export class project_bids extends Model<project_bidsAttributes, project_bidsCrea
         ]
       },
       {
-        name: "project_bids_userId_projectId_key",
+        name: "project_bids_projectId_companyId_key",
         unique: true,
         fields: [
-          { name: "userId" },
           { name: "projectId" },
+          { name: "companyId" },
         ]
       },
     ]

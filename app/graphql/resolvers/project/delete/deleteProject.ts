@@ -1,8 +1,23 @@
-import { deleteProject as deleteProjectApi } from "../../../../api/project/deleteProjectApis";
-import { DeleteProjectInput } from "../../../../api/types/delete/projectTypes";
+import { 
+  deleteProject as deleteProjectApi,
+  deleteProjectPermissions as deleteProjectPermissionsApi,
+  deleteProjectBidPermissions as deleteProjectBidPermissionsApi 
+} from "../../../../api/project/deleteProjectApis";
+import * as deleteProjectTypes from "../../../../api/types/delete/projectTypes";
 
-const deleteProject = (parent: any, args: Record<string, DeleteProjectInput>, context: any, info: any) => {
+const deleteProject = (parent: any, args: Record<string, deleteProjectTypes.DeleteProjectInput>, context: any, info: any) => {
   return deleteProjectApi(args.data);
 };
 
-export default deleteProject;
+const deleteProjectPermissions = (parent: any, args: Record<string, deleteProjectTypes.DeleteProjectPermissionsInput>, context: any, info: any) => {
+  return deleteProjectPermissionsApi(args.data);
+};
+
+const deleteProjectBidPermissions = (parent: any, args: Record<string, deleteProjectTypes.DeleteProjectBidPermissionsInput>, context: any, info: any) => {
+  return deleteProjectBidPermissionsApi(args.data);
+};
+export {
+  deleteProject,
+  deleteProjectBidPermissions,
+  deleteProjectPermissions
+}

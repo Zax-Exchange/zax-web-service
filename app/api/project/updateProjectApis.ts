@@ -5,6 +5,7 @@ import { Transaction } from "sequelize/types";
 import { createOrUpdateProjectPermission, createOrUpdateProjectBidPermission } from "./createProjectApis";
 import { Op } from "sequelize";
 import ElasticProjectService from "../../elastic/project/ElasticProjectService";
+import { deleteProjectPermissions } from "./deleteProjectApis";
 
 const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<boolean> => {
   const { id, projectData, componentsInput } = data;
@@ -127,11 +128,15 @@ const updateProjectBidComponents = async(components: projectTypes.UpdateProjectB
 
 // bulk create or update project permissions
 const updateProjectPermissions = async (data: projectTypes.UpdateProjectPermissionsInput): Promise<boolean> => {
-  const { userIds, projectId, permission } = data;
+  const { viewers, editors } = data;
   try {
     await sequelize.transaction(async (transaction) => {
-      for (let userId of userIds) {
-        await createOrUpdateProjectPermission({userId, projectId, permission}, transaction);
+
+      for (let userId of viewers.userIds) {
+        await createOrUpdateProjectPermission({userId, projectId: viewers.projectId, permission: viewers.permission}, transaction);
+      }
+      for (let userId of editors.userIds) {
+        await createOrUpdateProjectPermission({userId, projectId: editors.projectId, permission: editors.permission}, transaction);
       }
     });
     return Promise.resolve(true);
@@ -142,11 +147,15 @@ const updateProjectPermissions = async (data: projectTypes.UpdateProjectPermissi
 };
 
 const updateProjectBidPermissions = async (data: projectTypes.UpdateProjectBidPermissionsInput): Promise<boolean> => {
-  const { userIds, projectBidId, permission } = data;
+  const { viewers, editors } = data;
+
   try {
     await sequelize.transaction(async (transaction) => {
-      for (let userId of userIds) {
-        await createOrUpdateProjectBidPermission({userId, projectBidId, permission}, transaction);
+      for (let userId of viewers.userIds) {
+        await createOrUpdateProjectBidPermission({userId, projectBidId: viewers.projectBidId, permission: viewers.permission}, transaction);
+      }
+      for (let userId of editors.userIds) {
+        await createOrUpdateProjectBidPermission({userId, projectBidId: editors.projectBidId, permission: editors.permission}, transaction);
       }
     });
     return Promise.resolve(true);

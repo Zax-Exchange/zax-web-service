@@ -1,3 +1,5 @@
+import { DeleteProjectBidPermissionsInput, DeleteProjectPermissionsInput } from "../delete/projectTypes";
+
 export interface UpdateProjectInput {
   id: number;
   projectData: UpdateProjectInputData;
@@ -38,12 +40,22 @@ export interface UpdateProjectBidComponentInput {
 }
 
 export interface UpdateProjectBidPermissionsInput {
+  viewers: UpdateProjectBidPermissionsInputData;
+  editors: UpdateProjectBidPermissionsInputData;
+}
+
+export interface UpdateProjectBidPermissionsInputData {
   userIds: number[];
   projectBidId: number;
   permission: enums.ProjectPermission;
 }
 
 export interface UpdateProjectPermissionsInput {
+  viewers: UpdateProjectPermissionsInputData;
+  editors: UpdateProjectPermissionsInputData;
+}
+
+export interface UpdateProjectPermissionsInputData {
   userIds: number[];
   projectId: number;
   permission: enums.ProjectPermission;

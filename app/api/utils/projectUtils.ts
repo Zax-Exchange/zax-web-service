@@ -9,6 +9,7 @@ import { users } from "../models/users";
 import { project_bid_permissionsAttributes } from "../models/project_bid_permissions";
 import { project_permissionsAttributes } from "../models/project_permissions";
 import { projects, projectsAttributes } from "../models/projects";
+import { getUserWithUserId } from "../user/getUserApis";
 
 class ProjectApiUtils {
   static async getBidPermissions(userId: number): Promise<project_bid_permissionsAttributes[]> {
@@ -84,16 +85,29 @@ class ProjectApiUtils {
     }
   } 
 
-  static async getProjectBid(id: number): Promise<commonProjectTypes.ProjectBid> {
+  static async getProjectBidsByProjectId(projectId: number): Promise<commonProjectTypes.ProjectBid[]> {
     const project_bids = sequelize.models.project_bids;
-
     try {
-      return await project_bids.findByPk(id).then(b => b?.get({ plain:true }));
+      const bids = await project_bids.findAll({
+        where: {
+          projectId
+        }
+      }).then(async bids => {
+        const res = [];
+        for (let bid of bids) {
+          const components = await (bid as project_bids).getProject_bid_components().then(comps => comps.map(comp => comp.get({plain:true})));
+          res.push({
+            ...bid?.get({ plain:true }),
+            components
+          });
+        }
+        return res;
+      });
+      return bids;
     } catch(e) {
       return Promise.reject(e);
     }
-  } 
-
+  }
   // for customer, get all bids with projectId
   static async getPermissionedProjectBids(projectId: number): Promise<commonProjectTypes.PermissionedProjectBid[]> {
     const project_bids = sequelize.models.project_bids;
@@ -105,6 +119,7 @@ class ProjectApiUtils {
       }).then(bids => bids.map((b) => b.get({ plain:true })));
       const res = [];
       for (let bid of bids) {
+
         res.push({
           ...bid,
           permission: enums.ProjectPermission.VIEWER
@@ -181,6 +196,66 @@ class ProjectApiUtils {
           }
         }
       }).then(ps => ps.map(p => p.get({plain:true})));
+    } catch(e) {
+      return Promise.reject(e);
+    }
+  }
+
+  static async getProjectUsers(projectId: number) {
+    try {
+      const projectUsers = await sequelize.models.project_permissions.findAll({
+        where: {
+          projectId
+        }
+      }).then(ps => ps.map(p => {
+        return {
+          userId: p.get("userId") as number,
+          permission: p.get("permission")
+        }
+      }));
+      const res = [];
+      for (let data of projectUsers) {
+        const user = await getUserWithUserId(data.userId);
+  
+        res.push({
+          ...data,
+          email: user.email,
+          name: user.name, 
+        } as commonProjectTypes.UserPermission)
+
+      }
+
+      return res;
+    } catch(e) {
+      return Promise.reject(e);
+    }
+  }
+
+  static async getProjectBidUsers(projectBidId: number) {
+    try {
+      const projectUsers = await sequelize.models.project_bid_permissions.findAll({
+        where: {
+          projectBidId
+        }
+      }).then(ps => ps.map(p => {
+        return {
+          userId: p.get("userId") as number,
+          permission: p.get("permission")
+        }
+      }));
+      const res = [];
+      for (let data of projectUsers) {
+        const user = await getUserWithUserId(data.userId);
+  
+        res.push({
+          ...data,
+          email: user.email,
+          name: user.name, 
+        } as commonProjectTypes.UserPermission)
+
+      }
+
+      return res;
     } catch(e) {
       return Promise.reject(e);
     }
