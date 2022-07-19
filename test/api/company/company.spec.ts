@@ -11,7 +11,8 @@ import {
   ADMIN_EMAILS,
   NON_ADMIN_EMAILS,
   VENDOR_COMPANY_NAME,
-  BASIC_PLAN_NAME
+  BASIC_PLAN_NAME,
+  CUSTOMER_COMPANY_NAME
 } from "../../constants";
 import { UpdateCompanyData, UpdateCompanyInput } from "../../../app/api/types/update/companyTypes";
 import * as enums from "../../../app/api/types/common/enums";
@@ -32,7 +33,7 @@ describe('company tests', () => {
   });
 
   it("should allow company creation with plan", async () => {
-    const planId = await sequelize.models.plans.findOne({where: {name: FREE_PLAN_NAME}}).then(p => p!.get("id"));
+    const planId = await sequelize.models.plans.findOne({where: {name: FREE_PLAN_NAME}}).then(p => p!.get("id") as number);
     await expect(createCompany({
       name: VENDOR_COMPANY_NAME,
       phone: "123-456-7890",
@@ -43,8 +44,25 @@ describe('company tests', () => {
       isActive: true,
       isVendor: true,
       isVerified: true,
+      planId,
+      materials: ["paper", "molded fiber"],
+      moq: 10000,
+      locations: ["USA", "China"],
+      leadTime: 6
+    })).resolves.toEqual(true);
+
+    await expect(createCompany({
+      name: CUSTOMER_COMPANY_NAME,
+      phone: "123-456-7890",
+      creditCardNumber:"1234-1111-1111-1111",
+      creditCardExp: "07/23",
+      creditCardCvv: "012",
+      country: "USA",
+      isActive: true,
+      isVendor: false,
+      isVerified: true,
       planId
-    } as CreateCompanyInput)).resolves.toEqual(true);
+    })).resolves.toEqual(true);
   });
 
   it("should not allow duplicate company names", async () => {

@@ -16,7 +16,6 @@ import {
   updateProjectPermissions,
 } from "../../../app/api/project/updateProjectApis";
 import { getCustomerProjects, getVendorProjects, getProjectDetail } from "../../../app/api/project/getProjectApis";
-import { CreateProjectComponentInput } from '../../../app/types/create/projectTypes';
 import * as enums from "../../../app/api/types/common/enums";
 import ProjectApiUtils from "../../../app/api/utils/projectUtils";
 
@@ -58,7 +57,8 @@ describe("project tests", () => {
       "deliveryCity": "Los Angeles",
       "name": TEST_PROJECT_NAMES[0],
       "design": null,
-      "userId": user!.get("id") as number
+      "userId": user!.get("id") as number,
+      "comments": ""
     })).resolves.toEqual(true);
 
     const projects = await getCustomerProjects(user?.get("id") as number);
@@ -101,9 +101,16 @@ describe("project tests", () => {
     const user2 = await sequelize.models.users.findOne({ where:{email: CUSTOMER_EMAILS[1]} });
     const projectId = await sequelize.models.projects.findOne({ where:{name: TEST_PROJECT_NAMES[0]}}).then(p => p?.get("id") as number);
     await expect(updateProjectPermissions({
-      "permission": enums.ProjectPermission.VIEWER,
-      projectId,
-      userIds: [user2?.get("id") as number]
+      viewers: {
+        "permission": enums.ProjectPermission.VIEWER,
+        projectId,
+        userIds: [user2?.get("id") as number]
+      },
+      editors: {
+        "permission": enums.ProjectPermission.EDITOR,
+        projectId,
+        userIds: []
+      }
     })).resolves.toEqual(true);
   });
 

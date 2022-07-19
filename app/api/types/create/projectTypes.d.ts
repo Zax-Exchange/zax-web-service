@@ -9,7 +9,8 @@ export interface CreateProjectInput {
   deliveryCity: string;
   budget: number;
   design: BinaryType | null;
-  components: CreateProjectComponentInput[]
+  comments: string;
+  components: CreateProjectComponentInput[];
 }
 
 export interface CreateProjectComponentInput {

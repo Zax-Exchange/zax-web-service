@@ -1,8 +1,9 @@
 import * as planTypes from "../common/planTypes";
 
+// vendor will have leadTime, locations, moq, materials
 export interface CreateCompanyInput {
   name: string;
-  logo: string;
+  logo?: string;
   phone: string;
   fax?: string;
   creditCardNumber: string;
@@ -16,6 +17,6 @@ export interface CreateCompanyInput {
   locations?: string[];
   moq?: number;
   materials?: string[];
-  companyUrl: string;
+  companyUrl?: string;
   planId: number;
 }

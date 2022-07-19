@@ -17,10 +17,15 @@ import {
   FREE_PLAN_NAME,
   ADMIN_EMAILS,
   NON_ADMIN_EMAILS,
-  VENDOR_COMPANY_NAME
+  VENDOR_COMPANY_NAME,
+  CUSTOMER_COMPANY_NAME,
+  VENDOR_EMAILS,
+  CUSTOMER_EMAILS
 } from "../../constants";
 
 process.env.NODE_ENV = "test";
+
+jest.setTimeout(100000);
 
 describe('user tests', () => {
 
@@ -30,7 +35,7 @@ describe('user tests', () => {
   });
 
   afterAll((done) => {
-    sequelize.models.companies.destroy({ truncate: true ,cascade: true });
+    // sequelize.models.companies.destroy({ truncate: true ,cascade: true });
     done()
   });
 
@@ -47,8 +52,8 @@ describe('user tests', () => {
   // });
 
   it("should create user with company and decrease company quota", async () => {
-    const planId = await sequelize.models.plans.findOne({where: {name: FREE_PLAN_NAME}}).then(p => p!.get("id"));
-    await createCompany({
+    const planId = await sequelize.models.plans.findOne({where: {name: FREE_PLAN_NAME}}).then(p => p!.get("id") as number);
+    await expect(createCompany({
       name: VENDOR_COMPANY_NAME,
       phone: "123-456-7890",
       creditCardNumber:"1234-1111-1111-1111",
@@ -58,15 +63,34 @@ describe('user tests', () => {
       isActive: true,
       isVendor: true,
       isVerified: true,
-      planId
-    } as CreateCompanyInput);
-    
-    const companyId = await sequelize.models.companies.findOne({where:{name: VENDOR_COMPANY_NAME}}).then(c => c!.get("id") as number);
+      planId,
+      materials: ["paper", "molded fiber"],
+      moq: 10000,
+      locations: ["USA", "China"],
+      leadTime: 6
+    })).resolves.toEqual(true);
 
+    await expect(createCompany({
+      name: CUSTOMER_COMPANY_NAME,
+      phone: "123-456-7890",
+      creditCardNumber:"1234-1111-1111-1111",
+      creditCardExp: "07/23",
+      creditCardCvv: "012",
+      country: "USA",
+      isActive: true,
+      isVendor: false,
+      isVerified: true,
+      planId
+    })).resolves.toEqual(true);
+    
+    const vendorCompanId = await sequelize.models.companies.findOne({where:{name: VENDOR_COMPANY_NAME}}).then(c => c!.get("id") as number);
+    const customerCompanyId = await sequelize.models.companies.findOne({where:{name: CUSTOMER_COMPANY_NAME}}).then(c => c!.get("id") as number);
+
+    // create vendor company users
     await expect(createUser({
       name: "test",
       email: ADMIN_EMAILS[0],
-      companyId,
+      companyId: vendorCompanId,
       password: "123"
     })).resolves.toEqual(true);
 
@@ -74,7 +98,7 @@ describe('user tests', () => {
     await expect(createUser({
       name: "test",
       email: ADMIN_EMAILS[0],
-      companyId,
+      companyId: vendorCompanId,
       password: "123"
     })).rejects.toBeInstanceOf(Error)
 
@@ -82,13 +106,28 @@ describe('user tests', () => {
     await expect(createUser({
       name: "test",
       email: NON_ADMIN_EMAILS[0],
-      companyId,
+      companyId: vendorCompanId,
       password: "123"
     })).resolves.toEqual(true);
 
+    // create customer company users
+    await expect(createUser({
+      name: "test",
+      email: CUSTOMER_EMAILS[0],
+      companyId: customerCompanyId,
+      password: "123"
+    })).resolves.toEqual(true);
+
+    await expect(createUser({
+      name: "test",
+      email: CUSTOMER_EMAILS[1],
+      companyId: customerCompanyId,
+      password: "123"
+    })).resolves.toEqual(true);
 
     const user1Id = await sequelize.models.users.findOne({ where: {email: ADMIN_EMAILS[0]}}).then(u => u?.get("id") as number);
     const user2Id = await sequelize.models.users.findOne({ where: {email: NON_ADMIN_EMAILS[0]}}).then(u => u?.get("id") as number);
+    console.log({user1Id, user2Id})
     const user1 = await getUserWithUserId(user1Id);
     const user2 = await getUserWithUserId(user2Id);
 

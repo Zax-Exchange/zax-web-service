@@ -47,12 +47,13 @@ const createCompany = async (data: createCompanyTypes.CreateCompanyInput): Promi
       }, {transaction});
 
       if (isVendor) {
+        // leadTime, locations, moq, materials will be required for vendor
         await ElasticCompanyService.createVendorDocument({ 
           id: companyId, 
-          leadTime: leadTime || "NULL", 
-          locations: locations || "NULL",
-          moq: moq || "NULL",
-          materials: materials || "NULL"
+          leadTime: leadTime!, 
+          locations: locations!,
+          moq: moq!,
+          materials: materials!
         });
       }
     });

@@ -134,6 +134,7 @@ const project = gql`
     deliveryCity: String!
     budget: Int!
     design: String
+    comments: String!
     components: [CreateProjectComponentInput!]!
   }
 

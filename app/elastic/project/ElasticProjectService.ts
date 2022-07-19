@@ -24,7 +24,7 @@ export default class ElasticProjectService {
             "properties": {
               id: { type: "text" },
               deliveryDate: { type: "date" },
-              deliveryCountry: { type: "text"},
+              deliveryCountry: { type: "text" },
               deliveryCity: { type: "text"},
               budget: { type: "integer" },
               materials: { type: "text" }
