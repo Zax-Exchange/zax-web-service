@@ -19,4 +19,5 @@ export interface CreateCompanyInput {
   materials?: string[];
   companyUrl?: string;
   planId: number;
+  userEmail: string;
 }

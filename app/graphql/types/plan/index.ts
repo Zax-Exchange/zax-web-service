@@ -15,6 +15,8 @@ const plan = gql`
     planId: Int!
     companyId: Int!
     remainingQuota: Int!
+    description: String!
+    features: [String!]!
     createdAt: String!
     updatedAt: String!
   }

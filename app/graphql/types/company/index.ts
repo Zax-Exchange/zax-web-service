@@ -96,6 +96,7 @@ const company = gql`
     moq: Int
     materials: [String]
     companyUrl: String
+    userEmail: String!
   }
 
   input UpdateCompanyInput {

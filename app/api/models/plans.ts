@@ -9,6 +9,8 @@ export interface plansAttributes {
   createdAt: Date;
   updatedAt: Date;
   licensedUsers: number;
+  description: string;
+  features: string[];
 }
 
 export type plansPk = "id";
@@ -23,6 +25,8 @@ export class plans extends Model<plansAttributes, plansCreationAttributes> imple
   createdAt!: Date;
   updatedAt!: Date;
   licensedUsers!: number;
+  description!: string;
+  features!: string[];
 
   // plans hasMany company_plans via planId
   company_plans!: company_plans[];
@@ -56,6 +60,14 @@ export class plans extends Model<plansAttributes, plansCreationAttributes> imple
     },
     licensedUsers: {
       type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    features: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: false
     }
   }, {

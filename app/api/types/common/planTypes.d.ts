@@ -12,6 +12,8 @@ export interface Plan {
   name: string;
   price: number;
   licensedUsers: number;
+  description: string;
+  features: string[];
   createdAt: Date;
   updatedAt: Date;
 }

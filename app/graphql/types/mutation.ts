@@ -2,7 +2,7 @@ import { gql } from "apollo-server-express";
 
 const mutation = gql`
     type Mutation {
-        createUser(data: CreateUserInput): Boolean
+        createUser(data: CreateUserInput): LoggedInUser
         updateUser(data: UpdateUserInput): Boolean
         createProject(data: CreateProjectInput): Boolean
         createProjectBid(data: CreateProjectBidInput): Boolean

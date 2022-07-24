@@ -11,7 +11,16 @@ const getPlanWithPlanId = async (id: number, transaction?: Transaction): Promise
   }
 };
 
+const getAllPlans = async (): Promise<commonPlanTypes.Plan[]> => {
+  const plans = sequelize.models.plans;
+  try {
+    return await plans.findAll().then(ps => ps.map(p => p.get({ plain:true })));
+  } catch(e) {
+    return Promise.reject(e);
+  }
+}
 
 export {
-  getPlanWithPlanId
+  getPlanWithPlanId,
+  getAllPlans
 }

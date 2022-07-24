@@ -67,7 +67,8 @@ describe('user tests', () => {
       materials: ["paper", "molded fiber"],
       moq: 10000,
       locations: ["USA", "China"],
-      leadTime: 6
+      leadTime: 6,
+      userEmail: "test@email.com"
     })).resolves.toEqual(true);
 
     await expect(createCompany({
@@ -80,7 +81,8 @@ describe('user tests', () => {
       isActive: true,
       isVendor: false,
       isVerified: true,
-      planId
+      planId,
+      userEmail: "test@email.com"
     })).resolves.toEqual(true);
     
     const vendorCompanId = await sequelize.models.companies.findOne({where:{name: VENDOR_COMPANY_NAME}}).then(c => c!.get("id") as number);

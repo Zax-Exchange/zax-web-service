@@ -48,7 +48,8 @@ describe('company tests', () => {
       materials: ["paper", "molded fiber"],
       moq: 10000,
       locations: ["USA", "China"],
-      leadTime: 6
+      leadTime: 6,
+      userEmail: "test@email.com"
     })).resolves.toEqual(true);
 
     await expect(createCompany({
@@ -61,7 +62,8 @@ describe('company tests', () => {
       isActive: true,
       isVendor: false,
       isVerified: true,
-      planId
+      planId,
+      userEmail: "test@email.com"
     })).resolves.toEqual(true);
   });
 

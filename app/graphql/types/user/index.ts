@@ -10,6 +10,16 @@ const user = gql`
     isAdmin: Boolean!
   }
 
+  type LoggedInUser {
+    id: Int!
+    name: String!
+    email: String!
+    companyId: Int!
+    isVendor: Boolean!
+    isAdmin: Boolean!
+    token: String!
+  }
+
   input CreateUserInput {
     name: String!
     email: String!
@@ -27,6 +37,11 @@ const user = gql`
   input UpdateUserPower {
     id: Int
     isAdmin: Boolean
+  }
+
+  input UserLoginInput {
+    email: String!
+    password: String!
   }
 `;
 
