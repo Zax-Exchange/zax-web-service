@@ -1,40 +1,84 @@
 import * as planTypes from "./planTypes";
 import * as enums from "./enums";
 
+
+export interface Company {
+  id: number;
+  name: string;
+  phone: string;
+  creditCardNumber: string;
+  creditCardExp: string;
+  creditCardCvv: string;
+  country: string;
+  isActive: boolean;
+  isVerified: boolean;
+  isVendor: boolean;
+  planId: number;
+  logo?: string;
+  companyUrl?: string;
+  fax?: string;
+}
+
+export interface Vendor extends Company{
+  leadTime: number;
+  locations: string[];
+  moq: string;
+  materials: string[];
+}
+
+export interface Customer extends Company {
+  
+}
+
+
 // company for public view, for search
 export interface CompanyOverview {
   id: number;
   name: string;
   logo?: string;
   country: string;
-  isVendor: boolean;
   isVerified: boolean;
-  locations?: string[];
-  materials?: string[];
 }
 
-// company detail
-export interface Company extends CompanyOverview {
-  fax?: string;
-  phone: string;
-  companyUrl?: string;
-  isActive: boolean;
-  moq?: number;
-  leadTime?: number;
-  createdAt: Date;
-  updatedAt: Date;
+export interface VendorOverview extends CompanyOverview {
+  leadTime: number;
+  locations: string[];
+  materials: string[];
+  moq: string;
 }
 
+export interface CustomerOverview extends CompanyOverview {
 
+}
 
-export interface PermissionedCompany extends Company {
+export interface PermissionedCompany extends Vendor, Customer {
   isAdmin: boolean
   planInfo: planTypes.CompanyPlan;
-  creditCardNumber: string;
-  creditCardExp: string;
-  creditCardCvv: string;
 }
 
+// for general users view (both external & internal)
+export interface CompanyDetail {
+  id: number;
+  name: string;
+  phone: string;
+  country: string;
+  isActive: boolean;
+  isVerified: boolean;
+  logo?: string;
+  companyUrl?: string;
+  fax?: string;
+}
+
+export interface VendorDetail extends CompanyDetail {
+  leadTime: number;
+  locations: string[];
+  moq: string;
+  materials: string[];
+}
+
+export interface CustomerDetail extends CompanyDetail {
+
+}
 
 export interface SearchVendorInput {
   userInput: string;

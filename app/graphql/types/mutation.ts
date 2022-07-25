@@ -4,15 +4,20 @@ const mutation = gql`
     type Mutation {
         createUser(data: CreateUserInput): LoggedInUser
         updateUser(data: UpdateUserInput): Boolean
+
         createProject(data: CreateProjectInput): Boolean
         createProjectBid(data: CreateProjectBidInput): Boolean
         updateProjectPermissions(data: UpdateProjectPermissionsInput): Boolean
         updateProjectBidPermissions(data: UpdateProjectBidPermissionsInput): Boolean
         updateProject(data: UpdateProjectInput): Boolean
         updateProjectBid(data: UpdateProjectBidInput): Boolean
-        createCompany(data: CreateCompanyInput): Boolean
-        updateCompany(data: UpdateCompanyInput): Boolean
+
+        createVendor(data: CreateVendorInput): Boolean
+        createCustomer(data: CreateCustomerInput): Boolean
+        updateVendor(data: UpdateVendorInput): Boolean
+        updateCustomer(data: UpdateCustomerInput): Boolean
         updateCompanyPlan(data: UpdateCompanyPlanInput): Boolean
+        
         deleteProject(data: DeleteProjectInput): Boolean
         deleteProjectPermissions(data: DeleteProjectPermissionsInput): Boolean
         deleteProjectBidPermissions(data: DeleteProjectBidPermissionsInput): Boolean

@@ -1,23 +1,35 @@
-export interface UpdateCompanyInput {
+export interface UpdateVendorInput {
   id: number;
-  userId: number;
-  data: UpdateCompanyData
+  data: UpdateVendorInputData;
 }
 
-export interface UpdateCompanyData {
-  name: string;
-  logo: string;
-  phone: string;
-  fax: string;
-  creditCardNumber: string;
-  creditCardExp: string;
-  creditCardCvv: string;
-  country: string;
-  isActive: boolean;
-  isVendor: boolean;
-  isVerified: boolean;
-  leadTime: number;
-  companyUrl: string;
+export interface UpdateCustomerInput {
+  id: number;
+  data: UpdateCustomerInputData;
 }
 
 
+export interface UpdateCompanyInputData {
+  name?: string;
+  logo?: string;
+  phone?: string;
+  fax?: string;
+  creditCardNumber?: string;
+  creditCardExp?: string;
+  creditCardCvv?: string;
+  country?: string;
+  isActive?: boolean;
+  isVerified?: boolean;
+  companyUrl?: string;
+}
+
+export interface UpdateVendorInputData extends UpdateCompanyInputData {
+  leadTime?: number;
+  moq?: string;
+  locations?: string[];
+  materials?: string[];
+}
+
+export interface UpdateCustomerInputData extends UpdateCompanyInputData {
+
+}

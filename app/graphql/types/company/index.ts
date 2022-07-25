@@ -1,7 +1,7 @@
 import { gql } from "apollo-server-express";
 
 const company = gql`
-  type Company {
+  type Vendor {
     id: Int!
     name: String!
     logo: String!
@@ -11,28 +11,56 @@ const company = gql`
     creditCardExp: String!
     creditCardCvv: String!
     country: String!
-    planInfo: CompanyPlan!
+    planId: Int!
     isActive: Boolean!
     isVendor: Boolean!
     isVerified: Boolean!
-    leadTime: Int
-    locations: [String]
-    moq: Int
+    leadTime: Int!
+    locations: [String]!
+    moq: Int!
     materials: [String]
     companyUrl: String
     createdAt: String!
     updatedAt: String!
   }
 
-  type CompanyOverview {
+  type Customer {
+    id: Int!
+    name: String!
+    logo: String!
+    phone: String!
+    fax: String!
+    creditCardNumber: String!
+    creditCardExp: String!
+    creditCardCvv: String!
+    country: String!
+    planId: Int!
+    isActive: Boolean!
+    isVendor: Boolean!
+    isVerified: Boolean!
+    companyUrl: String
+    createdAt: String!
+    updatedAt: String!
+  }
+
+  type VendorOverview {
     id: Int!
     name: String!
     logo: String
     country: String!
-    isVendor: Boolean!
     isVerified: Boolean!
-    locations: [String]
-    materials: [String]
+    locations: [String]!
+    materials: [String]!
+    moq: String!
+    leadTime: Int!
+  }
+
+  type CustomerOverview {
+    id: Int!
+    name: String!
+    logo: String
+    country: String!
+    isVerified: Boolean!
   }
 
   type PermissionedCompany {
@@ -59,26 +87,35 @@ const company = gql`
     updatedAt: String!
   }
 
-  type GeneralCompany {
+  type VendorDetail {
     id: Int!
     name: String!
-    logo: String!
     phone: String!
-    fax: String!
+    logo: String
     country: String!
     isActive: Boolean!
-    isVendor: Boolean!
+    companyUrl: String
+    fax: String
     isVerified: Boolean!
-    leadTime: Int
-    locations: [String]
-    moq: Int
-    materials: [String]
-    companyUrl: String!
-    createdAt: String!
-    updatedAt: String!
+    locations: [String]!
+    materials: [String]!
+    moq: String!
+    leadTime: Int!
   }
 
-  input CreateCompanyInput {
+  type CustomerDetail {
+    id: Int!
+    name: String!
+    phone: String!
+    logo: String
+    country: String!
+    isActive: Boolean!
+    companyUrl: String
+    fax: String
+    isVerified: Boolean!
+  }
+
+  input CreateVendorInput {
     name: String!
     logo: String
     phone: String!
@@ -91,20 +128,37 @@ const company = gql`
     isActive: Boolean!
     isVendor: Boolean!
     isVerified: Boolean!
-    leadTime: Int
-    locations: [String]
-    moq: Int
-    materials: [String]
+    leadTime: Int!
+    locations: [String!]!
+    moq: String!
+    materials: [String!]!
     companyUrl: String
     userEmail: String!
   }
 
-  input UpdateCompanyInput {
-    id: Int!
-    data: UpdateCompanyData
+  input CreateCustomerInput {
+    name: String!
+    logo: String
+    phone: String!
+    fax: String
+    creditCardNumber: String!
+    creditCardExp: String!
+    creditCardCvv: String!
+    country: String!
+    planId: Int!
+    isActive: Boolean!
+    isVendor: Boolean!
+    isVerified: Boolean!
+    companyUrl: String
+    userEmail: String!
   }
 
-  input UpdateCompanyData {
+  input UpdateVendorInput {
+    id: Int!
+    data: UpdateVendorInputData
+  }
+
+  input UpdateVendorInputData {
     name: String
     logo: String
     phone: String
@@ -113,12 +167,32 @@ const company = gql`
     creditCardExp: String
     creditCardCvv: String
     country: String
-    planId: Int
+    companyUrl: String
     isActive: Boolean
-    isVendor: Boolean
     isVerified: Boolean
     leadTime: Int
+    moq: String
+    locations: [String]
+    materials: [String]
+  }
+
+  input UpdateCustomerInput {
+    id: Int!
+    data: UpdateCustomerInputData
+  }
+
+  input UpdateCustomerInputData {
+    name: String
+    logo: String
+    phone: String
+    fax: String
+    creditCardNumber: String
+    creditCardExp: String
+    creditCardCvv: String
+    country: String
     companyUrl: String
+    isActive: Boolean
+    isVerified: Boolean
   }
 
   input UpdateCompanyPlanInput {

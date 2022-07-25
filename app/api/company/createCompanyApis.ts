@@ -4,67 +4,22 @@ import * as commonPlanTyes from "../types/common/planTypes";
 import { getPlanWithPlanId } from "../plan/getPlanApis";
 import CompanyApiUtils from "../utils/companyUtils";
 import ElasticCompanyService from "../../elastic/company/ElasticCompanyService";
-import nodemailer from "nodemailer";
-import SMTPTransport from "nodemailer/lib/smtp-transport";
-import { Options } from "nodemailer/lib/mailer";
+import EmailService from "../email/EmailService";
+import jwt from "jsonwebtoken";
 
-
-
-const createCompany = async (data: createCompanyTypes.CreateCompanyInput): Promise<boolean> => {
+const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise<boolean> => {
   const { name, logo, phone, fax, creditCardNumber, creditCardCvv, creditCardExp, country, isActive, isVendor, isVerified, leadTime, companyUrl, planId, locations, moq, materials, userEmail} = data;
-  // let transporter = nodemailer.createTransport({
-  //   service: "smtp.zaxexchange.com",
-  //   port: 465,
-  //   secure: true,
-  //   "auth": {
-  //     user: process.env.NODE_MAILER_USERNAME,
-  //     pass: process.env.NODE_MAILER_PASSWORD
-  //   }
-  // }) 
+  const emailService = new EmailService();
 
-  const createTransporter = async () => {
-
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      secure: true,
-      port: 465,
-      auth: {
-        type: "OAuth2",
-        user: process.env.NODE_MAILER_USERNAME,
-        privateKey: process.env.OAUTH_PRIVATE_KEY,
-        serviceClient: process.env.OAUTH_CLIENT_ID,
-        accessToken: process.env.OAUTH_ACCESS_TOKEN,
-        refreshToken: process.env.OAUTH_REFRESH_TOKEN
-      }
-    } as SMTPTransport.Options);
-
-    return transporter;
-  };
-  const sendEmail = async (emailOptions: Options) => {
-    let emailTransporter = await createTransporter();
-    await emailTransporter.sendMail(emailOptions);
-  };
-
-  const options = {
-    from: process.env.NODE_MAILER_USERNAME,
-    to:userEmail,
-    subject: "TEST",
-    text: "test message" 
-  }
 
   const companies = sequelize.models.companies;
   const company_plans = sequelize.models.company_plans;
-
-  // send email invitation to userEmail
-
+  const vendors = sequelize.models.vendors;
   try {
     await sequelize.transaction(async (transaction) => {
 
       await CompanyApiUtils.checkCreditCardValidity(creditCardNumber, creditCardCvv, creditCardExp);
-      const isDuplicate = await CompanyApiUtils.isDuplicateCompanyNames(name);
-      if (isDuplicate) {
-        throw new Error("Duplicate company names");
-      }
+      
       const companyId = await companies.create({
         name,
         logo,
@@ -77,42 +32,120 @@ const createCompany = async (data: createCompanyTypes.CreateCompanyInput): Promi
         isActive,
         isVendor,
         isVerified,
-        leadTime,
         companyUrl,
+      }, {transaction}).then(c => c.getDataValue("id"));
+
+      const plan = await getPlanWithPlanId(planId, transaction);
+
+      await vendors.create({
+        companyId,
+        leadTime,
         locations, 
         moq,
         materials
-      }, {transaction}).then(c => c.getDataValue("id"));
-      const plan = await getPlanWithPlanId(planId, transaction);
-      
+      }, {transaction});
+
       await company_plans.create({
         companyId,
         planId,
         remainingQuota: plan.licensedUsers
       }, {transaction});
 
+      ElasticCompanyService.createVendorDocument({ 
+        id: companyId, 
+        leadTime: leadTime, 
+        locations: locations,
+        moq: moq,
+        materials: materials
+      });
 
-      if (isVendor) {
-        // leadTime, locations, moq, materials will be required for vendor
-        ElasticCompanyService.createVendorDocument({ 
-          id: companyId, 
-          leadTime: leadTime!, 
-          locations: locations!,
-          moq: moq!,
-          materials: materials!
-        });
+
+      const encryptedCompanyId = CompanyApiUtils.encryptCompanyId(companyId);
+      
+      const options = {
+        from: `Zax Exchange <${process.env.NODE_MAILER_USERNAME}>`,
+        to:userEmail,
+        subject: "Zax Exchange Account Signup",
+        html: `
+            <p>Please follow the link below to complete sign up for your account.</p>
+            <a href="http://localhost:4001/user-signup/${encryptedCompanyId}">Click here</a>
+         `
       }
 
-      await sendEmail(options)
+      await emailService.sendMail(options);
     });
     return Promise.resolve(true);
   } catch(e) {
     return Promise.reject(e);
   }
+};
+
+const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Promise<boolean> => {
+  const { name, logo, phone, fax, creditCardNumber, creditCardCvv, creditCardExp, country, isActive, isVendor, isVerified, companyUrl, planId, userEmail} = data;
+  const emailService = new EmailService();
+
+  const companies = sequelize.models.companies;
+  const company_plans = sequelize.models.company_plans;
+  const customers = sequelize.models.customers;
+  try {
+    await sequelize.transaction(async (transaction) => {
+
+      await CompanyApiUtils.checkCreditCardValidity(creditCardNumber, creditCardCvv, creditCardExp);
+      
+      const companyId = await companies.create({
+        name,
+        logo,
+        phone,
+        fax,
+        creditCardNumber,
+        creditCardCvv,
+        creditCardExp,
+        country,
+        isActive,
+        isVendor,
+        isVerified,
+        companyUrl,
+      }, {transaction}).then(c => c.getDataValue("id"));
+
+      const plan = await getPlanWithPlanId(planId, transaction);
+
+      await customers.create({
+        companyId
+      }, {transaction});
+
+      await company_plans.create({
+        companyId,
+        planId,
+        remainingQuota: plan.licensedUsers
+      }, {transaction});
+
+      const encryptedCompanyId = CompanyApiUtils.encryptCompanyId(companyId);
+      
+      const options = {
+        from: `Zax Exchange <${process.env.NODE_MAILER_USERNAME}>`,
+        to:userEmail,
+        subject: "Zax Exchange Account Signup",
+        html: `
+            <p>Please follow the link below to complete sign up for your account.</p>
+            <a href="http://localhost:4001/user-signup/${encryptedCompanyId}">Click here</a>
+         `
+      }
+
+      await emailService.sendMail(options);
+    });
+    return Promise.resolve(true);
+  } catch(e) {
+    return Promise.reject(e);
+  }
+};
+
+const isDuplicateName = async (name: string) => {
+  return await CompanyApiUtils.isDuplicateCompanyNames(name);
 }
 
 
-
 export { 
-  createCompany
+  createVendor,
+  createCustomer,
+  isDuplicateName
 };

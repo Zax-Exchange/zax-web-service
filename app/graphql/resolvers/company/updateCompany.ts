@@ -1,12 +1,17 @@
 import * as updatePlanTypes from "../../../api/types/update/planTypes";
 import * as updateCompanyTypes from "../../../api/types/update/companyTypes";
 import { 
-  updateCompany as updateCompanyApi,
+  updateCustomer as updateCustomerApi,
+  updateVendor as updateVendorApi,
   updateCompanyPlan as updateCompanyPlanApi
  } from "../../../api/company/updateCompanyApis";
 
-const updateCompany = (parents: any, args: Record<string, updateCompanyTypes.UpdateCompanyInput>, context: any) => {
-  return updateCompanyApi(args.data);
+const updateCustomer = (parents: any, args: Record<string, updateCompanyTypes.UpdateCustomerInput>, context: any) => {
+  return updateCustomerApi(args.data);
+};
+
+const updateVendor = (parents: any, args: Record<string, updateCompanyTypes.UpdateVendorInput>, context: any) => {
+  return updateVendorApi(args.data);
 };
 
 const updateCompanyPlan = (parents: any, args: Record<string, updatePlanTypes.UpdateCompanyPlanInput>, context: any) => {
@@ -14,6 +19,7 @@ const updateCompanyPlan = (parents: any, args: Record<string, updatePlanTypes.Up
 };
 
 export {
-  updateCompany,
+  updateCustomer,
+  updateVendor,
   updateCompanyPlan
 };

@@ -11,15 +11,20 @@ import {
   deleteProjectPermissions,
   deleteProjectBidPermissions
 } from "./project/delete/deleteProject";
-import createCompany from "./company/createCompany";
 import {
-  updateCompany,
+  createCustomer,
+  createVendor
+} from "./company/createCompany";
+import {
+  updateCustomer,
+  updateVendor,
   updateCompanyPlan
 } from "./company/updateCompany";
 
 export default {
   createUser,
-  createCompany,
+  createCustomer,
+  createVendor,
   updateUser,
   createProject,
   createProjectBid,
@@ -30,6 +35,7 @@ export default {
   deleteProject,
   deleteProjectPermissions,
   deleteProjectBidPermissions,
-  updateCompany,
+  updateCustomer,
+  updateVendor,
   updateCompanyPlan
 };

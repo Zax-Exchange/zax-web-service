@@ -48,7 +48,7 @@ const createUser = async(data: userTypes.CreateUserInput): Promise<LoggedInUser>
           id: user.id,
           email: user.email
         },
-        process.env.USER_TOKEN_SECRET!,
+        process.env.USER_PASSWORD_TOKEN_SECRET!,
         {
           expiresIn: "8h"
         }

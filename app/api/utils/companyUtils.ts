@@ -6,6 +6,7 @@ import * as enums from "../types/common/enums"
 import { Model, ModelStatic, Transaction } from "sequelize";
 import sequelize from "../../postgres/dbconnection";
 import { companiesAttributes } from "../models/companies";
+import jwt from "jsonwebtoken";
 
 class CompanyApiUtils {
   static async getCompanyPlan(companyId: number): Promise<commonPlanTypes.CompanyPlan> {
@@ -54,6 +55,7 @@ class CompanyApiUtils {
       if (foundCompany) {
         return true;
       }
+      return false;
     } catch(e) {
       return Promise.reject(e);
     }
@@ -72,6 +74,44 @@ class CompanyApiUtils {
       console.error(e);
       return Promise.reject(e);
     }
+  }
+
+  static async getVendorWithCompanyId(companyId: number) {
+    const vendors = sequelize.models.vendors;
+    try {
+      return await vendors.findOne({
+        where: {
+          companyId
+        }
+      }).then(v => v?.get({ plain:true }));
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
+
+  static async getCustomerWithCompanyId(companyId: number) {
+    const customers = sequelize.models.customers;
+    try {
+      return await customers.findOne({
+        where: {
+          companyId
+        }
+      }).then(v => v?.get({ plain:true }));
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
+
+  static encryptCompanyId(id: number) {
+    return jwt.sign(
+        {
+          id
+        },
+        process.env.COMPANY_ID_SECRET!,
+        {
+          expiresIn: "24h"
+        }
+      );
   }
 }
 

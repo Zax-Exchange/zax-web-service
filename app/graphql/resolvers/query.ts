@@ -1,7 +1,7 @@
 import { getUserWithUserId, getAllUsersWithinCompany } from "./user/get/getUser";
 import {
-    getPermissionedCompany,
-    getCompanyDetail,
+    getCustomerDetail,
+    getVendorDetail
 } from "./company/getCompany";
 import { getVendorProjects, 
     getCustomerProjects, 
@@ -23,8 +23,8 @@ export default {
     getAllPlans, 
     getUserWithUserId,
     getAllUsersWithinCompany,
-    getPermissionedCompany,
-    getCompanyDetail,
+    getCustomerDetail,
+    getVendorDetail,
     getVendorProjects,
     getCustomerProjects,
     getProjectDetail,

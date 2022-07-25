@@ -81,8 +81,15 @@ export default class QueryBuilder {
     if (moq) {
       filter.push({
         range: {
-          moq: {
+          moqMax: {
             lte: moq
+          }
+        }
+      });
+      filter.push({
+        range: {
+          moqMin: {
+            gte: moq
           }
         }
       });

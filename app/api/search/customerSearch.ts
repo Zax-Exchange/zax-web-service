@@ -7,26 +7,28 @@ import QueryBuilder from "./queryBuilder";
 // search by project materials
 // search by customer company name
 
-const searchVendorCompanies = async(data: companyTypes.SearchVendorInput): Promise<companyTypes.CompanyOverview[]> => {
+const searchVendorCompanies = async(data: companyTypes.SearchVendorInput): Promise<companyTypes.VendorOverview[]> => {
   try {
     const query = QueryBuilder.buildVendorCompanySearchQuery(data);
     const companyDocs = await ElasticCompanyService.searchVendorDocuments(query);
-    const res: companyTypes.CompanyOverview[] = [];
+    const res: companyTypes.VendorOverview[] = [];
     const ids: number[] = [];
     for (let comp of companyDocs) {
       ids.push(parseInt(comp._id, 10));
     }
     const companies = await CompanyApiUtils.getCompanyByIds(ids);
     for (let company of companies) {
+      const vendor = await CompanyApiUtils.getVendorWithCompanyId(company.id);
       res.push({
         id: company.id,
         name: company.name,
         logo: company.logo,
         country: company.country,
-        isVendor: company.isVendor,
         isVerified: company.isVerified,
-        locations: company.locations,
-        materials: company.materials
+        locations: vendor.locations,
+        materials: vendor.materials,
+        leadTime: vendor.leadTime,
+        moq: vendor.moq
       })
     }
     return res;

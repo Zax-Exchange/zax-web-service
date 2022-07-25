@@ -4,8 +4,8 @@ import { plans } from "../../../app/api/models/plans";
 import { createUser } from "../../../app/api/user/createUserApis";
 import { updateUser, updateUserPower} from "../../../app/api/user/updateUserApis";
 import { getUserWithUserId } from "../../../app/api/user/getUserApis";
-import { createCompany } from "../../../app/api/company/createCompanyApis";
-import { CreateCompanyInput } from '../../../app/api/types/create/companyTypes';
+import { createCustomer, createVendor } from "../../../app/api/company/createCompanyApis";
+import { CreateCustomerInput, CreateVendorInput } from '../../../app/api/types/create/companyTypes';
 import { initModels } from '../../../app/api/models/init-models';
 import sequelize from "../../../app/postgres/dbconnection";
 import { UpdateUserInput, UpdateUserInputData } from "../../../app/api/types/update/userTypes";
@@ -17,8 +17,8 @@ import {
   FREE_PLAN_NAME,
   ADMIN_EMAILS,
   NON_ADMIN_EMAILS,
-  VENDOR_COMPANY_NAME,
-  CUSTOMER_COMPANY_NAME,
+  VENDOR_COMPANY_NAMES,
+  CUSTOMER_COMPANY_NAMES,
   VENDOR_EMAILS,
   CUSTOMER_EMAILS
 } from "../../constants";
@@ -35,7 +35,7 @@ describe('user tests', () => {
   });
 
   afterAll((done) => {
-    // sequelize.models.companies.destroy({ truncate: true ,cascade: true });
+    sequelize.models.companies.destroy({ truncate: true ,cascade: true });
     done()
   });
 
@@ -53,8 +53,8 @@ describe('user tests', () => {
 
   it("should create user with company and decrease company quota", async () => {
     const planId = await sequelize.models.plans.findOne({where: {name: FREE_PLAN_NAME}}).then(p => p!.get("id") as number);
-    await expect(createCompany({
-      name: VENDOR_COMPANY_NAME,
+    await expect(createVendor({
+      name: VENDOR_COMPANY_NAMES[0],
       phone: "123-456-7890",
       creditCardNumber:"1234-1111-1111-1111",
       creditCardExp: "07/23",
@@ -65,14 +65,14 @@ describe('user tests', () => {
       isVerified: true,
       planId,
       materials: ["paper", "molded fiber"],
-      moq: 10000,
+      moq: "10000-30000",
       locations: ["USA", "China"],
       leadTime: 6,
       userEmail: "test@email.com"
     })).resolves.toEqual(true);
 
-    await expect(createCompany({
-      name: CUSTOMER_COMPANY_NAME,
+    await expect(createCustomer({
+      name: CUSTOMER_COMPANY_NAMES[0],
       phone: "123-456-7890",
       creditCardNumber:"1234-1111-1111-1111",
       creditCardExp: "07/23",
@@ -85,8 +85,8 @@ describe('user tests', () => {
       userEmail: "test@email.com"
     })).resolves.toEqual(true);
     
-    const vendorCompanId = await sequelize.models.companies.findOne({where:{name: VENDOR_COMPANY_NAME}}).then(c => c!.get("id") as number);
-    const customerCompanyId = await sequelize.models.companies.findOne({where:{name: CUSTOMER_COMPANY_NAME}}).then(c => c!.get("id") as number);
+    const vendorCompanId = await sequelize.models.companies.findOne({where:{name: VENDOR_COMPANY_NAMES[0]}}).then(c => c!.get("id") as number);
+    const customerCompanyId = await sequelize.models.companies.findOne({where:{name: CUSTOMER_COMPANY_NAMES[0]}}).then(c => c!.get("id") as number);
 
     // create vendor company users
     await expect(createUser({
@@ -94,7 +94,7 @@ describe('user tests', () => {
       email: ADMIN_EMAILS[0],
       companyId: vendorCompanId,
       password: "123"
-    })).resolves.toEqual(true);
+    })).resolves.toBeTruthy();
 
     // should not allow duplicate user emails
     await expect(createUser({
@@ -110,7 +110,7 @@ describe('user tests', () => {
       email: NON_ADMIN_EMAILS[0],
       companyId: vendorCompanId,
       password: "123"
-    })).resolves.toEqual(true);
+    })).resolves.toBeTruthy();
 
     // create customer company users
     await expect(createUser({
@@ -118,18 +118,18 @@ describe('user tests', () => {
       email: CUSTOMER_EMAILS[0],
       companyId: customerCompanyId,
       password: "123"
-    })).resolves.toEqual(true);
+    })).resolves.toBeTruthy();
 
     await expect(createUser({
       name: "test",
       email: CUSTOMER_EMAILS[1],
       companyId: customerCompanyId,
       password: "123"
-    })).resolves.toEqual(true);
+    })).resolves.toBeTruthy();
 
     const user1Id = await sequelize.models.users.findOne({ where: {email: ADMIN_EMAILS[0]}}).then(u => u?.get("id") as number);
     const user2Id = await sequelize.models.users.findOne({ where: {email: NON_ADMIN_EMAILS[0]}}).then(u => u?.get("id") as number);
-    console.log({user1Id, user2Id})
+
     const user1 = await getUserWithUserId(user1Id);
     const user2 = await getUserWithUserId(user2Id);
 
@@ -145,7 +145,7 @@ describe('user tests', () => {
     await expect(updateUser({
       id: userId,
       data: {
-
+        
       } as UpdateUserInputData
     })).resolves.toEqual(true);
 

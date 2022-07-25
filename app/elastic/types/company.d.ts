@@ -1,9 +1,9 @@
 export interface VendorDocument {
   id: number;
-  moq: number | string;
+  moq: string;
   locations: string[] | string;
   materials: string[] | string;
-  leadTime: number | string;
+  leadTime: number;
 }
 
 export interface CustomerDocument {

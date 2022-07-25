@@ -2,7 +2,6 @@ import * as userTypes from "../types/common/userTypes";
 import { companies } from "../models/companies";
 import sequelize from "../../postgres/dbconnection";
 import UserApiUtils from "../utils/userUtils";
-import { getPermissionedCompany } from "../company/getCompanyApis";
 
 
 // returns a list of users with user power

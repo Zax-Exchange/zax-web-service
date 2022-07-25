@@ -1,9 +1,11 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { company_plans, company_plansCreationAttributes, company_plansId } from './company_plans';
+import type { customers, customersId } from './customers';
 import type { project_bids, project_bidsId } from './project_bids';
 import type { projects, projectsId } from './projects';
 import type { users, usersId } from './users';
+import type { vendors, vendorsId } from './vendors';
 
 export interface companiesAttributes {
   name: string;
@@ -18,18 +20,14 @@ export interface companiesAttributes {
   isVendor: boolean;
   isVerified: boolean;
   companyUrl?: string;
-  leadTime?: number;
   id: number;
   createdAt: Date;
   updatedAt: Date;
-  locations?: string[];
-  moq?: number;
-  materials?: string[];
 }
 
 export type companiesPk = "id";
 export type companiesId = companies[companiesPk];
-export type companiesOptionalAttributes = "logo" | "fax" | "companyUrl" | "leadTime" | "createdAt" | "updatedAt" | "locations" | "moq" | "materials";
+export type companiesOptionalAttributes = "logo" | "fax" | "companyUrl" | "createdAt" | "updatedAt";
 export type companiesCreationAttributes = Optional<companiesAttributes, companiesOptionalAttributes>;
 
 export class companies extends Model<companiesAttributes, companiesCreationAttributes> implements companiesAttributes {
@@ -45,19 +43,27 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
   isVendor!: boolean;
   isVerified!: boolean;
   companyUrl?: string;
-  leadTime?: number;
   id!: number;
   createdAt!: Date;
   updatedAt!: Date;
-  locations?: string[];
-  moq?: number;
-  materials?: string[];
 
   // companies hasOne company_plans via companyId
   company_plan!: company_plans;
   getCompany_plan!: Sequelize.HasOneGetAssociationMixin<company_plans>;
   setCompany_plan!: Sequelize.HasOneSetAssociationMixin<company_plans, company_plansId>;
   createCompany_plan!: Sequelize.HasOneCreateAssociationMixin<company_plans>;
+  // companies hasMany customers via companyId
+  customers!: customers[];
+  getCustomers!: Sequelize.HasManyGetAssociationsMixin<customers>;
+  setCustomers!: Sequelize.HasManySetAssociationsMixin<customers, customersId>;
+  addCustomer!: Sequelize.HasManyAddAssociationMixin<customers, customersId>;
+  addCustomers!: Sequelize.HasManyAddAssociationsMixin<customers, customersId>;
+  createCustomer!: Sequelize.HasManyCreateAssociationMixin<customers>;
+  removeCustomer!: Sequelize.HasManyRemoveAssociationMixin<customers, customersId>;
+  removeCustomers!: Sequelize.HasManyRemoveAssociationsMixin<customers, customersId>;
+  hasCustomer!: Sequelize.HasManyHasAssociationMixin<customers, customersId>;
+  hasCustomers!: Sequelize.HasManyHasAssociationsMixin<customers, customersId>;
+  countCustomers!: Sequelize.HasManyCountAssociationsMixin;
   // companies hasMany project_bids via companyId
   project_bids!: project_bids[];
   getProject_bids!: Sequelize.HasManyGetAssociationsMixin<project_bids>;
@@ -94,6 +100,18 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
   hasUser!: Sequelize.HasManyHasAssociationMixin<users, usersId>;
   hasUsers!: Sequelize.HasManyHasAssociationsMixin<users, usersId>;
   countUsers!: Sequelize.HasManyCountAssociationsMixin;
+  // companies hasMany vendors via companyId
+  vendors!: vendors[];
+  getVendors!: Sequelize.HasManyGetAssociationsMixin<vendors>;
+  setVendors!: Sequelize.HasManySetAssociationsMixin<vendors, vendorsId>;
+  addVendor!: Sequelize.HasManyAddAssociationMixin<vendors, vendorsId>;
+  addVendors!: Sequelize.HasManyAddAssociationsMixin<vendors, vendorsId>;
+  createVendor!: Sequelize.HasManyCreateAssociationMixin<vendors>;
+  removeVendor!: Sequelize.HasManyRemoveAssociationMixin<vendors, vendorsId>;
+  removeVendors!: Sequelize.HasManyRemoveAssociationsMixin<vendors, vendorsId>;
+  hasVendor!: Sequelize.HasManyHasAssociationMixin<vendors, vendorsId>;
+  hasVendors!: Sequelize.HasManyHasAssociationsMixin<vendors, vendorsId>;
+  countVendors!: Sequelize.HasManyCountAssociationsMixin;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof companies {
     return sequelize.define('companies', {
@@ -146,28 +164,12 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    leadTime: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
     id: {
       autoIncrement: true,
       autoIncrementIdentity: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
-    },
-    locations: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true
-    },
-    moq: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    materials: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true
     }
   }, {
     tableName: 'companies',

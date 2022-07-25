@@ -12,13 +12,16 @@ const login = async (data: UserLoginInput): Promise<LoggedInUser> => {
       }
     }).then(u => u?.get({ plain: true }));
 
-    if (user && await bcrypt.compare(data.password, user.password)) {
+    const valid = await bcrypt.compare(data.password, user.password);
+
+    if (user && valid) {
+
       const token = jwt.sign(
         {
           id: user.id,
           email: user.email
         },
-        process.env.USER_TOKEN_SECRET!,
+        process.env.USER_SESSION_TOKEN_SECRET!,
         {
           expiresIn: "8h"
         }
@@ -28,10 +31,10 @@ const login = async (data: UserLoginInput): Promise<LoggedInUser> => {
         token
       }
     } else {
-      throw new Error();
+      throw new Error("Incorrect email/password.");
     }
   } catch(e) {
-    return Promise.reject(new Error("Incorrect email/password"));
+    return Promise.reject(e);
   }
 }
 

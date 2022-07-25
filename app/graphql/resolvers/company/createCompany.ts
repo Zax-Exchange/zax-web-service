@@ -1,8 +1,18 @@
 import * as createCompanyTypes from "../../../api/types/create/companyTypes";
-import { createCompany as createCompanyApi } from "../../../api/company/createCompanyApis";
+import { 
+  createVendor as createVendorApi,
+  createCustomer as createCustomerApi 
+} from "../../../api/company/createCompanyApis";
 
-const createCompany = (parents: any, args: Record<string, createCompanyTypes.CreateCompanyInput>, context: any) => {
-  return createCompanyApi(args.data);
+const createVendor = (parents: any, args: Record<string, createCompanyTypes.CreateVendorInput>, context: any) => {
+  return createVendorApi(args.data);
 }
 
-export default createCompany;
+const createCustomer = (parents: any, args: Record<string, createCompanyTypes.CreateCustomerInput>, context: any) => {
+  return createCustomerApi(args.data);
+}
+
+export {
+  createVendor,
+  createCustomer
+}
