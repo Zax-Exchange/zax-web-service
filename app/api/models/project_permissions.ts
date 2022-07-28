@@ -52,7 +52,8 @@ export class project_permissions extends Model<project_permissionsAttributes, pr
         model: 'users',
         key: 'id'
       },
-      unique: "project_viewers_userId_projectId_key"
+      unique: "project_viewers_userId_projectId_key",
+      onDelete: 'cascade'
     },
     projectId: {
       type: DataTypes.INTEGER,
@@ -61,7 +62,8 @@ export class project_permissions extends Model<project_permissionsAttributes, pr
         model: 'projects',
         key: 'id'
       },
-      unique: "project_viewers_userId_projectId_key"
+      unique: "project_viewers_userId_projectId_key",
+      onDelete: 'cascade'
     },
     permission: {
       type: DataTypes.STRING(10),
@@ -72,6 +74,7 @@ export class project_permissions extends Model<project_permissionsAttributes, pr
     schema: 'public',
     hasTrigger: true,
     timestamps: true,
+    paranoid: true,
     indexes: [
       {
         name: "project_viewers_pkey",

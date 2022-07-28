@@ -58,7 +58,7 @@ try {
 const getCustomerDetail = async (companyId: number): Promise<commonCompanyTypes.CustomerDetail> => {
 try {
     const company = await CompanyApiUtils.getCompanyWithCompanyId(companyId);
-
+    const customer = await CompanyApiUtils.getCustomerWithCompanyId(companyId);
 
     const { id, name, logo, phone, fax, country, isActive, isVerified, companyUrl } = company;
     const res = {

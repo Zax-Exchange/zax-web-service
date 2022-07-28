@@ -1,4 +1,6 @@
 import type { Sequelize } from "sequelize";
+import { sequelize_meta as _sequelize_meta } from "./SequelizeMeta";
+import type { sequelize_metaAttributes, sequelize_metaCreationAttributes } from "./SequelizeMeta";
 import { companies as _companies } from "./companies";
 import type { companiesAttributes, companiesCreationAttributes } from "./companies";
 import { company_plans as _company_plans } from "./company_plans";
@@ -27,6 +29,7 @@ import { vendors as _vendors } from "./vendors";
 import type { vendorsAttributes, vendorsCreationAttributes } from "./vendors";
 
 export {
+  _sequelize_meta as sequelize_meta,
   _companies as companies,
   _company_plans as company_plans,
   _customers as customers,
@@ -43,6 +46,8 @@ export {
 };
 
 export type {
+  sequelize_metaAttributes,
+  sequelize_metaCreationAttributes,
   companiesAttributes,
   companiesCreationAttributes,
   company_plansAttributes,
@@ -72,56 +77,58 @@ export type {
 };
 
 export function initModels(sequelize: Sequelize) {
+  const sequelize_meta = _sequelize_meta.initModel(sequelize);
+  const plans = _plans.initModel(sequelize);
   const companies = _companies.initModel(sequelize);
   const company_plans = _company_plans.initModel(sequelize);
-  const customers = _customers.initModel(sequelize);
-  const materials = _materials.initModel(sequelize);
-  const plans = _plans.initModel(sequelize);
-  const project_bid_components = _project_bid_components.initModel(sequelize);
-  const project_bid_permissions = _project_bid_permissions.initModel(sequelize);
-  const project_bids = _project_bids.initModel(sequelize);
-  const project_components = _project_components.initModel(sequelize);
-  const project_permissions = _project_permissions.initModel(sequelize);
-  const projects = _projects.initModel(sequelize);
   const users = _users.initModel(sequelize);
+  const customers = _customers.initModel(sequelize);
   const vendors = _vendors.initModel(sequelize);
+  const projects = _projects.initModel(sequelize);
+  const project_components = _project_components.initModel(sequelize);
+  const project_bids = _project_bids.initModel(sequelize);
+  const project_bid_components = _project_bid_components.initModel(sequelize);
+  const project_permissions = _project_permissions.initModel(sequelize);
+  const project_bid_permissions = _project_bid_permissions.initModel(sequelize);
+  const materials = _materials.initModel(sequelize);
 
   company_plans.belongsTo(companies, { as: "company", foreignKey: "companyId"});
-  companies.hasOne(company_plans, { as: "company_plan", foreignKey: "companyId"});
+  companies.hasOne(company_plans, { as: "company_plan", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   customers.belongsTo(companies, { as: "company", foreignKey: "companyId"});
-  companies.hasMany(customers, { as: "customers", foreignKey: "companyId"});
+  companies.hasMany(customers, { as: "customers", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   project_bids.belongsTo(companies, { as: "company", foreignKey: "companyId"});
-  companies.hasMany(project_bids, { as: "project_bids", foreignKey: "companyId"});
+  companies.hasMany(project_bids, { as: "project_bids", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   projects.belongsTo(companies, { as: "company", foreignKey: "companyId"});
-  companies.hasMany(projects, { as: "projects", foreignKey: "companyId"});
+  companies.hasMany(projects, { as: "projects", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   users.belongsTo(companies, { as: "company", foreignKey: "companyId"});
-  companies.hasMany(users, { as: "users", foreignKey: "companyId"});
+  companies.hasMany(users, { as: "users", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   vendors.belongsTo(companies, { as: "company", foreignKey: "companyId"});
-  companies.hasMany(vendors, { as: "vendors", foreignKey: "companyId"});
+  companies.hasMany(vendors, { as: "vendors", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   company_plans.belongsTo(plans, { as: "plan", foreignKey: "planId"});
-  plans.hasMany(company_plans, { as: "company_plans", foreignKey: "planId"});
+  plans.hasMany(company_plans, { as: "company_plans", foreignKey: "planId", hooks: true, onDelete: "CASCADE"});
   project_bid_components.belongsTo(project_bids, { as: "projectBid", foreignKey: "projectBidId"});
-  project_bids.hasMany(project_bid_components, { as: "project_bid_components", foreignKey: "projectBidId"});
+  project_bids.hasMany(project_bid_components, { as: "project_bid_components", foreignKey: "projectBidId", hooks: true, onDelete: "CASCADE"});
   project_bid_permissions.belongsTo(project_bids, { as: "projectBid", foreignKey: "projectBidId"});
-  project_bids.hasMany(project_bid_permissions, { as: "project_bid_permissions", foreignKey: "projectBidId"});
+  project_bids.hasMany(project_bid_permissions, { as: "project_bid_permissions", foreignKey: "projectBidId", hooks: true, onDelete: "CASCADE"});
   project_bid_components.belongsTo(project_components, { as: "projectComponent", foreignKey: "projectComponentId"});
-  project_components.hasMany(project_bid_components, { as: "project_bid_components", foreignKey: "projectComponentId"});
+  project_components.hasMany(project_bid_components, { as: "project_bid_components", foreignKey: "projectComponentId", hooks: true, onDelete: "CASCADE"});
   project_bids.belongsTo(projects, { as: "project", foreignKey: "projectId"});
-  projects.hasMany(project_bids, { as: "project_bids", foreignKey: "projectId"});
-  project_components.belongsTo(projects, { as: "project", foreignKey: "projectId"});
-  projects.hasMany(project_components, { as: "project_components", foreignKey: "projectId"});
-  project_permissions.belongsTo(projects, { as: "project", foreignKey: "projectId"});
-  projects.hasMany(project_permissions, { as: "project_permissions", foreignKey: "projectId"});
+  projects.hasMany(project_bids, { as: "project_bids", foreignKey: "projectId", hooks: true, onDelete: "CASCADE"});
+  project_components.belongsTo(projects, { as: "project", foreignKey: "projectId", hooks: true, onDelete: "CASCADE"});
+  projects.hasMany(project_components, { as: "project_components", foreignKey: "projectId", hooks: true, onDelete: "CASCADE" });
+  project_permissions.belongsTo(projects, { as: "project", foreignKey: "projectId", hooks: true, onDelete: "CASCADE"});
+  projects.hasMany(project_permissions, { as: "project_permissions", foreignKey: "projectId", hooks: true, onDelete: "CASCADE" });
   project_bid_permissions.belongsTo(users, { as: "user", foreignKey: "userId"});
-  users.hasMany(project_bid_permissions, { as: "project_bid_permissions", foreignKey: "userId"});
-  project_bids.belongsTo(users, { as: "user", foreignKey: "userId"});
-  users.hasMany(project_bids, { as: "project_bids", foreignKey: "userId"});
+  users.hasMany(project_bid_permissions, { as: "project_bid_permissions", foreignKey: "userId", hooks: true, onDelete: "CASCADE"});
+  project_bids.belongsTo(users, { as: "user", foreignKey: "userId", hooks: true, onDelete: "CASCADE" });
+  users.hasMany(project_bids, { as: "project_bids", foreignKey: "userId", hooks: true, onDelete: "CASCADE"});
   project_permissions.belongsTo(users, { as: "user", foreignKey: "userId"});
-  users.hasMany(project_permissions, { as: "project_permissions", foreignKey: "userId"});
+  users.hasMany(project_permissions, { as: "project_permissions", foreignKey: "userId", hooks: true, onDelete: "CASCADE"});
   projects.belongsTo(users, { as: "user", foreignKey: "userId"});
-  users.hasMany(projects, { as: "projects", foreignKey: "userId"});
+  users.hasMany(projects, { as: "projects", foreignKey: "userId", hooks: true, onDelete: "CASCADE"});
 
   return {
+    sequelize_meta: sequelize_meta,
     companies: companies,
     company_plans: company_plans,
     customers: customers,

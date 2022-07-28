@@ -52,7 +52,8 @@ export class project_bid_permissions extends Model<project_bid_permissionsAttrib
         model: 'project_bids',
         key: 'id'
       },
-      unique: "project_bid_editors_userId_projectBidId_key"
+      unique: "project_bid_editors_userId_projectBidId_key",
+      onDelete: 'cascade'
     },
     userId: {
       type: DataTypes.INTEGER,
@@ -61,7 +62,8 @@ export class project_bid_permissions extends Model<project_bid_permissionsAttrib
         model: 'users',
         key: 'id'
       },
-      unique: "project_bid_editors_userId_projectBidId_key"
+      unique: "project_bid_editors_userId_projectBidId_key",
+      onDelete: 'cascade'
     },
     permission: {
       type: DataTypes.STRING(10),
@@ -72,6 +74,7 @@ export class project_bid_permissions extends Model<project_bid_permissionsAttrib
     schema: 'public',
     hasTrigger: true,
     timestamps: true,
+    paranoid: true,
     indexes: [
       {
         name: "project_bid_editors_pkey",

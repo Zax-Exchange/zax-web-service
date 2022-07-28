@@ -14,11 +14,12 @@ export interface project_bidsAttributes {
   createdAt: Date;
   updatedAt: Date;
   companyId: number;
+  deletedAt?: Date;
 }
 
 export type project_bidsPk = "id";
 export type project_bidsId = project_bids[project_bidsPk];
-export type project_bidsOptionalAttributes = "comments" | "createdAt" | "updatedAt";
+export type project_bidsOptionalAttributes = "comments" | "createdAt" | "updatedAt" | "deletedAt";
 export type project_bidsCreationAttributes = Optional<project_bidsAttributes, project_bidsOptionalAttributes>;
 
 export class project_bids extends Model<project_bidsAttributes, project_bidsCreationAttributes> implements project_bidsAttributes {
@@ -29,6 +30,7 @@ export class project_bids extends Model<project_bidsAttributes, project_bidsCrea
   createdAt!: Date;
   updatedAt!: Date;
   companyId!: number;
+  deletedAt?: Date;
 
   // project_bids belongsTo companies via companyId
   company!: companies;
@@ -94,7 +96,8 @@ export class project_bids extends Model<project_bidsAttributes, project_bidsCrea
         model: 'projects',
         key: 'id'
       },
-      unique: "project_bids_projectId_companyId_key"
+      unique: "project_bids_projectId_companyId_key",
+      onDelete: 'cascade'
     },
     comments: {
       type: DataTypes.TEXT,
@@ -107,13 +110,25 @@ export class project_bids extends Model<project_bidsAttributes, project_bidsCrea
         model: 'companies',
         key: 'id'
       },
-      unique: "project_bids_projectId_companyId_key"
+      unique: "project_bids_projectId_companyId_key",
+      onDelete: 'cascade'
     }
   }, {
     tableName: 'project_bids',
     schema: 'public',
     hasTrigger: true,
     timestamps: true,
+    paranoid: true,
+    hooks: {
+        afterDestroy: async (instance, options) => {
+          await instance.getProject_bid_components().then(async comps => {
+            for (let comp of comps) await comp.destroy()
+          });
+          await instance.getProject_bid_permissions().then(async ps => {
+            for (let p of ps) await p.destroy()
+          })
+        }
+    },
     indexes: [
       {
         name: "project_bids_pkey",

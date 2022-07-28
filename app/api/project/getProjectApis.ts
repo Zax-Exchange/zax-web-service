@@ -38,6 +38,7 @@ const getCustomerProjects = async(userId: number): Promise<commonProjectTypes.Cu
         bids
       });
     }
+    console.log(res)
     return Promise.resolve(res);
   } catch(e) {
     return Promise.reject(e);

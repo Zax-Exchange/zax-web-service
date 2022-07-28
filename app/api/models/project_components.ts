@@ -12,11 +12,12 @@ export interface project_componentsAttributes {
   postProcess: string;
   createdAt: Date;
   updatedAt: Date;
+  deletedAt?: Date;
 }
 
 export type project_componentsPk = "id";
 export type project_componentsId = project_components[project_componentsPk];
-export type project_componentsOptionalAttributes = "createdAt" | "updatedAt";
+export type project_componentsOptionalAttributes = "createdAt" | "updatedAt" | "deletedAt";
 export type project_componentsCreationAttributes = Optional<project_componentsAttributes, project_componentsOptionalAttributes>;
 
 export class project_components extends Model<project_componentsAttributes, project_componentsCreationAttributes> implements project_componentsAttributes {
@@ -28,6 +29,7 @@ export class project_components extends Model<project_componentsAttributes, proj
   postProcess!: string;
   createdAt!: Date;
   updatedAt!: Date;
+  deletedAt?: Date;
 
   // project_components hasMany project_bid_components via projectComponentId
   project_bid_components!: project_bid_components[];
@@ -61,8 +63,9 @@ export class project_components extends Model<project_componentsAttributes, proj
       allowNull: false,
       references: {
         model: 'projects',
-        key: 'id'
-      }
+        key: 'id',
+      },
+      onDelete: 'cascade'
     },
     name: {
       type: DataTypes.STRING,
@@ -85,6 +88,7 @@ export class project_components extends Model<project_componentsAttributes, proj
     schema: 'public',
     hasTrigger: true,
     timestamps: true,
+    paranoid: true,
     indexes: [
       {
         name: "project_components_pkey",

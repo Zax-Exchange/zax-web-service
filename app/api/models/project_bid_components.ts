@@ -10,11 +10,12 @@ export interface project_bid_componentsAttributes {
   quantityPrices: object;
   createdAt: Date;
   updatedAt: Date;
+  deletedAt?: Date;
 }
 
 export type project_bid_componentsPk = "id";
 export type project_bid_componentsId = project_bid_components[project_bid_componentsPk];
-export type project_bid_componentsOptionalAttributes = "createdAt" | "updatedAt";
+export type project_bid_componentsOptionalAttributes = "createdAt" | "updatedAt" | "deletedAt";
 export type project_bid_componentsCreationAttributes = Optional<project_bid_componentsAttributes, project_bid_componentsOptionalAttributes>;
 
 export class project_bid_components extends Model<project_bid_componentsAttributes, project_bid_componentsCreationAttributes> implements project_bid_componentsAttributes {
@@ -24,6 +25,7 @@ export class project_bid_components extends Model<project_bid_componentsAttribut
   quantityPrices!: object;
   createdAt!: Date;
   updatedAt!: Date;
+  deletedAt?: Date;
 
   // project_bid_components belongsTo project_bids via projectBidId
   projectBid!: project_bids;
@@ -51,7 +53,8 @@ export class project_bid_components extends Model<project_bid_componentsAttribut
       references: {
         model: 'project_bids',
         key: 'id'
-      }
+      },
+      onDelete: 'cascade'
     },
     projectComponentId: {
       type: DataTypes.INTEGER,
@@ -59,7 +62,8 @@ export class project_bid_components extends Model<project_bid_componentsAttribut
       references: {
         model: 'project_components',
         key: 'id'
-      }
+      },
+      onDelete: 'cascade'
     },
     quantityPrices: {
       type: DataTypes.JSON,
@@ -69,6 +73,7 @@ export class project_bid_components extends Model<project_bid_componentsAttribut
     tableName: 'project_bid_components',
     schema: 'public',
     timestamps: true,
+    paranoid: true,
     indexes: [
       {
         name: "project_bid_components_pkey",

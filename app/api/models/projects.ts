@@ -20,11 +20,12 @@ export interface projectsAttributes {
   companyId: number;
   comments?: string;
   deliveryCity: string;
+  deletedAt?: Date;
 }
 
 export type projectsPk = "id";
 export type projectsId = projects[projectsPk];
-export type projectsOptionalAttributes = "design" | "createdAt" | "updatedAt" | "comments";
+export type projectsOptionalAttributes = "design" | "createdAt" | "updatedAt" | "comments" | "deletedAt";
 export type projectsCreationAttributes = Optional<projectsAttributes, projectsOptionalAttributes>;
 
 export class projects extends Model<projectsAttributes, projectsCreationAttributes> implements projectsAttributes {
@@ -41,6 +42,7 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
   companyId!: number;
   comments?: string;
   deliveryCity!: string;
+  deletedAt?: Date;
 
   // projects belongsTo companies via companyId
   company!: companies;
@@ -151,6 +153,17 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
     schema: 'public',
     hasTrigger: true,
     timestamps: true,
+    paranoid: true,
+    hooks: {
+        afterDestroy: async (instance, options) => {
+          await instance.getProject_components().then(async comps => {
+            for (let comp of comps) await comp.destroy()
+          });
+          await instance.getProject_permissions().then(async ps => {
+            for (let p of ps) await p.destroy()
+          })
+        }
+    },
     indexes: [
       {
         name: "projects_pkey",

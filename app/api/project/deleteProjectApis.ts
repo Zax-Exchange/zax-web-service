@@ -4,19 +4,15 @@ import * as enums from "../types/common/enums";
 import { Op, Transaction } from "sequelize";
 import ProjectUtils from "../utils/projectUtils";
 
-const deleteProject = async(data: projectTypes.DeleteProjectInput): Promise<boolean> => {
+const deleteProject = async(id: number): Promise<boolean> => {
   const projects = sequelize.models.projects;
-  const project_permissions = sequelize.models.project_permissions;
 
-  const { userId, projectId } = data;
-  
   try {
     await projects.destroy({
       where: {
-        id: projectId,
-        status: enums.ProjectStatus.OPEN
+        id
       },
-      truncate: true
+      individualHooks: true
     });
     return Promise.resolve(true);
   } catch(e) {
@@ -27,15 +23,8 @@ const deleteProject = async(data: projectTypes.DeleteProjectInput): Promise<bool
 
 const deleteProjectComponents = async(data: projectTypes.DeleteProjectComponentsInput): Promise<boolean> => {
   const project_components = sequelize.models.project_components;
-  const project_permissions = sequelize.models.project_permissions;
 
   const { projectComponentIds, projectId, userId } = data;
-
-  // const permission = await ProjectUtils.getProjectOrBidPermission(project_permissions, "projectId", userId, projectId);
-
-  // if (!permission || permission === enums.ProjectPermission.VIEWER) {
-  //   return Promise.reject(new Error("Permission denied"))
-  // }
 
   try {
     await sequelize.transaction(async (transaction: Transaction) => {
@@ -65,7 +54,8 @@ const deleteProjectBid = async(data: projectTypes.DeleteProjectBidInput): Promis
     await project_bids.destroy({
       where: {
         id: projectBidId
-      }
+      },
+      individualHooks: true
     });
     return Promise.resolve(true);
   } catch(e) {
@@ -76,7 +66,6 @@ const deleteProjectBid = async(data: projectTypes.DeleteProjectBidInput): Promis
 
 const deleteProjectBidComponents = async(data: projectTypes.DeleteProjectBidComponentsInput): Promise<boolean> => {
   const project_components = sequelize.models.project_components;
-  const project_bid_permissions = sequelize.models.project_bid_permissions;
 
   const { projectBidComponentIds, projectBidId, userId } = data;
 

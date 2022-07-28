@@ -15,8 +15,10 @@ if (process.env.NODE_ENV !== 'production') {
 const startServer = async() => {  
   
   initModels(sequelize);
- 
+  
+  
   try {
+    await sequelize.sync({ alter: true }).then(() => console.log("db initialized@"))
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
   } catch (error) {
