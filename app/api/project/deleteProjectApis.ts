@@ -3,6 +3,8 @@ import * as projectTypes from "../types/delete/projectTypes";
 import * as enums from "../types/common/enums";
 import { Op, Transaction } from "sequelize";
 import ProjectUtils from "../utils/projectUtils";
+import ElasticProjectService from "../../elastic/project/ElasticProjectService";
+
 
 const deleteProject = async(id: number): Promise<boolean> => {
   const projects = sequelize.models.projects;
@@ -14,6 +16,7 @@ const deleteProject = async(id: number): Promise<boolean> => {
       },
       individualHooks: true
     });
+    ElasticProjectService.deleteProjectDocument(id);
     return Promise.resolve(true);
   } catch(e) {
     console.error(e);

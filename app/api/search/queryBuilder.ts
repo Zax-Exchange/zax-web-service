@@ -55,6 +55,11 @@ export default class QueryBuilder {
             match: {
               materials: userInput
             }
+          },
+          {
+            match: {
+              deleted: false
+            }
           }
         ],
         filter     

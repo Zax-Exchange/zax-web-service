@@ -115,6 +115,13 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
 
   static initModel(sequelize: Sequelize.Sequelize): typeof companies {
     return sequelize.define('companies', {
+    id: {
+      autoIncrement: true,
+      autoIncrementIdentity: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
     name: {
       type: DataTypes.STRING(255),
       allowNull: false,
@@ -163,13 +170,6 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
     companyUrl: {
       type: DataTypes.STRING(255),
       allowNull: true
-    },
-    id: {
-      autoIncrement: true,
-      autoIncrementIdentity: true,
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
     }
   }, {
     tableName: 'companies',

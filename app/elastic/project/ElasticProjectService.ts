@@ -14,6 +14,7 @@ export default class ElasticProjectService {
     } = data
 
     try {
+      // await elasticClient.indices.delete({ index: "project" });
       const exist = await elasticClient.indices.exists({ index: "project" });
       
      
@@ -27,7 +28,8 @@ export default class ElasticProjectService {
               deliveryCountry: { type: "text" },
               deliveryCity: { type: "text"},
               budget: { type: "integer" },
-              materials: { type: "text" }
+              materials: { type: "text" },
+              deleted: { type: "boolean" }
             },
           }
         });
@@ -40,7 +42,8 @@ export default class ElasticProjectService {
           deliveryCity,
           deliveryDate,
           budget,
-          materials
+          materials,
+          deleted: false
         },
         refresh: true
       })
@@ -68,6 +71,16 @@ export default class ElasticProjectService {
         deliveryDate,
         budget,
         materials
+      },
+    }).catch(e => console.error(e));
+  }
+
+  static async deleteProjectDocument(id: number) {
+    await elasticClient.update({
+      index: "project",
+      id: id.toString(),
+      doc: {
+        deleted: true
       },
     }).catch(e => console.error(e));
   }
