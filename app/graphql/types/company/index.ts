@@ -90,9 +90,9 @@ const company = gql`
   type CompanyDetail {
     id: String!
     name: String!
-    logo: String!
+    logo: String
     phone: String!
-    fax: String!
+    fax: String
     creditCardNumber: String!
     creditCardExp: String!
     creditCardCvv: String!
@@ -101,6 +101,12 @@ const company = gql`
     isVendor: Boolean!
     isVerified: Boolean!
     companyUrl: String
+
+    locations: [String]
+    materials: [String]
+    moq: String
+    leadTime: Int
+
     createdAt: String!
     updatedAt: String!
   }
@@ -186,8 +192,6 @@ const company = gql`
     creditCardCvv: String
     country: String
     companyUrl: String
-    isActive: Boolean
-    isVerified: Boolean
     leadTime: Int
     moq: String
     locations: [String]
@@ -209,8 +213,6 @@ const company = gql`
     creditCardCvv: String
     country: String
     companyUrl: String
-    isActive: Boolean
-    isVerified: Boolean
   }
 
   input UpdateCompanyPlanInput {

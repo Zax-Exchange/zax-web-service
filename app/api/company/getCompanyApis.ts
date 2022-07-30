@@ -7,11 +7,24 @@ import CompanyApiUtils from "../utils/companyUtils";
 import UserApiUtils from "../utils/userUtils";
 import { companiesAttributes } from "../models/companies";
 
-// should only be called with user within the company
-const getCompanyDetail = async (id: string): Promise<companiesAttributes> => {
-  return Promise.reject(new Error("test"))
+// should only be called with user admin within the company
+const getCompanyDetail = async (id: string): Promise<commonCompanyTypes.VendorDetail | commonCompanyTypes.CustomerDetail> => {
   try {
-    return await CompanyApiUtils.getCompanyWithCompanyId(id);
+    const company = await CompanyApiUtils.getCompanyWithCompanyId(id);
+    
+    if (company.isVendor) {
+      const vendor = await CompanyApiUtils.getVendorWithCompanyId(id);
+      return {
+        ...company,
+        ...vendor
+      }
+    } else {
+      const customer = await CompanyApiUtils.getCustomerWithCompanyId(id);
+      return {
+        ...company,
+        ...customer
+      }
+    }
   } catch(e) {
     return Promise.reject(e);
   }
@@ -23,7 +36,7 @@ try {
     const company = await CompanyApiUtils.getCompanyWithCompanyId(companyId);
     const vendor = await CompanyApiUtils.getVendorWithCompanyId(companyId);
     const { moq, locations, materials, leadTime } = vendor;
-    const { id, name, logo, phone, fax, country, isActive, isVendor, isVerified, companyUrl, createdAt, updatedAt } = company;
+    const { id, name, logo, phone, fax, country, isActive, isVerified, companyUrl } = company;
     const res = {
       id, 
       name, 
@@ -31,7 +44,6 @@ try {
       country,
       phone, 
       fax, 
-      isVendor, 
       isVerified, 
       isActive,
       leadTime, 
@@ -59,6 +71,7 @@ try {
       country,
       phone, 
       fax, 
+
       isVerified, 
       isActive,
       companyUrl,

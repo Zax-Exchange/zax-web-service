@@ -45,11 +45,14 @@ export default class ElasticCompanyService {
   static async updateVendorDocument(data: companyTypes.VendorDocument) {
     try {
       const { id, moq, locations, leadTime, materials } = data;
+      const moqMin = moq.split("-")[0];
+      const moqMax = moq.split("-")[1];
       await elasticClient.update({
         index: "vendor",
         id,
         doc: {
-          moq,
+          moqMin,
+          moqMax,
           locations,
           leadTime,
           materials

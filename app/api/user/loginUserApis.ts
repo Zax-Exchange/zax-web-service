@@ -19,7 +19,11 @@ const login = async (data: UserLoginInput): Promise<LoggedInUser> => {
       const token = jwt.sign(
         {
           id: user.id,
-          email: user.email
+          companyId: user.companyId,
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin,
+          isVendor: user.isVendor,
         },
         process.env.USER_SESSION_TOKEN_SECRET!,
         {

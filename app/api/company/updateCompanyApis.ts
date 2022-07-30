@@ -6,47 +6,52 @@ import CompanyApiUtils from "../utils/companyUtils";
 import { getPlanWithPlanId } from "../plan/getPlanApis";
 import { Transaction } from "sequelize/types";
 import UserApiUtils from "../utils/userUtils";
+import ElasticCompanyService from "../../elastic/company/ElasticCompanyService";
 
 const updateVendor = async (data: updateCompanyTypes.UpdateVendorInput) => {
   const companies = sequelize.models.companies;
   const vendors = sequelize.models.vendors;
-  const id = data.id;
-
-  const { name, logo, phone, fax, creditCardNumber, creditCardCvv, creditCardExp, companyUrl, country, isActive, isVerified } = data.data
-  const { leadTime, moq, locations, materials } = data.data;
+  
   try {
-    const transaction = await sequelize.transaction();
+    const id = data.id;
+    const { name, logo, phone, fax, creditCardNumber, creditCardCvv, creditCardExp, companyUrl, country } = data.data
+    const { leadTime, moq, locations, materials } = data.data;
 
-    await companies.update({ 
-      name, 
-      logo, 
-      phone, 
-      fax, 
-      creditCardNumber, 
-      creditCardCvv, 
-      creditCardExp, 
-      companyUrl, 
-      country, 
-      isActive, 
-      isVerified 
-    }, {
-      where: {
-        id
-      },
-      transaction
-    });
 
-    await vendors.update({
-      leadTime, 
-      moq, 
-      locations, 
-      materials
-    }, {
-      where: {
-        companyId: id
-      },
-      transaction
-    });
+    await sequelize.transaction(async transaction => {
+      await companies.update({ 
+        name, 
+        logo, 
+        phone, 
+        fax, 
+        creditCardNumber, 
+        creditCardCvv, 
+        creditCardExp, 
+        companyUrl, 
+        country
+      }, {
+        where: {
+          id
+        },
+        transaction
+      });
+  
+      await vendors.update({
+        leadTime, 
+        moq, 
+        locations, 
+        materials
+      }, {
+        where: {
+          companyId: id
+        },
+        transaction
+      });
+    })
+    
+    if (leadTime && moq && locations && materials) {
+      ElasticCompanyService.updateVendorDocument({ id, leadTime, moq, locations, materials })
+    }
     return Promise.resolve(true);
   } catch(e) {
     return Promise.reject(e);

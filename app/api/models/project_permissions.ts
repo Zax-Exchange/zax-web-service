@@ -72,7 +72,6 @@ export class project_permissions extends Model<project_permissionsAttributes, pr
     schema: 'public',
     hasTrigger: true,
     timestamps: true,
-    paranoid: true,
     indexes: [
       {
         name: "project_viewers_pkey",
