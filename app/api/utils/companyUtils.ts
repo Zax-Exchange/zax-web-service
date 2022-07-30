@@ -11,13 +11,15 @@ import jwt from "jsonwebtoken";
 class CompanyApiUtils {
   static async getCompanyPlan(companyId: number): Promise<commonPlanTypes.CompanyPlan> {
     const company_plans = sequelize.models.company_plans;
-    const plan = await company_plans.findOne({
-      where: {
-        companyId
-      }
-    }).then(p => p?.get({ plain:true }));
-    
-    return plan;
+    try {
+      return await company_plans.findOne({
+        where: {
+          companyId
+        }
+      }).then(p => p?.get({ plain:true }));
+    } catch (e) {
+      return Promise.reject(e);
+    }
   }
 
   // TODO: should charge card with $1.00 first to see if card is valid
@@ -40,7 +42,7 @@ class CompanyApiUtils {
       const res = [];
       for (let id of ids) {
         const comp = await CompanyApiUtils.getCompanyWithCompanyId(id);
-        res.push(comp);
+        if (comp) res.push(comp);
       }
       return res;
     } catch(e) {

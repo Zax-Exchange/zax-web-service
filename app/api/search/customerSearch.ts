@@ -18,6 +18,7 @@ const searchVendorCompanies = async(data: companyTypes.SearchVendorInput): Promi
       ids.push(parseInt(comp._id, 10));
     }
     const companies = await CompanyApiUtils.getCompanyByIds(ids);
+
     for (let company of companies) {
       const vendor = await CompanyApiUtils.getVendorWithCompanyId(company.id);
       res.push({

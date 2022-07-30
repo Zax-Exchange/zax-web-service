@@ -20,6 +20,7 @@ import {
   updateVendor,
   updateCompanyPlan
 } from "./company/updateCompany";
+import { inviteUser } from "./user/invite/inviteUsers";
 
 export default {
   createUser,
@@ -37,5 +38,6 @@ export default {
   deleteProjectBidPermissions,
   updateCustomer,
   updateVendor,
-  updateCompanyPlan
+  updateCompanyPlan,
+  inviteUser
 };

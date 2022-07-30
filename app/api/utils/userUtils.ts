@@ -1,8 +1,18 @@
 
 import * as enums from "../types/common/enums";
 import sequelize from "../../postgres/dbconnection";
+import { users } from "../models/users";
 
 class UserApiUtils {
+
+  static async getUserWithUserId(id: number): Promise<users> {
+    const users = sequelize.models.users;
+    try {
+      return await users.findByPk(id).then(u => u?.get({ plain: true }));
+    } catch(e) {
+      return Promise.reject(e);
+    }
+  }
   static async isUserFirstInCompany(companyId: number): Promise<boolean> {
     const users = sequelize.models.users;
     try {
@@ -34,9 +44,16 @@ class UserApiUtils {
   static async isUserAdmin(id: number): Promise<boolean> {
     const users = sequelize.models.users;
     try {
-      return await users.findOne({
-        where: { id }
-      }).then(u => u?.get("isAdmin") as boolean);
+      return await users.findByPk(id).then(u => u?.get("isAdmin") as boolean);
+    } catch(e) {
+      return Promise.reject(e);
+    }
+  }
+
+  static async getUserCompanyId(id: number): Promise<number> {
+    const users = sequelize.models.users;
+    try {
+      return await users.findByPk(id).then(u => u?.get("companyId") as number);
     } catch(e) {
       return Promise.reject(e);
     }

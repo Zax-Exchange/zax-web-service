@@ -5,7 +5,7 @@ import { google } from "googleapis";
 
 class EmailService {
   transporter?: nodemailer.Transporter;
-
+  
   constructor() {
     this.init();
   }
@@ -50,4 +50,6 @@ class EmailService {
 
 }
 
-export default EmailService;
+const emailService = new EmailService();
+
+export default emailService;

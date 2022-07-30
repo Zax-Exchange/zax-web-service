@@ -9,8 +9,6 @@ import jwt from "jsonwebtoken";
 
 const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise<boolean> => {
   const { name, logo, phone, fax, creditCardNumber, creditCardCvv, creditCardExp, country, isActive, isVendor, isVerified, leadTime, companyUrl, planId, locations, moq, materials, userEmail} = data;
-  const emailService = new EmailService();
-
 
   const companies = sequelize.models.companies;
   const company_plans = sequelize.models.company_plans;
@@ -72,7 +70,7 @@ const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise
          `
       }
 
-      await emailService.sendMail(options);
+      await EmailService.sendMail(options);
     });
     return Promise.resolve(true);
   } catch(e) {
@@ -82,7 +80,6 @@ const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise
 
 const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Promise<boolean> => {
   const { name, logo, phone, fax, creditCardNumber, creditCardCvv, creditCardExp, country, isActive, isVendor, isVerified, companyUrl, planId, userEmail} = data;
-  const emailService = new EmailService();
 
   const companies = sequelize.models.companies;
   const company_plans = sequelize.models.company_plans;
@@ -131,7 +128,7 @@ const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Pro
          `
       }
 
-      await emailService.sendMail(options);
+      await EmailService.sendMail(options);
     });
     return Promise.resolve(true);
   } catch(e) {
