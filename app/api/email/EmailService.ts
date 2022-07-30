@@ -43,8 +43,9 @@ class EmailService {
   async sendMail(options: Options) {
     try {
       await this.transporter?.sendMail(options);
+      return true;
     } catch(e) {
-      throw new Error("Failed to send email");
+      return Promise.reject(e)
     }
   }
 

@@ -18,7 +18,7 @@ const startServer = async() => {
   
   
   try {
-    await sequelize.sync({ alter: true }).then(() => console.log("db initialized@"))
+    await sequelize.sync().then(() => console.log("db initialized@"))
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
   } catch (error) {
@@ -33,13 +33,13 @@ const startServer = async() => {
 
   await server.start();
   server.applyMiddleware({app, cors: {
-    origin: ["http://localhost:4001", "https://studio.apollographql.com"]
+    origin: ["http://localhost:3000", "https://studio.apollographql.com"]
   }});
 
   app.listen({port: 4000}, () => {
     console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
   });
-};
+}; 
 
 startServer()
 export default startServer;
