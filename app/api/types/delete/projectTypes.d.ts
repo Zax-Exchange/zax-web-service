@@ -1,31 +1,31 @@
 export interface DeleteProjectInput {
-  projectId: number;
-  userId: number;
+  projectId: string;
+  userId: string;
 }
 
 export interface DeleteProjectComponentsInput {
-  projectComponentIds: number[];
-  projectId: number;
-  userId: number
+  projectComponentIds: string[];
+  projectId: string;
+  userId: string
 }
 
 export interface DeleteProjectBidInput {
-  projectBidId: number;
-  userId: number;
+  projectBidId: string;
+  userId: string;
 }
 
 export interface DeleteProjectBidComponentsInput {
-  projectBidComponentIds: number[];
-  projectBidId: number;
-  userId: number;
+  projectBidComponentIds: string[];
+  projectBidId: string;
+  userId: string;
 }
 
 export interface DeleteProjectPermissionsInput {
-  userIds: number[];
-  projectId: number;
+  userIds: string[];
+  projectId: string;
 }
 
 export interface DeleteProjectBidPermissionsInput {
-  userIds: number[];
-  projectBidId: number;
+  userIds: string[];
+  projectBidId: string;
 }

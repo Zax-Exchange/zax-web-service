@@ -5,7 +5,7 @@ import { users } from "../models/users";
 
 class UserApiUtils {
 
-  static async getUserWithUserId(id: number): Promise<users> {
+  static async getUserWithUserId(id: string): Promise<users> {
     const users = sequelize.models.users;
     try {
       return await users.findByPk(id).then(u => u?.get({ plain: true }));
@@ -13,7 +13,7 @@ class UserApiUtils {
       return Promise.reject(e);
     }
   }
-  static async isUserFirstInCompany(companyId: number): Promise<boolean> {
+  static async isUserFirstInCompany(companyId: string): Promise<boolean> {
     const users = sequelize.models.users;
     try {
       const foundUsers = await users.findAll({
@@ -28,7 +28,7 @@ class UserApiUtils {
     }
   }
 
-  static async isVendorWithUserId (id: number): Promise<boolean> {
+  static async isVendorWithUserId (id: string): Promise<boolean> {
     const users = sequelize.models.users;
     try {
       const user = await users.findOne({
@@ -41,7 +41,7 @@ class UserApiUtils {
     }
   }
 
-  static async isUserAdmin(id: number): Promise<boolean> {
+  static async isUserAdmin(id: string): Promise<boolean> {
     const users = sequelize.models.users;
     try {
       return await users.findByPk(id).then(u => u?.get("isAdmin") as boolean);
@@ -50,10 +50,10 @@ class UserApiUtils {
     }
   }
 
-  static async getUserCompanyId(id: number): Promise<number> {
+  static async getUserCompanyId(id: string): Promise<string> {
     const users = sequelize.models.users;
     try {
-      return await users.findByPk(id).then(u => u?.get("companyId") as number);
+      return await users.findByPk(id).then(u => u?.get("companyId") as string);
     } catch(e) {
       return Promise.reject(e);
     }

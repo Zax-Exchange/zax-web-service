@@ -6,6 +6,7 @@ import CompanyApiUtils from "../utils/companyUtils";
 import ElasticCompanyService from "../../elastic/company/ElasticCompanyService";
 import EmailService from "../email/EmailService";
 import jwt from "jsonwebtoken";
+import { v4 as uuidv4 } from 'uuid';
 
 const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise<boolean> => {
   const { name, logo, phone, fax, creditCardNumber, creditCardCvv, creditCardExp, country, isActive, isVendor, isVerified, leadTime, companyUrl, planId, locations, moq, materials, userEmail} = data;
@@ -19,6 +20,7 @@ const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise
       await CompanyApiUtils.checkCreditCardValidity(creditCardNumber, creditCardCvv, creditCardExp);
       
       const companyId = await companies.create({
+        id: uuidv4(),
         name,
         logo,
         phone,
@@ -36,6 +38,7 @@ const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise
       const plan = await getPlanWithPlanId(planId, transaction);
 
       await vendors.create({
+        id: uuidv4(),
         companyId,
         leadTime,
         locations, 
@@ -44,6 +47,7 @@ const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise
       }, {transaction});
 
       await company_plans.create({
+        id: uuidv4(),
         companyId,
         planId,
         remainingQuota: plan.licensedUsers
@@ -90,6 +94,7 @@ const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Pro
       await CompanyApiUtils.checkCreditCardValidity(creditCardNumber, creditCardCvv, creditCardExp);
       
       const companyId = await companies.create({
+        id: uuidv4(),
         name,
         logo,
         phone,
@@ -107,10 +112,12 @@ const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Pro
       const plan = await getPlanWithPlanId(planId, transaction);
 
       await customers.create({
+        id: uuidv4(),
         companyId
       }, {transaction});
 
       await company_plans.create({
+        id: uuidv4(),
         companyId,
         planId,
         remainingQuota: plan.licensedUsers
@@ -132,6 +139,7 @@ const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Pro
     });
     return Promise.resolve(true);
   } catch(e) {
+    console.error(e)
     return Promise.reject(e);
   }
 };

@@ -5,29 +5,20 @@ import * as commonPlanTyes from "../types/common/planTypes";
 import { getPlanWithPlanId } from "../plan/getPlanApis";
 import CompanyApiUtils from "../utils/companyUtils";
 import UserApiUtils from "../utils/userUtils";
+import { companiesAttributes } from "../models/companies";
 
 // should only be called with user within the company
-// const getPermissionedCompany = async (data: getCompanyTypes.GetPermissionedCompanyInput): Promise<commonCompanyTypes.PermissionedCompany> => {
-//   const { companyId, userId } = data;
-
-//   try {
-//     const company = await CompanyApiUtils.getCompanyWithCompanyId(companyId);
-//     const companyPlan = await CompanyApiUtils.getCompanyPlan(companyId);
-//     const isAdmin = await UserApiUtils.isUserAdmin(userId);
-
-//     const res = {
-//       ...company,
-//       planInfo: companyPlan,
-//       isAdmin
-//     };
-//     return res;
-//   } catch(e) {
-//     return Promise.reject(e);
-//   }
-// };
+const getCompanyDetail = async (id: string): Promise<companiesAttributes> => {
+  return Promise.reject(new Error("test"))
+  try {
+    return await CompanyApiUtils.getCompanyWithCompanyId(id);
+  } catch(e) {
+    return Promise.reject(e);
+  }
+};
 
 // company public view
-const getVendorDetail = async (companyId: number): Promise<commonCompanyTypes.VendorDetail> => {
+const getVendorDetail = async (companyId: string): Promise<commonCompanyTypes.VendorDetail> => {
 try {
     const company = await CompanyApiUtils.getCompanyWithCompanyId(companyId);
     const vendor = await CompanyApiUtils.getVendorWithCompanyId(companyId);
@@ -55,7 +46,7 @@ try {
   }
 };
 
-const getCustomerDetail = async (companyId: number): Promise<commonCompanyTypes.CustomerDetail> => {
+const getCustomerDetail = async (companyId: string): Promise<commonCompanyTypes.CustomerDetail> => {
 try {
     const company = await CompanyApiUtils.getCompanyWithCompanyId(companyId);
     const customer = await CompanyApiUtils.getCustomerWithCompanyId(companyId);
@@ -80,6 +71,7 @@ try {
 
 
 export {
+  getCompanyDetail,
   getCustomerDetail,
   getVendorDetail
 }

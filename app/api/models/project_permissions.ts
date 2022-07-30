@@ -4,9 +4,9 @@ import type { projects, projectsId } from './projects';
 import type { users, usersId } from './users';
 
 export interface project_permissionsAttributes {
-  id: number;
-  userId: number;
-  projectId: number;
+  id: string;
+  userId: string;
+  projectId: string;
   createdAt: Date;
   updatedAt: Date;
   permission: string;
@@ -18,9 +18,9 @@ export type project_permissionsOptionalAttributes = "createdAt" | "updatedAt";
 export type project_permissionsCreationAttributes = Optional<project_permissionsAttributes, project_permissionsOptionalAttributes>;
 
 export class project_permissions extends Model<project_permissionsAttributes, project_permissionsCreationAttributes> implements project_permissionsAttributes {
-  id!: number;
-  userId!: number;
-  projectId!: number;
+  id!: string;
+  userId!: string;
+  projectId!: string;
   createdAt!: Date;
   updatedAt!: Date;
   permission!: string;
@@ -39,14 +39,12 @@ export class project_permissions extends Model<project_permissionsAttributes, pr
   static initModel(sequelize: Sequelize.Sequelize): typeof project_permissions {
     return sequelize.define('project_permissions', {
     id: {
-      autoIncrement: true,
-      autoIncrementIdentity: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'users',
@@ -56,7 +54,7 @@ export class project_permissions extends Model<project_permissionsAttributes, pr
       onDelete: 'cascade'
     },
     projectId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'projects',

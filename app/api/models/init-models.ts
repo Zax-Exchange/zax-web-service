@@ -104,7 +104,7 @@ export function initModels(sequelize: Sequelize) {
   companies.hasMany(users, { as: "users", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   vendors.belongsTo(companies, { as: "company", foreignKey: "companyId"});
   companies.hasMany(vendors, { as: "vendors", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
-  company_plans.belongsTo(plans, { as: "plan", foreignKey: "planId"});
+  company_plans.belongsTo(plans, { as: "plan", foreignKey: "planId", hooks: true, onDelete: "CASCADE"});
   plans.hasMany(company_plans, { as: "company_plans", foreignKey: "planId", hooks: true, onDelete: "CASCADE"});
   project_bid_components.belongsTo(project_bids, { as: "projectBid", foreignKey: "projectBidId"});
   project_bids.hasMany(project_bid_components, { as: "project_bid_components", foreignKey: "projectBidId", hooks: true, onDelete: "CASCADE"});

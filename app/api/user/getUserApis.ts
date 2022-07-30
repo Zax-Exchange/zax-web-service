@@ -5,7 +5,7 @@ import UserApiUtils from "../utils/userUtils";
 
 
 // returns a list of users with user power
-const getAllUsersWithinCompany = async(companyId: number): Promise<userTypes.User[]> => {
+const getAllUsersWithinCompany = async(companyId: string): Promise<userTypes.User[]> => {
   const companies = sequelize.models.companies;
   try {
     const userList: any = await companies.findByPk(companyId).then(async comp => {
@@ -19,7 +19,7 @@ const getAllUsersWithinCompany = async(companyId: number): Promise<userTypes.Use
   }
 };
 
-const getUserWithUserId = async(id: number): Promise<userTypes.User> => {
+const getUserWithUserId = async(id: string): Promise<userTypes.User> => {
   const users = sequelize.models.users;
   try {
     const user = await users.findByPk(id).then(u => u?.get({ plain:true }));

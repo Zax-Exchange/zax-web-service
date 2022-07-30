@@ -4,9 +4,9 @@ import type { project_bids, project_bidsId } from './project_bids';
 import type { users, usersId } from './users';
 
 export interface project_bid_permissionsAttributes {
-  id: number;
-  projectBidId: number;
-  userId: number;
+  id: string;
+  projectBidId: string;
+  userId: string;
   createdAt: Date;
   updatedAt: Date;
   permission: string;
@@ -18,9 +18,9 @@ export type project_bid_permissionsOptionalAttributes = "createdAt" | "updatedAt
 export type project_bid_permissionsCreationAttributes = Optional<project_bid_permissionsAttributes, project_bid_permissionsOptionalAttributes>;
 
 export class project_bid_permissions extends Model<project_bid_permissionsAttributes, project_bid_permissionsCreationAttributes> implements project_bid_permissionsAttributes {
-  id!: number;
-  projectBidId!: number;
-  userId!: number;
+  id!: string;
+  projectBidId!: string;
+  userId!: string;
   createdAt!: Date;
   updatedAt!: Date;
   permission!: string;
@@ -39,14 +39,12 @@ export class project_bid_permissions extends Model<project_bid_permissionsAttrib
   static initModel(sequelize: Sequelize.Sequelize): typeof project_bid_permissions {
     return sequelize.define('project_bid_permissions', {
     id: {
-      autoIncrement: true,
-      autoIncrementIdentity: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true
     },
     projectBidId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'project_bids',
@@ -56,7 +54,7 @@ export class project_bid_permissions extends Model<project_bid_permissionsAttrib
       onDelete: 'cascade'
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'users',

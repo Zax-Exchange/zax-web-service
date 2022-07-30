@@ -2,8 +2,8 @@ import { gql } from "apollo-server-express";
 
 const project = gql`
   type ProjectOverview {
-    id: Int!
-    companyId: Int!
+    id: String!
+    companyId: String!
     name: String!
     deliveryDate: String!
     deliveryCountry: String!
@@ -14,9 +14,9 @@ const project = gql`
   }
 
   type Project {
-    id: Int!
-    userId: Int!
-    companyId: Int!
+    id: String!
+    userId: String!
+    companyId: String!
     name: String!
     deliveryDate: String!
     deliveryCountry: String!
@@ -30,9 +30,9 @@ const project = gql`
   }
 
   type VendorProject {
-    id: Int!
-    userId: Int!
-    companyId: Int!
+    id: String!
+    userId: String!
+    companyId: String!
     name: String!
     deliveryDate: String!
     deliveryCountry: String!
@@ -48,9 +48,9 @@ const project = gql`
   }
 
   type CustomerProject {
-    id: Int!
-    userId: Int!
-    companyId: Int!
+    id: String!
+    userId: String!
+    companyId: String!
     name: String!
     deliveryDate: String!
     deliveryCountry: String!
@@ -66,10 +66,10 @@ const project = gql`
   }
 
   type PermissionedProjectBid {
-    id: Int!
-    userId: Int!
-    projectId: Int!
-    companyId: Int!
+    id: String!
+    userId: String!
+    projectId: String!
+    companyId: String!
     components: [ProjectBidComponent!]!
     permission: String!
     createdAt: String!
@@ -77,8 +77,8 @@ const project = gql`
   }
 
   type ProjectComponent {
-    id: Int!
-    projectId: Int!
+    id: String!
+    projectId: String!
     name: String!
     materials: [String!]!
     dimension: String!
@@ -88,10 +88,10 @@ const project = gql`
   }
 
   type ProjectBid {
-    id: Int!
-    userId: Int!
-    companyId: Int!
-    projectId: Int!
+    id: String!
+    userId: String!
+    companyId: String!
+    projectId: String!
     comments: String!
     project: Project!
     components: [ProjectBidComponent!]!
@@ -100,16 +100,16 @@ const project = gql`
   }
 
   type ProjectBidComponent {
-    id: Int!
-    projectBidId: Int!
-    projectComponentId: Int!
+    id: String!
+    projectBidId: String!
+    projectComponentId: String!
     quantityPrices: [QuantityPrice!]!
     createdAt: String!
     updatedAt: String!
   }
 
   type UserPermission {
-    userId: Int!
+    userId: String!
     email: String!
     name: String!
     permission: String!
@@ -127,7 +127,7 @@ const project = gql`
   }
 
   input CreateProjectInput {
-    userId: Int!
+    userId: String!
     name: String!
     deliveryDate: String!
     deliveryCountry: String!
@@ -144,19 +144,19 @@ const project = gql`
   }
 
   input CreateProjectBidInput {
-    userId: Int!
-    projectId: Int!
+    userId: String!
+    projectId: String!
     comments: String!
     components: [CreateProjectBidComponentInput!]!
   }
 
   input CreateProjectBidComponentInput {
-    projectComponentId: Int!
+    projectComponentId: String!
     quantityPrices: [QuantityPriceInput!]!
   }
 
   input UpdateProjectInput {
-    id: Int!
+    id: String!
     name: String!
     deliveryDate: String!
     deliveryCountry: String!
@@ -167,7 +167,7 @@ const project = gql`
   }
 
   input UpdateProjectComponentInput {
-    id: Int!
+    id: String!
     name: String!
     materials: [String!]!
     dimension: String!
@@ -175,13 +175,13 @@ const project = gql`
   }
 
   input UpdateProjectBidInput {
-    id: Int!
+    id: String!
     comments: String!
     components: [UpdateProjectBidComponentInput!]!
   }
 
   input UpdateProjectBidComponentInput {
-    id: Int!
+    id: String!
     quantityPrices: [QuantityPriceInput!]!
   }
 
@@ -191,8 +191,8 @@ const project = gql`
   }
 
   input UpdateProjectPermissionsInputData {
-    userIds: [Int]!
-    projectId: Int!
+    userIds: [String]!
+    projectId: String!
     permission: String!
   }
 
@@ -202,24 +202,24 @@ const project = gql`
   }
 
   input UpdateProjectBidPermissionsInputData {
-    userIds: [Int]!
-    projectBidId: Int!
+    userIds: [String]!
+    projectBidId: String!
     permission: String!
   }
 
   input GetProjectInput {
-    userId: Int!
-    projectId: Int!
+    userId: String!
+    projectId: String!
   }
 
   input GetProjectBidInput {
-    userId: Int!
-    projectBidId: Int!
+    userId: String!
+    projectBidId: String!
   }
 
   input DeleteProjectInput {
-    userId: Int!
-    projectId: Int!
+    userId: String!
+    projectId: String!
   }
 
   input SearchProjectInput {
@@ -231,13 +231,13 @@ const project = gql`
   }
 
   input DeleteProjectPermissionsInput {
-    userIds: [Int!]!
-    projectId: Int!
+    userIds: [String!]!
+    projectId: String!
   }
 
   input DeleteProjectBidPermissionsInput {
-    userIds: [Int!]!
-    projectBidId: Int!
+    userIds: [String!]!
+    projectBidId: String!
   }
 `;
 

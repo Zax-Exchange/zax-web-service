@@ -2,7 +2,7 @@ import EmailService from "../email/EmailService"
 import CompanyApiUtils from "../utils/companyUtils"
 import UserApiUtils from "../utils/userUtils"
 
-const inviteUser = async (email: string, userId: number): Promise<Boolean> => {
+const inviteUser = async (email: string, userId: string): Promise<Boolean> => {
   try {
     const user = await UserApiUtils.getUserWithUserId(userId);
     const encryptedCompanyId = await CompanyApiUtils.encryptCompanyId(user.companyId);

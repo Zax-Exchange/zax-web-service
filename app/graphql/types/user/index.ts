@@ -2,19 +2,19 @@ import { gql } from "apollo-server-express";
 
 const user = gql`
   type User {
-    id: Int!
+    id: String!
     name: String!
     email: String!
-    companyId: Int!
+    companyId: String!
     isVendor: Boolean!
     isAdmin: Boolean!
   }
 
   type LoggedInUser {
-    id: Int!
+    id: String!
     name: String!
     email: String!
-    companyId: Int!
+    companyId: String!
     isVendor: Boolean!
     isAdmin: Boolean!
     token: String!
@@ -24,19 +24,19 @@ const user = gql`
     name: String!
     email: String!
     password: String!
-    companyId: Int!
+    companyId: String!
   }
 
   input UpdateUserInput {
-    id: Int!
+    id: String!
     name: String
     email: String
     password: String
   }
 
   input UpdateUserPower {
-    id: Int
-    isAdmin: Boolean
+    id: String!
+    isAdmin: Boolean!
   }
 
   input UserLoginInput {

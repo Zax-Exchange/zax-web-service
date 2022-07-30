@@ -12,10 +12,10 @@ const searchVendorCompanies = async(data: companyTypes.SearchVendorInput): Promi
     const query = QueryBuilder.buildVendorCompanySearchQuery(data);
     const companyDocs = await ElasticCompanyService.searchVendorDocuments(query);
     const res: companyTypes.VendorOverview[] = [];
-    const ids: number[] = [];
+    const ids: string[] = [];
 
     for (let comp of companyDocs) {
-      ids.push(parseInt(comp._id, 10));
+      ids.push(comp._id);
     }
     const companies = await CompanyApiUtils.getCompanyByIds(ids);
 

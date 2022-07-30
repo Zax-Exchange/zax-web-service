@@ -1,4 +1,4 @@
 export interface UpdateCompanyPlanInput {
-  companyId: number;
-  planId: number;
+  companyId: string;
+  planId: string;
 }

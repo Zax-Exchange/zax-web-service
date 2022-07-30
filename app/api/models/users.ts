@@ -7,8 +7,8 @@ import type { project_permissions, project_permissionsId } from './project_permi
 import type { projects, projectsId } from './projects';
 
 export interface usersAttributes {
-  id: number;
-  companyId: number;
+  id: string;
+  companyId: string;
   name: string;
   email: string;
   password: string;
@@ -25,8 +25,8 @@ export type usersOptionalAttributes = "createdAt" | "updatedAt" | "isActive";
 export type usersCreationAttributes = Optional<usersAttributes, usersOptionalAttributes>;
 
 export class users extends Model<usersAttributes, usersCreationAttributes> implements usersAttributes {
-  id!: number;
-  companyId!: number;
+  id!: string;
+  companyId!: string;
   name!: string;
   email!: string;
   password!: string;
@@ -93,14 +93,12 @@ export class users extends Model<usersAttributes, usersCreationAttributes> imple
   static initModel(sequelize: Sequelize.Sequelize): typeof users {
     return sequelize.define('users', {
     id: {
-      autoIncrement: true,
-      autoIncrementIdentity: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true
     },
     companyId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'companies',

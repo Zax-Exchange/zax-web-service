@@ -1,4 +1,4 @@
 export interface GetPermissionedCompanyInput {
-  userId: number;
-  companyId: number;
+  userId: string;
+  companyId: string;
 }

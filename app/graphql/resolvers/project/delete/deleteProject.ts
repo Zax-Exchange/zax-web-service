@@ -5,7 +5,7 @@ import {
 } from "../../../../api/project/deleteProjectApis";
 import * as deleteProjectTypes from "../../../../api/types/delete/projectTypes";
 
-const deleteProject = (parent: any, args: Record<string, number>, context: any, info: any) => {
+const deleteProject = (parent: any, args: Record<string, string>, context: any, info: any) => {
   return deleteProjectApi(args.projectId);
 };
 

@@ -2,7 +2,7 @@ import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 
 export interface materialsAttributes {
-  id: number;
+  id: string;
   name: string;
   createdAt: Date;
   updatedAt: Date;
@@ -14,7 +14,7 @@ export type materialsOptionalAttributes = "createdAt" | "updatedAt";
 export type materialsCreationAttributes = Optional<materialsAttributes, materialsOptionalAttributes>;
 
 export class materials extends Model<materialsAttributes, materialsCreationAttributes> implements materialsAttributes {
-  id!: number;
+  id!: string;
   name!: string;
   createdAt!: Date;
   updatedAt!: Date;
@@ -23,9 +23,7 @@ export class materials extends Model<materialsAttributes, materialsCreationAttri
   static initModel(sequelize: Sequelize.Sequelize): typeof materials {
     return sequelize.define('materials', {
     id: {
-      autoIncrement: true,
-      autoIncrementIdentity: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true
     },

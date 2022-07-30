@@ -7,13 +7,13 @@ import type { projects, projectsId } from './projects';
 import type { users, usersId } from './users';
 
 export interface project_bidsAttributes {
-  id: number;
-  userId: number;
-  projectId: number;
+  id: string;
+  userId: string;
+  projectId: string;
   comments?: string;
   createdAt: Date;
   updatedAt: Date;
-  companyId: number;
+  companyId: string;
   deletedAt?: Date;
 }
 
@@ -23,13 +23,13 @@ export type project_bidsOptionalAttributes = "comments" | "createdAt" | "updated
 export type project_bidsCreationAttributes = Optional<project_bidsAttributes, project_bidsOptionalAttributes>;
 
 export class project_bids extends Model<project_bidsAttributes, project_bidsCreationAttributes> implements project_bidsAttributes {
-  id!: number;
-  userId!: number;
-  projectId!: number;
+  id!: string;
+  userId!: string;
+  projectId!: string;
   comments?: string;
   createdAt!: Date;
   updatedAt!: Date;
-  companyId!: number;
+  companyId!: string;
   deletedAt?: Date;
 
   // project_bids belongsTo companies via companyId
@@ -75,14 +75,12 @@ export class project_bids extends Model<project_bidsAttributes, project_bidsCrea
   static initModel(sequelize: Sequelize.Sequelize): typeof project_bids {
     return sequelize.define('project_bids', {
     id: {
-      autoIncrement: true,
-      autoIncrementIdentity: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'users',
@@ -90,7 +88,7 @@ export class project_bids extends Model<project_bidsAttributes, project_bidsCrea
       }
     },
     projectId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'projects',
@@ -104,7 +102,7 @@ export class project_bids extends Model<project_bidsAttributes, project_bidsCrea
       allowNull: true
     },
     companyId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'companies',

@@ -17,7 +17,7 @@ const searchCustomerProjects = async (data: projectTypes.SearchProjectInput): Pr
 
     for (let project of projectDocs) {
 
-      ids.push(parseInt(project._id, 10));
+      ids.push(project._id);
       idToMaterialsMap[project._id] = (project._source as any).materials;
     }
     const projects = await ProjectApiUtils.getProjectsByIds(ids);

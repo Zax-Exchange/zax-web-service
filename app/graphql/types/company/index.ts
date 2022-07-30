@@ -2,7 +2,7 @@ import { gql } from "apollo-server-express";
 
 const company = gql`
   type Vendor {
-    id: Int!
+    id: String!
     name: String!
     logo: String!
     phone: String!
@@ -11,7 +11,7 @@ const company = gql`
     creditCardExp: String!
     creditCardCvv: String!
     country: String!
-    planId: Int!
+    planId: String!
     isActive: Boolean!
     isVendor: Boolean!
     isVerified: Boolean!
@@ -25,7 +25,7 @@ const company = gql`
   }
 
   type Customer {
-    id: Int!
+    id: String!
     name: String!
     logo: String!
     phone: String!
@@ -34,7 +34,7 @@ const company = gql`
     creditCardExp: String!
     creditCardCvv: String!
     country: String!
-    planId: Int!
+    planId: String!
     isActive: Boolean!
     isVendor: Boolean!
     isVerified: Boolean!
@@ -44,7 +44,7 @@ const company = gql`
   }
 
   type VendorOverview {
-    id: Int!
+    id: String!
     name: String!
     logo: String
     country: String!
@@ -56,7 +56,7 @@ const company = gql`
   }
 
   type CustomerOverview {
-    id: Int!
+    id: String!
     name: String!
     logo: String
     country: String!
@@ -64,7 +64,7 @@ const company = gql`
   }
 
   type PermissionedCompany {
-    id: Int!
+    id: String!
     name: String!
     logo: String!
     phone: String!
@@ -87,8 +87,26 @@ const company = gql`
     updatedAt: String!
   }
 
+  type CompanyDetail {
+    id: String!
+    name: String!
+    logo: String!
+    phone: String!
+    fax: String!
+    creditCardNumber: String!
+    creditCardExp: String!
+    creditCardCvv: String!
+    country: String!
+    isActive: Boolean!
+    isVendor: Boolean!
+    isVerified: Boolean!
+    companyUrl: String
+    createdAt: String!
+    updatedAt: String!
+  }
+
   type VendorDetail {
-    id: Int!
+    id: String!
     name: String!
     phone: String!
     logo: String
@@ -104,7 +122,7 @@ const company = gql`
   }
 
   type CustomerDetail {
-    id: Int!
+    id: String!
     name: String!
     phone: String!
     logo: String
@@ -124,7 +142,7 @@ const company = gql`
     creditCardExp: String!
     creditCardCvv: String!
     country: String!
-    planId: Int!
+    planId: String!
     isActive: Boolean!
     isVendor: Boolean!
     isVerified: Boolean!
@@ -145,7 +163,7 @@ const company = gql`
     creditCardExp: String!
     creditCardCvv: String!
     country: String!
-    planId: Int!
+    planId: String!
     isActive: Boolean!
     isVendor: Boolean!
     isVerified: Boolean!
@@ -154,8 +172,8 @@ const company = gql`
   }
 
   input UpdateVendorInput {
-    id: Int!
-    data: UpdateVendorInputData
+    id: String!
+    data: UpdateVendorInputData!
   }
 
   input UpdateVendorInputData {
@@ -177,8 +195,8 @@ const company = gql`
   }
 
   input UpdateCustomerInput {
-    id: Int!
-    data: UpdateCustomerInputData
+    id: String!
+    data: UpdateCustomerInputData!
   }
 
   input UpdateCustomerInputData {
@@ -196,13 +214,13 @@ const company = gql`
   }
 
   input UpdateCompanyPlanInput {
-    planId: Int!
-    companyId: Int!
+    planId: String!
+    companyId: String!
   }
 
   input GetPermissionedCompanyInput {
-    companyId: Int!
-    userId: Int!
+    companyId: String!
+    userId: String!
   }
 
   input SearchCompanyInput {

@@ -1,5 +1,5 @@
 export interface VendorDocument {
-  id: number;
+  id: string;
   moq: string;
   locations: string[] | string;
   materials: string[] | string;
@@ -7,6 +7,6 @@ export interface VendorDocument {
 }
 
 export interface CustomerDocument {
-  id: number;
+  id: string;
   name: string;
 }

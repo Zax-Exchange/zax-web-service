@@ -2,7 +2,7 @@ import * as enums from "../common/enums";
 import { QuantityPrice } from "../common/projectTypes";
 
 export interface CreateProjectInput {
-  userId: number;
+  userId: string;
   name: string;
   deliveryDate: string; 
   deliveryCountry: string;
@@ -21,14 +21,14 @@ export interface CreateProjectComponentInput {
 }
 
 export interface CreateProjectBidInput {
-  userId: number;
-  projectId: number;
+  userId: string;
+  projectId: string;
   comments: string;
   components: CreateProjectBidComponentInput[];
 }
 
 export interface CreateProjectBidComponentInput {
-  projectComponentId: number;
+  projectComponentId: string;
   quantityPrices: QuantityPriceInput[];
 }
 
@@ -38,13 +38,13 @@ export interface QuantityPriceInput {
 }
 
 export interface CreateOrUpdateProjectPermissionInput {
-  userId: number;
-  projectId: number;
+  userId: string;
+  projectId: string;
   permission: enums.ProjectPermission;
 }
 
 export interface CreateOrUpdateProjectBidPermissionInput {
-  userId: number;
-  projectBidId: number;
+  userId: string;
+  projectBidId: string;
   permission: enums.ProjectPermission;
 }

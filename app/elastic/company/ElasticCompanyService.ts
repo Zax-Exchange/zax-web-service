@@ -4,7 +4,7 @@ import * as companyTypes from "../types/company";
 export default class ElasticCompanyService {
   static async createVendorDocument(data: companyTypes.VendorDocument) {
     try {
-      // await elasticClient.indices.delete({ index: "vendor" })
+      await elasticClient.indices.delete({ index: "vendor" })
       const exist = await elasticClient.indices.exists({ index: "vendor" });
 
       if (!exist) {
@@ -28,7 +28,7 @@ export default class ElasticCompanyService {
       const moqMax = moq.split("-")[1];
       await elasticClient.index({
         index: "vendor",
-        id: id.toString(),
+        id,
         document: {
           moqMin,
           moqMax,
@@ -47,7 +47,7 @@ export default class ElasticCompanyService {
       const { id, moq, locations, leadTime, materials } = data;
       await elasticClient.update({
         index: "vendor",
-        id: id.toString(),
+        id,
         doc: {
           moq,
           locations,

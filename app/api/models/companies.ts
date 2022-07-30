@@ -8,6 +8,7 @@ import type { users, usersId } from './users';
 import type { vendors, vendorsId } from './vendors';
 
 export interface companiesAttributes {
+  id: string;
   name: string;
   logo?: any;
   phone: string;
@@ -20,7 +21,6 @@ export interface companiesAttributes {
   isVendor: boolean;
   isVerified: boolean;
   companyUrl?: string;
-  id: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -31,6 +31,7 @@ export type companiesOptionalAttributes = "logo" | "fax" | "companyUrl" | "creat
 export type companiesCreationAttributes = Optional<companiesAttributes, companiesOptionalAttributes>;
 
 export class companies extends Model<companiesAttributes, companiesCreationAttributes> implements companiesAttributes {
+  id!: string;
   name!: string;
   logo?: any;
   phone!: string;
@@ -43,7 +44,6 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
   isVendor!: boolean;
   isVerified!: boolean;
   companyUrl?: string;
-  id!: number;
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -116,9 +116,7 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
   static initModel(sequelize: Sequelize.Sequelize): typeof companies {
     return sequelize.define('companies', {
     id: {
-      autoIncrement: true,
-      autoIncrementIdentity: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true
     },
@@ -128,7 +126,7 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
       unique: "companies_name_key"
     },
     logo: {
-      type: DataTypes.BLOB,
+      type: DataTypes.STRING,
       allowNull: true
     },
     phone: {

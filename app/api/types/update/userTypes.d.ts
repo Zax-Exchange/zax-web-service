@@ -1,5 +1,5 @@
 export interface UpdateUserInput {
-  id: number;
+  id: string;
   data: UpdateUserInputData
 }
 
@@ -11,8 +11,8 @@ export interface UpdateUserInputData {
 
 export interface UpdateUserPowerInput {
   // user that's updating
-  fromId: number; 
+  fromId: string; 
   // user being updated
-  targetId: number; 
+  targetId: string; 
   isAdmin: boolean;
 }

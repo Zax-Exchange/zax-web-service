@@ -1,10 +1,10 @@
 export interface UpdateVendorInput {
-  id: number;
+  id: string;
   data: UpdateVendorInputData;
 }
 
 export interface UpdateCustomerInput {
-  id: number;
+  id: string;
   data: UpdateCustomerInputData;
 }
 

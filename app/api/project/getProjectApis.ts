@@ -2,7 +2,7 @@ import * as commonProjectTypes from "../types/common/projectTypes";
 import * as enums from "../types/common/enums"
 import ProjectApiUtils from "../utils/projectUtils";
 
-const getVendorProjects = async(userId:number): Promise<commonProjectTypes.VendorProject[]> => {
+const getVendorProjects = async(userId:string): Promise<commonProjectTypes.VendorProject[]> => {
   // projectBidPermissions -> projectBidId -> projectBid -> projectId -> project
   try {
     const permissions = await ProjectApiUtils.getBidPermissions(userId);
@@ -25,7 +25,7 @@ const getVendorProjects = async(userId:number): Promise<commonProjectTypes.Vendo
 
 
 
-const getCustomerProjects = async(userId: number): Promise<commonProjectTypes.CustomerProject[]> => {
+const getCustomerProjects = async(userId: string): Promise<commonProjectTypes.CustomerProject[]> => {
   try {
     const projectPermissions = await ProjectApiUtils.getProjectPermissions(userId);
 
@@ -44,7 +44,7 @@ const getCustomerProjects = async(userId: number): Promise<commonProjectTypes.Cu
   }
 };
 
-const getProjectDetail = async(id: number): Promise<commonProjectTypes.Project> => {
+const getProjectDetail = async(id: string): Promise<commonProjectTypes.Project> => {
   try {
     return await ProjectApiUtils.getProject(id);
   } catch(e) {
@@ -52,7 +52,7 @@ const getProjectDetail = async(id: number): Promise<commonProjectTypes.Project> 
   }
 };
 
-const getProjectUsers = async(projectId: number): Promise<commonProjectTypes.UserPermission[]> => {
+const getProjectUsers = async(projectId: string): Promise<commonProjectTypes.UserPermission[]> => {
 try {
     return await ProjectApiUtils.getProjectUsers(projectId);
   } catch(e) {
@@ -60,7 +60,7 @@ try {
   }
 };
 
-const getProjectBidUsers = async(projectBidId: number): Promise<commonProjectTypes.UserPermission[]> => {
+const getProjectBidUsers = async(projectBidId: string): Promise<commonProjectTypes.UserPermission[]> => {
 try {
     return await ProjectApiUtils.getProjectBidUsers(projectBidId);
   } catch(e) {

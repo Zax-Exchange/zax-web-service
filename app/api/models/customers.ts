@@ -3,8 +3,8 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import type { companies, companiesId } from './companies';
 
 export interface customersAttributes {
-  id: number;
-  companyId: number;
+  id: string;
+  companyId: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,8 +15,8 @@ export type customersOptionalAttributes = "createdAt" | "updatedAt";
 export type customersCreationAttributes = Optional<customersAttributes, customersOptionalAttributes>;
 
 export class customers extends Model<customersAttributes, customersCreationAttributes> implements customersAttributes {
-  id!: number;
-  companyId!: number;
+  id!: string;
+  companyId!: string;
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -29,15 +29,13 @@ export class customers extends Model<customersAttributes, customersCreationAttri
   static initModel(sequelize: Sequelize.Sequelize): typeof customers {
     return sequelize.define('customers', {
     id: {
-      autoIncrement: true,
-      autoIncrementIdentity: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
       unique: "customers_id_companyId_key"
     },
     companyId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'companies',

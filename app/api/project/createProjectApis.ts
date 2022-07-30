@@ -5,7 +5,7 @@ import { Transaction } from "sequelize/types";
 import ProjectApiUtils from "../utils/projectUtils";
 import UserApiUtils from "../utils/userUtils";
 import ElasticProjectService from "../../elastic/project/ElasticProjectService";
-
+import { v4 as uuidv4} from "uuid"
 //TODO: findOrCreate product or materials when creating project
 const createProject = async(data: projectTypes.CreateProjectInput): Promise<boolean> => {
   const projects = sequelize.models.projects;
@@ -21,6 +21,7 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
       });
       const companyId = await user?.getDataValue("companyId");
       const project = await projects.create({
+        id: uuidv4(),
         userId,
         name,
         deliveryDate,
@@ -51,7 +52,7 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
   }
 };
 
-const createProjectComponents = async(projectId: number, components: projectTypes.CreateProjectComponentInput[], companyId: number, transaction: Transaction): Promise<boolean> => {
+const createProjectComponents = async(projectId: string, components: projectTypes.CreateProjectComponentInput[], companyId: number, transaction: Transaction): Promise<boolean> => {
   const project_components = sequelize.models.project_components;
   const materialsModel = sequelize.models.materials;
 
@@ -63,10 +64,14 @@ const createProjectComponents = async(projectId: number, components: projectType
           where: {
             name: material
           },
+          defaults: {
+            id: uuidv4()
+          },
           transaction
         });
       }
       await project_components.create({
+        id: uuidv4(),
         projectId,
         ...component
       }, {transaction})
@@ -90,6 +95,7 @@ const createProjectBid = async(data: projectTypes.CreateProjectBidInput): Promis
       });
       const companyId = await user?.getDataValue("companyId");
       const bid = await project_bids.create({
+        id: uuidv4(),
         userId,
         companyId,
         projectId,
@@ -107,12 +113,13 @@ const createProjectBid = async(data: projectTypes.CreateProjectBidInput): Promis
   }
 };
 
-const createProjectBidComponents = async(projectBidId: number, components: projectTypes.CreateProjectBidComponentInput[], transaction: Transaction): Promise<boolean> => {
+const createProjectBidComponents = async(projectBidId: string, components: projectTypes.CreateProjectBidComponentInput[], transaction: Transaction): Promise<boolean> => {
   const project_bid_components = sequelize.models.project_bid_components;
   try {
     for (let component of components) {
       const { projectComponentId, quantityPrices } = component;
       await project_bid_components.create({
+        id: uuidv4(),
         projectBidId,
         projectComponentId,
         quantityPrices
@@ -136,6 +143,7 @@ const createOrUpdateProjectPermission = async(data: projectTypes.CreateOrUpdateP
         projectId
       },
       defaults: {
+        id: uuidv4(),
         permission
       },
       transaction
@@ -162,6 +170,7 @@ const createOrUpdateProjectBidPermission = async(data: projectTypes.CreateOrUpda
         projectBidId
       },
       defaults: {
+        id: uuidv4(),
         permission
       },
       transaction

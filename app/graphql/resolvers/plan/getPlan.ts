@@ -4,7 +4,7 @@ import {
 } from "../../../api/plan/getPlanApis";
 
 
-const getPlanWithPlanId = (parent: any, args: Record<string, number>, context: any) => {
+const getPlanWithPlanId = (parent: any, args: Record<string, string>, context: any) => {
   return getPlanWithPlanIdApi(args.id);
 }
 

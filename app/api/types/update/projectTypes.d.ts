@@ -1,7 +1,7 @@
 import { DeleteProjectBidPermissionsInput, DeleteProjectPermissionsInput } from "../delete/projectTypes";
 
 export interface UpdateProjectInput {
-  id: number;
+  id: string;
   projectData: UpdateProjectInputData;
   componentsInput: UpdateProjectComponentsInput;
 }
@@ -21,7 +21,7 @@ export interface UpdateProjectComponentsInput {
 }
 
 export interface UpdateProjectComponentInputData {
-  id: number | undefined; //if user is creating a new component, id should be undefined
+  id: string | undefined; //if user is creating a new component, id should be undefined
   name: string;
   materials: string[];
   dimension: string;
@@ -29,13 +29,13 @@ export interface UpdateProjectComponentInputData {
 }
 
 export interface UpdateProjectBidInput {
-  id: number;
+  id: string;
   comments: string | "";
   components: UpdateProjectBidComponentInput[];
 }
 
 export interface UpdateProjectBidComponentInput {
-  id: number;
+  id: string;
   quantityPrices: QuantityPrice[];
 }
 
@@ -45,8 +45,8 @@ export interface UpdateProjectBidPermissionsInput {
 }
 
 export interface UpdateProjectBidPermissionsInputData {
-  userIds: number[];
-  projectBidId: number;
+  userIds: string[];
+  projectBidId: string;
   permission: enums.ProjectPermission;
 }
 
@@ -56,7 +56,7 @@ export interface UpdateProjectPermissionsInput {
 }
 
 export interface UpdateProjectPermissionsInputData {
-  userIds: number[];
-  projectId: number;
+  userIds: string[];
+  projectId: string;
   permission: enums.ProjectPermission;
 }

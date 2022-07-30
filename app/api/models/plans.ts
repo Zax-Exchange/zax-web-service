@@ -3,7 +3,7 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import type { company_plans, company_plansId } from './company_plans';
 
 export interface plansAttributes {
-  id: number;
+  id: string;
   name: string;
   price: number;
   createdAt: Date;
@@ -19,7 +19,7 @@ export type plansOptionalAttributes = "createdAt" | "updatedAt";
 export type plansCreationAttributes = Optional<plansAttributes, plansOptionalAttributes>;
 
 export class plans extends Model<plansAttributes, plansCreationAttributes> implements plansAttributes {
-  id!: number;
+  id!: string;
   name!: string;
   price!: number;
   createdAt!: Date;
@@ -44,9 +44,7 @@ export class plans extends Model<plansAttributes, plansCreationAttributes> imple
   static initModel(sequelize: Sequelize.Sequelize): typeof plans {
     return sequelize.define('plans', {
     id: {
-      autoIncrement: true,
-      autoIncrementIdentity: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true
     },

@@ -6,7 +6,7 @@ import ProjectUtils from "../utils/projectUtils";
 import ElasticProjectService from "../../elastic/project/ElasticProjectService";
 
 
-const deleteProject = async(id: number): Promise<boolean> => {
+const deleteProject = async(id: string): Promise<boolean> => {
   const projects = sequelize.models.projects;
 
   try {

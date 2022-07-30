@@ -8,7 +8,7 @@ const createVendor = (parents: any, args: Record<string, createCompanyTypes.Crea
   return createVendorApi(args.data);
 }
 
-const createCustomer = (parents: any, args: Record<string, createCompanyTypes.CreateCustomerInput>, context: any) => {
+const createCustomer = (parents: any, args: Record<string, createCompanyTypes.CreateCustomerInput>, context: any) => {  
   return createCustomerApi(args.data);
 }
 

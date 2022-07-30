@@ -2,7 +2,7 @@ import { gql } from "apollo-server-express";
 
 const plan = gql`
   type Plan {
-    id: Int!
+    id: String!
     name: String!
     price: Int!
     licensedUsers: Int!
@@ -11,9 +11,9 @@ const plan = gql`
   }
 
   type CompanyPlan {
-    id: Int!
-    planId: Int!
-    companyId: Int!
+    id: String!
+    planId: String!
+    companyId: String!
     remainingQuota: Int!
     description: String!
     features: [String!]!

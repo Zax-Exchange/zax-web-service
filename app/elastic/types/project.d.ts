@@ -1,5 +1,5 @@
 export interface ProjectDocument {
-  projectId: number;
+  projectId: string;
   deliveryCountry: string;
   deliveryCity: string;
   deliveryDate: string;

@@ -1,20 +1,24 @@
 import * as getCompanyTypes from "../../../api/types/get/companyTypes";
 import { 
   getVendorDetail as getVendorDetailApi,
-  getCustomerDetail as getCustomerDetailApi
+  getCustomerDetail as getCustomerDetailApi,
+  getCompanyDetail as getCompanyDetailApi
  } from "../../../api/company/getCompanyApis";
 
+const getCompanyDetail = (parent: any, args: Record<string, string>, context: any) => {
+  return getCompanyDetailApi(args.companyId);
+}
 
-
-const getVendorDetail = (parent: any, args: Record<string, number>, context: any) => {
+const getVendorDetail = (parent: any, args: Record<string, string>, context: any) => {
   return getVendorDetailApi(args.companyId);
 }
 
-const getCustomerDetail = (parent: any, args: Record<string, number>, context: any) => {
+const getCustomerDetail = (parent: any, args: Record<string, string>, context: any) => {
   return getCustomerDetailApi(args.companyId);
 }
 
 export {
+  getCompanyDetail,
   getVendorDetail,
   getCustomerDetail
 }

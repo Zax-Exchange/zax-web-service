@@ -8,8 +8,8 @@ export interface QuantityPrice {
 
 // project for public view
 export interface ProjectOverview {
-  id: number;
-  companyId: number;
+  id: string;
+  companyId: string;
   name: string;
   deliveryDate: string;
   deliveryCountry: string;
@@ -20,7 +20,7 @@ export interface ProjectOverview {
 }
 
 export interface Project extends ProjectOverview{
-  userId: number;
+  userId: string;
   design: BinaryType | null;
   status: enums.ProjectStatus;
   components: ProjectComponent[];
@@ -40,8 +40,8 @@ export interface CustomerProject extends PermissionedProject {
 }
 
 export interface ProjectComponent {
-  id: number;
-  projectId: number;
+  id: string;
+  projectId: string;
   name: string;
   materials: string[];
   dimension: string;
@@ -51,18 +51,18 @@ export interface ProjectComponent {
 }
 
 export interface ProjectBid {
-  id: number;
-  userId: number;
-  companyId: number;
-  projectId: number;
+  id: string;
+  userId: string;
+  companyId: string;
+  projectId: string;
   components: ProjectBidComponent[];
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface ProjectBidComponent {
-  id: number;
-  projectComponentId: number;
+  id: string;
+  projectComponentId: string;
   quantityPrices: QuantityPrice[];
 }
 
@@ -81,7 +81,7 @@ export interface SearchProjectInput {
 
 
 export interface UserPermission {
-  userId: number;
+  userId: string;
   email: string;
   name: string;
   permission: enums.ProjectPermission;

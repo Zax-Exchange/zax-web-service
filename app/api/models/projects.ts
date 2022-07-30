@@ -7,7 +7,7 @@ import type { project_permissions, project_permissionsId } from './project_permi
 import type { users, usersId } from './users';
 
 export interface projectsAttributes {
-  id: number;
+  id: string;
   name: string;
   deliveryDate: string;
   deliveryCountry: string;
@@ -15,9 +15,9 @@ export interface projectsAttributes {
   design?: any;
   createdAt: Date;
   updatedAt: Date;
-  userId: number;
+  userId: string;
   status: string;
-  companyId: number;
+  companyId: string;
   comments?: string;
   deliveryCity: string;
   deletedAt?: Date;
@@ -29,7 +29,7 @@ export type projectsOptionalAttributes = "design" | "createdAt" | "updatedAt" | 
 export type projectsCreationAttributes = Optional<projectsAttributes, projectsOptionalAttributes>;
 
 export class projects extends Model<projectsAttributes, projectsCreationAttributes> implements projectsAttributes {
-  id!: number;
+  id!: string;
   name!: string;
   deliveryDate!: string;
   deliveryCountry!: string;
@@ -37,9 +37,9 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
   design?: any;
   createdAt!: Date;
   updatedAt!: Date;
-  userId!: number;
+  userId!: string;
   status!: string;
-  companyId!: number;
+  companyId!: string;
   comments?: string;
   deliveryCity!: string;
   deletedAt?: Date;
@@ -94,9 +94,7 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
   static initModel(sequelize: Sequelize.Sequelize): typeof projects {
     return sequelize.define('projects', {
     id: {
-      autoIncrement: true,
-      autoIncrementIdentity: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true
     },
@@ -121,7 +119,7 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
       allowNull: true
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'users',
@@ -133,7 +131,7 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
       allowNull: false
     },
     companyId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'companies',

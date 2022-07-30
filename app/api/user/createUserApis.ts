@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import { decreaseCompanyQuota } from "../company/updateCompanyApis";
 import { Transaction } from "sequelize/types";
 import { LoggedInUser } from "../types/common/userTypes";
+import { v4 as uuidv4 } from "uuid";
 
 const createUser = async(data: userTypes.CreateUserInput): Promise<LoggedInUser> => {
   const users = sequelize.models.users;
@@ -34,6 +35,7 @@ const createUser = async(data: userTypes.CreateUserInput): Promise<LoggedInUser>
       const encrypted = await bcrypt.hash(password, 10);
 
       const user = await users.create({
+        id: uuidv4(),
         name,
         email: email.toLowerCase(),
         companyId,

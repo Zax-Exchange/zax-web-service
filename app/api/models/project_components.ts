@@ -4,8 +4,8 @@ import type { project_bid_components, project_bid_componentsId } from './project
 import type { projects, projectsId } from './projects';
 
 export interface project_componentsAttributes {
-  id: number;
-  projectId: number;
+  id: string;
+  projectId: string;
   name: string;
   materials: string[];
   dimension: string;
@@ -21,8 +21,8 @@ export type project_componentsOptionalAttributes = "createdAt" | "updatedAt" | "
 export type project_componentsCreationAttributes = Optional<project_componentsAttributes, project_componentsOptionalAttributes>;
 
 export class project_components extends Model<project_componentsAttributes, project_componentsCreationAttributes> implements project_componentsAttributes {
-  id!: number;
-  projectId!: number;
+  id!: string;
+  projectId!: string;
   name!: string;
   materials!: string[];
   dimension!: string;
@@ -52,14 +52,12 @@ export class project_components extends Model<project_componentsAttributes, proj
   static initModel(sequelize: Sequelize.Sequelize): typeof project_components {
     return sequelize.define('project_components', {
     id: {
-      autoIncrement: true,
-      autoIncrementIdentity: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true
     },
     projectId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'projects',

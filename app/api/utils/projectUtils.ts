@@ -12,13 +12,13 @@ import { projects, projectsAttributes } from "../models/projects";
 import { getUserWithUserId } from "../user/getUserApis";
 
 class ProjectApiUtils {
-  static async getBidPermissions(userId: number): Promise<project_bid_permissionsAttributes[]> {
+  static async getBidPermissions(userId: string): Promise<project_bid_permissionsAttributes[]> {
     return await sequelize.models.users.findByPk(userId).then(async (user) => {
       return await (user as users).getProject_bid_permissions().then(permissions => permissions.map(p => p.get({ plain:true })));
     });
   }
 
-  static async getProjectPermissions(userId: number): Promise<project_permissionsAttributes[]> {
+  static async getProjectPermissions(userId: string): Promise<project_permissionsAttributes[]> {
     return await sequelize.models.users.findByPk(userId).then(async (user) => {
       return await (user as users).getProject_permissions().then(permissions => permissions.map(p => p.get({ plain:true })));
     });
@@ -29,7 +29,7 @@ class ProjectApiUtils {
    * @param projectId 
    * @returns commonProjectTypes.ProjectComponent
    */
-  static async getProjectComponents(projectId:number): Promise<commonProjectTypes.ProjectComponent[]> {
+  static async getProjectComponents(projectId:string): Promise<commonProjectTypes.ProjectComponent[]> {
     const project_components = sequelize.models.project_components;
     try {
       const components = await project_components.findAll({
@@ -48,7 +48,7 @@ class ProjectApiUtils {
    * @param projectBidId 
    * @returns 
    */
-  static async getBidComponents(projectBidId: number): Promise<commonProjectTypes.ProjectBidComponent[]> {
+  static async getBidComponents(projectBidId: string): Promise<commonProjectTypes.ProjectBidComponent[]> {
     const project_bid_components = sequelize.models.project_bid_components;
 
     try {
@@ -68,7 +68,7 @@ class ProjectApiUtils {
    * @param id 
    * @returns Project
    */
-  static async getProject(id: number): Promise<commonProjectTypes.Project> {
+  static async getProject(id: string): Promise<commonProjectTypes.Project> {
     const projects = sequelize.models.projects;
 
     try {
@@ -85,7 +85,7 @@ class ProjectApiUtils {
     }
   } 
 
-  static async getProjectBidsByProjectId(projectId: number): Promise<commonProjectTypes.ProjectBid[]> {
+  static async getProjectBidsByProjectId(projectId: string): Promise<commonProjectTypes.ProjectBid[]> {
     const project_bids = sequelize.models.project_bids;
     try {
       const bids = await project_bids.findAll({
@@ -109,7 +109,7 @@ class ProjectApiUtils {
     }
   }
   // for customer, get all bids with projectId
-  static async getPermissionedProjectBids(projectId: number): Promise<commonProjectTypes.PermissionedProjectBid[]> {
+  static async getPermissionedProjectBids(projectId: string): Promise<commonProjectTypes.PermissionedProjectBid[]> {
     const project_bids = sequelize.models.project_bids;
     try {
       const bids = await project_bids.findAll({
@@ -132,7 +132,7 @@ class ProjectApiUtils {
   }
 
   // for vendor & customer
-  static async getPermissionedProject(userId: number, projectId: number, userPermission?: enums.ProjectPermission): Promise<commonProjectTypes.PermissionedProject> {
+  static async getPermissionedProject(userId: string, projectId: string, userPermission?: enums.ProjectPermission): Promise<commonProjectTypes.PermissionedProject> {
     try {
       const project = await ProjectApiUtils.getProject(projectId);
       const components = await ProjectApiUtils.getProjectComponents(projectId);
@@ -151,7 +151,7 @@ class ProjectApiUtils {
   };
 
   // for vendor, gets a single projectBid with projectBidId
-  static async getPermissionedProjectBid(projectBidId: number, permission: enums.ProjectPermission): Promise<commonProjectTypes.PermissionedProjectBid> {
+  static async getPermissionedProjectBid(projectBidId: string, permission: enums.ProjectPermission): Promise<commonProjectTypes.PermissionedProjectBid> {
     try {
       const rawUserBid = await sequelize.models.project_bids.findByPk(projectBidId);
       const components = await (rawUserBid as project_bids).getProject_bid_components().then(comps => comps.map(comp => comp.get({ plain:true }))) as commonProjectTypes.ProjectBidComponent[]; 
@@ -169,7 +169,7 @@ class ProjectApiUtils {
     }
   }
 
-  static async updateProjectStatus(projectId: number, status: enums.ProjectStatus, transaction?: Transaction): Promise<boolean> {
+  static async updateProjectStatus(projectId: string, status: enums.ProjectStatus, transaction?: Transaction): Promise<boolean> {
     const projects = sequelize.models.projects;
     try {
       await projects.update({
@@ -187,7 +187,7 @@ class ProjectApiUtils {
     }
   }
 
-  static async getProjectsByIds(projectIds: number[]): Promise<projectsAttributes[]> {
+  static async getProjectsByIds(projectIds: string[]): Promise<projectsAttributes[]> {
     try {
       return await sequelize.models.projects.findAll({
         where: {
@@ -201,7 +201,7 @@ class ProjectApiUtils {
     }
   }
 
-  static async getProjectUsers(projectId: number) {
+  static async getProjectUsers(projectId: string) {
     try {
       const projectUsers = await sequelize.models.project_permissions.findAll({
         where: {
@@ -209,7 +209,7 @@ class ProjectApiUtils {
         }
       }).then(ps => ps.map(p => {
         return {
-          userId: p.get("userId") as number,
+          userId: p.get("userId") as string,
           permission: p.get("permission")
         }
       }));
@@ -231,7 +231,7 @@ class ProjectApiUtils {
     }
   }
 
-  static async getProjectBidUsers(projectBidId: number) {
+  static async getProjectBidUsers(projectBidId: string) {
     try {
       const projectUsers = await sequelize.models.project_bid_permissions.findAll({
         where: {
@@ -239,7 +239,7 @@ class ProjectApiUtils {
         }
       }).then(ps => ps.map(p => {
         return {
-          userId: p.get("userId") as number,
+          userId: p.get("userId") as string,
           permission: p.get("permission")
         }
       }));

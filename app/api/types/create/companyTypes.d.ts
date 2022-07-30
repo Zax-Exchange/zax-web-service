@@ -11,7 +11,7 @@ export interface CreateCompanyInput {
   isActive: boolean;
   isVendor: boolean;
   isVerified: boolean;
-  planId: number;
+  planId: string;
   userEmail: string;
   logo?: string;
   companyUrl?: string;

@@ -9,7 +9,7 @@ import { companiesAttributes } from "../models/companies";
 import jwt from "jsonwebtoken";
 
 class CompanyApiUtils {
-  static async getCompanyPlan(companyId: number): Promise<commonPlanTypes.CompanyPlan> {
+  static async getCompanyPlan(companyId: string): Promise<commonPlanTypes.CompanyPlan> {
     const company_plans = sequelize.models.company_plans;
     try {
       return await company_plans.findOne({
@@ -27,7 +27,7 @@ class CompanyApiUtils {
     return true;
   }
 
-  static async getCompanyWithCompanyId(id: number): Promise<companiesAttributes> {
+  static async getCompanyWithCompanyId(id: string): Promise<companiesAttributes> {
     const companies = sequelize.models.companies;
     try {
       return await companies.findByPk(id).then(comp => comp?.get({ plain:true }));
@@ -36,7 +36,7 @@ class CompanyApiUtils {
     }
   }
 
-  static async getCompanyByIds(ids: number[]): Promise<companiesAttributes[]>{
+  static async getCompanyByIds(ids: string[]): Promise<companiesAttributes[]>{
     const companies = sequelize.models.companies;
     try {
       const res = [];
@@ -63,7 +63,7 @@ class CompanyApiUtils {
     }
   }
 
-  static async isVendorWithCompanyId(id: number): Promise<boolean> {
+  static async isVendorWithCompanyId(id: string): Promise<boolean> {
     const companies = sequelize.models.companies;
     try {
       return await companies.findOne({
@@ -78,7 +78,7 @@ class CompanyApiUtils {
     }
   }
 
-  static async getVendorWithCompanyId(companyId: number) {
+  static async getVendorWithCompanyId(companyId: string) {
     const vendors = sequelize.models.vendors;
     try {
       return await vendors.findOne({
@@ -91,7 +91,7 @@ class CompanyApiUtils {
     }
   }
 
-  static async getCustomerWithCompanyId(companyId: number) {
+  static async getCustomerWithCompanyId(companyId: string) {
     const customers = sequelize.models.customers;
     try {
       return await customers.findOne({
@@ -104,7 +104,7 @@ class CompanyApiUtils {
     }
   }
 
-  static encryptCompanyId(id: number) {
+  static encryptCompanyId(id: string) {
     return jwt.sign(
         {
           id

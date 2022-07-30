@@ -3,7 +3,7 @@ import * as enums from "./enums";
 
 
 export interface Company {
-  id: number;
+  id: string;
   name: string;
   phone: string;
   creditCardNumber: string;
@@ -13,7 +13,7 @@ export interface Company {
   isActive: boolean;
   isVerified: boolean;
   isVendor: boolean;
-  planId: number;
+  planId: string;
   logo?: string;
   companyUrl?: string;
   fax?: string;
@@ -33,7 +33,7 @@ export interface Customer extends Company {
 
 // company for public view, for search
 export interface CompanyOverview {
-  id: number;
+  id: string;
   name: string;
   logo?: string;
   country: string;
@@ -58,7 +58,7 @@ export interface PermissionedCompany extends Vendor, Customer {
 
 // for general users view (both external & internal)
 export interface CompanyDetail {
-  id: number;
+  id: string;
   name: string;
   phone: string;
   country: string;

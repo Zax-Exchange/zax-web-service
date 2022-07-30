@@ -6,7 +6,7 @@ import { createOrUpdateProjectPermission, createOrUpdateProjectBidPermission } f
 import { Op } from "sequelize";
 import ElasticProjectService from "../../elastic/project/ElasticProjectService";
 import { deleteProjectPermissions } from "./deleteProjectApis";
-
+import { v4 as uuidv4 } from "uuid"
 const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<boolean> => {
   const { id, projectData, componentsInput } = data;
   const { toFindOrCreate, toDelete } = componentsInput;
@@ -54,6 +54,7 @@ const updateProjectComponents = async(components: projectTypes.UpdateProjectComp
       await project_components.findOrCreate({
         where: {id: id}, 
         defaults: {
+          id: uuidv4(),
           name, 
           materials, 
           dimension, 

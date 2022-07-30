@@ -112,7 +112,7 @@ const updateCompanyPlan = async (data: updatePlanTypes.UpdateCompanyPlanInput) =
   }
 }
 
-const decreaseCompanyQuota = async (companyId: number, remainingQuota: number, transaction?: Transaction) => {
+const decreaseCompanyQuota = async (companyId: string, remainingQuota: number, transaction?: Transaction) => {
   const company_plans = sequelize.models.company_plans;
   try {
     await company_plans.update({
@@ -123,7 +123,6 @@ const decreaseCompanyQuota = async (companyId: number, remainingQuota: number, t
       },
       transaction
     });
-    const p = await company_plans.findOne({ where: {companyId}}).then(c => c?.get());
     return Promise.resolve(true);
   } catch(e) {
     return Promise.reject(e);

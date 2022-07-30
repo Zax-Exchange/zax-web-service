@@ -1,8 +1,8 @@
 export interface User {
-    id: number;
+    id: string;
     name: string;
     email: string;
-    companyId: number;
+    companyId: string;
     isVendor: boolean;
     isAdmin: boolean;
   }
@@ -20,5 +20,5 @@ export interface UserRegisterInput {
   name: string;
   email: string;
   password: string;
-  companyId: number;
+  companyId: string;
 }

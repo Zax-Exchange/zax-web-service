@@ -19,11 +19,11 @@ const mutation = gql`
         updateCompanyPlan(data: UpdateCompanyPlanInput): Boolean
         
 
-        deleteProject(projectId: Int): Boolean
+        deleteProject(projectId: String): Boolean
         deleteProjectPermissions(data: DeleteProjectPermissionsInput): Boolean
         deleteProjectBidPermissions(data: DeleteProjectBidPermissionsInput): Boolean
 
-        inviteUser(email: String, userId: Int): Boolean
+        inviteUser(email: String, userId: String): Boolean
     }
 `;
 

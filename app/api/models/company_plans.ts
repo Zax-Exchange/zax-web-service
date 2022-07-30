@@ -4,9 +4,9 @@ import type { companies, companiesId } from './companies';
 import type { plans, plansId } from './plans';
 
 export interface company_plansAttributes {
-  id: number;
-  planId: number;
-  companyId: number;
+  id: string;
+  planId: string;
+  companyId: string;
   remainingQuota: number;
   createdAt: Date;
   updatedAt: Date;
@@ -18,9 +18,9 @@ export type company_plansOptionalAttributes = "createdAt" | "updatedAt";
 export type company_plansCreationAttributes = Optional<company_plansAttributes, company_plansOptionalAttributes>;
 
 export class company_plans extends Model<company_plansAttributes, company_plansCreationAttributes> implements company_plansAttributes {
-  id!: number;
-  planId!: number;
-  companyId!: number;
+  id!: string;
+  planId!: string;
+  companyId!: string;
   remainingQuota!: number;
   createdAt!: Date;
   updatedAt!: Date;
@@ -39,14 +39,12 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
   static initModel(sequelize: Sequelize.Sequelize): typeof company_plans {
     return sequelize.define('company_plans', {
     id: {
-      autoIncrement: true,
-      autoIncrementIdentity: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true
     },
     planId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'plans',
@@ -54,7 +52,7 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
       }
     },
     companyId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'companies',

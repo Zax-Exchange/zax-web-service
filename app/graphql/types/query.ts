@@ -2,17 +2,18 @@ import { gql } from "apollo-server-express";
 
 const query = gql`
     type Query {
-        getPlanWithPlanId(id: Int): Plan
+        getPlanWithPlanId(id: String): Plan
         getAllPlans: [Plan]
-        getUserWithUserId(userId: Int): User
-        getAllUsersWithinCompany(companyId: Int): [User]
-        getCustomerDetail(companyId: Int): CustomerDetail
-        getVendorDetail(companyId: Int): VendorDetail
-        getVendorProjects(userId: Int): [VendorProject]
-        getProjectUsers(projectId: Int): [UserPermission]
-        getProjectBidUsers(projectBidId: Int): [UserPermission]
-        getCustomerProjects(userId: Int): [CustomerProject]
-        getProjectDetail(projectId: Int): Project
+        getUserWithUserId(userId: String): User
+        getAllUsersWithinCompany(companyId: String): [User]
+        getCompanyDetail(companyId: String): CompanyDetail
+        getCustomerDetail(companyId: String): CustomerDetail
+        getVendorDetail(companyId: String): VendorDetail
+        getVendorProjects(userId: String): [VendorProject]
+        getProjectUsers(projectId: String): [UserPermission]
+        getProjectBidUsers(projectBidId: String): [UserPermission]
+        getCustomerProjects(userId: String): [CustomerProject]
+        getProjectDetail(projectId: String): Project
         searchCustomerProjects(searchInput: SearchProjectInput): [ProjectOverview]
         searchVendorCompanies(searchInput: SearchCompanyInput): [VendorOverview]
         login(data: UserLoginInput): LoggedInUser

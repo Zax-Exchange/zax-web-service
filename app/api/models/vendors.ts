@@ -3,8 +3,8 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import type { companies, companiesId } from './companies';
 
 export interface vendorsAttributes {
-  id: number;
-  companyId: number;
+  id: string;
+  companyId: string;
   moq: string;
   leadTime: number;
   materials: string[];
@@ -19,8 +19,8 @@ export type vendorsOptionalAttributes = "createdAt" | "updatedAt";
 export type vendorsCreationAttributes = Optional<vendorsAttributes, vendorsOptionalAttributes>;
 
 export class vendors extends Model<vendorsAttributes, vendorsCreationAttributes> implements vendorsAttributes {
-  id!: number;
-  companyId!: number;
+  id!: string;
+  companyId!: string;
   moq!: string;
   leadTime!: number;
   materials!: string[];
@@ -37,15 +37,13 @@ export class vendors extends Model<vendorsAttributes, vendorsCreationAttributes>
   static initModel(sequelize: Sequelize.Sequelize): typeof vendors {
     return sequelize.define('vendors', {
     id: {
-      autoIncrement: true,
-      autoIncrementIdentity: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
       unique: "vendors_companyId_id_key"
     },
     companyId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'companies',

@@ -1,14 +1,14 @@
 export interface CompanyPlan {
-  id: number;
-  planId: number;
-  companyId: number;
+  id: string;
+  planId: string;
+  companyId: string;
   remainingQuota: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface Plan {
-  id: number;
+  id: string;
   name: string;
   price: number;
   licensedUsers: number;
