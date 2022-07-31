@@ -1,18 +1,18 @@
 export interface UpdateUserInput {
   id: string;
-  data: UpdateUserInputData
+  data: UpdateUserInputData;
 }
 
+export interface UpdateUserPasswordInput {
+  id: string;
+  currentPassword: string;
+  newPassword: string;
+}
 export interface UpdateUserInputData {
   name: string;
-  password: string;
-  isAdmin: boolean;
 }
 
 export interface UpdateUserPowerInput {
-  // user that's updating
-  fromId: string; 
-  // user being updated
-  targetId: string; 
+  id: string; 
   isAdmin: boolean;
 }

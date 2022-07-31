@@ -30,11 +30,15 @@ const user = gql`
   input UpdateUserInput {
     id: String!
     name: String
-    email: String
-    password: String
   }
 
-  input UpdateUserPower {
+  input UpdateUserPasswordInput {
+    id: String!
+    currentPassword: String!
+    newPassword: String!
+  }
+
+  input UpdateUserPowerInput {
     id: String!
     isAdmin: Boolean!
   }

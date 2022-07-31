@@ -4,7 +4,9 @@ const mutation = gql`
     type Mutation {
         createUser(data: CreateUserInput): LoggedInUser
         updateUser(data: UpdateUserInput): Boolean
-
+        updateUserPassword(data: UpdateUserPasswordInput): Boolean
+        updateUserPower(data: UpdateUserPowerInput): Boolean
+        
         createProject(data: CreateProjectInput): Boolean
         createProjectBid(data: CreateProjectBidInput): Boolean
         updateProjectPermissions(data: UpdateProjectPermissionsInput): Boolean

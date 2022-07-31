@@ -6,6 +6,8 @@ import { getPlanWithPlanId } from "../plan/getPlanApis";
 import CompanyApiUtils from "../utils/companyUtils";
 import UserApiUtils from "../utils/userUtils";
 import { companiesAttributes } from "../models/companies";
+import { company_plansAttributes } from "../models/company_plans";
+import { plansAttributes } from "../models/plans";
 
 // should only be called with user admin within the company
 const getCompanyDetail = async (id: string): Promise<commonCompanyTypes.VendorDetail | commonCompanyTypes.CustomerDetail> => {
@@ -82,6 +84,29 @@ try {
   }
 };
 
+const getCompanyPlanDetail = async (companyId: string) => {
+  const company_plans = sequelize.models.company_plans;
+  const plans = sequelize.models.plans;
+
+  try {
+    const companyPlan = await company_plans.findOne({
+      where: {
+        companyId
+      }
+    }).then(plan => plan?.get({ plain: true }) as company_plansAttributes);
+    const plan = await plans.findOne({
+      where: {
+        id: companyPlan.planId
+      }
+    }).then(p => p?.get({ plain: true }) as plansAttributes);
+
+    return {
+
+    }
+  } catch (e) {
+    return Promise.reject(e);
+  }
+}
 
 export {
   getCompanyDetail,
