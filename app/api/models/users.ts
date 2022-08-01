@@ -136,6 +136,17 @@ export class users extends Model<usersAttributes, usersCreationAttributes> imple
     schema: 'public',
     hasTrigger: true,
     timestamps: true,
+    paranoid: true,
+    hooks: {
+      beforeDestroy: async (instance, options) => {
+        instance.getProject_permissions().then(ps => {
+          for (let p of ps) p.destroy();
+        })
+        instance.getProject_bid_permissions().then(ps => {
+          for (let p of ps) p.destroy()
+        })
+      }
+    },
     indexes: [
       {
         name: "users_email_key",

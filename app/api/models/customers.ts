@@ -47,6 +47,7 @@ export class customers extends Model<customersAttributes, customersCreationAttri
     tableName: 'customers',
     schema: 'public',
     timestamps: true,
+    paranoid: true,
     indexes: [
       {
         name: "customers_id_companyId_key",

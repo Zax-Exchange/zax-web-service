@@ -121,10 +121,6 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
     userId: {
       type: DataTypes.UUID,
       allowNull: false,
-      references: {
-        model: 'users',
-        key: 'id'
-      }
     },
     status: {
       type: DataTypes.STRING(20),
@@ -153,13 +149,22 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
     timestamps: true,
     paranoid: true,
     hooks: {
-        afterDestroy: async (instance, options) => {
-          await instance.getProject_components().then(async comps => {
-            for (let comp of comps) await comp.destroy()
-          });
-          await instance.getProject_permissions().then(async ps => {
-            for (let p of ps) await p.destroy()
-          })
+        beforeDestroy: async (instance, options) => {
+          const transaction = await sequelize.transaction();
+          try {
+            instance.getProject_components().then(async comps => {
+              for (let comp of comps) await comp.destroy({ transaction })
+            })
+            
+
+            instance.getProject_permissions().then(async ps => {
+              for (let p of ps) await p.destroy({ transaction })
+            })
+            await transaction.commit();
+          } catch (error) {
+            console.error(error);
+            await transaction.rollback();
+          }
         }
     },
     indexes: [

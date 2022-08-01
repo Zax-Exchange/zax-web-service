@@ -19,17 +19,21 @@ const getAllUsersWithinCompany = async(companyId: string): Promise<userTypes.Use
   }
 };
 
-const getUserWithUserId = async(id: string): Promise<userTypes.User> => {
+
+const getUserWithUserId = async(id: string, paranoid: boolean = true): Promise<userTypes.User> => {
   const users = sequelize.models.users;
   try {
-    const user = await users.findByPk(id).then(u => u?.get({ plain:true }));
+    const user = await users.findByPk(id, {
+      paranoid
+    }).then(u => u?.get({ plain:true }));
     const res = {
       id: user.id,
       name: user.name,
       email: user.email,
       companyId: user.companyId,
       isVendor: user.isVendor,
-      isAdmin: user.isAdmin
+      isAdmin: user.isAdmin,
+      isActive: user.isActive
     }
     return res
   } catch (e) {

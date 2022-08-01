@@ -5,6 +5,7 @@ export interface User {
     companyId: string;
     isVendor: boolean;
     isAdmin: boolean;
+    isActive: boolean;
   }
 
 export interface LoggedInUser extends User {

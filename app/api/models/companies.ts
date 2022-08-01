@@ -174,6 +174,7 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
     schema: 'public',
     hasTrigger: true,
     timestamps: true,
+    paranoid: true,
     indexes: [
       {
         name: "companies_name_key",

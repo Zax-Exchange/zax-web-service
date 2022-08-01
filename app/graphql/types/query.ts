@@ -4,7 +4,7 @@ const query = gql`
     type Query {
         getPlanWithPlanId(id: String): Plan
         getAllPlans: [Plan]
-        getUserWithUserId(userId: String): User
+        getUserWithUserId(userId: String, paranoid: Boolean): User
         getAllUsersWithinCompany(companyId: String): [User]
         getCompanyDetail(companyId: String): CompanyDetail
         getCustomerDetail(companyId: String): CustomerDetail

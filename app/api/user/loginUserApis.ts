@@ -11,9 +11,11 @@ const login = async (data: UserLoginInput): Promise<LoggedInUser> => {
         email: data.email.toLowerCase()
       }
     }).then(u => u?.get({ plain: true }));
+    if (!user.isActive) {
+      throw new Error("Account is not active.")
+    }
 
     const valid = await bcrypt.compare(data.password, user.password);
-
     if (user && valid) {
 
       const token = jwt.sign(
@@ -24,6 +26,7 @@ const login = async (data: UserLoginInput): Promise<LoggedInUser> => {
           email: user.email,
           isAdmin: user.isAdmin,
           isVendor: user.isVendor,
+          isActive: user.isActive
         },
         process.env.USER_SESSION_TOKEN_SECRET!,
         {

@@ -25,6 +25,7 @@ import {
   updateCompanyPlan
 } from "./company/updateCompany";
 import { inviteUser } from "./user/invite/inviteUsers";
+import { deactivateUser } from "./user/delete/deleteUser";
 
 export default {
   createUser,
@@ -47,6 +48,7 @@ export default {
   deleteProject,
   deleteProjectPermissions,
   deleteProjectBidPermissions,
-  
+  deactivateUser,
+
   inviteUser
 };

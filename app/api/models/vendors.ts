@@ -71,6 +71,7 @@ export class vendors extends Model<vendorsAttributes, vendorsCreationAttributes>
     tableName: 'vendors',
     schema: 'public',
     timestamps: true,
+    paranoid: true,
     indexes: [
       {
         name: "vendors_companyId_id_key",

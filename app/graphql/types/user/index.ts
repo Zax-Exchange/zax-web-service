@@ -8,6 +8,7 @@ const user = gql`
     companyId: String!
     isVendor: Boolean!
     isAdmin: Boolean!
+    isActive: Boolean!
   }
 
   type LoggedInUser {
@@ -18,6 +19,7 @@ const user = gql`
     isVendor: Boolean!
     isAdmin: Boolean!
     token: String!
+    isActive: Boolean!
   }
 
   input CreateUserInput {
