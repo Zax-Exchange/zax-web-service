@@ -52,13 +52,10 @@ describe('user tests', () => {
   // });
 
   it("should create user with company and decrease company quota", async () => {
-    const planId = await sequelize.models.plans.findOne({where: {name: FREE_PLAN_NAME}}).then(p => p!.get("id") as number);
+    const planId = await sequelize.models.plans.findOne({where: {name: FREE_PLAN_NAME}}).then(p => p!.get("id") as string);
     await expect(createVendor({
       name: VENDOR_COMPANY_NAMES[0],
       phone: "123-456-7890",
-      creditCardNumber:"1234-1111-1111-1111",
-      creditCardExp: "07/23",
-      creditCardCvv: "012",
       country: "USA",
       isActive: true,
       isVendor: true,
@@ -74,9 +71,6 @@ describe('user tests', () => {
     await expect(createCustomer({
       name: CUSTOMER_COMPANY_NAMES[0],
       phone: "123-456-7890",
-      creditCardNumber:"1234-1111-1111-1111",
-      creditCardExp: "07/23",
-      creditCardCvv: "012",
       country: "USA",
       isActive: true,
       isVendor: false,
@@ -85,8 +79,8 @@ describe('user tests', () => {
       userEmail: "test@email.com"
     })).resolves.toEqual(true);
     
-    const vendorCompanId = await sequelize.models.companies.findOne({where:{name: VENDOR_COMPANY_NAMES[0]}}).then(c => c!.get("id") as number);
-    const customerCompanyId = await sequelize.models.companies.findOne({where:{name: CUSTOMER_COMPANY_NAMES[0]}}).then(c => c!.get("id") as number);
+    const vendorCompanId = await sequelize.models.companies.findOne({where:{name: VENDOR_COMPANY_NAMES[0]}}).then(c => c!.get("id") as string);
+    const customerCompanyId = await sequelize.models.companies.findOne({where:{name: CUSTOMER_COMPANY_NAMES[0]}}).then(c => c!.get("id") as string);
 
     // create vendor company users
     await expect(createUser({
@@ -127,8 +121,8 @@ describe('user tests', () => {
       password: "123"
     })).resolves.toBeTruthy();
 
-    const user1Id = await sequelize.models.users.findOne({ where: {email: ADMIN_EMAILS[0]}}).then(u => u?.get("id") as number);
-    const user2Id = await sequelize.models.users.findOne({ where: {email: NON_ADMIN_EMAILS[0]}}).then(u => u?.get("id") as number);
+    const user1Id = await sequelize.models.users.findOne({ where: {email: ADMIN_EMAILS[0]}}).then(u => u?.get("id") as string);
+    const user2Id = await sequelize.models.users.findOne({ where: {email: NON_ADMIN_EMAILS[0]}}).then(u => u?.get("id") as string);
 
     const user1 = await getUserWithUserId(user1Id);
     const user2 = await getUserWithUserId(user2Id);
@@ -140,7 +134,7 @@ describe('user tests', () => {
 
 
   it("should allow update user data", async () => {
-    const userId = await sequelize.models.users.findOne({ where: {email: ADMIN_EMAILS[0]}}).then(u => u?.get("id") as number);
+    const userId = await sequelize.models.users.findOne({ where: {email: ADMIN_EMAILS[0]}}).then(u => u?.get("id") as string);
 
     await expect(updateUser({
       id: userId,
@@ -155,23 +149,15 @@ describe('user tests', () => {
         name: "updated name",
       } as UpdateUserInputData
     })).resolves.toEqual(true);
-
-    await expect(updateUser({
-      id: userId,
-      data: {
-        password: "321"
-      } as UpdateUserInputData
-    })).resolves.toEqual(true);
   });
 
   it("should allow user power update from admin user", async() => {
-    const adminUserId = await sequelize.models.users.findOne({ where: {email: ADMIN_EMAILS[0]}}).then(u => u?.get("id") as number);
-    const nonAdminUser1Id = await sequelize.models.users.findOne({ where: {email: NON_ADMIN_EMAILS[0]}}).then(u => u?.get("id") as number);
+    const adminUserId = await sequelize.models.users.findOne({ where: {email: ADMIN_EMAILS[0]}}).then(u => u?.get("id") as string);
+    const nonAdminUser1Id = await sequelize.models.users.findOne({ where: {email: NON_ADMIN_EMAILS[0]}}).then(u => u?.get("id") as string);
 
     await expect(updateUserPower({
       isAdmin: true,
-      fromId: adminUserId,
-      targetId: nonAdminUser1Id
+      id: nonAdminUser1Id
     })).resolves.toEqual(true);
 
     await expect(getUserWithUserId(nonAdminUser1Id)).resolves.toHaveProperty("isAdmin", true);

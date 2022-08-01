@@ -4,9 +4,6 @@ import * as planTypes from "../common/planTypes";
 export interface CreateCompanyInput {
   name: string;
   phone: string;
-  creditCardNumber: string;
-  creditCardExp: string;
-  creditCardCvv: string;
   country: string;
   isActive: boolean;
   isVendor: boolean;

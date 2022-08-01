@@ -22,11 +22,6 @@ class CompanyApiUtils {
     }
   }
 
-  // TODO: should charge card with $1.00 first to see if card is valid
-  static async checkCreditCardValidity(cardNumber: string, cardExp: string, cardCvv: string) {
-    return true;
-  }
-
   static async getCompanyWithCompanyId(id: string): Promise<companiesAttributes> {
     const companies = sequelize.models.companies;
     try {

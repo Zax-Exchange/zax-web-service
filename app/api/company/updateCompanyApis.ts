@@ -14,7 +14,7 @@ const updateVendor = async (data: updateCompanyTypes.UpdateVendorInput) => {
   
   try {
     const id = data.id;
-    const { name, logo, phone, fax, creditCardNumber, creditCardCvv, creditCardExp, companyUrl, country } = data.data
+    const { name, logo, phone, fax, companyUrl, country } = data.data
     const { leadTime, moq, locations, materials } = data.data;
 
 
@@ -24,9 +24,6 @@ const updateVendor = async (data: updateCompanyTypes.UpdateVendorInput) => {
         logo, 
         phone, 
         fax, 
-        creditCardNumber, 
-        creditCardCvv, 
-        creditCardExp, 
         companyUrl, 
         country
       }, {
@@ -61,7 +58,7 @@ const updateVendor = async (data: updateCompanyTypes.UpdateVendorInput) => {
 const updateCustomer = async (data: updateCompanyTypes.UpdateCustomerInput) => {
   const companies = sequelize.models.companies;
   const id = data.id;
-  const { name, logo, phone, fax, creditCardNumber, creditCardCvv, creditCardExp, companyUrl, country, isActive, isVerified } = data.data
+  const { name, logo, phone, fax, companyUrl, country, isActive, isVerified } = data.data
 
   try {
     await companies.update({ 
@@ -69,9 +66,6 @@ const updateCustomer = async (data: updateCompanyTypes.UpdateCustomerInput) => {
       logo, 
       phone, 
       fax, 
-      creditCardNumber, 
-      creditCardCvv, 
-      creditCardExp, 
       companyUrl, 
       country, 
       isActive, 

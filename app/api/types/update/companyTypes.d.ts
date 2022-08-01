@@ -14,9 +14,6 @@ export interface UpdateCompanyInputData {
   logo?: string;
   phone?: string;
   fax?: string;
-  creditCardNumber?: string;
-  creditCardExp?: string;
-  creditCardCvv?: string;
   country?: string;
   isActive?: boolean;
   isVerified?: boolean;

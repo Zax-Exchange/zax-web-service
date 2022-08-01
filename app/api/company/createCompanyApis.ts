@@ -9,7 +9,7 @@ import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from 'uuid';
 
 const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise<boolean> => {
-  const { name, logo, phone, fax, creditCardNumber, creditCardCvv, creditCardExp, country, isActive, isVendor, isVerified, leadTime, companyUrl, planId, locations, moq, materials, userEmail} = data;
+  const { name, logo, phone, fax, country, isActive, isVendor, isVerified, leadTime, companyUrl, planId, locations, moq, materials, userEmail} = data;
 
   const companies = sequelize.models.companies;
   const company_plans = sequelize.models.company_plans;
@@ -17,7 +17,6 @@ const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise
   try {
     await sequelize.transaction(async (transaction) => {
 
-      await CompanyApiUtils.checkCreditCardValidity(creditCardNumber, creditCardCvv, creditCardExp);
       
       const companyId = await companies.create({
         id: uuidv4(),
@@ -25,9 +24,6 @@ const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise
         logo,
         phone,
         fax,
-        creditCardNumber,
-        creditCardCvv,
-        creditCardExp,
         country,
         isActive,
         isVendor,
@@ -83,7 +79,7 @@ const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise
 };
 
 const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Promise<boolean> => {
-  const { name, logo, phone, fax, creditCardNumber, creditCardCvv, creditCardExp, country, isActive, isVendor, isVerified, companyUrl, planId, userEmail} = data;
+  const { name, logo, phone, fax, country, isActive, isVendor, isVerified, companyUrl, planId, userEmail} = data;
 
   const companies = sequelize.models.companies;
   const company_plans = sequelize.models.company_plans;
@@ -91,17 +87,12 @@ const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Pro
   try {
     await sequelize.transaction(async (transaction) => {
 
-      await CompanyApiUtils.checkCreditCardValidity(creditCardNumber, creditCardCvv, creditCardExp);
-      
       const companyId = await companies.create({
         id: uuidv4(),
         name,
         logo,
         phone,
         fax,
-        creditCardNumber,
-        creditCardCvv,
-        creditCardExp,
         country,
         isActive,
         isVendor,

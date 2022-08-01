@@ -60,6 +60,10 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
       },
       unique: "company_plans_companyId_key"
     },
+    expiringDate: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
     remainingQuota: {
       type: DataTypes.INTEGER,
       allowNull: false

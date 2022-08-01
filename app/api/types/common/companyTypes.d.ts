@@ -6,9 +6,6 @@ export interface Company {
   id: string;
   name: string;
   phone: string;
-  creditCardNumber: string;
-  creditCardExp: string;
-  creditCardCvv: string;
   country: string;
   isActive: boolean;
   isVerified: boolean;

@@ -31,13 +31,10 @@ describe('company tests', () => {
   });
 
   it("should allow company creation with plan", async () => {
-    const planId = await sequelize.models.plans.findOne({where: {name: FREE_PLAN_NAME}}).then(p => p!.get("id") as number);
+    const planId = await sequelize.models.plans.findOne({where: {name: FREE_PLAN_NAME}}).then(p => p!.get("id") as string);
     await expect(createVendor({
       name: VENDOR_COMPANY_NAMES[0],
       phone: "123-456-7890",
-      creditCardNumber:"1234-1111-1111-1111",
-      creditCardExp: "07/23",
-      creditCardCvv: "012",
       country: "USA",
       isActive: true,
       isVendor: true,
@@ -53,9 +50,6 @@ describe('company tests', () => {
     await expect(createCustomer({
       name: CUSTOMER_COMPANY_NAMES[0],
       phone: "123-456-7890",
-      creditCardNumber:"1234-1111-1111-1111",
-      creditCardExp: "07/23",
-      creditCardCvv: "012",
       country: "USA",
       isActive: true,
       isVendor: false,
@@ -71,9 +65,6 @@ describe('company tests', () => {
     await createVendor({
       name: VENDOR_COMPANY_NAMES[0],
       phone: "123-456-7890",
-      creditCardNumber:"2222-1111-1111-1111",
-      creditCardExp: "07/23",
-      creditCardCvv: "012",
       country: "USA",
       isActive: true,
       isVendor: true,
@@ -87,9 +78,6 @@ describe('company tests', () => {
   //   await createCompany({
   //     name: VENDOR_COMPANY_NAME,
   //     phone: "123-456-7890",
-  //     creditCardNumber:"1234-1111-1111-1111",
-  //     creditCardExp: "07/23",
-  //     creditCardCvv: "012",
   //     country: "USA",
   //     isActive: true,
   //     isVendor: true,
@@ -100,7 +88,7 @@ describe('company tests', () => {
   // });
 
   it("should allow user creation", async () => {
-    const companyId = await sequelize.models.companies.findOne({where:{name: VENDOR_COMPANY_NAMES[0]}}).then(c => c!.get("id") as number);
+    const companyId = await sequelize.models.companies.findOne({where:{name: VENDOR_COMPANY_NAMES[0]}}).then(c => c!.get("id") as string);
     const companyPlan = await sequelize.models.company_plans.findOne({ where: {companyId}});
     
     await expect(createUser({
@@ -193,7 +181,7 @@ describe('company tests', () => {
   // });
 
   it("should update vendor", async () => {
-    const companyId = await sequelize.models.companies.findOne({where:{name: VENDOR_COMPANY_NAMES[0]}}).then(c => c!.get("id") as number);
+    const companyId = await sequelize.models.companies.findOne({where:{name: VENDOR_COMPANY_NAMES[0]}}).then(c => c!.get("id") as string);
 
     await expect(updateVendor({
       "data": {
@@ -206,7 +194,7 @@ describe('company tests', () => {
   });
 
   it("should update customer", async () => {
-    const companyId = await sequelize.models.companies.findOne({where:{name: CUSTOMER_COMPANY_NAMES[0]}}).then(c => c!.get("id") as number);
+    const companyId = await sequelize.models.companies.findOne({where:{name: CUSTOMER_COMPANY_NAMES[0]}}).then(c => c!.get("id") as string);
 
     await expect(updateCustomer({
       "data": {

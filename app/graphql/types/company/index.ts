@@ -7,9 +7,6 @@ const company = gql`
     logo: String!
     phone: String!
     fax: String!
-    creditCardNumber: String!
-    creditCardExp: String!
-    creditCardCvv: String!
     country: String!
     planId: String!
     isActive: Boolean!
@@ -30,9 +27,6 @@ const company = gql`
     logo: String!
     phone: String!
     fax: String!
-    creditCardNumber: String!
-    creditCardExp: String!
-    creditCardCvv: String!
     country: String!
     planId: String!
     isActive: Boolean!
@@ -69,9 +63,6 @@ const company = gql`
     logo: String!
     phone: String!
     fax: String!
-    creditCardNumber: String!
-    creditCardExp: String!
-    creditCardCvv: String!
     country: String!
     planInfo: CompanyPlan!
     isActive: Boolean!
@@ -93,9 +84,6 @@ const company = gql`
     logo: String
     phone: String!
     fax: String
-    creditCardNumber: String!
-    creditCardExp: String!
-    creditCardCvv: String!
     country: String!
     isActive: Boolean!
     isVendor: Boolean!
@@ -144,9 +132,6 @@ const company = gql`
     logo: String
     phone: String!
     fax: String
-    creditCardNumber: String!
-    creditCardExp: String!
-    creditCardCvv: String!
     country: String!
     planId: String!
     isActive: Boolean!
@@ -165,9 +150,6 @@ const company = gql`
     logo: String
     phone: String!
     fax: String
-    creditCardNumber: String!
-    creditCardExp: String!
-    creditCardCvv: String!
     country: String!
     planId: String!
     isActive: Boolean!
@@ -187,9 +169,6 @@ const company = gql`
     logo: String
     phone: String
     fax: String
-    creditCardNumber: String
-    creditCardExp: String
-    creditCardCvv: String
     country: String
     companyUrl: String
     leadTime: Int
@@ -208,9 +187,6 @@ const company = gql`
     logo: String
     phone: String
     fax: String
-    creditCardNumber: String
-    creditCardExp: String
-    creditCardCvv: String
     country: String
     companyUrl: String
   }

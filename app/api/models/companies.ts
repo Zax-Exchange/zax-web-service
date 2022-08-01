@@ -13,9 +13,6 @@ export interface companiesAttributes {
   logo?: any;
   phone: string;
   fax?: string;
-  creditCardNumber: string;
-  creditCardExp: string;
-  creditCardCvv: string;
   country: string;
   isActive: boolean;
   isVendor: boolean;
@@ -36,9 +33,6 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
   logo?: any;
   phone!: string;
   fax?: string;
-  creditCardNumber!: string;
-  creditCardExp!: string;
-  creditCardCvv!: string;
   country!: string;
   isActive!: boolean;
   isVendor!: boolean;
@@ -136,18 +130,6 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
     fax: {
       type: DataTypes.STRING(255),
       allowNull: true
-    },
-    creditCardNumber: {
-      type: DataTypes.STRING(255),
-      allowNull: false
-    },
-    creditCardExp: {
-      type: DataTypes.STRING(10),
-      allowNull: false
-    },
-    creditCardCvv: {
-      type: DataTypes.STRING(4),
-      allowNull: false
     },
     country: {
       type: DataTypes.STRING(255),
