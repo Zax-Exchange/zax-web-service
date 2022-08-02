@@ -74,6 +74,7 @@ const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise
     });
     return Promise.resolve(true);
   } catch(e) {
+    console.error(e)
     return Promise.reject(e);
   }
 };

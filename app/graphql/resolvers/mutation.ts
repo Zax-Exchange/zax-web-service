@@ -19,11 +19,16 @@ import {
   createCustomer,
   createVendor
 } from "./company/createCompany";
+import { 
+  createStripeCustomer,
+  createSubscription
+} from "./plan/createSubscription";
 import {
   updateCustomer,
   updateVendor,
   updateCompanyPlan
 } from "./company/updateCompany";
+
 import { inviteUser } from "./user/invite/inviteUsers";
 import { deactivateUser } from "./user/delete/deleteUser";
 
@@ -31,6 +36,8 @@ export default {
   createUser,
   createCustomer,
   createVendor,
+  createStripeCustomer,
+  createSubscription,
   createProject,
   createProjectBid,
 

@@ -20,6 +20,11 @@ const plan = gql`
     createdAt: String!
     updatedAt: String!
   }
+
+  type StripeSubscription {
+    subscriptionId: String!
+    clientSecret: String!
+  }
 `;
 
 export default plan;

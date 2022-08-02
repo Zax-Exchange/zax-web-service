@@ -17,6 +17,8 @@ const mutation = gql`
 
         createVendor(data: CreateVendorInput): Boolean
         createCustomer(data: CreateCustomerInput): Boolean
+        createStripeCustomer(email: String): String
+        createSubscription(priceId: String, customerId: String): StripeSubscription
         updateVendor(data: UpdateVendorInput): Boolean
         updateCustomer(data: UpdateCustomerInput): Boolean
         updateCompanyPlan(data: UpdateCompanyPlanInput): Boolean
