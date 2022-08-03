@@ -1,4 +1,7 @@
 import { Stripe } from "stripe";
+import sequelize from "../../postgres/dbconnection";
+import { stripe_customers } from "../models/stripe_customers";
+import { v4 as uuidv4 } from "uuid";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST!, {
   "apiVersion": "2020-08-27"
@@ -6,12 +9,31 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST!, {
 
 
 const createStripeCustomer = async (email: string): Promise<string> => {
+
   try {
-    const customer = await stripe.customers.create({
-      email
+    const stripeCustomerId = await sequelize.models.stripe_customers.findOrCreate({
+      where: {
+        email
+      },
+      defaults: {
+        id: uuidv4(),
+        email,
+      }
+    })
+    .then(async ([foundCustomer, created]) => {
+
+      if (created) {
+        const customer = await stripe.customers.create({
+          email
+        });
+        foundCustomer.set("customerId", customer.id);
+        foundCustomer.save();
+        return customer.id;
+      }
+      return foundCustomer.get("customerId") as string;
     });
 
-    return customer.id
+    return stripeCustomerId;
   } catch (error) {
     return Promise.reject(error);
   }

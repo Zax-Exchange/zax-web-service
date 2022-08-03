@@ -4,7 +4,7 @@ import * as companyTypes from "../types/company";
 export default class ElasticCompanyService {
   static async createVendorDocument(data: companyTypes.VendorDocument) {
     try {
-      // await elasticClient.indices.delete({ index: "vendor" })
+      await elasticClient.indices.delete({ index: "vendor" })
       const exist = await elasticClient.indices.exists({ index: "vendor" });
 
       if (!exist) {

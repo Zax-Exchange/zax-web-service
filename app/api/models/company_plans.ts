@@ -2,11 +2,13 @@ import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { companies, companiesId } from './companies';
 import type { plans, plansId } from './plans';
+import type { stripe_customers, stripe_customersId } from './stripe_customers';
 
 export interface company_plansAttributes {
   id: string;
   planId: string;
   companyId: string;
+  stripeCustomerId?: string;
   remainingQuota: number;
   createdAt: Date;
   updatedAt: Date;
@@ -21,6 +23,7 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
   id!: string;
   planId!: string;
   companyId!: string;
+  stripeCustomerId?: string;
   remainingQuota!: number;
   createdAt!: Date;
   updatedAt!: Date;
@@ -35,6 +38,11 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
   getPlan!: Sequelize.BelongsToGetAssociationMixin<plans>;
   setPlan!: Sequelize.BelongsToSetAssociationMixin<plans, plansId>;
   createPlan!: Sequelize.BelongsToCreateAssociationMixin<plans>;
+  // company_plans hasOne stripe_customers via stripeCustomerId
+  stripe_customer!: stripe_customers;
+  getStripe_customer!: Sequelize.HasOneGetAssociationMixin<stripe_customers>;
+  setStripe_cusomter!: Sequelize.HasOneSetAssociationMixin<stripe_customers, stripe_customersId>;
+  createStripe_customer!: Sequelize.HasOneCreateAssociationMixin<stripe_customers>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof company_plans {
     return sequelize.define('company_plans', {
@@ -49,7 +57,8 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
       references: {
         model: 'plans',
         key: 'id'
-      }
+      },
+      unique: "company_plans_planId_key"
     },
     companyId: {
       type: DataTypes.UUID,
@@ -60,9 +69,14 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
       },
       unique: "company_plans_companyId_key"
     },
-    expiringDate: {
-      type: DataTypes.DATE,
-      allowNull: true
+    stripeCustomerId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'stripe_customers',
+        key: 'id'
+      },
+      unique: "company_plans_stripe_customerId_key"
     },
     remainingQuota: {
       type: DataTypes.INTEGER,
@@ -79,6 +93,20 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
         unique: true,
         fields: [
           { name: "companyId" },
+        ]
+      },
+      {
+        name: "company_plans_planId_key",
+        unique: true,
+        fields: [
+          { name: "planId" },
+        ]
+      },
+      {
+        name: "company_plans_stripe_customerId_key",
+        unique: true,
+        fields: [
+          { name: "stripeCustomerId" }
         ]
       },
       {

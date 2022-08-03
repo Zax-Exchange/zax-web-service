@@ -39,8 +39,7 @@ export class vendors extends Model<vendorsAttributes, vendorsCreationAttributes>
     id: {
       type: DataTypes.UUID,
       allowNull: false,
-      primaryKey: true,
-      unique: "vendors_companyId_id_key"
+      primaryKey: true
     },
     companyId: {
       type: DataTypes.UUID,

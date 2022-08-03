@@ -7,9 +7,9 @@ export interface project_permissionsAttributes {
   id: string;
   userId: string;
   projectId: string;
+  permission: string;
   createdAt: Date;
   updatedAt: Date;
-  permission: string;
 }
 
 export type project_permissionsPk = "id";
@@ -21,9 +21,9 @@ export class project_permissions extends Model<project_permissionsAttributes, pr
   id!: string;
   userId!: string;
   projectId!: string;
+  permission!: string;
   createdAt!: Date;
   updatedAt!: Date;
-  permission!: string;
 
   // project_permissions belongsTo projects via projectId
   project!: projects;

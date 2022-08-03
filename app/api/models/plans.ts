@@ -6,11 +6,11 @@ export interface plansAttributes {
   id: string;
   name: string;
   price: number;
-  createdAt: Date;
-  updatedAt: Date;
   licensedUsers: number;
   description: string;
   features: string[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export type plansPk = "id";
@@ -22,11 +22,11 @@ export class plans extends Model<plansAttributes, plansCreationAttributes> imple
   id!: string;
   name!: string;
   price!: number;
-  createdAt!: Date;
-  updatedAt!: Date;
   licensedUsers!: number;
   description!: string;
   features!: string[];
+  createdAt!: Date;
+  updatedAt!: Date;
 
   // plans hasMany company_plans via planId
   company_plans!: company_plans[];

@@ -3,6 +3,8 @@ import { sequelize_meta as _sequelize_meta } from "./SequelizeMeta";
 import type { sequelize_metaAttributes, sequelize_metaCreationAttributes } from "./SequelizeMeta";
 import { companies as _companies } from "./companies";
 import type { companiesAttributes, companiesCreationAttributes } from "./companies";
+import { stripe_customers as _stripe_customers } from "./stripe_customers";
+import type { stripe_customersAttributes, stripe_customersCreationAttributes } from "./stripe_customers";
 import { company_plans as _company_plans } from "./company_plans";
 import type { company_plansAttributes, company_plansCreationAttributes } from "./company_plans";
 import { customers as _customers } from "./customers";
@@ -31,6 +33,7 @@ import type { vendorsAttributes, vendorsCreationAttributes } from "./vendors";
 export {
   _sequelize_meta as sequelize_meta,
   _companies as companies,
+  _stripe_customers as stripe_customers,
   _company_plans as company_plans,
   _customers as customers,
   _materials as materials,
@@ -50,6 +53,8 @@ export type {
   sequelize_metaCreationAttributes,
   companiesAttributes,
   companiesCreationAttributes,
+  stripe_customersAttributes,
+  stripe_customersCreationAttributes,
   company_plansAttributes,
   company_plansCreationAttributes,
   customersAttributes,
@@ -79,11 +84,12 @@ export type {
 export function initModels(sequelize: Sequelize) {
   const sequelize_meta = _sequelize_meta.initModel(sequelize);
   const plans = _plans.initModel(sequelize);
+  const stripe_customers = _stripe_customers.initModel(sequelize);
   const companies = _companies.initModel(sequelize);
-  const company_plans = _company_plans.initModel(sequelize);
   const users = _users.initModel(sequelize);
   const customers = _customers.initModel(sequelize);
   const vendors = _vendors.initModel(sequelize);
+  const company_plans = _company_plans.initModel(sequelize);
   const projects = _projects.initModel(sequelize);
   const project_components = _project_components.initModel(sequelize);
   const project_bids = _project_bids.initModel(sequelize);
@@ -93,9 +99,10 @@ export function initModels(sequelize: Sequelize) {
   const materials = _materials.initModel(sequelize);
 
   company_plans.belongsTo(companies, { as: "company", foreignKey: "companyId", hooks: true, onDelete: "CASCADE" });
+  company_plans.hasOne(stripe_customers, { as: "stripe_customer", foreignKey: "stripeCustomerId", onDelete: "CASCADE" });
   companies.hasOne(company_plans, { as: "company_plan", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   customers.belongsTo(companies, { as: "company", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
-  companies.hasMany(customers, { as: "customers", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
+  companies.hasOne(customers, { as: "customers", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   project_bids.belongsTo(companies, { as: "company", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   companies.hasMany(project_bids, { as: "project_bids", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   projects.belongsTo(companies, { as: "company", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
@@ -103,7 +110,7 @@ export function initModels(sequelize: Sequelize) {
   users.belongsTo(companies, { as: "company", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   companies.hasMany(users, { as: "users", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   vendors.belongsTo(companies, { as: "company", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
-  companies.hasMany(vendors, { as: "vendors", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
+  companies.hasOne(vendors, { as: "vendors", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   company_plans.belongsTo(plans, { as: "plan", foreignKey: "planId", hooks: true, onDelete: "CASCADE"});
   plans.hasMany(company_plans, { as: "company_plans", foreignKey: "planId", hooks: true, onDelete: "CASCADE"});
   project_bid_components.belongsTo(project_bids, { as: "projectBid", foreignKey: "projectBidId", hooks: true, onDelete: "CASCADE"});
@@ -130,6 +137,7 @@ export function initModels(sequelize: Sequelize) {
   return {
     sequelize_meta: sequelize_meta,
     companies: companies,
+    stripe_customers: stripe_customers,
     company_plans: company_plans,
     customers: customers,
     materials: materials,

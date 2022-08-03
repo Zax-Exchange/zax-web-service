@@ -14,7 +14,7 @@ export default class ElasticProjectService {
     } = data
 
     try {
-      // await elasticClient.indices.delete({ index: "project" });
+      await elasticClient.indices.delete({ index: "project" });
       const exist = await elasticClient.indices.exists({ index: "project" });
       
      
