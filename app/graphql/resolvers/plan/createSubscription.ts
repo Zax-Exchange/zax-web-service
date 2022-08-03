@@ -1,7 +1,7 @@
 import { 
   createStripeCustomer as createStripeCustomerApi,
   createSubscription as createSubscriptionApi
-} from "../../../api/plan/createSubscriptions"
+} from "../../../api/plan/createSubscriptionsApis"
 
 const createStripeCustomer = (parent: any, { email }: { email: string}, context:any) => {
   return createStripeCustomerApi(email);

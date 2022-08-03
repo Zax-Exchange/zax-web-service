@@ -14,6 +14,8 @@ const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise
   const companies = sequelize.models.companies;
   const company_plans = sequelize.models.company_plans;
   const vendors = sequelize.models.vendors;
+  const stripe_customers = sequelize.models.stripe_customers;
+
   try {
     await sequelize.transaction(async (transaction) => {
 
@@ -85,8 +87,15 @@ const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Pro
   const companies = sequelize.models.companies;
   const company_plans = sequelize.models.company_plans;
   const customers = sequelize.models.customers;
+  const stripe_customers = sequelize.models.stripe_customers;
+
   try {
     await sequelize.transaction(async (transaction) => {
+      const stripeCustomerId = await stripe_customers.findOne({
+        where: {
+          email: userEmail
+        }
+      }).then(customer => customer?.get("id"));
 
       const companyId = await companies.create({
         id: uuidv4(),
@@ -112,6 +121,7 @@ const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Pro
         id: uuidv4(),
         companyId,
         planId,
+        stripeCustomerId,
         remainingQuota: plan.licensedUsers
       }, {transaction});
 

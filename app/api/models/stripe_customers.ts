@@ -4,7 +4,8 @@ import { DataTypes, Model, Optional } from 'sequelize';
 
 export interface stripe_customersAttributes {
   id: string;
-  customerId: string;
+  customerId?: string;
+  subscriptionId?: string;
   email: string;
   createdAt: Date;
   updatedAt: Date;
@@ -18,7 +19,8 @@ export type stripe_customersCreationAttributes = Optional<stripe_customersAttrib
 
 export class stripe_customers extends Model<stripe_customersAttributes, stripe_customersCreationAttributes> implements stripe_customersAttributes {
   id!: string;
-  customerId!: string;
+  customerId?: string;
+  subscriptionId?: string;
   email!: string;
   createdAt!: Date;
   updatedAt!: Date;
@@ -31,6 +33,10 @@ export class stripe_customers extends Model<stripe_customersAttributes, stripe_c
         primaryKey: true
       },
       customerId: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      subscriptionId: {
         type: DataTypes.STRING,
         allowNull: true
       },

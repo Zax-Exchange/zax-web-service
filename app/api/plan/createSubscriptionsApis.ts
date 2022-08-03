@@ -3,7 +3,7 @@ import sequelize from "../../postgres/dbconnection";
 import { stripe_customers } from "../models/stripe_customers";
 import { v4 as uuidv4 } from "uuid";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST!, {
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST!, {
   "apiVersion": "2020-08-27"
 });
 
@@ -21,7 +21,6 @@ const createStripeCustomer = async (email: string): Promise<string> => {
       }
     })
     .then(async ([foundCustomer, created]) => {
-
       if (created) {
         const customer = await stripe.customers.create({
           email
@@ -41,6 +40,12 @@ const createStripeCustomer = async (email: string): Promise<string> => {
 
 const createSubscription = async (priceId: string, customerId: string) => {
   try {
+    const customer = await sequelize.models.stripe_customers.findOne({
+      where: {
+        customerId
+      }
+    });
+
     const subscription = await stripe.subscriptions.create({
       customer: customerId,
       items: [{
@@ -50,6 +55,10 @@ const createSubscription = async (priceId: string, customerId: string) => {
       payment_settings: { save_default_payment_method: 'on_subscription' },
       expand: ['latest_invoice.payment_intent'],
     });
+
+    customer?.update({
+      subscriptionId: subscription.id
+    })
     const invoice = subscription.latest_invoice as Stripe.Invoice;
     const intent = invoice.payment_intent as Stripe.PaymentIntent;
 

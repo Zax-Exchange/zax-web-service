@@ -1,12 +1,14 @@
 import * as commonProjectTypes from "../types/common/projectTypes";
 import * as enums from "../types/common/enums"
 import ProjectApiUtils from "../utils/projectUtils";
+import sequelize from "../../postgres/dbconnection";
+import { users } from "../models/users";
 
 const getVendorProjects = async(userId:string): Promise<commonProjectTypes.VendorProject[]> => {
   // projectBidPermissions -> projectBidId -> projectBid -> projectId -> project
   try {
     const permissions = await ProjectApiUtils.getBidPermissions(userId);
-
+    
     const res = [];
     for (let permission of permissions) {
       const bid = await ProjectApiUtils.getPermissionedProjectBid(permission.projectBidId, permission.permission as enums.ProjectPermission);
