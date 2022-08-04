@@ -7,11 +7,28 @@ import sequelize from "./postgres/dbconnection";
 import { initModels } from "./api/models/init-models";
 import dotenv from "dotenv";
 import cors from "cors";
+import http from "http";
+import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
+import { handleStripeWebhook } from "./rest/stripeWebhook";
 
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
 }
 
+const stripeWebhookIPs = [
+  "3.18.12.63",
+"3.130.192.231",
+"13.235.14.237",
+"13.235.122.149",
+"18.211.135.69",
+"35.154.171.200",
+"52.15.183.38",
+"54.88.130.119",
+"54.88.130.237",
+"54.187.174.169",
+"54.187.205.235",
+"54.187.216.72"
+]
 const startServer = async() => {  
   
   initModels(sequelize);
@@ -24,21 +41,29 @@ const startServer = async() => {
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   }
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers
-  });
   const app = express();
   // app.use(cors({ credentials: true, origin: ["http://localhost:4001", "https://studio.apollographql.com"] }));
-
+  const httpServer = http.createServer(app);
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer })
+    ]
+  });
+  
   await server.start();
+
   server.applyMiddleware({app, cors: {
-    origin: ["http://localhost:4001", "https://studio.apollographql.com"]
+    origin: ["http://localhost:4001", "https://studio.apollographql.com", "https://api.stripe.com"]
   }});
 
-  app.listen({port: 4000}, () => {
-    console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
-  });
+  app.use(express.json());
+
+  app.post("/webhook", handleStripeWebhook);
+
+  await new Promise<void>(resolve => httpServer.listen({ port: 4000 }, resolve));
+  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 }; 
 
 startServer()

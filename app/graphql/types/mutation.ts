@@ -22,8 +22,9 @@ const mutation = gql`
         updateVendor(data: UpdateVendorInput): Boolean
         updateCustomer(data: UpdateCustomerInput): Boolean
         updateCompanyPlan(data: UpdateCompanyPlanInput): Boolean
+        updateSubscription(subscriptionId: String): Boolean
+        updateCompanyPlanSubscriptionInfo(subscriptionId: String): Boolean 
         
-
         deleteProject(projectId: String): Boolean
         deleteProjectPermissions(data: DeleteProjectPermissionsInput): Boolean
         deleteProjectBidPermissions(data: DeleteProjectBidPermissionsInput): Boolean

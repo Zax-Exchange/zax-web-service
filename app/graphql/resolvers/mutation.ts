@@ -28,7 +28,10 @@ import {
   updateVendor,
   updateCompanyPlan
 } from "./company/updateCompany";
-
+import { 
+  updateSubscription,
+  updateCompanyPlanSubscriptionInfo
+} from "./plan/updateSubscription";
 import { inviteUser } from "./user/invite/inviteUsers";
 import { deactivateUser } from "./user/delete/deleteUser";
 
@@ -51,6 +54,8 @@ export default {
   updateCustomer,
   updateVendor,
   updateCompanyPlan,
+  updateSubscription,
+  updateCompanyPlanSubscriptionInfo,
 
   deleteProject,
   deleteProjectPermissions,

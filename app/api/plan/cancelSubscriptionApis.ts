@@ -7,11 +7,12 @@ import { stripe } from "./createSubscriptionsApis";
 const cancelSubscription = async (email: string) => {
   try {
     const stripe_customers = sequelize.models.stripe_customers;
-    const subscriptionId = await stripe_customers.findOne({
+    const customer = await stripe_customers.findOne({
       where: {
         email
       }
-    }).then(customer => customer?.get("subscriptionId") as string);
+    })
+    const subscriptionId = customer?.get("subscriptionId") as string;
 
     await stripe.subscriptions.update(subscriptionId, {
       cancel_at_period_end: true

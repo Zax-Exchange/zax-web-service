@@ -59,20 +59,6 @@ const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise
         materials: materials
       });
 
-
-      const encryptedCompanyId = CompanyApiUtils.encryptCompanyId(companyId);
-      
-      const options = {
-        from: `Zax Exchange <${process.env.NODE_MAILER_USERNAME}>`,
-        to:userEmail,
-        subject: "Zax Exchange Account Signup",
-        html: `
-            <p>Please follow the link below to complete sign up for your account.</p>
-            <a href="http://localhost:4001/user-signup/${encryptedCompanyId}">Click here</a>
-         `
-      }
-
-      await EmailService.sendMail(options);
     });
     return Promise.resolve(true);
   } catch(e) {
@@ -125,19 +111,6 @@ const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Pro
         remainingQuota: plan.licensedUsers
       }, {transaction});
 
-      const encryptedCompanyId = CompanyApiUtils.encryptCompanyId(companyId);
-      
-      const options = {
-        from: `Zax Exchange <${process.env.NODE_MAILER_USERNAME}>`,
-        to:userEmail,
-        subject: "Zax Exchange Account Signup",
-        html: `
-            <p>Please follow the link below to complete sign up for your account.</p>
-            <a href="http://localhost:4001/user-signup/${encryptedCompanyId}">Click here</a>
-         `
-      }
-
-      await EmailService.sendMail(options);
     });
     return Promise.resolve(true);
   } catch(e) {

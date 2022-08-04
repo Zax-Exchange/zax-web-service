@@ -10,6 +10,8 @@ export interface company_plansAttributes {
   companyId: string;
   stripeCustomerId?: string;
   remainingQuota: number;
+  subscriptionStartDate?: Date;
+  subscriptionEndDate?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -25,6 +27,8 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
   companyId!: string;
   stripeCustomerId?: string;
   remainingQuota!: number;
+  subscriptionStartDate?: Date;
+  subscriptionEndDate?: Date;
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -57,8 +61,7 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
       references: {
         model: 'plans',
         key: 'id'
-      },
-      unique: "company_plans_planId_key"
+      }
     },
     companyId: {
       type: DataTypes.UUID,
@@ -78,6 +81,14 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
       },
       unique: "company_plans_stripe_customerId_key"
     },
+    subscriptionStartDate: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    subscriptionEndDate: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
     remainingQuota: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -93,13 +104,6 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
         unique: true,
         fields: [
           { name: "companyId" },
-        ]
-      },
-      {
-        name: "company_plans_planId_key",
-        unique: true,
-        fields: [
-          { name: "planId" },
         ]
       },
       {
