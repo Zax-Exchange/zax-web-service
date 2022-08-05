@@ -128,9 +128,30 @@ const decreaseCompanyQuota = async (companyId: string, remainingQuota: number, t
   }
 };
 
+/**
+ * Updates company's isActive status
+ * @param companyId 
+ * @param isActive 
+ * @returns boolean
+ */
+const updateCompanyStatus = async (companyId: string, isActive: boolean) => {
+
+  try {
+   const company = await sequelize.models.companies.findByPk(companyId);
+   await company?.update({
+    isActive
+   });
+
+   return true;
+  } catch (error) {
+    return Promise.reject(error)
+  }
+}
+
 export {
   updateCustomer,
   updateVendor,
   updateCompanyPlan,
-  decreaseCompanyQuota
+  decreaseCompanyQuota,
+  updateCompanyStatus
 }

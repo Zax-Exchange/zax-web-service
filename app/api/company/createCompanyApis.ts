@@ -8,7 +8,7 @@ import EmailService from "../email/EmailService";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from 'uuid';
 
-const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise<boolean> => {
+const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise<string> => {
   const { name, logo, phone, fax, country, isActive, isVendor, isVerified, leadTime, companyUrl, planId, locations, moq, materials, userEmail} = data;
 
   const companies = sequelize.models.companies;
@@ -17,7 +17,7 @@ const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise
   const stripe_customers = sequelize.models.stripe_customers;
 
   try {
-    await sequelize.transaction(async (transaction) => {
+    return await sequelize.transaction(async (transaction) => {
 
       
       const companyId = await companies.create({
@@ -59,15 +59,15 @@ const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise
         materials: materials
       });
 
+      return companyId;
     });
-    return Promise.resolve(true);
   } catch(e) {
     console.error(e)
     return Promise.reject(e);
   }
 };
 
-const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Promise<boolean> => {
+const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Promise<string> => {
   const { name, logo, phone, fax, country, isActive, isVendor, isVerified, companyUrl, planId, userEmail} = data;
 
   const companies = sequelize.models.companies;
@@ -76,7 +76,7 @@ const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Pro
   const stripe_customers = sequelize.models.stripe_customers;
 
   try {
-    await sequelize.transaction(async (transaction) => {
+    return await sequelize.transaction(async (transaction) => {
       const stripeCustomerId = await stripe_customers.findOne({
         where: {
           email: userEmail
@@ -111,8 +111,8 @@ const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Pro
         remainingQuota: plan.licensedUsers
       }, {transaction});
 
+      return companyId;
     });
-    return Promise.resolve(true);
   } catch(e) {
     console.error(e)
     return Promise.reject(e);

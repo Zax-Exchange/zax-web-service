@@ -7,7 +7,11 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST!, {
   "apiVersion": "2020-08-27"
 });
 
-
+/**
+ * Creates an instance of stripe_customer and returns the id of the row
+ * @param email 
+ * @returns stripeCustomerId
+ */
 const createStripeCustomer = async (email: string): Promise<string> => {
 
   try {
@@ -38,6 +42,12 @@ const createStripeCustomer = async (email: string): Promise<string> => {
   }
 }
 
+/**
+ * Creates a stripe subscription
+ * @param priceId 
+ * @param customerId 
+ * @returns 
+ */
 const createSubscription = async (priceId: string, customerId: string) => {
   try {
     const customer = await sequelize.models.stripe_customers.findOne({

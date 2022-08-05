@@ -26,7 +26,8 @@ import {
 import {
   updateCustomer,
   updateVendor,
-  updateCompanyPlan
+  updateCompanyPlan,
+  updateCompanyStatus
 } from "./company/updateCompany";
 import { 
   updateSubscription,
@@ -54,6 +55,7 @@ export default {
   updateCustomer,
   updateVendor,
   updateCompanyPlan,
+  updateCompanyStatus,
   updateSubscription,
   updateCompanyPlanSubscriptionInfo,
 

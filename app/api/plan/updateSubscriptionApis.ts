@@ -29,6 +29,7 @@ const updateSubscription = async (subscriptionId: string) => {
  * @returns Boolean
  */
 const updateCompanyPlanSubscriptionInfo = async (subscriptionId: string) => {
+
   try {
     const subscription = await getSubscription(subscriptionId);
     const stripeCustomer  = await sequelize.models.stripe_customers.findOne({

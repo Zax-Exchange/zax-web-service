@@ -15,16 +15,17 @@ const mutation = gql`
         updateProject(data: UpdateProjectInput): Boolean
         updateProjectBid(data: UpdateProjectBidInput): Boolean
 
-        createVendor(data: CreateVendorInput): Boolean
-        createCustomer(data: CreateCustomerInput): Boolean
+        createVendor(data: CreateVendorInput): String
+        createCustomer(data: CreateCustomerInput): String
         createStripeCustomer(email: String): String
         createSubscription(priceId: String, customerId: String): StripeSubscription
         updateVendor(data: UpdateVendorInput): Boolean
         updateCustomer(data: UpdateCustomerInput): Boolean
         updateCompanyPlan(data: UpdateCompanyPlanInput): Boolean
+        updateCompanyStatus(companyId: String, isActive: Boolean): Boolean
         updateSubscription(subscriptionId: String): Boolean
         updateCompanyPlanSubscriptionInfo(subscriptionId: String): Boolean 
-        
+
         deleteProject(projectId: String): Boolean
         deleteProjectPermissions(data: DeleteProjectPermissionsInput): Boolean
         deleteProjectBidPermissions(data: DeleteProjectBidPermissionsInput): Boolean
