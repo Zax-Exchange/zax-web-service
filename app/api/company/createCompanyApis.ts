@@ -119,7 +119,7 @@ const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Pro
   }
 };
 
-const isDuplicateName = async (name: string) => {
+const checkCompanyName = async (name: string) => {
   return await CompanyApiUtils.isDuplicateCompanyNames(name);
 }
 
@@ -127,5 +127,5 @@ const isDuplicateName = async (name: string) => {
 export { 
   createVendor,
   createCustomer,
-  isDuplicateName
+  checkCompanyName
 };

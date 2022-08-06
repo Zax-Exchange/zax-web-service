@@ -8,8 +8,8 @@ const getPlanWithPlanId = (parent: any, args: Record<string, string>, context: a
   return getPlanWithPlanIdApi(args.id);
 }
 
-const getAllPlans = (parent: any, args: any, context: any) => {
-  return getAllPlansApi();
+const getAllPlans = (parent: any, { isVendor }: { isVendor: boolean }, context: any) => {
+  return getAllPlansApi(isVendor);
 }
 
 export {

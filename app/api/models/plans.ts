@@ -1,11 +1,14 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import { Pricings } from '../types/common/planTypes';
 import type { company_plans, company_plansId } from './company_plans';
 
 export interface plansAttributes {
   id: string;
+  isVendor: boolean
+  planTier?: string; 
   name: string;
-  price: number;
+  pricings: Pricings;
   licensedUsers: number;
   description: string;
   features: string[];
@@ -20,8 +23,10 @@ export type plansCreationAttributes = Optional<plansAttributes, plansOptionalAtt
 
 export class plans extends Model<plansAttributes, plansCreationAttributes> implements plansAttributes {
   id!: string;
+  isVendor!: boolean;
+  planTier?: string;
   name!: string;
-  price!: number;
+  pricings!: Pricings;
   licensedUsers!: number;
   description!: string;
   features!: string[];
@@ -48,12 +53,20 @@ export class plans extends Model<plansAttributes, plansCreationAttributes> imple
       allowNull: false,
       primaryKey: true
     },
+    isVendor: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    },
+    planTier: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
     name: {
       type: DataTypes.STRING(255),
       allowNull: false
     },
-    price: {
-      type: DataTypes.INTEGER,
+    pricings: {
+      type: DataTypes.JSON,
       allowNull: false
     },
     licensedUsers: {

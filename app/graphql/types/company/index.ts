@@ -78,6 +78,11 @@ const company = gql`
     updatedAt: String!
   }
 
+  type CompanyPlanDetail {
+    id: String!
+    
+  }
+
   type CompanyDetail {
     id: String!
     name: String!

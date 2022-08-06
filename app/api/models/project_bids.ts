@@ -10,10 +10,10 @@ export interface project_bidsAttributes {
   id: string;
   userId: string;
   projectId: string;
+  companyId: string;
   comments?: string;
   createdAt: Date;
   updatedAt: Date;
-  companyId: string;
   deletedAt?: Date;
 }
 
@@ -26,10 +26,10 @@ export class project_bids extends Model<project_bidsAttributes, project_bidsCrea
   id!: string;
   userId!: string;
   projectId!: string;
+  companyId!: string;
   comments?: string;
   createdAt!: Date;
   updatedAt!: Date;
-  companyId!: string;
   deletedAt?: Date;
 
   // project_bids belongsTo companies via companyId

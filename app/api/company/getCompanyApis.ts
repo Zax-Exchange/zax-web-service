@@ -7,7 +7,8 @@ import CompanyApiUtils from "../utils/companyUtils";
 import UserApiUtils from "../utils/userUtils";
 import { companiesAttributes } from "../models/companies";
 import { company_plansAttributes } from "../models/company_plans";
-import { plansAttributes } from "../models/plans";
+import { plans, plansAttributes } from "../models/plans";
+import { stripe } from "../plan/createSubscriptionsApis";
 
 // should only be called with user admin within the company
 const getCompanyDetail = async (id: string): Promise<commonCompanyTypes.VendorDetail | commonCompanyTypes.CustomerDetail> => {
@@ -94,15 +95,13 @@ const getCompanyPlanDetail = async (companyId: string) => {
         companyId
       }
     }).then(plan => plan?.get({ plain: true }) as company_plansAttributes);
-    const plan = await plans.findOne({
-      where: {
-        id: companyPlan.planId
-      }
-    }).then(p => p?.get({ plain: true }) as plansAttributes);
+   
+    const plan = await plans.findByPk(companyPlan.planId).then(p => p?.get({ plain:true }) as plansAttributes);
 
-    return {
+    const subscription = await stripe.prices.retrieve("price_1LSBTMEZqkVG9UR3HZhwZEsT");
 
-    }
+    console.log(subscription)
+    return true
   } catch (e) {
     return Promise.reject(e);
   }
@@ -111,5 +110,6 @@ const getCompanyPlanDetail = async (companyId: string) => {
 export {
   getCompanyDetail,
   getCustomerDetail,
-  getVendorDetail
+  getVendorDetail,
+  getCompanyPlanDetail
 }

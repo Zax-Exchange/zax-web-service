@@ -1,8 +1,10 @@
 import { getUserWithUserId, getAllUsersWithinCompany } from "./user/get/getUser";
+import { checkCompanyName } from "./company/createCompany";
 import {
     getCustomerDetail,
     getVendorDetail,
-    getCompanyDetail
+    getCompanyDetail,
+    getCompanyPlanDetail
 } from "./company/getCompany";
 import { getVendorProjects, 
     getCustomerProjects, 
@@ -20,10 +22,12 @@ import { searchVendorCompanies } from "./search/customerSearch";
 import login from "./user/login/login";
 
 export default {
+    checkCompanyName,
     getPlanWithPlanId, 
     getAllPlans, 
     getUserWithUserId,
     getAllUsersWithinCompany,
+    getCompanyPlanDetail,
     getCustomerDetail,
     getVendorDetail,
     getCompanyDetail,

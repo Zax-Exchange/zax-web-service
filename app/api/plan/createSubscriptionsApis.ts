@@ -8,7 +8,7 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST!, {
 });
 
 /**
- * Creates an instance of stripe_customer and returns the id of the row
+ * Creates/Finds a stripe_customer and returns its id
  * @param email 
  * @returns stripeCustomerId
  */
@@ -55,7 +55,6 @@ const createSubscription = async (priceId: string, customerId: string) => {
         customerId
       }
     });
-
     const subscription = await stripe.subscriptions.create({
       customer: customerId,
       items: [{

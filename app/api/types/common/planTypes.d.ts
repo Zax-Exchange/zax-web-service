@@ -7,10 +7,21 @@ export interface CompanyPlan {
   updatedAt: Date;
 }
 
+export interface PricingDetail {
+  price: number;
+  priceId: string
+}
+export interface Pricings {
+  monthly: PricingDetail;
+  annual: PricingDetail;
+  additionalLicense: PricingDetail;
+}
 export interface Plan {
   id: string;
+  isVendor: boolean
+  planTier?: string; 
   name: string;
-  price: number;
+  pricings: Pricings;
   licensedUsers: number;
   description: string;
   features: string[];
