@@ -20,8 +20,9 @@ import {
 import { searchCustomerProjects } from "./search/vendorSearch";
 import { searchVendorCompanies } from "./search/customerSearch";
 import login from "./user/login/login";
-
+import { checkUserEmail } from "./plan/createSubscription";
 export default {
+    checkUserEmail,
     checkCompanyName,
     getPlanWithPlanId, 
     getAllPlans, 

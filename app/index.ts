@@ -55,7 +55,7 @@ const startServer = async() => {
   await server.start();
 
   server.applyMiddleware({app, cors: {
-    origin: ["http://localhost:4001", "https://studio.apollographql.com", "https://api.stripe.com"]
+    origin: ["http://localhost:3000", "https://studio.apollographql.com", "https://api.stripe.com"]
   }});
 
   app.use(express.json());

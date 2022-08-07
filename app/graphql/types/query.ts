@@ -2,6 +2,7 @@ import { gql } from "apollo-server-express";
 
 const query = gql`
     type Query {
+        checkUserEmail(email: String): Boolean
         checkCompanyName(name: String): Boolean
         getPlanWithPlanId(id: String): Plan
         getAllPlans(isVendor: Boolean): [Plan]

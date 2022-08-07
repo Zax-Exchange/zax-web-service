@@ -15,7 +15,7 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST!, {
 const createStripeCustomer = async (email: string): Promise<string> => {
 
   try {
-    const stripeCustomerId = await sequelize.models.stripe_customers.findOrCreate({
+    return await sequelize.models.stripe_customers.findOrCreate({
       where: {
         email
       },
@@ -32,11 +32,10 @@ const createStripeCustomer = async (email: string): Promise<string> => {
         foundCustomer.set("customerId", customer.id);
         foundCustomer.save();
         return customer.id;
+      } else {
+        return foundCustomer.get("customerId") as string;
       }
-      return foundCustomer.get("customerId") as string;
     });
-
-    return stripeCustomerId;
   } catch (error) {
     return Promise.reject(error);
   }
@@ -80,7 +79,27 @@ const createSubscription = async (priceId: string, customerId: string) => {
   }
 }
 
+/**
+ * Check if email is duplicate when signing up
+ * @param email 
+ * @returns 
+ */
+const checkUserEmail = async (email: string) => {
+  try {
+    const customer =  await sequelize.models.stripe_customers.findOne({
+      where: {
+        email
+      }
+    })
+    
+    if (customer) return true;
+    return false;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
 export {
   createStripeCustomer,
-  createSubscription
+  createSubscription,
+  checkUserEmail
 }
