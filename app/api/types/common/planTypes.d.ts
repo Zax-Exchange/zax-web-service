@@ -7,6 +7,20 @@ export interface CompanyPlan {
   updatedAt: Date;
 }
 
+export interface CompanyPlanDetail {
+  name: string;
+  tier?: string | undefined;
+  price: number;
+  billingFrequency: string;
+  licensedUsers: number;
+  remainingQuota: number;
+  memberSince: string;
+  subscriptionStartDate: string;
+  subscriptionEndDate: string;
+  trialStartDate?: string | null;
+  trialEndDate?: string | null;
+}
+
 export interface PricingDetail {
   price: number;
   priceId: string

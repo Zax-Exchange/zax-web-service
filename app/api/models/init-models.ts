@@ -99,10 +99,12 @@ export function initModels(sequelize: Sequelize) {
   const materials = _materials.initModel(sequelize);
 
   company_plans.belongsTo(companies, { as: "company", foreignKey: "companyId", hooks: true, onDelete: "CASCADE" });
-  company_plans.hasOne(stripe_customers, { as: "stripe_customer", foreignKey: "stripeCustomerId", onDelete: "CASCADE" });
+  company_plans.belongsTo(stripe_customers, { as: "stripe_customer", foreignKey: "stripeCustomerId", onDelete: "CASCADE" });
+  stripe_customers.hasOne(company_plans, { as: "company_plan", foreignKey: "stripeCustomerId", onDelete: "CASCADE"})
   companies.hasOne(company_plans, { as: "company_plan", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
+  
   customers.belongsTo(companies, { as: "company", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
-  companies.hasOne(customers, { as: "customers", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
+  companies.hasOne(customers, { as: "customer", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   project_bids.belongsTo(companies, { as: "company", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   companies.hasMany(project_bids, { as: "project_bids", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   projects.belongsTo(companies, { as: "company", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
@@ -110,7 +112,7 @@ export function initModels(sequelize: Sequelize) {
   users.belongsTo(companies, { as: "company", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   companies.hasMany(users, { as: "users", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   vendors.belongsTo(companies, { as: "company", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
-  companies.hasOne(vendors, { as: "vendors", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
+  companies.hasOne(vendors, { as: "vendor", foreignKey: "companyId", hooks: true, onDelete: "CASCADE"});
   company_plans.belongsTo(plans, { as: "plan", foreignKey: "planId", hooks: true, onDelete: "CASCADE"});
   plans.hasMany(company_plans, { as: "company_plans", foreignKey: "planId", hooks: true, onDelete: "CASCADE"});
   project_bid_components.belongsTo(project_bids, { as: "projectBid", foreignKey: "projectBidId", hooks: true, onDelete: "CASCADE"});

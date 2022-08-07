@@ -44,11 +44,6 @@ const updateCompanyPlanSubscriptionInfo = async (subscriptionId: string) => {
       }
     });
 
-    companyPlan?.update({
-      subscriptionStartDate: new Date(subscription.current_period_start*1000),
-      subscriptionEndDate: new Date(subscription.current_period_end*1000)
-    })
-
     const encryptedCompanyId = CompanyApiUtils.encryptCompanyId(companyPlan?.get("companyId") as string);
       
     const options = {

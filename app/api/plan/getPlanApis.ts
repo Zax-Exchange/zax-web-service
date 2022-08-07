@@ -2,6 +2,10 @@ import sequelize from "../../postgres/dbconnection";
 import * as commonPlanTypes from "../types/common/planTypes";
 import { Transaction } from "sequelize/types";
 import { plansAttributes } from "../models/plans";
+import { company_plans } from "../models/company_plans";
+import { stripe } from "./createSubscriptionsApis";
+import { companies } from "../models/companies";
+import { stripeTimeToUTC } from "../utils/timeUtils";
 
 const getPlanWithPlanId = async (id: string, transaction?: Transaction) => {
   const plans = sequelize.models.plans;
@@ -31,8 +35,47 @@ const getAllPlans = async (isVendor: boolean) => {
   }
 }
 
+const getCompanyPlanWithCompanyId = async (companyId: string): Promise<commonPlanTypes.CompanyPlanDetail> => {
+  try {
+    const companyPlan = await sequelize.models.company_plans.findOne({
+      where: {
+        companyId
+      }
+    }) as company_plans;
+    
+    const [plan, subId] = await Promise.all([
+      companyPlan.getPlan().then(p => p.get({ plain:true }) as plansAttributes),
+      companyPlan.getStripe_customer().then(cus => cus.get("subscriptionId") as string)
+    ])
+
+    const sub = await stripe.subscriptions.retrieve(subId, {
+      "expand": ["plan"]
+    });
+
+
+    const res = {
+      name: plan.name,
+      tier: plan.planTier,
+      price: sub.items.data[0].plan.amount! / 100,
+      billingFrequency: sub.items.data[0].plan.interval,
+      licensedUsers: plan.licensedUsers,
+      remainingQuota: companyPlan.remainingQuota,
+      memberSince: stripeTimeToUTC(sub.start_date)!,
+      subscriptionStartDate: stripeTimeToUTC(sub.current_period_start)!,
+      subscriptionEndDate: stripeTimeToUTC(sub.current_period_end)!,
+      trialStartDate: stripeTimeToUTC(sub.trial_start),
+      trialEndDate: stripeTimeToUTC(sub.trial_end)
+    }
+
+    return res;
+  } catch (error) {
+
+    return Promise.reject(error) 
+  }
+}
 
 export {
   getPlanWithPlanId,
+  getCompanyPlanWithCompanyId,
   getAllPlans
 }

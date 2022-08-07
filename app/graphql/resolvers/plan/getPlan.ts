@@ -1,6 +1,7 @@
 import { 
   getPlanWithPlanId as getPlanWithPlanIdApi,
-  getAllPlans as getAllPlansApi
+  getAllPlans as getAllPlansApi,
+  getCompanyPlanWithCompanyId as getCompanyPlanWithCompanyIdApi
 } from "../../../api/plan/getPlanApis";
 
 
@@ -12,7 +13,11 @@ const getAllPlans = (parent: any, { isVendor }: { isVendor: boolean }, context: 
   return getAllPlansApi(isVendor);
 }
 
+const getCompanyPlanWithCompanyId = (parent: any, { companyId }: { companyId: string }, context: any) => {
+  return getCompanyPlanWithCompanyIdApi(companyId);
+}
 export {
   getPlanWithPlanId,
+  getCompanyPlanWithCompanyId,
   getAllPlans
 }

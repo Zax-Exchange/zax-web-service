@@ -34,6 +34,20 @@ const plan = gql`
     createdAt: String!
     updatedAt: String!
   }
+  
+  type CompanyPlanDetail {
+    name: String!
+    tier: String
+    price: Int!
+    billingFrequency: String!
+    licensedUsers: Int!
+    remainingQuota: Int!
+    memberSince: String!
+    subscriptionStartDate: String!
+    subscriptionEndDate: String!
+    trialStartDate: String
+    trialEndDate: String
+  }
 
   type StripeSubscription {
     subscriptionId: String!

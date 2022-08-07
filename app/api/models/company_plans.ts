@@ -10,8 +10,6 @@ export interface company_plansAttributes {
   companyId: string;
   stripeCustomerId?: string;
   remainingQuota: number;
-  subscriptionStartDate?: Date;
-  subscriptionEndDate?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -27,8 +25,6 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
   companyId!: string;
   stripeCustomerId?: string;
   remainingQuota!: number;
-  subscriptionStartDate?: Date;
-  subscriptionEndDate?: Date;
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -42,11 +38,11 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
   getPlan!: Sequelize.BelongsToGetAssociationMixin<plans>;
   setPlan!: Sequelize.BelongsToSetAssociationMixin<plans, plansId>;
   createPlan!: Sequelize.BelongsToCreateAssociationMixin<plans>;
-  // company_plans hasOne stripe_customers via stripeCustomerId
+  // company_plans belongsTo stripe_customers via stripeCustomerId
   stripe_customer!: stripe_customers;
-  getStripe_customer!: Sequelize.HasOneGetAssociationMixin<stripe_customers>;
-  setStripe_cusomter!: Sequelize.HasOneSetAssociationMixin<stripe_customers, stripe_customersId>;
-  createStripe_customer!: Sequelize.HasOneCreateAssociationMixin<stripe_customers>;
+  getStripe_customer!: Sequelize.BelongsToGetAssociationMixin<stripe_customers>;
+  setStripe_cusomter!: Sequelize.BelongsToSetAssociationMixin<stripe_customers, stripe_customersId>;
+  createStripe_customer!: Sequelize.BelongsToCreateAssociationMixin<stripe_customers>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof company_plans {
     return sequelize.define('company_plans', {
@@ -80,14 +76,6 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
         key: 'id'
       },
       unique: "company_plans_stripe_customerId_key"
-    },
-    subscriptionStartDate: {
-      type: DataTypes.DATE,
-      allowNull: true
-    },
-    subscriptionEndDate: {
-      type: DataTypes.DATE,
-      allowNull: true
     },
     remainingQuota: {
       type: DataTypes.INTEGER,

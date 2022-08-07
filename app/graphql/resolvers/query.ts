@@ -15,30 +15,39 @@ import { getVendorProjects,
 
 import { 
     getPlanWithPlanId, 
-    getAllPlans 
+    getAllPlans,
+    getCompanyPlanWithCompanyId 
 } from "./plan/getPlan";
 import { searchCustomerProjects } from "./search/vendorSearch";
 import { searchVendorCompanies } from "./search/customerSearch";
 import login from "./user/login/login";
 import { checkUserEmail } from "./plan/createSubscription";
+
 export default {
     checkUserEmail,
     checkCompanyName,
+
     getPlanWithPlanId, 
+    getCompanyPlanWithCompanyId,
     getAllPlans, 
+
     getUserWithUserId,
     getAllUsersWithinCompany,
+
     getCompanyPlanDetail,
     getCustomerDetail,
     getVendorDetail,
     getCompanyDetail,
+
     getVendorProjects,
     getCustomerProjects,
     getProjectDetail,
     getProjectUsers,
     getProjectBidUsers,
+
     searchCustomerProjects,
     searchVendorCompanies,
+    
     login
 };
 

@@ -45,6 +45,8 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
   getCustomer!: Sequelize.HasOneGetAssociationMixin<customers>;
   setCustomer!: Sequelize.HasOneSetAssociationMixin<customers, customersId>;
   createCustomer!: Sequelize.HasOneCreateAssociationMixin<customers>;
+
+
   vendor!: vendors;
   getVendor!: Sequelize.HasOneGetAssociationMixin<vendors>;
   setVendor!: Sequelize.HasOneSetAssociationMixin<vendors, vendorsId>;
@@ -55,19 +57,7 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
   getCompany_plan!: Sequelize.HasOneGetAssociationMixin<company_plans>;
   setCompany_plan!: Sequelize.HasOneSetAssociationMixin<company_plans, company_plansId>;
   createCompany_plan!: Sequelize.HasOneCreateAssociationMixin<company_plans>;
-  // companies hasMany customers via companyId
-  // customers!: customers[];
-  // getCustomers!: Sequelize.HasManyGetAssociationsMixin<customers>;
-  // setCustomers!: Sequelize.HasManySetAssociationsMixin<customers, customersId>;
-  // addCustomer!: Sequelize.HasManyAddAssociationMixin<customers, customersId>;
-  // addCustomers!: Sequelize.HasManyAddAssociationsMixin<customers, customersId>;
-  // createCustomer!: Sequelize.HasManyCreateAssociationMixin<customers>;
-  // removeCustomer!: Sequelize.HasManyRemoveAssociationMixin<customers, customersId>;
-  // removeCustomers!: Sequelize.HasManyRemoveAssociationsMixin<customers, customersId>;
-  // hasCustomer!: Sequelize.HasManyHasAssociationMixin<customers, customersId>;
-  // hasCustomers!: Sequelize.HasManyHasAssociationsMixin<customers, customersId>;
-  // countCustomers!: Sequelize.HasManyCountAssociationsMixin;
-  // companies hasMany project_bids via companyId
+
   project_bids!: project_bids[];
   getProject_bids!: Sequelize.HasManyGetAssociationsMixin<project_bids>;
   setProject_bids!: Sequelize.HasManySetAssociationsMixin<project_bids, project_bidsId>;
@@ -103,18 +93,7 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
   hasUser!: Sequelize.HasManyHasAssociationMixin<users, usersId>;
   hasUsers!: Sequelize.HasManyHasAssociationsMixin<users, usersId>;
   countUsers!: Sequelize.HasManyCountAssociationsMixin;
-  // companies hasMany vendors via companyId
-  // vendors!: vendors[];
-  // getVendors!: Sequelize.HasManyGetAssociationsMixin<vendors>;
-  // setVendors!: Sequelize.HasManySetAssociationsMixin<vendors, vendorsId>;
-  // addVendor!: Sequelize.HasManyAddAssociationMixin<vendors, vendorsId>;
-  // addVendors!: Sequelize.HasManyAddAssociationsMixin<vendors, vendorsId>;
-  // createVendor!: Sequelize.HasManyCreateAssociationMixin<vendors>;
-  // removeVendor!: Sequelize.HasManyRemoveAssociationMixin<vendors, vendorsId>;
-  // removeVendors!: Sequelize.HasManyRemoveAssociationsMixin<vendors, vendorsId>;
-  // hasVendor!: Sequelize.HasManyHasAssociationMixin<vendors, vendorsId>;
-  // hasVendors!: Sequelize.HasManyHasAssociationsMixin<vendors, vendorsId>;
-  // countVendors!: Sequelize.HasManyCountAssociationsMixin;
+
 
   static initModel(sequelize: Sequelize.Sequelize): typeof companies {
     return sequelize.define('companies', {
