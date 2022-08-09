@@ -4,7 +4,6 @@ import UserApiUtils from "../utils/userUtils";
 import CompanyApiUtils from "../utils/companyUtils";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { decreaseCompanyQuota } from "../company/updateCompanyApis";
 import { Transaction } from "sequelize/types";
 import { LoggedInUser } from "../types/common/userTypes";
 import { v4 as uuidv4 } from "uuid";
@@ -25,11 +24,6 @@ const createUser = async(data: userTypes.CreateUserInput): Promise<LoggedInUser>
 
     const isFirst = await UserApiUtils.isUserFirstInCompany(companyId);
     const isVendor = await CompanyApiUtils.isVendorWithCompanyId(companyId);
-    const companyPlan = await CompanyApiUtils.getCompanyPlan(companyId);
-
-    if (companyPlan.remainingQuota <= 0) {
-      throw new Error("No more licensed users allowed.");
-    }
 
     return await sequelize.transaction(async (transaction: Transaction) => {
       const encrypted = await bcrypt.hash(password, 10);
@@ -55,7 +49,6 @@ const createUser = async(data: userTypes.CreateUserInput): Promise<LoggedInUser>
           expiresIn: "8h"
         }
       )
-      await decreaseCompanyQuota(companyId, companyPlan.remainingQuota - 1, transaction);
 
       return {
         ...user,

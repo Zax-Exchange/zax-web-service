@@ -9,7 +9,6 @@ export interface company_plansAttributes {
   planId: string;
   companyId: string;
   stripeCustomerId?: string;
-  remainingQuota: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -24,7 +23,6 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
   planId!: string;
   companyId!: string;
   stripeCustomerId?: string;
-  remainingQuota!: number;
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -76,10 +74,6 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
         key: 'id'
       },
       unique: "company_plans_stripe_customerId_key"
-    },
-    remainingQuota: {
-      type: DataTypes.INTEGER,
-      allowNull: false
     }
   }, {
     tableName: 'company_plans',

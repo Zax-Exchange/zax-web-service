@@ -4,19 +4,17 @@ const plan = gql`
   type Plan {
     id: String!
     isVendor: Boolean!
-    planTier: String
-    name: String!
+    companySize: String
+    tier: String
     pricings: Pricings!
-    licensedUsers: Int!
-    features: [String!]!
     createdAt: String!
     updatedAt: String!
   }
 
   type Pricings {
-    monthly: PricingDetail!
-    annual: PricingDetail!
-    additionalLicense: PricingDetail!
+    monthly: PricingDetail
+    annual: PricingDetail
+    perUser: PricingDetail!
   }
 
   type PricingDetail {
@@ -28,20 +26,14 @@ const plan = gql`
     id: String!
     planId: String!
     companyId: String!
-    remainingQuota: Int!
-    description: String!
-    features: [String!]!
     createdAt: String!
     updatedAt: String!
   }
   
   type CompanyPlanDetail {
-    name: String!
     tier: String
     price: Int!
     billingFrequency: String!
-    licensedUsers: Int!
-    remainingQuota: Int!
     memberSince: String!
     subscriptionStartDate: String!
     subscriptionEndDate: String!
@@ -52,6 +44,12 @@ const plan = gql`
   type StripeSubscription {
     subscriptionId: String!
     clientSecret: String!
+  }
+
+  input CreateVendorSubscriptionInput {
+    subscriptionPriceId: String!
+    perUserPriceId: String!
+    stripeCustomerId: String!
   }
 `;
 

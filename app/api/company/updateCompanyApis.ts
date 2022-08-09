@@ -86,47 +86,14 @@ const updateCompanyPlan = async (data: updatePlanTypes.UpdateCompanyPlanInput) =
   const company_plans = sequelize.models.company_plans;
   const plans = sequelize.models.plans;
   try {
-    const newPlanQuota = await plans.findByPk(planId).then(p => p?.getDataValue("licensedUsers"));
     const companyPlan = await CompanyApiUtils.getCompanyPlan(companyId);
-    const previousPlanQuota = (await getPlanWithPlanId(companyPlan.planId)).licensedUsers;
 
-    const used = previousPlanQuota - companyPlan.remainingQuota;
 
-    //TODO: review
-    if (newPlanQuota < used) {
-      throw new Error("Current licensed users exceed new plan quota.");
-    }
-
-    await company_plans.update({
-      planId,
-      remainingQuota: newPlanQuota - used
-    }, {
-      where: {
-        companyId
-      }
-    });
     return Promise.resolve(true);
   } catch(e) {
     return Promise.reject(e);
   }
 }
-
-const decreaseCompanyQuota = async (companyId: string, remainingQuota: number, transaction?: Transaction) => {
-  const company_plans = sequelize.models.company_plans;
-  try {
-    await company_plans.update({
-      remainingQuota
-    }, {
-      where: {
-        companyId
-      },
-      transaction
-    });
-    return Promise.resolve(true);
-  } catch(e) {
-    return Promise.reject(e);
-  }
-};
 
 /**
  * Updates company's isActive status
@@ -152,6 +119,5 @@ export {
   updateCustomer,
   updateVendor,
   updateCompanyPlan,
-  decreaseCompanyQuota,
   updateCompanyStatus
 }

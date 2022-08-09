@@ -47,7 +47,7 @@ export default {
 
     searchCustomerProjects,
     searchVendorCompanies,
-    
+
     login
 };
 

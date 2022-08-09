@@ -1,17 +1,15 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import { CompanySize, PlanTier } from '../types/common/enums';
 import { Pricings } from '../types/common/planTypes';
 import type { company_plans, company_plansId } from './company_plans';
 
 export interface plansAttributes {
   id: string;
-  isVendor: boolean
-  planTier?: string; 
-  name: string;
+  isVendor: boolean;
+  companySize?: CompanySize;
+  tier: PlanTier; 
   pricings: Pricings;
-  licensedUsers: number;
-  description: string;
-  features: string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -24,12 +22,9 @@ export type plansCreationAttributes = Optional<plansAttributes, plansOptionalAtt
 export class plans extends Model<plansAttributes, plansCreationAttributes> implements plansAttributes {
   id!: string;
   isVendor!: boolean;
-  planTier?: string;
-  name!: string;
+  companySize?: CompanySize;
+  tier!: PlanTier;
   pricings!: Pricings;
-  licensedUsers!: number;
-  description!: string;
-  features!: string[];
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -57,28 +52,16 @@ export class plans extends Model<plansAttributes, plansCreationAttributes> imple
       type: DataTypes.BOOLEAN,
       allowNull: false
     },
-    planTier: {
+    companySize: {
       type: DataTypes.STRING,
       allowNull: true
     },
-    name: {
-      type: DataTypes.STRING(255),
+    tier: {
+      type: DataTypes.STRING,
       allowNull: false
     },
     pricings: {
       type: DataTypes.JSON,
-      allowNull: false
-    },
-    licensedUsers: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    description: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    features: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: false
     }
   }, {

@@ -21,7 +21,8 @@ import {
 } from "./company/createCompany";
 import { 
   createStripeCustomer,
-  createSubscription
+  createCustomerSubscription,
+  createVendorSubscription
 } from "./plan/createSubscription";
 import {
   updateCustomer,
@@ -35,13 +36,14 @@ import {
 } from "./plan/updateSubscription";
 import { inviteUser } from "./user/invite/inviteUsers";
 import { deactivateUser } from "./user/delete/deleteUser";
-
+import { reset } from "./resetDB";
 export default {
   createUser,
   createCustomer,
   createVendor,
   createStripeCustomer,
-  createSubscription,
+  createCustomerSubscription,
+  createVendorSubscription,
   createProject,
   createProjectBid,
 
@@ -64,5 +66,7 @@ export default {
   deleteProjectBidPermissions,
   deactivateUser,
 
-  inviteUser
+  inviteUser,
+
+  reset
 };

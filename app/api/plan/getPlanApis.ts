@@ -54,12 +54,9 @@ const getCompanyPlanWithCompanyId = async (companyId: string): Promise<commonPla
 
 
     const res = {
-      name: plan.name,
-      tier: plan.planTier,
+      tier: plan.tier,
       price: sub.items.data[0].plan.amount! / 100,
       billingFrequency: sub.items.data[0].plan.interval,
-      licensedUsers: plan.licensedUsers,
-      remainingQuota: companyPlan.remainingQuota,
       memberSince: stripeTimeToUTC(sub.start_date)!,
       subscriptionStartDate: stripeTimeToUTC(sub.current_period_start)!,
       subscriptionEndDate: stripeTimeToUTC(sub.current_period_end)!,

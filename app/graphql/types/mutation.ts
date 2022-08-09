@@ -18,8 +18,9 @@ const mutation = gql`
         createVendor(data: CreateVendorInput): String
         createCustomer(data: CreateCustomerInput): String
         createStripeCustomer(email: String): String
-        
-        createSubscription(priceId: String, customerId: String): StripeSubscription
+        createCustomerSubscription(priceId: String, stripeCustomerId: String): StripeSubscription
+        createVendorSubscription(data: CreateVendorSubscriptionInput): StripeSubscription
+
         updateVendor(data: UpdateVendorInput): Boolean
         updateCustomer(data: UpdateCustomerInput): Boolean
         updateCompanyPlan(data: UpdateCompanyPlanInput): Boolean
@@ -32,6 +33,8 @@ const mutation = gql`
         deleteProjectBidPermissions(data: DeleteProjectBidPermissionsInput): Boolean
 
         inviteUser(email: String, userId: String): Boolean
+
+        reset(t: Int):Boolean
     }
 `;
 

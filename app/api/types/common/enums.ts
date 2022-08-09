@@ -14,3 +14,15 @@ export enum CompanyPermission {
   ADMIN = "ADMIN",
   USER = "USER"
 }
+
+export enum PlanTier {
+  PREMIUM = "PREMIUM",
+  BUSINESS = "BUSINESS"
+}
+
+export enum CompanySize {
+  XS = "XS",
+  S = "S",
+  M = "S",
+  L = "L"
+}

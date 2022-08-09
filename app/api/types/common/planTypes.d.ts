@@ -1,19 +1,17 @@
+import { CompanySize } from "./enums";
+
 export interface CompanyPlan {
   id: string;
   planId: string;
   companyId: string;
-  remainingQuota: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface CompanyPlanDetail {
-  name: string;
-  tier?: string | undefined;
+  tier: string;
   price: number;
   billingFrequency: string;
-  licensedUsers: number;
-  remainingQuota: number;
   memberSince: string;
   subscriptionStartDate: string;
   subscriptionEndDate: string;
@@ -26,19 +24,16 @@ export interface PricingDetail {
   priceId: string
 }
 export interface Pricings {
-  monthly: PricingDetail;
-  annual: PricingDetail;
-  additionalLicense: PricingDetail;
+  monthly?: PricingDetail;
+  annual?: PricingDetail;
+  perUser: PricingDetail;
 }
 export interface Plan {
   id: string;
-  isVendor: boolean
-  planTier?: string; 
-  name: string;
+  isVendor: boolean;
+  companySize?: CompanySize;
+  tier: string; 
   pricings: Pricings;
-  licensedUsers: number;
-  description: string;
-  features: string[];
   createdAt: Date;
   updatedAt: Date;
 }

@@ -2,6 +2,7 @@ import { Stripe } from "stripe";
 import sequelize from "../../postgres/dbconnection";
 import { stripe_customers } from "../models/stripe_customers";
 import { v4 as uuidv4 } from "uuid";
+import { CreateVendorSubscriptionInput } from "../types/create/planTypes";
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST!, {
   "apiVersion": "2020-08-27"
@@ -42,22 +43,61 @@ const createStripeCustomer = async (email: string): Promise<string> => {
 }
 
 /**
- * Creates a stripe subscription
+ * Creates a customer stripe subscription
  * @param priceId 
- * @param customerId 
+ * @param stripeCustomerId 
  * @returns 
  */
-const createSubscription = async (priceId: string, customerId: string) => {
+const createCustomerSubscription = async (priceId: string, stripeCustomerId: string) => {
   try {
     const customer = await sequelize.models.stripe_customers.findOne({
       where: {
-        customerId
+        customerId: stripeCustomerId
       }
     });
     const subscription = await stripe.subscriptions.create({
-      customer: customerId,
+      customer: stripeCustomerId,
       items: [{
         price: priceId,
+      }],
+      payment_behavior: 'default_incomplete',
+      payment_settings: { save_default_payment_method: 'on_subscription' },
+      expand: ['latest_invoice.payment_intent'],
+    });
+
+    customer?.update({
+      subscriptionId: subscription.id
+    })
+    const invoice = subscription.latest_invoice as Stripe.Invoice;
+    const intent = invoice.payment_intent as Stripe.PaymentIntent;
+
+    return {
+      subscriptionId: subscription.id,
+      clientSecret: intent.client_secret
+    }
+  } catch (error) {
+    return Promise.reject(error)
+  }
+}
+
+const createVendorSubscription = async (data: CreateVendorSubscriptionInput) => {
+
+  const {subscriptionPriceId, perUserPriceId, stripeCustomerId } = data;
+
+  try {
+    const customer = await sequelize.models.stripe_customers.findOne({
+      where: {
+        customerId: stripeCustomerId
+      }
+    });
+    const subscription = await stripe.subscriptions.create({
+      customer: stripeCustomerId,
+      items: [{
+        price: subscriptionPriceId,
+        quantity: 1
+      },{
+        price: perUserPriceId,
+        quantity: 1
       }],
       payment_behavior: 'default_incomplete',
       payment_settings: { save_default_payment_method: 'on_subscription' },
@@ -100,6 +140,7 @@ const checkUserEmail = async (email: string) => {
 }
 export {
   createStripeCustomer,
-  createSubscription,
+  createCustomerSubscription,
+  createVendorSubscription,
   checkUserEmail
 }

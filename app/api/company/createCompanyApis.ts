@@ -48,7 +48,6 @@ const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise
         id: uuidv4(),
         companyId,
         planId,
-        remainingQuota: plan.licensedUsers
       }, {transaction});
 
       ElasticCompanyService.createVendorDocument({ 
@@ -108,7 +107,6 @@ const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Pro
         companyId,
         planId,
         stripeCustomerId,
-        remainingQuota: plan.licensedUsers
       }, {transaction});
 
       return companyId;

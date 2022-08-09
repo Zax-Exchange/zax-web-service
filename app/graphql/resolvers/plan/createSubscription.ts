@@ -1,16 +1,22 @@
 import { 
   createStripeCustomer as createStripeCustomerApi,
-  createSubscription as createSubscriptionApi,
+  createCustomerSubscription as createCustomerSubscriptionApi,
+  createVendorSubscription as createVendorSubscriptionApi,
   checkUserEmail as checkUserEmailApi
 } from "../../../api/plan/createSubscriptionsApis"
+import { CreateVendorSubscriptionInput } from "../../../api/types/create/planTypes";
 
 const createStripeCustomer = (parent: any, { email }: { email: string}, context:any) => {
   return createStripeCustomerApi(email);
 }
 
 
-const createSubscription = (parent: any, { priceId, customerId }: { priceId: string, customerId: string }, context:any) => {
-  return createSubscriptionApi(priceId, customerId);
+const createCustomerSubscription = (parent: any, { priceId, stripeCustomerId }: { priceId: string, stripeCustomerId: string }, context:any) => {
+  return createCustomerSubscriptionApi(priceId, stripeCustomerId);
+}
+
+const createVendorSubscription = (parent: any, args: Record<string, CreateVendorSubscriptionInput>, context:any) => {
+  return createVendorSubscriptionApi(args.data);
 }
 
 const checkUserEmail = (parent: any, { email }: { email: string }, context:any) => {
@@ -19,6 +25,7 @@ const checkUserEmail = (parent: any, { email }: { email: string }, context:any) 
 
 export {
   createStripeCustomer,
-  createSubscription,
+  createCustomerSubscription,
+  createVendorSubscription,
   checkUserEmail
 }
