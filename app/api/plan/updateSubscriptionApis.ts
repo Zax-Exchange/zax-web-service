@@ -9,6 +9,7 @@ import { getSubscription } from "./getSubscriptionApis";
  * @param subscriptionId 
  * @returns Boolean
  */
+// TODO: should separate between vendor/customer
 const updateSubscription = async (subscriptionId: string) => {
   try {
     const subscription = await getSubscription(subscriptionId);
@@ -44,7 +45,7 @@ const updateCompanyPlanSubscriptionInfo = async (subscriptionId: string) => {
       }
     });
 
-    const encryptedCompanyId = CompanyApiUtils.encryptCompanyId(companyPlan?.get("companyId") as string);
+    // const encryptedCompanyId = CompanyApiUtils.encryptCompanyId(companyPlan?.get("companyId") as string);
       
     const options = {
       from: `Zax Exchange <${process.env.NODE_MAILER_USERNAME}>`,
@@ -52,7 +53,7 @@ const updateCompanyPlanSubscriptionInfo = async (subscriptionId: string) => {
       subject: "Zax Exchange Account Signup",
       html: `
           <p>Please follow the link below to complete sign up for your account.</p>
-          <a href="http://localhost:4001/user-signup/${encryptedCompanyId}">Click here</a>
+          <a href="http://localhost:3000/user-signup/${companyPlan?.get("companyId")}">Click here</a>
         `
     }
 

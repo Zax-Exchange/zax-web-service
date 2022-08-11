@@ -90,14 +90,11 @@ const createVendorSubscription = async (data: CreateVendorSubscriptionInput) => 
         customerId: stripeCustomerId
       }
     });
+    // TODO: review vendor pricing model
     const subscription = await stripe.subscriptions.create({
       customer: stripeCustomerId,
       items: [{
         price: subscriptionPriceId,
-        quantity: 1
-      },{
-        price: perUserPriceId,
-        quantity: 1
       }],
       payment_behavior: 'default_incomplete',
       payment_settings: { save_default_payment_method: 'on_subscription' },

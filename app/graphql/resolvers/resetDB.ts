@@ -4,7 +4,8 @@ import sequelize from "../../postgres/dbconnection"
 
 const reset = async () => {
   try {
-    await sequelize.models.companies.destroy({ where: {} })
+    console.log("deleting...")
+    await sequelize.models.companies.destroy({ where: {}, force: true })
     await sequelize.models.company_plans.destroy({ where: {} })
     await sequelize.models.stripe_customers.destroy({ where: {} });
     const { data } = await stripe.customers.list({

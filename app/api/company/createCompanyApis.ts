@@ -33,7 +33,11 @@ const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise
         companyUrl,
       }, {transaction}).then(c => c.getDataValue("id"));
 
-      const plan = await getPlanWithPlanId(planId, transaction);
+      const stripeCustomerId = await stripe_customers.findOne({
+        where: {
+          email: userEmail
+        }
+      }).then(customer => customer?.get("id"));
 
       await vendors.create({
         id: uuidv4(),
@@ -48,6 +52,7 @@ const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise
         id: uuidv4(),
         companyId,
         planId,
+        stripeCustomerId,
       }, {transaction});
 
       ElasticCompanyService.createVendorDocument({ 
