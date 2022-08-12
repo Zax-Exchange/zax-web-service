@@ -2,7 +2,6 @@ import { ApolloServer, gql } from "apollo-server-express";
 import express from "express";
 import resolvers from "./graphql/resolvers";
 import typeDefs from "./graphql/types";
-import SequelizeAuto from "sequelize-auto";
 import sequelize from "./postgres/dbconnection";
 import { initModels } from "./api/models/init-models";
 import dotenv from "dotenv";
@@ -44,6 +43,7 @@ const startServer = async() => {
   const app = express();
   // app.use(cors({ credentials: true, origin: ["http://localhost:4001", "https://studio.apollographql.com"] }));
   const httpServer = http.createServer(app);
+
   const server = new ApolloServer({
     typeDefs,
     resolvers,

@@ -19,6 +19,7 @@ const user = gql`
     isVendor: Boolean!
     isAdmin: Boolean!
     token: String!
+    notificationToken: String!
     isActive: Boolean!
   }
 

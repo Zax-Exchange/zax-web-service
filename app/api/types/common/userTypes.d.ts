@@ -10,6 +10,7 @@ export interface User {
 
 export interface LoggedInUser extends User {
   token: string;
+  notificationToken: string;
 }
 
 export interface UserLoginInput {
