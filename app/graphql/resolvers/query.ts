@@ -9,6 +9,7 @@ import {
 import { 
     getVendorProject,
     getVendorProjects, 
+    getCustomerProject,
     getCustomerProjects, 
     getProjectDetail, 
     getProjectUsers, 
@@ -43,6 +44,7 @@ export default {
 
     getVendorProject,
     getVendorProjects,
+    getCustomerProject,
     getCustomerProjects,
     getProjectDetail,
     getProjectUsers,

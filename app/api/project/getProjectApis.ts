@@ -4,8 +4,9 @@ import ProjectApiUtils from "../utils/projectUtils";
 import sequelize from "../../postgres/dbconnection";
 import { users } from "../models/users";
 import CompanyApiUtils from "../utils/companyUtils";
-import { GetVendorProjectInput } from "../types/get/projectTypes";
+import { GetProjectInput } from "../types/get/projectTypes";
 import { project_bid_permissionsAttributes } from "../models/project_bid_permissions";
+import { project_permissionsAttributes } from "../models/project_permissions";
 
 /**
  * Get the full list of vendor bidded projects with userId
@@ -41,7 +42,7 @@ const getVendorProjects = async(userId:string): Promise<commonProjectTypes.Vendo
  * @param data 
  * @returns VendorProject
  */
-const getVendorProject = async (data: GetVendorProjectInput): Promise<commonProjectTypes.VendorProject> => {
+const getVendorProject = async (data: GetProjectInput): Promise<commonProjectTypes.VendorProject> => {
   try {
     const { projectId, userId } = data;
     const permission = await sequelize.models.project_bid_permissions.findOne({
@@ -85,6 +86,28 @@ const getCustomerProjects = async(userId: string): Promise<commonProjectTypes.Cu
   }
 };
 
+const getCustomerProject = async(data: GetProjectInput): Promise<commonProjectTypes.CustomerProject> => {
+  try {
+    const { projectId, userId } = data;
+    const permission = await sequelize.models.project_permissions.findOne({
+      where: {
+        userId,
+        projectId
+      }
+    }).then(p => p?.get({ plain: true }) as project_permissionsAttributes)
+
+    const project = await ProjectApiUtils.getPermissionedProject(userId, permission.projectId, permission.permission as enums.ProjectPermission);
+    const bids = await ProjectApiUtils.getProjectBidsByProjectId(permission.projectId);
+    return {
+      ...project,
+      bids
+    };
+
+  } catch(e) {
+    return Promise.reject(e);
+  }
+};
+
 const getProjectDetail = async(id: string): Promise<commonProjectTypes.Project> => {
   try {
     return await ProjectApiUtils.getProject(id);
@@ -112,6 +135,7 @@ try {
 export {
   getVendorProject,
   getVendorProjects,
+  getCustomerProject,
   getCustomerProjects,
   getProjectDetail,
   getProjectUsers,

@@ -17,10 +17,11 @@ const query = gql`
         getCustomerDetail(companyId: String): CustomerDetail
         getVendorDetail(companyId: String): VendorDetail
 
-        getVendorProject(data: GetVendorProjectInput): VendorProject
+        getVendorProject(data: GetProjectInput): VendorProject
         getVendorProjects(userId: String): [VendorProject]
         getProjectUsers(projectId: String): [UserPermission]
         getProjectBidUsers(projectBidId: String): [UserPermission]
+        getCustomerProject(data: GetProjectInput): CustomerProject
         getCustomerProjects(userId: String): [CustomerProject]
         getProjectDetail(projectId: String): Project
 

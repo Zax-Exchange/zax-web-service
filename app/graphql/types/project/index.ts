@@ -121,7 +121,7 @@ const project = gql`
     price: Int!
   }
 
-  input GetVendorProjectInput {
+  input GetProjectInput {
     projectId: String!
     userId: String!
   }

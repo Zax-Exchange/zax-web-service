@@ -1,23 +1,28 @@
 import { 
-  getCustomerProjects as getCustomerProjectApi,
+  getCustomerProject as getCustomerProjectApi,
+  getCustomerProjects as getCustomerProjectsApi,
   getVendorProjects as getVendorProjectsApi,
   getVendorProject as getVendorProjectApi,
   getProjectDetail as getProjectDetailApi,
   getProjectUsers as getProjectUsersApi,
   getProjectBidUsers as getProjectBidUsersApi
  } from "../../../../api/project/getProjectApis";
-import { GetVendorProjectInput } from "../../../../api/types/get/projectTypes";
+import { GetProjectInput } from "../../../../api/types/get/projectTypes";
 
 const getVendorProjects = (parent: any, args: Record<string, string>, context:any) => {
   return getVendorProjectsApi(args.userId);
 };
 
-const getVendorProject = (parent: any, args: Record<string, GetVendorProjectInput>, context:any) => {
+const getVendorProject = (parent: any, args: Record<string, GetProjectInput>, context:any) => {
   return getVendorProjectApi(args.data);
 };
 
+const getCustomerProject = (parent: any, args: Record<string, GetProjectInput>, context:any) => {
+  return getCustomerProjectApi(args.data);
+};
+
 const getCustomerProjects = (parent: any, args: Record<string, string>, context:any) => {
-  return getCustomerProjectApi(args.userId);
+  return getCustomerProjectsApi(args.userId);
 };
 
 const getProjectDetail = (parent: any, args: Record<string, string>, context:any) => {
@@ -34,6 +39,7 @@ const getProjectBidUsers = (parent: any, args: Record<string, string>, context:a
 export {
   getVendorProject,
   getVendorProjects,
+  getCustomerProject,
   getCustomerProjects,
   getProjectDetail,
   getProjectUsers,

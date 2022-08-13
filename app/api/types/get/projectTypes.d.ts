@@ -1,4 +1,4 @@
-export interface getProjectInput {
+export interface GetProjectInput {
   projectId: string;
   userId: string;
 }
@@ -6,10 +6,5 @@ export interface getProjectInput {
 
 export interface getProjectBidInput {
   projectBidId: string;
-  userId: string;
-}
-
-export interface GetVendorProjectInput {
-  projectId: string;
   userId: string;
 }
