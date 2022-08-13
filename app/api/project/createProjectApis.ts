@@ -104,7 +104,7 @@ const createProjectBid = async(data: projectTypes.CreateProjectBidInput): Promis
       }, { transaction });
       const projectBidId = bid.getDataValue("id");
       await createProjectBidComponents(projectBidId, components, transaction);
-      await createOrUpdateProjectBidPermission({ userId, projectBidId, permission: enums.ProjectPermission.OWNER }, transaction);
+      await createOrUpdateProjectBidPermission({ userId, projectId, projectBidId, permission: enums.ProjectPermission.OWNER }, transaction);
       await ProjectApiUtils.updateProjectStatus(projectId, enums.ProjectStatus.IN_PROGRESS);
     });
     notificationService.broadcastNewBid(data);
@@ -162,13 +162,14 @@ const createOrUpdateProjectPermission = async(data: projectTypes.CreateOrUpdateP
 };
 
 const createOrUpdateProjectBidPermission = async(data: projectTypes.CreateOrUpdateProjectBidPermissionInput, transaction?: Transaction): Promise<boolean> => {
-  const { userId, projectBidId, permission } = data;
+  const { userId, projectId, projectBidId, permission } = data;
   const project_bid_permissions = sequelize.models.project_bid_permissions;
 
   try {
     await project_bid_permissions.findOrCreate({
       where: {
         userId,
+        projectId,
         projectBidId
       },
       defaults: {

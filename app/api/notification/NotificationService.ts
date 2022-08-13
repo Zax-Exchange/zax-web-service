@@ -32,14 +32,14 @@ class NotificationService {
       const project = await ProjectApiUtils.getProject(data.projectId);
       const activityData = {
         'actor': data.userId, 
-        'verb': 'bid', 
+        'verb': `bid for ${project.id}`, 
         foreign_id: project.id + companyId,
-        group: project.id,
         'object': {
           projectId: project.id,
           projectName: project.name,
           companyName,
-        }, 'time': new Date()
+        }, 
+        'time': new Date()
       } as any
       
       for (let user of users) {

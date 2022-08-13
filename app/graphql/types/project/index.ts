@@ -32,6 +32,7 @@ const project = gql`
   type VendorProject {
     id: String!
     userId: String!
+    customerName: String!
     companyId: String!
     name: String!
     deliveryDate: String!
@@ -119,6 +120,11 @@ const project = gql`
     quantity: Int!
     price: Int!
   }
+
+  input GetVendorProjectInput {
+    projectId: String!
+    userId: String!
+  }
   input CreateProjectComponentInput {
     name: String!
     materials: [String!]!
@@ -203,6 +209,7 @@ const project = gql`
 
   input UpdateProjectBidPermissionsInputData {
     userIds: [String]!
+    projectId: String!
     projectBidId: String!
     permission: String!
   }

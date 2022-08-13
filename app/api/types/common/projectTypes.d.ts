@@ -32,7 +32,8 @@ export interface PermissionedProject extends Project {
 }
 
 export interface VendorProject extends PermissionedProject {
-  bidInfo: PermissionedProjectBid | null;
+  customerName: string;
+  bidInfo: PermissionedProjectBid;
 }
 
 export interface CustomerProject extends PermissionedProject {

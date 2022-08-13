@@ -118,6 +118,7 @@ export function initModels(sequelize: Sequelize) {
   project_bid_components.belongsTo(project_bids, { as: "projectBid", foreignKey: "projectBidId", hooks: true, onDelete: "CASCADE"});
   project_bids.hasMany(project_bid_components, { as: "project_bid_components", foreignKey: "projectBidId", hooks: true, onDelete: "CASCADE"});
   project_bid_permissions.belongsTo(project_bids, { as: "projectBid", foreignKey: "projectBidId", hooks: true, onDelete: "CASCADE"});
+  project_bid_permissions.belongsTo(projects, { as: "project", foreignKey: "projectId", hooks: true, onDelete: "CASCADE"});
   project_bids.hasMany(project_bid_permissions, { as: "project_bid_permissions", foreignKey: "projectBidId", hooks: true, onDelete: "CASCADE"});
   project_bid_components.belongsTo(project_components, { as: "projectComponent", foreignKey: "projectComponentId"});
   project_components.hasMany(project_bid_components, { as: "project_bid_components", foreignKey: "projectComponentId", hooks: true, onDelete: "CASCADE"});

@@ -17,6 +17,7 @@ const query = gql`
         getCustomerDetail(companyId: String): CustomerDetail
         getVendorDetail(companyId: String): VendorDetail
 
+        getVendorProject(data: GetVendorProjectInput): VendorProject
         getVendorProjects(userId: String): [VendorProject]
         getProjectUsers(projectId: String): [UserPermission]
         getProjectBidUsers(projectBidId: String): [UserPermission]

@@ -46,6 +46,7 @@ export interface UpdateProjectBidPermissionsInput {
 
 export interface UpdateProjectBidPermissionsInputData {
   userIds: string[];
+  projectId: string;
   projectBidId: string;
   permission: enums.ProjectPermission;
 }

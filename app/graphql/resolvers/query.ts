@@ -6,7 +6,9 @@ import {
     getCompanyDetail,
     getCompanyPlanDetail
 } from "./company/getCompany";
-import { getVendorProjects, 
+import { 
+    getVendorProject,
+    getVendorProjects, 
     getCustomerProjects, 
     getProjectDetail, 
     getProjectUsers, 
@@ -39,6 +41,7 @@ export default {
     getVendorDetail,
     getCompanyDetail,
 
+    getVendorProject,
     getVendorProjects,
     getCustomerProjects,
     getProjectDetail,

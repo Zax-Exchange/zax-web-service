@@ -1,15 +1,18 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import { ProjectPermission } from '../types/common/enums';
+import { projects, projectsId } from './projects';
 import type { project_bids, project_bidsId } from './project_bids';
 import type { users, usersId } from './users';
 
 export interface project_bid_permissionsAttributes {
   id: string;
+  projectId: string;
   projectBidId: string;
   userId: string;
+  permission: ProjectPermission;
   createdAt: Date;
   updatedAt: Date;
-  permission: string;
 }
 
 export type project_bid_permissionsPk = "id";
@@ -19,17 +22,24 @@ export type project_bid_permissionsCreationAttributes = Optional<project_bid_per
 
 export class project_bid_permissions extends Model<project_bid_permissionsAttributes, project_bid_permissionsCreationAttributes> implements project_bid_permissionsAttributes {
   id!: string;
+  projectId!: string;
+  permission!: ProjectPermission;
   projectBidId!: string;
   userId!: string;
   createdAt!: Date;
   updatedAt!: Date;
-  permission!: string;
 
   // project_bid_permissions belongsTo project_bids via projectBidId
   projectBid!: project_bids;
   getProjectBid!: Sequelize.BelongsToGetAssociationMixin<project_bids>;
   setProjectBid!: Sequelize.BelongsToSetAssociationMixin<project_bids, project_bidsId>;
   createProjectBid!: Sequelize.BelongsToCreateAssociationMixin<project_bids>;
+
+  // project_bid_permissions belongsTo projects via projectId
+  project!: projects;
+  getProject!: Sequelize.BelongsToGetAssociationMixin<projects>;
+  setProject!: Sequelize.BelongsToSetAssociationMixin<projects, projectsId>;
+  createProject!: Sequelize.BelongsToCreateAssociationMixin<projects>;
   // project_bid_permissions belongsTo users via userId
   user!: users;
   getUser!: Sequelize.BelongsToGetAssociationMixin<users>;
@@ -42,6 +52,15 @@ export class project_bid_permissions extends Model<project_bid_permissionsAttrib
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true
+    },
+    projectId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'projects',
+        key: 'id'
+      },
+      onDelete: 'cascade'
     },
     projectBidId: {
       type: DataTypes.UUID,
@@ -88,7 +107,7 @@ export class project_bid_permissions extends Model<project_bid_permissionsAttrib
           { name: "userId" },
           { name: "projectBidId" },
         ]
-      },
+      }
     ]
   }) as typeof project_bid_permissions;
   }

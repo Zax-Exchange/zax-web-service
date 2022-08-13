@@ -153,10 +153,10 @@ const updateProjectBidPermissions = async (data: projectTypes.UpdateProjectBidPe
   try {
     await sequelize.transaction(async (transaction) => {
       for (let userId of viewers.userIds) {
-        await createOrUpdateProjectBidPermission({userId, projectBidId: viewers.projectBidId, permission: viewers.permission}, transaction);
+        await createOrUpdateProjectBidPermission({userId, projectId:viewers.projectId, projectBidId: viewers.projectBidId, permission: viewers.permission}, transaction);
       }
       for (let userId of editors.userIds) {
-        await createOrUpdateProjectBidPermission({userId, projectBidId: editors.projectBidId, permission: editors.permission}, transaction);
+        await createOrUpdateProjectBidPermission({userId, projectId:editors.projectId, projectBidId: editors.projectBidId, permission: editors.permission}, transaction);
       }
     });
     return Promise.resolve(true);
