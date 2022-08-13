@@ -27,13 +27,20 @@ class NotificationService {
     if (!this.client) return;
     try {
       const users = await ProjectApiUtils.getProjectUsers(data.projectId);
-      const companyName = await CompanyApiUtils.getCompanyWithCompanyId(await UserApiUtils.getUserCompanyId(data.userId)).then(c => c.name);
+      const companyId = await UserApiUtils.getUserCompanyId(data.userId);
+      const companyName = await CompanyApiUtils.getCompanyWithCompanyId(companyId).then(c => c.name);
       const project = await ProjectApiUtils.getProject(data.projectId);
-      const activityData = {'actor': data.userId, 'verb': 'bid', 'object': {
-        id: project.id,
-        name: project.name,
-        companyName
-      }, 'time': new Date()} as any
+      const activityData = {
+        'actor': data.userId, 
+        'verb': 'bid', 
+        foreign_id: project.id + companyId,
+        group: project.id,
+        'object': {
+          projectId: project.id,
+          projectName: project.name,
+          companyName,
+        }, 'time': new Date()
+      } as any
       
       for (let user of users) {
         const feed = this.client.feed("notification", user.userId)

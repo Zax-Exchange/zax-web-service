@@ -6,6 +6,7 @@ import ProjectApiUtils from "../utils/projectUtils";
 import UserApiUtils from "../utils/userUtils";
 import ElasticProjectService from "../../elastic/project/ElasticProjectService";
 import { v4 as uuidv4} from "uuid"
+import notificationService from "../notification/NotificationService";
 //TODO: findOrCreate product or materials when creating project
 const createProject = async(data: projectTypes.CreateProjectInput): Promise<boolean> => {
   const projects = sequelize.models.projects;
@@ -106,6 +107,7 @@ const createProjectBid = async(data: projectTypes.CreateProjectBidInput): Promis
       await createOrUpdateProjectBidPermission({ userId, projectBidId, permission: enums.ProjectPermission.OWNER }, transaction);
       await ProjectApiUtils.updateProjectStatus(projectId, enums.ProjectStatus.IN_PROGRESS);
     });
+    notificationService.broadcastNewBid(data);
     return Promise.resolve(true);
   } catch(e) {
     console.error(e);
