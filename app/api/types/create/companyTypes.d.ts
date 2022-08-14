@@ -3,6 +3,7 @@ import * as planTypes from "../common/planTypes";
 // vendor will have leadTime, locations, moq, materials
 export interface CreateCompanyInput {
   name: string;
+  contactEmail: string;
   phone: string;
   country: string;
   isActive: boolean;

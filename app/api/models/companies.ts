@@ -10,6 +10,7 @@ import type { vendors, vendorsId } from './vendors';
 export interface companiesAttributes {
   id: string;
   name: string;
+  contactEmail: string;
   logo?: any;
   phone: string;
   fax?: string;
@@ -30,6 +31,7 @@ export type companiesCreationAttributes = Optional<companiesAttributes, companie
 export class companies extends Model<companiesAttributes, companiesCreationAttributes> implements companiesAttributes {
   id!: string;
   name!: string;
+  contactEmail!: string;
   logo?: any;
   phone!: string;
   fax?: string;
@@ -106,6 +108,10 @@ export class companies extends Model<companiesAttributes, companiesCreationAttri
       type: DataTypes.STRING(255),
       allowNull: false,
       unique: "companies_name_key"
+    },
+    contactEmail: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
     logo: {
       type: DataTypes.STRING,

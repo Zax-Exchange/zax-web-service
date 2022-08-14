@@ -9,7 +9,7 @@ import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from 'uuid';
 
 const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise<string> => {
-  const { name, logo, phone, fax, country, isActive, isVendor, isVerified, leadTime, companyUrl, planId, locations, moq, materials, userEmail} = data;
+  const { name, contactEmail, logo, phone, fax, country, isActive, isVendor, isVerified, leadTime, companyUrl, planId, locations, moq, materials, userEmail} = data;
 
   const companies = sequelize.models.companies;
   const company_plans = sequelize.models.company_plans;
@@ -23,6 +23,7 @@ const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise
       const companyId = await companies.create({
         id: uuidv4(),
         name,
+        contactEmail,
         logo,
         phone,
         fax,
@@ -72,7 +73,7 @@ const createVendor = async (data: createCompanyTypes.CreateVendorInput): Promise
 };
 
 const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Promise<string> => {
-  const { name, logo, phone, fax, country, isActive, isVendor, isVerified, companyUrl, planId, userEmail} = data;
+  const { name, contactEmail, logo, phone, fax, country, isActive, isVendor, isVerified, companyUrl, planId, userEmail} = data;
 
   const companies = sequelize.models.companies;
   const company_plans = sequelize.models.company_plans;
@@ -90,6 +91,7 @@ const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Pro
       const companyId = await companies.create({
         id: uuidv4(),
         name,
+        contactEmail,
         logo,
         phone,
         fax,

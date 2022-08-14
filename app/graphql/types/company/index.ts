@@ -4,6 +4,7 @@ const company = gql`
   type Vendor {
     id: String!
     name: String!
+    contactEmail: String!
     logo: String!
     phone: String!
     fax: String!
@@ -24,6 +25,7 @@ const company = gql`
   type Customer {
     id: String!
     name: String!
+    contactEmail: String!
     logo: String!
     phone: String!
     fax: String!
@@ -40,6 +42,7 @@ const company = gql`
   type VendorOverview {
     id: String!
     name: String!
+    contactEmail: String!
     logo: String
     country: String!
     isVerified: Boolean!
@@ -52,6 +55,7 @@ const company = gql`
   type CustomerOverview {
     id: String!
     name: String!
+    contactEmail: String!
     logo: String
     country: String!
     isVerified: Boolean!
@@ -60,6 +64,7 @@ const company = gql`
   type PermissionedCompany {
     id: String!
     name: String!
+    contactEmail: String!
     logo: String!
     phone: String!
     fax: String!
@@ -86,6 +91,7 @@ const company = gql`
   type CompanyDetail {
     id: String!
     name: String!
+    contactEmail: String!
     logo: String
     phone: String!
     fax: String
@@ -134,6 +140,7 @@ const company = gql`
 
   input CreateVendorInput {
     name: String!
+    contactEmail: String!
     logo: String
     phone: String!
     fax: String
@@ -152,6 +159,7 @@ const company = gql`
 
   input CreateCustomerInput {
     name: String!
+    contactEmail: String!
     logo: String
     phone: String!
     fax: String
@@ -171,6 +179,7 @@ const company = gql`
 
   input UpdateVendorInputData {
     name: String
+    contactEmail: String
     logo: String
     phone: String
     fax: String
@@ -189,6 +198,7 @@ const company = gql`
 
   input UpdateCustomerInputData {
     name: String
+    contactEmail: String
     logo: String
     phone: String
     fax: String

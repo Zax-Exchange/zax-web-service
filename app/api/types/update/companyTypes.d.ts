@@ -11,6 +11,7 @@ export interface UpdateCustomerInput {
 
 export interface UpdateCompanyInputData {
   name?: string;
+  contactEmail?: string;
   logo?: string;
   phone?: string;
   fax?: string;
