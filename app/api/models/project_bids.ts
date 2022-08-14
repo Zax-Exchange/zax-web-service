@@ -33,7 +33,7 @@ export class project_bids extends Model<project_bidsAttributes, project_bidsCrea
   deletedAt?: Date;
 
   // project_bids belongsTo companies via companyId
-  company!: companies;
+  company!: companies; 
   getCompany!: Sequelize.BelongsToGetAssociationMixin<companies>;
   setCompany!: Sequelize.BelongsToSetAssociationMixin<companies, companiesId>;
   createCompany!: Sequelize.BelongsToCreateAssociationMixin<companies>;
