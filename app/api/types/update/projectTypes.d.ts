@@ -9,8 +9,7 @@ export interface UpdateProjectInput {
 export interface UpdateProjectInputData {
   name: string;
   deliveryDate: string;
-  deliveryCountry: string;
-  deliveryCity: string;
+  deliveryAddress: string;
   budget: number;
   design: BinaryType | null;
 }

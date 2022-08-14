@@ -8,18 +8,17 @@ import type { users, usersId } from './users';
 
 export interface projectsAttributes {
   id: string;
+  userId: string;
+  companyId: string;
   name: string;
   deliveryDate: string;
-  deliveryCountry: string;
+  deliveryAddress: string;
   budget: number;
   design?: any;
-  createdAt: Date;
-  updatedAt: Date;
-  userId: string;
   status: string;
-  companyId: string;
   comments?: string;
-  deliveryCity: string;
+  updatedAt: Date;
+  createdAt: Date;
   deletedAt?: Date;
 }
 
@@ -30,18 +29,17 @@ export type projectsCreationAttributes = Optional<projectsAttributes, projectsOp
 
 export class projects extends Model<projectsAttributes, projectsCreationAttributes> implements projectsAttributes {
   id!: string;
+  userId!: string;
+  companyId!: string;
   name!: string;
   deliveryDate!: string;
-  deliveryCountry!: string;
+  deliveryAddress!: string;
   budget!: number;
   design?: any;
+  status!: string;
+  comments?: string;
   createdAt!: Date;
   updatedAt!: Date;
-  userId!: string;
-  status!: string;
-  companyId!: string;
-  comments?: string;
-  deliveryCity!: string;
   deletedAt?: Date;
 
   // projects belongsTo companies via companyId
@@ -106,7 +104,7 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
       type: DataTypes.DATEONLY,
       allowNull: false
     },
-    deliveryCountry: {
+    deliveryAddress: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -137,10 +135,6 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
     comments: {
       type: DataTypes.STRING,
       allowNull: true
-    },
-    deliveryCity: {
-      type: DataTypes.STRING,
-      allowNull: false
     }
   }, {
     tableName: 'projects',

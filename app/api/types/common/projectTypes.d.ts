@@ -12,8 +12,7 @@ export interface ProjectOverview {
   companyId: string;
   name: string;
   deliveryDate: string;
-  deliveryCountry: string;
-  deliveryCity: string;
+  deliveryAddress: string;
   budget: number;
   materials: string[];
   createdAt: Date;

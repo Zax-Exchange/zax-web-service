@@ -28,8 +28,7 @@ const searchCustomerProjects = async (data: projectTypes.SearchProjectInput): Pr
         companyId: project.companyId,
         name: project.name,
         deliveryDate: project.deliveryDate,
-        deliveryCountry: project.deliveryCountry,
-        deliveryCity: project.deliveryCity,
+        deliveryAddress: project.deliveryAddress,
         budget: project.budget,
         materials: idToMaterialsMap[project.id],
         createdAt: project.createdAt

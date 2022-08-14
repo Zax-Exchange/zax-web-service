@@ -6,8 +6,7 @@ export default class ElasticProjectService {
   static async createProjectDocument(data: projectTypes.ProjectDocument) {
     const {
       projectId,
-      deliveryCountry,
-      deliveryCity,
+      deliveryAddress,
       deliveryDate,
       budget,
       materials
@@ -25,8 +24,7 @@ export default class ElasticProjectService {
             "properties": {
               id: { type: "text" },
               deliveryDate: { type: "date" },
-              deliveryCountry: { type: "text" },
-              deliveryCity: { type: "text"},
+              deliveryAddress: { type: "text" },
               budget: { type: "integer" },
               materials: { type: "text" },
               deleted: { type: "boolean" }
@@ -38,8 +36,7 @@ export default class ElasticProjectService {
         index: "project",
         id: projectId,
         document: {
-          deliveryCountry,
-          deliveryCity,
+          deliveryAddress,
           deliveryDate,
           budget,
           materials,
@@ -56,8 +53,7 @@ export default class ElasticProjectService {
   static async updateProjectDocument(data: projectTypes.ProjectDocument) {
     const {
       projectId,
-      deliveryCountry,
-      deliveryCity,
+      deliveryAddress,
       deliveryDate,
       budget,
       materials
@@ -66,8 +62,7 @@ export default class ElasticProjectService {
       index: "project",
       id: projectId,
       doc: {
-        deliveryCountry,
-        deliveryCity,
+        deliveryAddress,
         deliveryDate,
         budget,
         materials

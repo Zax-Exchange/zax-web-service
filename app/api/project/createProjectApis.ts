@@ -11,7 +11,7 @@ import notificationService from "../notification/NotificationService";
 const createProject = async(data: projectTypes.CreateProjectInput): Promise<boolean> => {
   const projects = sequelize.models.projects;
   const users = sequelize.models.users;
-  const {userId, name, deliveryDate, deliveryCountry, deliveryCity, budget, design, components} = data;
+  const {userId, name, deliveryDate, deliveryAddress, budget, design, components} = data;
   try {
     await sequelize.transaction(async transaction => {
       const user = await users.findOne({
@@ -26,8 +26,7 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
         userId,
         name,
         deliveryDate,
-        deliveryCountry,
-        deliveryCity,
+        deliveryAddress,
         budget,
         design,
         companyId,
@@ -42,7 +41,7 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
       }
       await createProjectComponents(projectId, components, companyId, transaction);
       await createOrUpdateProjectPermission({ userId, projectId, permission: enums.ProjectPermission.OWNER }, transaction);
-      ElasticProjectService.createProjectDocument({ projectId, deliveryDate, deliveryCountry, deliveryCity, budget, materials });
+      ElasticProjectService.createProjectDocument({ projectId, deliveryDate, deliveryAddress, budget, materials });
     });
 
 

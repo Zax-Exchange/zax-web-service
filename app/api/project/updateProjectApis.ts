@@ -12,8 +12,7 @@ const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<bool
   const { toFindOrCreate, toDelete } = componentsInput;
   const {
     deliveryDate,
-    deliveryCountry,
-    deliveryCity,
+    deliveryAddress,
     budget
   } = projectData;
   const projects = sequelize.models.projects;
@@ -25,7 +24,7 @@ const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<bool
   }
 
   try {
-    ElasticProjectService.updateProjectDocument({projectId:id, deliveryDate, deliveryCountry, deliveryCity, budget, materials});
+    ElasticProjectService.updateProjectDocument({projectId:id, deliveryDate, deliveryAddress, budget, materials});
     await sequelize.transaction(async transaction => {
       await projects.update(projectData, {
         where: {

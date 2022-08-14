@@ -6,8 +6,7 @@ const project = gql`
     companyId: String!
     name: String!
     deliveryDate: String!
-    deliveryCountry: String!
-    deliveryCity: String!
+    deliveryAddress: String!
     budget: Int!
     materials: [String!]!
     createdAt: String!
@@ -19,8 +18,7 @@ const project = gql`
     companyId: String!
     name: String!
     deliveryDate: String!
-    deliveryCountry: String!
-    deliveryCity: String!
+    deliveryAddress: String!
     budget: Int!
     design: String
     status: String!
@@ -36,8 +34,7 @@ const project = gql`
     companyId: String!
     name: String!
     deliveryDate: String!
-    deliveryCountry: String!
-    deliveryCity: String!
+    deliveryAddress: String!
     budget: Int!
     design: String
     status: String!
@@ -54,8 +51,7 @@ const project = gql`
     companyId: String!
     name: String!
     deliveryDate: String!
-    deliveryCountry: String!
-    deliveryCity: String!
+    deliveryAddress: String!
     budget: Int!
     design: String
     status: String!
@@ -136,8 +132,7 @@ const project = gql`
     userId: String!
     name: String!
     deliveryDate: String!
-    deliveryCountry: String!
-    deliveryCity: String!
+    deliveryAddress: String!
     budget: Int!
     design: String
     comments: String!
@@ -165,8 +160,7 @@ const project = gql`
     id: String!
     name: String!
     deliveryDate: String!
-    deliveryCountry: String!
-    deliveryCity: String!
+    deliveryAddress: String!
     budget: Int!
     design: String!
     components: [UpdateProjectComponentInput!]!
