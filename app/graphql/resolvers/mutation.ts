@@ -19,7 +19,7 @@ import {
   createCustomer,
   createVendor
 } from "./company/createCompany";
-import { 
+import {
   createStripeCustomer,
   createCustomerSubscription,
   createVendorSubscription
@@ -30,13 +30,14 @@ import {
   updateCompanyPlan,
   updateCompanyStatus
 } from "./company/updateCompany";
-import { 
+import {
   updateSubscription,
   updateCompanyPlanSubscriptionInfo
 } from "./plan/updateSubscription";
 import { inviteUser } from "./user/invite/inviteUsers";
 import { deactivateUser } from "./user/delete/deleteUser";
 import { reset } from "./resetDB";
+import { uploadFile } from "./upload/upload";
 export default {
   createUser,
   createCustomer,
@@ -60,6 +61,8 @@ export default {
   updateCompanyStatus,
   updateSubscription,
   updateCompanyPlanSubscriptionInfo,
+
+  uploadFile,
 
   deleteProject,
   deleteProjectPermissions,

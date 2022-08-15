@@ -9,6 +9,8 @@ import cors from "cors";
 import http from "http";
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import { handleStripeWebhook } from "./rest/stripeWebhook";
+import { graphqlUploadExpress } from "graphql-upload";
+import bodyParser from "body-parser";
 
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
@@ -28,11 +30,11 @@ const stripeWebhookIPs = [
 "54.187.205.235",
 "54.187.216.72"
 ]
-const startServer = async() => {  
-  
+const startServer = async() => {
+
   initModels(sequelize);
-  
-  
+
+
   try {
     await sequelize.sync({ alter: true }).then(() => console.log("db initialized@"))
     await sequelize.authenticate();
@@ -45,13 +47,14 @@ const startServer = async() => {
   const httpServer = http.createServer(app);
 
   const server = new ApolloServer({
+    csrfPrevention: true,
     typeDefs,
     resolvers,
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer })
-    ]
+    ],
   });
-  
+
   await server.start();
 
   server.applyMiddleware({app, cors: {
@@ -59,12 +62,14 @@ const startServer = async() => {
   }});
 
   app.use(express.json());
+  app.use(graphqlUploadExpress());
+  app.use(bodyParser.json());
 
   app.post("/webhook", handleStripeWebhook);
 
   await new Promise<void>(resolve => httpServer.listen({ port: 4000 }, resolve));
   console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
-}; 
+};
 
 startServer()
 export default startServer;
