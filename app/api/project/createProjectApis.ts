@@ -32,14 +32,17 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
         status: enums.ProjectStatus.OPEN  
       }, { transaction });
       const projectId = project.getDataValue("id");
-      console.log("project created with id: ", projectId)
-      const design = await sequelize.models.project_designs.findByPk(designId)
-      await design?.update(
-        {
-          projectId,
-        },
-        { transaction }
-      );
+
+      if (designId) {
+        const design = await sequelize.models.project_designs.findByPk(designId)
+  
+        await design?.update(
+          {
+            projectId,
+          },
+          { transaction }
+        );
+      }
       const materials = [];
       for (let comp of components) {
         for (let mat of comp.materials) {
