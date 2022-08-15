@@ -11,7 +11,6 @@ export interface UpdateProjectInputData {
   deliveryDate: string;
   deliveryAddress: string;
   budget: number;
-  design: BinaryType | null;
 }
 
 export interface UpdateProjectComponentsInput {

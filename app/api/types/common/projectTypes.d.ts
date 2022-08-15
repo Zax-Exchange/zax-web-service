@@ -20,8 +20,8 @@ export interface ProjectOverview {
 
 export interface Project extends ProjectOverview{
   userId: string;
-  design: BinaryType | null;
   status: enums.ProjectStatus;
+  design: string;
   components: ProjectComponent[];
   updatedAt: Date;
 }

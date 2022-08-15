@@ -131,10 +131,10 @@ const project = gql`
   input CreateProjectInput {
     userId: String!
     name: String!
+    designId: String
     deliveryDate: String!
     deliveryAddress: String!
     budget: Int!
-    design: String
     comments: String!
     components: [CreateProjectComponentInput!]!
   }
@@ -162,7 +162,6 @@ const project = gql`
     deliveryDate: String!
     deliveryAddress: String!
     budget: Int!
-    design: String!
     components: [UpdateProjectComponentInput!]!
   }
 

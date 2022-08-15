@@ -29,8 +29,9 @@ import { users as _users } from "./users";
 import type { usersAttributes, usersCreationAttributes } from "./users";
 import { vendors as _vendors } from "./vendors";
 import type { vendorsAttributes, vendorsCreationAttributes } from "./vendors";
-import { chats as _chats } from "./chats"
-import type { chatsAttributes, chatsCreationAttributes } from "./chats";
+
+import { project_designs as _project_designs } from "./project_designs";
+import type { project_designsAttributes, project_designsCreationAttributes } from "./project_designs";
 
 export {
   _sequelize_meta as sequelize_meta,
@@ -48,7 +49,7 @@ export {
   _projects as projects,
   _users as users,
   _vendors as vendors,
-  _chats as chats
+  _project_designs as project_designs
 };
 
 export type {
@@ -82,8 +83,9 @@ export type {
   usersCreationAttributes,
   vendorsAttributes,
   vendorsCreationAttributes,
-  chatsAttributes,
-  chatsCreationAttributes
+
+  project_designsAttributes,
+  project_designsCreationAttributes
 };
 
 export function initModels(sequelize: Sequelize) {
@@ -102,7 +104,8 @@ export function initModels(sequelize: Sequelize) {
   const project_permissions = _project_permissions.initModel(sequelize);
   const project_bid_permissions = _project_bid_permissions.initModel(sequelize);
   const materials = _materials.initModel(sequelize);
-  const chats = _chats.initModel(sequelize)
+
+  const project_designs = _project_designs.initModel(sequelize);
 
   company_plans.belongsTo(companies, { as: "company", foreignKey: "companyId", hooks: true, onDelete: "CASCADE" });
   company_plans.belongsTo(stripe_customers, { as: "stripe_customer", foreignKey: "stripeCustomerId", onDelete: "CASCADE" });
@@ -143,9 +146,18 @@ export function initModels(sequelize: Sequelize) {
   projects.belongsTo(users, { as: "user", foreignKey: "userId", hooks: true, onDelete: "CASCADE"});
   users.hasMany(projects, { as: "projects", foreignKey: "userId", hooks: true, onDelete: "CASCADE"});
 
-  chats.belongsTo(project_bids, { as: "project_bid", foreignKey: "projectBidId", hooks: true, onDelete: "CASCADE"})
-  project_bids.hasOne(chats, { as: "chat", foreignKey: "projectBidId", hooks: true, onDelete: "CASCADE"})
   
+  project_designs.belongsTo(projects, {
+    as: "project",
+    foreignKey: "projectId",
+    onDelete: "CASCADE",
+  });
+  projects.hasOne(project_designs, {
+    as: "project_design",
+    foreignKey: "projectId",
+    onDelete: "CASCADE",
+  });
+
   return {
     sequelize_meta: sequelize_meta,
     companies: companies,
@@ -162,5 +174,6 @@ export function initModels(sequelize: Sequelize) {
     projects: projects,
     users: users,
     vendors: vendors,
+    project_designs: project_designs
   };
 }

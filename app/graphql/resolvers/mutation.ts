@@ -37,7 +37,7 @@ import {
 import { inviteUser } from "./user/invite/inviteUsers";
 import { deactivateUser } from "./user/delete/deleteUser";
 import { reset } from "./resetDB";
-import { uploadFile } from "./upload/upload";
+import { uploadProjectDesign } from "./upload/upload";
 export default {
   createUser,
   createCustomer,
@@ -62,7 +62,7 @@ export default {
   updateSubscription,
   updateCompanyPlanSubscriptionInfo,
 
-  uploadFile,
+  uploadProjectDesign,
 
   deleteProject,
   deleteProjectPermissions,
@@ -71,5 +71,5 @@ export default {
 
   inviteUser,
 
-  reset
+  reset,
 };

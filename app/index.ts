@@ -47,7 +47,7 @@ const startServer = async() => {
   const httpServer = http.createServer(app);
 
   const server = new ApolloServer({
-    csrfPrevention: true,
+    csrfPrevention: false,
     typeDefs,
     resolvers,
     plugins: [
@@ -57,13 +57,14 @@ const startServer = async() => {
 
   await server.start();
 
-  server.applyMiddleware({app, cors: {
-    origin: ["http://localhost:3000", "https://studio.apollographql.com", "https://api.stripe.com"]
-  }});
 
   app.use(express.json());
   app.use(graphqlUploadExpress());
   app.use(bodyParser.json());
+
+  server.applyMiddleware({app, cors: {
+    origin: ["http://localhost:3000", "https://studio.apollographql.com", "https://api.stripe.com"]
+  }});
 
   app.post("/webhook", handleStripeWebhook);
 

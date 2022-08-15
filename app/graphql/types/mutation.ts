@@ -34,7 +34,7 @@ const mutation = gql`
 
         inviteUser(email: String, userId: String): Boolean
 
-        uploadFile(file: Upload!): FileUploadResponse!
+        uploadProjectDesign(file: Upload!): String
 
         reset(t: Int):Boolean
     }

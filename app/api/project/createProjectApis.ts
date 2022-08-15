@@ -11,7 +11,7 @@ import notificationService from "../../stream/StreamService";
 const createProject = async(data: projectTypes.CreateProjectInput): Promise<boolean> => {
   const projects = sequelize.models.projects;
   const users = sequelize.models.users;
-  const {userId, name, deliveryDate, deliveryAddress, budget, design, components} = data;
+  const {userId, name, designId, deliveryDate, deliveryAddress, budget, components} = data;
   try {
     await sequelize.transaction(async transaction => {
       const user = await users.findOne({
@@ -28,11 +28,18 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
         deliveryDate,
         deliveryAddress,
         budget,
-        design,
         companyId,
         status: enums.ProjectStatus.OPEN  
       }, { transaction });
       const projectId = project.getDataValue("id");
+      console.log("project created with id: ", projectId)
+      const design = await sequelize.models.project_designs.findByPk(designId)
+      await design?.update(
+        {
+          projectId,
+        },
+        { transaction }
+      );
       const materials = [];
       for (let comp of components) {
         for (let mat of comp.materials) {
@@ -51,6 +58,19 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
     return Promise.reject(e);
   }
 };
+
+const createProjectDesign = async (uri: string) => {
+  try {
+    const id = uuidv4();
+    await sequelize.models.project_designs.create({
+      id,
+      uri,
+    })
+    return id;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
 
 const createProjectComponents = async(projectId: string, components: projectTypes.CreateProjectComponentInput[], companyId: number, transaction: Transaction): Promise<boolean> => {
   const project_components = sequelize.models.project_components;
@@ -191,6 +211,7 @@ const createOrUpdateProjectBidPermission = async(data: projectTypes.CreateOrUpda
 
 export {
   createProject,
+  createProjectDesign,
   createProjectBid,
   createOrUpdateProjectPermission,
   createOrUpdateProjectBidPermission

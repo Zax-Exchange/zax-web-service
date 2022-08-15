@@ -6,8 +6,8 @@ export interface CreateProjectInput {
   name: string;
   deliveryDate: string; 
   deliveryAddress: string;
+  designId: string;
   budget: number;
-  design: BinaryType | null;
   comments: string;
   components: CreateProjectComponentInput[];
 }
