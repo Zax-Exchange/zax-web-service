@@ -19,7 +19,8 @@ const user = gql`
     isVendor: Boolean!
     isAdmin: Boolean!
     token: String!
-    notificationToken: String!
+    notificationToken: String
+    chatToken: String
     isActive: Boolean!
   }
 

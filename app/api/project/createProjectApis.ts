@@ -6,7 +6,7 @@ import ProjectApiUtils from "../utils/projectUtils";
 import UserApiUtils from "../utils/userUtils";
 import ElasticProjectService from "../../elastic/project/ElasticProjectService";
 import { v4 as uuidv4} from "uuid"
-import notificationService from "../notification/NotificationService";
+import notificationService from "../../stream/StreamService";
 //TODO: findOrCreate product or materials when creating project
 const createProject = async(data: projectTypes.CreateProjectInput): Promise<boolean> => {
   const projects = sequelize.models.projects;

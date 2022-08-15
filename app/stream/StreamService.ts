@@ -1,12 +1,12 @@
 import { Activity, connect, DefaultGenerics, StreamClient, StreamFeed } from "getstream";
-import sequelize from "../../postgres/dbconnection";
-import { CreateProjectBidInput } from "../types/create/projectTypes";
-import CompanyApiUtils from "../utils/companyUtils";
-import ProjectApiUtils from "../utils/projectUtils";
-import UserApiUtils from "../utils/userUtils";
+import sequelize from "../postgres/dbconnection";
+import { CreateProjectBidInput } from "../api/types/create/projectTypes";
+import CompanyApiUtils from "../api/utils/companyUtils";
+import ProjectApiUtils from "../api/utils/projectUtils";
+import UserApiUtils from "../api/utils/userUtils";
 
 
-class NotificationService {
+class StreamService {
   client?: StreamClient<DefaultGenerics>;
 
   constructor() {
@@ -53,6 +53,6 @@ class NotificationService {
   }
 }
 
-const notificationService = new NotificationService();
+const streamService = new StreamService();
 
-export default notificationService;
+export default streamService;

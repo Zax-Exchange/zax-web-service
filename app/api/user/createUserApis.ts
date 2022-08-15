@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 import { Transaction } from "sequelize/types";
 import { LoggedInUser } from "../types/common/userTypes";
 import { v4 as uuidv4 } from "uuid";
-import notificationService from "../notification/NotificationService";
+import streamService from "../../stream/StreamService";
 
 const createUser = async(data: userTypes.CreateUserInput): Promise<LoggedInUser> => {
   const users = sequelize.models.users;
@@ -40,7 +40,8 @@ const createUser = async(data: userTypes.CreateUserInput): Promise<LoggedInUser>
         isActive: true
       }, {transaction}).then(u => u.get({ plain:true }));
 
-      const notificationToken = notificationService.createToken(user.id);
+      const notificationToken = streamService.createToken(user.id);
+      const chatToken = streamService.createToken(companyId);
 
       const token = jwt.sign(
         {
@@ -51,17 +52,19 @@ const createUser = async(data: userTypes.CreateUserInput): Promise<LoggedInUser>
           isAdmin: user.isAdmin,
           isVendor: user.isVendor,
           isActive: user.isActive,
-          notificationToken
+          notificationToken,
+          chatToken,
         },
         process.env.USER_PASSWORD_TOKEN_SECRET!,
         {
-          expiresIn: "8h"
+          expiresIn: "8h",
         }
-      )
+      );
 
       return {
         ...user,
         notificationToken,
+        chatToken,
         token
       }
     })

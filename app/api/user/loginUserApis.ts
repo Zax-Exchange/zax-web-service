@@ -5,7 +5,7 @@ import sequelize from "../../postgres/dbconnection";
 import { LoggedInUser } from "../types/common/userTypes";
 import { connect } from 'getstream';
 import { usersAttributes } from "../models/users";
-import notificationService from "../notification/NotificationService";
+import streamService from "../../stream/StreamService";
 
 const login = async (data: UserLoginInput): Promise<LoggedInUser> => {
   try {
@@ -18,12 +18,9 @@ const login = async (data: UserLoginInput): Promise<LoggedInUser> => {
       throw new Error("Account is not active.")
     }
 
-    const notificationToken = notificationService.createToken(user.id);
+    const notificationToken = streamService.createToken(user.id);
+    const chatToken = streamService.createToken(user.companyId);
 
-    if (!notificationToken) {
-      throw new Error("Something went wrong.")
-    }
-    
     const valid = await bcrypt.compare(data.password, user.password);
     if (user && valid) {
 
@@ -36,7 +33,8 @@ const login = async (data: UserLoginInput): Promise<LoggedInUser> => {
           isAdmin: user.isAdmin,
           isVendor: user.isVendor,
           isActive: user.isActive,
-          notificationToken
+          notificationToken,
+          chatToken
         },
         process.env.USER_SESSION_TOKEN_SECRET!,
         {
@@ -46,6 +44,7 @@ const login = async (data: UserLoginInput): Promise<LoggedInUser> => {
       return {
         ...user,
         notificationToken,
+        chatToken,
         token
       }
     } else {
