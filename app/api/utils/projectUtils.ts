@@ -10,6 +10,8 @@ import { project_bid_permissionsAttributes } from "../models/project_bid_permiss
 import { project_permissionsAttributes } from "../models/project_permissions";
 import { projects, projectsAttributes } from "../models/projects";
 import { getUserWithUserId } from "../user/getUserApis";
+import s3 from "../../aws/s3";
+import { File } from "../types/common/fileTypes";
 
 class ProjectApiUtils {
   static async getBidPermissions(userId: string): Promise<project_bid_permissionsAttributes[]> {
@@ -75,13 +77,22 @@ class ProjectApiUtils {
 
       return await projects.findByPk(id).then(async p => {
         const components = await (p as projects)?.getProject_components().then(comps => comps.map(comp => comp.get({plain:true})));
-        const design = await (p as projects)?.getProject_design().then(d => d?.get("uri"));
+        const designObject = await (p as projects)?.getProject_design();
+
+        let design = null;
+        
+        if (designObject) {
+          design = {
+            fileName: designObject.get("fileName"),
+            url: `${process.env.AWS_CDN_URL}/${designObject.get("id")}`,
+          } as File;
+        }
 
         return {
-          ...p?.get({plain: true}),
+          ...p?.get({ plain: true }),
           design,
-          components
-        }
+          components,
+        };
       });
     } catch(e) {
       return Promise.reject(e);

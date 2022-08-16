@@ -62,13 +62,12 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
   }
 };
 
-const createProjectDesign = async (uri: string) => {
+const createProjectDesign = async (id: string, fileName: string) => {
   try {
-    const id = uuidv4();
     await sequelize.models.project_designs.create({
       id,
-      uri,
-    })
+      fileName,
+    });
     return id;
   } catch (error) {
     return Promise.reject(error);

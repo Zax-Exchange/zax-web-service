@@ -124,6 +124,7 @@ const createCustomer = async (data: createCompanyTypes.CreateCustomerInput): Pro
   }
 };
 
+// const createCompanyLogo = async ()
 const checkCompanyName = async (name: string) => {
   return await CompanyApiUtils.isDuplicateCompanyNames(name);
 }

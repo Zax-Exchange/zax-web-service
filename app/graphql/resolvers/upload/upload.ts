@@ -8,19 +8,38 @@ export const uploadProjectDesign = async (_parent: any, { file }: any) => {
   const { createReadStream, filename, mimetype, encoding } = await file;
   const stream = createReadStream();
 
-  let result;
-
   try {
-    const { Location } = await s3
+    const Key = uuidv4();
+    await s3
       .upload({
         Body: stream,
-        Key: uuidv4(),
+        Key,
         ContentType: mimetype,
         Bucket: process.env.AWS_PROJECT_DESIGNS_BUCKET!,
       })
       .promise();
-    return await createProjectDesign(Location);
+    return await createProjectDesign(Key, filename);
   } catch (error: any) {
     throw new ApolloError("Error uploading file");
   }
 };
+
+// export const uploadCompanyLogo = async (_parent: any, { file }: any) => {
+//   const { createReadStream, filename, mimetype, encoding } = await file;
+//   const stream = createReadStream();
+
+//   try {
+//     const Key = uuidv4();
+//     const { Location } = await s3
+//       .upload({
+//         Body: stream,
+//         Key,
+//         ContentType: mimetype,
+//         Bucket: process.env.AWS_COMPANY_LOGO_BUCKET!,
+//       })
+//       .promise();
+//     return await createCompanyLogo(Key, Location);
+//   } catch (error: any) {
+//     throw new ApolloError("Error uploading file");
+//   }
+// };

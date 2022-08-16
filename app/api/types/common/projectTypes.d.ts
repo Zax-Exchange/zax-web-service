@@ -1,5 +1,6 @@
 import * as enums from "./enums";
 import { QuantityPrice } from "../common/projectTypes";
+import { File } from "./fileTypes";
 
 export interface QuantityPrice {
   quantity: number;
@@ -18,10 +19,10 @@ export interface ProjectOverview {
   createdAt: Date;
 }
 
-export interface Project extends ProjectOverview{
+export interface Project extends ProjectOverview {
   userId: string;
   status: enums.ProjectStatus;
-  design: string;
+  design?: File;
   components: ProjectComponent[];
   updatedAt: Date;
 }

@@ -5,7 +5,7 @@ import type { projects, projectsId } from "./projects";
 export interface project_designsAttributes {
   id: string;
   projectId?: string;
-  uri: string;
+  fileName: string;
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
@@ -25,7 +25,7 @@ export class project_designs
 {
   id!: string;
   projectId?: string;
-  uri!: string;
+  fileName!: string;
   createdAt!: Date;
   updatedAt!: Date;
   deletedAt?: Date;
@@ -34,40 +34,42 @@ export class project_designs
   project!: projects;
   getProject!: Sequelize.BelongsToGetAssociationMixin<projects>;
   hasProject!: Sequelize.HasOneGetAssociationMixin<projects>;
-  
+
   static initModel(sequelize: Sequelize.Sequelize): typeof project_designs {
-    return sequelize.define("project_designs", {
-      id: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        primaryKey: true,
-      },
-      projectId: {
-        type: DataTypes.UUID,
-        allowNull: true,
-        references: {
-          model: "projects",
-          key: "id"
+    return sequelize.define(
+      "project_designs",
+      {
+        id: {
+          type: DataTypes.UUID,
+          allowNull: false,
+          primaryKey: true,
         },
-        onDelete: "cascade"
+        projectId: {
+          type: DataTypes.UUID,
+          allowNull: true,
+          references: {
+            model: "projects",
+            key: "id",
+          },
+          onDelete: "cascade",
+        },
+        fileName: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
       },
-      uri: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      {
+        tableName: "project_designs",
+        schema: "public",
+        timestamps: true,
+        indexes: [
+          {
+            name: "project_designs_pKey",
+            unique: true,
+            fields: [{ name: "id" }],
+          },
+        ],
       }
-    }, {
-      tableName: "project_designs",
-      schema: "public",
-      timestamps: true,
-      indexes: [
-        {
-          name: "project_designs_pKey",
-          unique: true,
-          fields: [
-            { name: "id" }
-          ]
-        }
-      ]
-    }) as typeof project_designs;
+    ) as typeof project_designs;
   }
 }

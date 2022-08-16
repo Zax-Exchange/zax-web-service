@@ -11,6 +11,10 @@ const project = gql`
     materials: [String!]!
     createdAt: String!
   }
+  type ProjectDesign {
+    fileName: String!
+    url: String!
+  }
 
   type Project {
     id: String!
@@ -20,7 +24,7 @@ const project = gql`
     deliveryDate: String!
     deliveryAddress: String!
     budget: Int!
-    design: String
+    design: ProjectDesign
     status: String!
     components: [ProjectComponent!]!
     createdAt: String!
@@ -36,7 +40,7 @@ const project = gql`
     deliveryDate: String!
     deliveryAddress: String!
     budget: Int!
-    design: String
+    design: ProjectDesign
     status: String!
     permission: String!
     components: [ProjectComponent!]!
@@ -53,7 +57,7 @@ const project = gql`
     deliveryDate: String!
     deliveryAddress: String!
     budget: Int!
-    design: String
+    design: ProjectDesign
     status: String!
     permission: String!
     components: [ProjectComponent!]!
