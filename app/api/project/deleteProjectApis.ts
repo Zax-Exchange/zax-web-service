@@ -44,7 +44,7 @@ const deleteProjectComponents = async(data: projectTypes.DeleteProjectComponents
   } catch(e) {
     console.error(e);
     return Promise.reject(e);
-  }
+  } 
 };
 
 // TODO: should be withdraw bid? add a status to project bid?

@@ -91,7 +91,6 @@ export class project_bid_permissions extends Model<project_bid_permissionsAttrib
     schema: 'public',
     hasTrigger: true,
     timestamps: true,
-    paranoid: true,
     indexes: [
       {
         name: "project_bid_editors_pkey",

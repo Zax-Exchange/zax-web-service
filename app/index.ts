@@ -43,9 +43,8 @@ const startServer = async() => {
     console.error('Unable to connect to the database:', error);
   }
   const app = express();
-  // app.use(cors({ credentials: true, origin: ["http://localhost:4001", "https://studio.apollographql.com"] }));
   const httpServer = http.createServer(app);
-
+  
   const server = new ApolloServer({
     csrfPrevention: false,
     typeDefs,
@@ -56,8 +55,7 @@ const startServer = async() => {
   });
 
   await server.start();
-
-
+  
   app.use(express.json());
   app.use(graphqlUploadExpress());
   app.use(bodyParser.json());

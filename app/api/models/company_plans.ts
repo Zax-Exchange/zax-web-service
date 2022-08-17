@@ -79,7 +79,6 @@ export class company_plans extends Model<company_plansAttributes, company_plansC
     tableName: 'company_plans',
     schema: 'public',
     timestamps: true,
-    paranoid: true,
     indexes: [
       {
         name: "company_plans_companyId_key",

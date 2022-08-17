@@ -49,7 +49,6 @@ export class stripe_customers extends Model<stripe_customersAttributes, stripe_c
       schema: 'public',
       hasTrigger: true,
       timestamps: true,
-
       indexes: [
         {
           name: "stripe_customers_pkey",

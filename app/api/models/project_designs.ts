@@ -8,12 +8,11 @@ export interface project_designsAttributes {
   fileName: string;
   createdAt: Date;
   updatedAt: Date;
-  deletedAt?: Date;
 }
 
 export type project_designsPk = "id";
 export type project_designsId = project_designs[project_designsPk];
-export type project_designsOptionalAttributes = "projectId" | "createdAt" | "updatedAt" | "deletedAt";
+export type project_designsOptionalAttributes = "projectId" | "createdAt" | "updatedAt";
 export type project_designsCreationAttributes = Optional<
   project_designsAttributes,
   project_designsOptionalAttributes
@@ -28,7 +27,6 @@ export class project_designs
   fileName!: string;
   createdAt!: Date;
   updatedAt!: Date;
-  deletedAt?: Date;
 
   // project_designs belongsTo projects via projectId
   project!: projects;

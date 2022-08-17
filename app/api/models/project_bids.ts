@@ -14,12 +14,11 @@ export interface project_bidsAttributes {
   comments?: string;
   createdAt: Date;
   updatedAt: Date;
-  deletedAt?: Date;
 }
 
 export type project_bidsPk = "id";
 export type project_bidsId = project_bids[project_bidsPk];
-export type project_bidsOptionalAttributes = "comments" | "createdAt" | "updatedAt" | "deletedAt";
+export type project_bidsOptionalAttributes = "comments" | "createdAt" | "updatedAt";
 export type project_bidsCreationAttributes = Optional<project_bidsAttributes, project_bidsOptionalAttributes>;
 
 export class project_bids extends Model<project_bidsAttributes, project_bidsCreationAttributes> implements project_bidsAttributes {
@@ -30,7 +29,6 @@ export class project_bids extends Model<project_bidsAttributes, project_bidsCrea
   comments?: string;
   createdAt!: Date;
   updatedAt!: Date;
-  deletedAt?: Date;
 
   // project_bids belongsTo companies via companyId
   company!: companies; 
@@ -116,16 +114,15 @@ export class project_bids extends Model<project_bidsAttributes, project_bidsCrea
     schema: 'public',
     hasTrigger: true,
     timestamps: true,
-    paranoid: true,
     hooks: {
-        afterDestroy: async (instance, options) => {
-          await instance.getProject_bid_components().then(async comps => {
-            for (let comp of comps) await comp.destroy()
-          });
-          await instance.getProject_bid_permissions().then(async ps => {
-            for (let p of ps) await p.destroy()
-          })
-        }
+        // afterDestroy: async (instance, options) => {
+        //   await instance.getProject_bid_components().then(async comps => {
+        //     for (let comp of comps) await comp.destroy()
+        //   });
+        //   await instance.getProject_bid_permissions().then(async ps => {
+        //     for (let p of ps) await p.destroy()
+        //   })
+        // }
     },
     indexes: [
       {

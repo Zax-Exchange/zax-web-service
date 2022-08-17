@@ -13,10 +13,10 @@ export interface usersAttributes {
   email: string;
   password: string;
   isAdmin: boolean;
-  createdAt: Date;
-  updatedAt: Date;
   isVendor: boolean;
   isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export type usersPk = "id";
@@ -31,10 +31,10 @@ export class users extends Model<usersAttributes, usersCreationAttributes> imple
   email!: string;
   password!: string;
   isAdmin!: boolean;
-  createdAt!: Date;
-  updatedAt!: Date;
   isVendor!: boolean;
   isActive!: boolean;
+  createdAt!: Date;
+  updatedAt!: Date;
 
   // users belongsTo companies via companyId
   company!: companies;
@@ -136,16 +136,16 @@ export class users extends Model<usersAttributes, usersCreationAttributes> imple
     schema: 'public',
     hasTrigger: true,
     timestamps: true,
-    paranoid: true,
+    // paranoid: true,
     hooks: {
-      beforeDestroy: async (instance, options) => {
-        instance.getProject_permissions().then(ps => {
-          for (let p of ps) p.destroy();
-        })
-        instance.getProject_bid_permissions().then(ps => {
-          for (let p of ps) p.destroy()
-        })
-      }
+      // beforeDestroy: async (instance, options) => {
+      //   instance.getProject_permissions().then(ps => {
+      //     for (let p of ps) p.destroy();
+      //   })
+      //   instance.getProject_bid_permissions().then(ps => {
+      //     for (let p of ps) p.destroy()
+      //   })
+      // }
     },
     indexes: [
       {

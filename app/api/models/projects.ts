@@ -19,12 +19,11 @@ export interface projectsAttributes {
   comments?: string;
   updatedAt: Date;
   createdAt: Date;
-  deletedAt?: Date;
 }
 
 export type projectsPk = "id";
 export type projectsId = projects[projectsPk];
-export type projectsOptionalAttributes =  "createdAt" | "updatedAt" | "comments" | "deletedAt";
+export type projectsOptionalAttributes =  "createdAt" | "updatedAt" | "comments";
 export type projectsCreationAttributes = Optional<projectsAttributes, projectsOptionalAttributes>;
 
 export class projects
@@ -42,7 +41,6 @@ export class projects
   comments?: string;
   createdAt!: Date;
   updatedAt!: Date;
-  deletedAt?: Date;
 
   // projects belongsTo companies via companyId
   company!: companies;
@@ -208,24 +206,28 @@ export class projects
         schema: "public",
         hasTrigger: true,
         timestamps: true,
-        paranoid: true,
         hooks: {
-          beforeDestroy: async (instance, options) => {
-            const transaction = await sequelize.transaction();
-            try {
-              instance.getProject_components().then(async (comps) => {
-                for (let comp of comps) await comp.destroy({ transaction });
-              });
+          // beforeDestroy: async (instance, options) => {
+          //   const transaction = await sequelize.transaction();
+          //   try {
+          //     await instance.getProject_components().then(async (comps) => {
+          //       for (let comp of comps) await comp.destroy({ transaction });
+          //     });
 
-              instance.getProject_permissions().then(async (ps) => {
-                for (let p of ps) await p.destroy({ transaction });
-              });
-              await transaction.commit();
-            } catch (error) {
-              console.error(error);
-              await transaction.rollback();
-            }
-          },
+          //     await instance.getProject_permissions().then(async (ps) => {
+          //       for (let p of ps) await p.destroy({ transaction });
+          //     });
+
+          //     await instance.getProject_design().then(async (d) => {
+          //       await d.destroy({ transaction });
+          //     });
+
+          //     await transaction.commit();
+          //   } catch (error) {
+          //     console.error(error);
+          //     await transaction.rollback();
+          //   }
+          // },
         },
         indexes: [
           {
