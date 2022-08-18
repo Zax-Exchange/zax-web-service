@@ -19,11 +19,13 @@ class EmailService {
       "https://developers.google.com/oauthplayground"
     ); 
 
+
     oauth2Client.setCredentials({
       refresh_token: process.env.OAUTH_REFRESH_TOKEN
     });
 
-    const accessToken = await oauth2Client.getAccessToken().then(t => t.token);
+    
+    const accessToken = (await oauth2Client.refreshAccessToken()).credentials.access_token;
 
     this.transporter = nodemailer.createTransport({
       host: "smtp.gmail.com", 
