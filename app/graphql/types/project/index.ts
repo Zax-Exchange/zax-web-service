@@ -3,6 +3,7 @@ import { gql } from "apollo-server-express";
 const project = gql`
   type ProjectOverview {
     id: String!
+    companyName: String!
     companyId: String!
     name: String!
     deliveryDate: String!

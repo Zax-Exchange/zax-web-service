@@ -12,28 +12,23 @@ const searchCustomerProjects = async (data: projectTypes.SearchProjectInput): Pr
     const query = QueryBuilder.buildProjectSearchQuery(data);
     const projectDocs = await ElasticProjectService.searchProjectDocuments(query);
     const res: projectTypes.ProjectOverview[] = [];
-    const ids = [];
-    const idToMaterialsMap: Record<string, string[]> = {};
 
     for (let project of projectDocs) {
-
-      ids.push(project._id);
-      idToMaterialsMap[project._id] = (project._source as any).materials;
-    }
-    const projects = await ProjectApiUtils.getProjectsByIds(ids);
-
-    for (let project of projects) {
+      const proj = await ProjectApiUtils.getProject(project._id);
       res.push({
-        id: project.id,
-        companyId: project.companyId,
-        name: project.name,
-        deliveryDate: project.deliveryDate,
-        deliveryAddress: project.deliveryAddress,
-        budget: project.budget,
-        materials: idToMaterialsMap[project.id],
-        createdAt: project.createdAt
+        id: project._id,
+        companyName: (project._source as any).companyName,
+        companyId: proj.companyId,
+        name: proj.name,
+        deliveryDate: proj.deliveryDate,
+        deliveryAddress: proj.deliveryAddress,
+        budget: proj.budget,
+        materials: (project._source as any).materials,
+        createdAt: proj.createdAt,
       });
+
     }
+
     return res;
   } catch(e) {
     console.error(e);

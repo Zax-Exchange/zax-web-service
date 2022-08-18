@@ -51,7 +51,14 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
       }
       await createProjectComponents(projectId, components, companyId, transaction);
       await createOrUpdateProjectPermission({ userId, projectId, permission: enums.ProjectPermission.OWNER }, transaction);
-      ElasticProjectService.createProjectDocument({ projectId, deliveryDate, deliveryAddress, budget, materials });
+      ElasticProjectService.createProjectDocument({
+        userId,
+        projectId,
+        deliveryDate,
+        deliveryAddress,
+        budget,
+        materials,
+      });
     });
 
 

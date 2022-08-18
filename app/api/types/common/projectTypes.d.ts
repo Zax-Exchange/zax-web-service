@@ -10,6 +10,7 @@ export interface QuantityPrice {
 // project for public view
 export interface ProjectOverview {
   id: string;
+  companyName: string;
   companyId: string;
   name: string;
   deliveryDate: string;
