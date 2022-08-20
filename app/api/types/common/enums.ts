@@ -10,6 +10,12 @@ export enum ProjectStatus {
   CLOSED = "CLOSED"
 }
 
+export enum BidStatus {
+  OPEN = "OPEN",
+  ACCEPTED = "ACCEPTED",
+  REJECTED = "REJECTED"
+}
+
 export enum CompanyPermission {
   ADMIN = "ADMIN",
   USER = "USER"

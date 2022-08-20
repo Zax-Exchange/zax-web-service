@@ -21,7 +21,7 @@ const getVendorProjects = async(userId:string): Promise<commonProjectTypes.Vendo
     const res = [];
     for (let permission of permissions) {
       const bid = await ProjectApiUtils.getPermissionedProjectBid(permission.projectBidId, permission.permission as enums.ProjectPermission);
-      const project = await ProjectApiUtils.getPermissionedProject(userId, bid.projectId);
+      const project = await ProjectApiUtils.getPermissionedProject(bid.projectId);
       const company = await CompanyApiUtils.getCompanyWithCompanyId(project.companyId);
 
       res.push({
@@ -53,7 +53,7 @@ const getVendorProject = async (data: GetProjectInput): Promise<commonProjectTyp
     }).then(p => p?.get({ plain:true }) as project_bid_permissionsAttributes);
 
     const bid = await ProjectApiUtils.getPermissionedProjectBid(permission.projectBidId, permission.permission);
-    const project = await ProjectApiUtils.getPermissionedProject(userId, bid.projectId);
+    const project = await ProjectApiUtils.getPermissionedProject(bid.projectId);
     const company = await CompanyApiUtils.getCompanyWithCompanyId(project.companyId);
 
     return {
@@ -73,7 +73,7 @@ const getCustomerProjects = async(userId: string): Promise<commonProjectTypes.Cu
 
     const res = [];
     for (let permission of projectPermissions) {
-      const project = await ProjectApiUtils.getPermissionedProject(userId, permission.projectId, permission.permission as enums.ProjectPermission);
+      const project = await ProjectApiUtils.getPermissionedProject(permission.projectId, permission.permission as enums.ProjectPermission);
       const bids = await ProjectApiUtils.getProjectBidsByProjectId(permission.projectId);
       res.push({
         ...project,
@@ -96,7 +96,7 @@ const getCustomerProject = async(data: GetProjectInput): Promise<commonProjectTy
       }
     }).then(p => p?.get({ plain: true }) as project_permissionsAttributes)
 
-    const project = await ProjectApiUtils.getPermissionedProject(userId, permission.projectId, permission.permission as enums.ProjectPermission);
+    const project = await ProjectApiUtils.getPermissionedProject(permission.projectId, permission.permission as enums.ProjectPermission);
     const bids = await ProjectApiUtils.getProjectBidsByProjectId(permission.projectId);
     return {
       ...project,

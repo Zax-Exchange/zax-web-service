@@ -1,5 +1,6 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import { ProjectStatus } from '../types/common/enums';
 import type { companies, companiesId } from './companies';
 import type { project_bids, project_bidsId } from './project_bids';
 import type { project_components, project_componentsId } from './project_components';
@@ -15,7 +16,7 @@ export interface projectsAttributes {
   deliveryDate: string;
   deliveryAddress: string;
   budget: number;
-  status: string;
+  status: ProjectStatus;
   comments?: string;
   updatedAt: Date;
   createdAt: Date;
@@ -37,7 +38,7 @@ export class projects
   deliveryDate!: string;
   deliveryAddress!: string;
   budget!: number;
-  status!: string;
+  status!: ProjectStatus;
   comments?: string;
   createdAt!: Date;
   updatedAt!: Date;
@@ -213,15 +214,12 @@ export class projects
           //     await instance.getProject_components().then(async (comps) => {
           //       for (let comp of comps) await comp.destroy({ transaction });
           //     });
-
           //     await instance.getProject_permissions().then(async (ps) => {
           //       for (let p of ps) await p.destroy({ transaction });
           //     });
-
           //     await instance.getProject_design().then(async (d) => {
           //       await d.destroy({ transaction });
           //     });
-
           //     await transaction.commit();
           //   } catch (error) {
           //     console.error(error);

@@ -83,22 +83,9 @@ const createProjectDesign = async (id: string, fileName: string) => {
 
 const createProjectComponents = async(projectId: string, components: projectTypes.CreateProjectComponentInput[], companyId: number, transaction: Transaction): Promise<boolean> => {
   const project_components = sequelize.models.project_components;
-  const materialsModel = sequelize.models.materials;
 
   try {
     for (let component of components) {
-
-      for (let material of component.materials) {
-        await materialsModel.findOrCreate({
-          where: {
-            name: material
-          },
-          defaults: {
-            id: uuidv4()
-          },
-          transaction
-        });
-      }
       await project_components.create({
         id: uuidv4(),
         projectId,

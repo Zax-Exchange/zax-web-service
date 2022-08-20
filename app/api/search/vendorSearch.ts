@@ -8,7 +8,6 @@ import QueryBuilder from "./queryBuilder";
 const searchCustomerProjects = async (data: projectTypes.SearchProjectInput): Promise<projectTypes.ProjectOverview[]> => {
   try {
     // ProjectDocument -> ProjectOverview -> Project
-    //TODO: build query
     const query = QueryBuilder.buildProjectSearchQuery(data);
     const projectDocs = await ElasticProjectService.searchProjectDocuments(query);
     const res: projectTypes.ProjectOverview[] = [];

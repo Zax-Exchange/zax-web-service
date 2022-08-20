@@ -146,15 +146,15 @@ class ProjectApiUtils {
   }
 
   // for vendor & customer
-  static async getPermissionedProject(userId: string, projectId: string, userPermission?: enums.ProjectPermission): Promise<commonProjectTypes.PermissionedProject> {
+  static async getPermissionedProject(projectId: string, userPermission?: enums.ProjectPermission): Promise<commonProjectTypes.PermissionedProject> {
     try {
       const project = await ProjectApiUtils.getProject(projectId);
-      const components = await ProjectApiUtils.getProjectComponents(projectId);
+
+      // const components = await ProjectApiUtils.getProjectComponents(projectId);
       
       // vendor permission will always be viewer, customer permission will vary
       const res = {
         ...project,
-        components,
         permission: userPermission ? userPermission : "VIEWER"
       } as commonProjectTypes.PermissionedProject;
       return Promise.resolve(res);
@@ -201,19 +201,6 @@ class ProjectApiUtils {
     }
   }
 
-  static async getProjectsByIds(projectIds: string[]): Promise<projectsAttributes[]> {
-    try {
-      return await sequelize.models.projects.findAll({
-        where: {
-          id: {
-            [Op.in]: projectIds
-          }
-        }
-      }).then(ps => ps.map(p => p.get({plain:true})));
-    } catch(e) {
-      return Promise.reject(e);
-    }
-  }
 
   static async getProjectUsers(projectId: string) {
     try {

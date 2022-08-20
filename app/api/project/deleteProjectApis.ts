@@ -47,7 +47,7 @@ const deleteProjectComponents = async(data: projectTypes.DeleteProjectComponents
   } 
 };
 
-// TODO: should be withdraw bid? add a status to project bid?
+// TODO: should we withdraw bid? add a status to project bid?
 const deleteProjectBid = async(data: projectTypes.DeleteProjectBidInput): Promise<boolean> => {
   const project_bids = sequelize.models.project_bids;
 
