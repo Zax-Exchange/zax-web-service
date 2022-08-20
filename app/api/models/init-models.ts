@@ -9,8 +9,6 @@ import { company_plans as _company_plans } from "./company_plans";
 import type { company_plansAttributes, company_plansCreationAttributes } from "./company_plans";
 import { customers as _customers } from "./customers";
 import type { customersAttributes, customersCreationAttributes } from "./customers";
-import { materials as _materials } from "./materials";
-import type { materialsAttributes, materialsCreationAttributes } from "./materials";
 import { plans as _plans } from "./plans";
 import type { plansAttributes, plansCreationAttributes } from "./plans";
 import { project_bid_components as _project_bid_components } from "./project_bid_components";
@@ -39,7 +37,6 @@ export {
   _stripe_customers as stripe_customers,
   _company_plans as company_plans,
   _customers as customers,
-  _materials as materials,
   _plans as plans,
   _project_bid_components as project_bid_components,
   _project_bid_permissions as project_bid_permissions,
@@ -63,8 +60,6 @@ export type {
   company_plansCreationAttributes,
   customersAttributes,
   customersCreationAttributes,
-  materialsAttributes,
-  materialsCreationAttributes,
   plansAttributes,
   plansCreationAttributes,
   project_bid_componentsAttributes,
@@ -103,7 +98,6 @@ export function initModels(sequelize: Sequelize) {
   const project_bid_components = _project_bid_components.initModel(sequelize);
   const project_permissions = _project_permissions.initModel(sequelize);
   const project_bid_permissions = _project_bid_permissions.initModel(sequelize);
-  const materials = _materials.initModel(sequelize);
 
   const project_designs = _project_designs.initModel(sequelize);
 
@@ -171,7 +165,6 @@ export function initModels(sequelize: Sequelize) {
     stripe_customers: stripe_customers,
     company_plans: company_plans,
     customers: customers,
-    materials: materials,
     plans: plans,
     project_bid_components: project_bid_components,
     project_bid_permissions: project_bid_permissions,

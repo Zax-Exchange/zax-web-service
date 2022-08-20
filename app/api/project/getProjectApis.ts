@@ -26,6 +26,7 @@ const getVendorProjects = async(userId:string): Promise<commonProjectTypes.Vendo
 
       res.push({
         ...project,
+        permission: permission.permission,
         customerName: company.name,
         bidInfo: bid
       });

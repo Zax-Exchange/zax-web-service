@@ -1,5 +1,4 @@
 // builds elastic search query based on filters
-import { materials } from "../models/materials";
 import * as projectTypes from "../types/common/projectTypes";
 import * as companyTypes from "../types/common/companyTypes";
 import type { estypes } from "@elastic/elasticsearch"
