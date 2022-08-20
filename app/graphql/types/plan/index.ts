@@ -7,8 +7,6 @@ const plan = gql`
     companySize: String
     tier: String
     pricings: Pricings!
-    createdAt: String!
-    updatedAt: String!
   }
 
   type Pricings {
@@ -26,8 +24,6 @@ const plan = gql`
     id: String!
     planId: String!
     companyId: String!
-    createdAt: String!
-    updatedAt: String!
   }
   
   type CompanyPlanDetail {

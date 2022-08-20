@@ -1,5 +1,4 @@
 import * as enums from "./enums";
-import { QuantityPrice } from "../common/projectTypes";
 import { File } from "./fileTypes";
 
 export interface QuantityPrice {

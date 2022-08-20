@@ -34,6 +34,4 @@ export interface Plan {
   companySize?: CompanySize;
   tier: string; 
   pricings: Pricings;
-  createdAt: Date;
-  updatedAt: Date;
 }
