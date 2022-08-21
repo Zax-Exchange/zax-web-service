@@ -1,7 +1,11 @@
 import { createUser as createUserApi } from "../../../../api/user/createUserApis";
-import * as userTypes from "../../../../api/types/create/userTypes";
+import { CreateUserInput } from "../../../resolvers-types";
 
-const createUser = (parent: any, args: Record<string, userTypes.CreateUserInput>, context: any) => {
+const createUser = (
+  parent: any,
+  args: Record<string, CreateUserInput>,
+  context: any
+) => {
   return createUserApi(args.data);
 };
 

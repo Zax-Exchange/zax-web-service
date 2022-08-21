@@ -1,44 +1,6 @@
 import { gql } from "apollo-server-express";
 
 const company = gql`
-  type Vendor {
-    id: String!
-    name: String!
-    contactEmail: String!
-    logo: String!
-    phone: String!
-    fax: String!
-    country: String!
-    planId: String!
-    isActive: Boolean!
-    isVendor: Boolean!
-    isVerified: Boolean!
-    leadTime: Int!
-    locations: [String]!
-    moq: Int!
-    materials: [String]
-    companyUrl: String
-    createdAt: String!
-    updatedAt: String!
-  }
-
-  type Customer {
-    id: String!
-    name: String!
-    contactEmail: String!
-    logo: String!
-    phone: String!
-    fax: String!
-    country: String!
-    planId: String!
-    isActive: Boolean!
-    isVendor: Boolean!
-    isVerified: Boolean!
-    companyUrl: String
-    createdAt: String!
-    updatedAt: String!
-  }
-
   type VendorOverview {
     id: String!
     name: String!
@@ -83,11 +45,6 @@ const company = gql`
     updatedAt: String!
   }
 
-  type CompanyPlanDetail {
-    id: String!
-    
-  }
-
   type CompanyDetail {
     id: String!
     name: String!
@@ -113,6 +70,7 @@ const company = gql`
   type VendorDetail {
     id: String!
     name: String!
+    contactEmail: String!
     phone: String!
     logo: String
     country: String!
@@ -120,6 +78,7 @@ const company = gql`
     companyUrl: String
     fax: String
     isVerified: Boolean!
+
     locations: [String]!
     materials: [String]!
     moq: String!
@@ -129,6 +88,7 @@ const company = gql`
   type CustomerDetail {
     id: String!
     name: String!
+    contactEmail: String!
     phone: String!
     logo: String
     country: String!
@@ -178,17 +138,17 @@ const company = gql`
   }
 
   input UpdateVendorInputData {
-    name: String
-    contactEmail: String
+    name: String!
+    contactEmail: String!
     logo: String
-    phone: String
+    phone: String!
     fax: String
-    country: String
+    country: String!
     companyUrl: String
-    leadTime: Int
-    moq: String
-    locations: [String]
-    materials: [String]
+    leadTime: Int!
+    moq: String!
+    locations: [String!]!
+    materials: [String!]!
   }
 
   input UpdateCustomerInput {
@@ -197,12 +157,12 @@ const company = gql`
   }
 
   input UpdateCustomerInputData {
-    name: String
-    contactEmail: String
+    name: String!
+    contactEmail: String!
     logo: String
-    phone: String
+    phone: String!
     fax: String
-    country: String
+    country: String!
     companyUrl: String
   }
 
@@ -218,7 +178,7 @@ const company = gql`
 
   input SearchCompanyInput {
     userInput: String!
-    locations: [String]
+    locations: [String!]
     moq: Int
     leadTime: Int
   }

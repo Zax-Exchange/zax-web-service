@@ -3,12 +3,13 @@ import sequelize from "../../postgres/dbconnection";
 import UserApiUtils from "../utils/userUtils";
 import bcrypt from "bcryptjs";
 import { ApolloError } from "apollo-server-express";
+import { UpdateUserInput, UpdateUserPasswordInput, UpdateUserPowerInput } from "../../graphql/resolvers-types";
 
-const updateUser = async(data: userTypes.UpdateUserInput) => {
+const updateUser = async(data: UpdateUserInput) => {
   const users = sequelize.models.users;
   const id = data.id; 
   try {
-    await users.update(data.data, {
+    await users.update({ name: data.name }, {
       where: { id }
     });
     return Promise.resolve(true);
@@ -18,7 +19,7 @@ const updateUser = async(data: userTypes.UpdateUserInput) => {
   }
 };
 
-const updateUserPassword = async ({ id, currentPassword, newPassword}: userTypes.UpdateUserPasswordInput) => {
+const updateUserPassword = async ({ id, currentPassword, newPassword}: UpdateUserPasswordInput) => {
   try {
     const user = await sequelize.models.users.findByPk(id);
 
@@ -36,7 +37,7 @@ const updateUserPassword = async ({ id, currentPassword, newPassword}: userTypes
     return Promise.reject(error);
   }
 }
-const updateUserPower = async({ isAdmin, id }: userTypes.UpdateUserPowerInput) => {
+const updateUserPower = async({ isAdmin, id }: UpdateUserPowerInput) => {
   try {
     await sequelize.models.users.update({
       isAdmin

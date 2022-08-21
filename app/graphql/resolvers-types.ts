@@ -4,6 +4,7 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -45,7 +46,6 @@ export type CompanyPlan = {
 export type CompanyPlanDetail = {
   __typename?: 'CompanyPlanDetail';
   billingFrequency: Scalars['String'];
-  id: Scalars['String'];
   memberSince: Scalars['String'];
   price: Scalars['Int'];
   subscriptionEndDate: Scalars['String'];
@@ -132,27 +132,10 @@ export type CreateVendorSubscriptionInput = {
   subscriptionPriceId: Scalars['String'];
 };
 
-export type Customer = {
-  __typename?: 'Customer';
-  companyUrl?: Maybe<Scalars['String']>;
-  contactEmail: Scalars['String'];
-  country: Scalars['String'];
-  createdAt: Scalars['String'];
-  fax: Scalars['String'];
-  id: Scalars['String'];
-  isActive: Scalars['Boolean'];
-  isVendor: Scalars['Boolean'];
-  isVerified: Scalars['Boolean'];
-  logo: Scalars['String'];
-  name: Scalars['String'];
-  phone: Scalars['String'];
-  planId: Scalars['String'];
-  updatedAt: Scalars['String'];
-};
-
 export type CustomerDetail = {
   __typename?: 'CustomerDetail';
   companyUrl?: Maybe<Scalars['String']>;
+  contactEmail: Scalars['String'];
   country: Scalars['String'];
   fax?: Maybe<Scalars['String']>;
   id: Scalars['String'];
@@ -250,6 +233,169 @@ export type LoggedInUser = {
   name: Scalars['String'];
   notificationToken?: Maybe<Scalars['String']>;
   token: Scalars['String'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createCustomer: Scalars['String'];
+  createCustomerSubscription: StripeSubscription;
+  createProject: Scalars['Boolean'];
+  createProjectBid: Scalars['Boolean'];
+  createStripeCustomer: Scalars['String'];
+  createUser: LoggedInUser;
+  createVendor: Scalars['String'];
+  createVendorSubscription: StripeSubscription;
+  deactivateUser: Scalars['Boolean'];
+  deleteProject: Scalars['Boolean'];
+  deleteProjectBidPermissions: Scalars['Boolean'];
+  deleteProjectPermissions: Scalars['Boolean'];
+  inviteUser: Scalars['Boolean'];
+  reset?: Maybe<Scalars['Boolean']>;
+  updateCompanyPlan: Scalars['Boolean'];
+  updateCompanyPlanSubscriptionInfo: Scalars['Boolean'];
+  updateCompanyStatus: Scalars['Boolean'];
+  updateCustomer: Scalars['Boolean'];
+  updateProjectBidPermissions: Scalars['Boolean'];
+  updateProjectPermissions: Scalars['Boolean'];
+  updateSubscription: Scalars['Boolean'];
+  updateUser: Scalars['Boolean'];
+  updateUserPassword: Scalars['Boolean'];
+  updateUserPower: Scalars['Boolean'];
+  updateVendor: Scalars['Boolean'];
+  uploadProjectDesign: Scalars['String'];
+};
+
+
+export type MutationCreateCustomerArgs = {
+  data?: InputMaybe<CreateCustomerInput>;
+};
+
+
+export type MutationCreateCustomerSubscriptionArgs = {
+  priceId?: InputMaybe<Scalars['String']>;
+  stripeCustomerId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationCreateProjectArgs = {
+  data?: InputMaybe<CreateProjectInput>;
+};
+
+
+export type MutationCreateProjectBidArgs = {
+  data?: InputMaybe<CreateProjectBidInput>;
+};
+
+
+export type MutationCreateStripeCustomerArgs = {
+  email?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationCreateUserArgs = {
+  data?: InputMaybe<CreateUserInput>;
+};
+
+
+export type MutationCreateVendorArgs = {
+  data?: InputMaybe<CreateVendorInput>;
+};
+
+
+export type MutationCreateVendorSubscriptionArgs = {
+  data?: InputMaybe<CreateVendorSubscriptionInput>;
+};
+
+
+export type MutationDeactivateUserArgs = {
+  email?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationDeleteProjectArgs = {
+  projectId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationDeleteProjectBidPermissionsArgs = {
+  data?: InputMaybe<DeleteProjectBidPermissionsInput>;
+};
+
+
+export type MutationDeleteProjectPermissionsArgs = {
+  data?: InputMaybe<DeleteProjectPermissionsInput>;
+};
+
+
+export type MutationInviteUserArgs = {
+  email?: InputMaybe<Scalars['String']>;
+  userId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationResetArgs = {
+  t?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type MutationUpdateCompanyPlanArgs = {
+  data?: InputMaybe<UpdateCompanyPlanInput>;
+};
+
+
+export type MutationUpdateCompanyPlanSubscriptionInfoArgs = {
+  subscriptionId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationUpdateCompanyStatusArgs = {
+  companyId?: InputMaybe<Scalars['String']>;
+  isActive?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type MutationUpdateCustomerArgs = {
+  data?: InputMaybe<UpdateCustomerInput>;
+};
+
+
+export type MutationUpdateProjectBidPermissionsArgs = {
+  data?: InputMaybe<UpdateProjectBidPermissionsInput>;
+};
+
+
+export type MutationUpdateProjectPermissionsArgs = {
+  data?: InputMaybe<UpdateProjectPermissionsInput>;
+};
+
+
+export type MutationUpdateSubscriptionArgs = {
+  subscriptionId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationUpdateUserArgs = {
+  data?: InputMaybe<UpdateUserInput>;
+};
+
+
+export type MutationUpdateUserPasswordArgs = {
+  data?: InputMaybe<UpdateUserPasswordInput>;
+};
+
+
+export type MutationUpdateUserPowerArgs = {
+  data?: InputMaybe<UpdateUserPowerInput>;
+};
+
+
+export type MutationUpdateVendorArgs = {
+  data?: InputMaybe<UpdateVendorInput>;
+};
+
+
+export type MutationUploadProjectDesignArgs = {
+  file: Scalars['Upload'];
 };
 
 export type PermissionedCompany = {
@@ -390,9 +536,140 @@ export type QuantityPriceInput = {
   quantity: Scalars['Int'];
 };
 
+export type Query = {
+  __typename?: 'Query';
+  checkCompanyName?: Maybe<Scalars['Boolean']>;
+  checkUserEmail?: Maybe<Scalars['Boolean']>;
+  getAllPlans?: Maybe<Array<Maybe<Plan>>>;
+  getAllUsersWithinCompany?: Maybe<Array<Maybe<User>>>;
+  getCompanyDetail?: Maybe<CompanyDetail>;
+  getCompanyPlanDetail?: Maybe<Scalars['Boolean']>;
+  getCompanyPlanWithCompanyId?: Maybe<CompanyPlanDetail>;
+  getCustomerDetail?: Maybe<CustomerDetail>;
+  getCustomerProject?: Maybe<CustomerProject>;
+  getCustomerProjects?: Maybe<Array<Maybe<CustomerProject>>>;
+  getPlanWithPlanId?: Maybe<Plan>;
+  getProjectBidUsers?: Maybe<Array<Maybe<UserPermission>>>;
+  getProjectDetail?: Maybe<Project>;
+  getProjectUsers?: Maybe<Array<Maybe<UserPermission>>>;
+  getUserWithUserId?: Maybe<User>;
+  getVendorDetail?: Maybe<VendorDetail>;
+  getVendorProject?: Maybe<VendorProject>;
+  getVendorProjects?: Maybe<Array<Maybe<VendorProject>>>;
+  login?: Maybe<LoggedInUser>;
+  searchCustomerProjects?: Maybe<Array<Maybe<ProjectOverview>>>;
+  searchVendorCompanies?: Maybe<Array<Maybe<VendorOverview>>>;
+};
+
+
+export type QueryCheckCompanyNameArgs = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryCheckUserEmailArgs = {
+  email?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetAllPlansArgs = {
+  isVendor?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type QueryGetAllUsersWithinCompanyArgs = {
+  companyId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetCompanyDetailArgs = {
+  companyId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetCompanyPlanDetailArgs = {
+  companyId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetCompanyPlanWithCompanyIdArgs = {
+  companyId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetCustomerDetailArgs = {
+  companyId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetCustomerProjectArgs = {
+  data?: InputMaybe<GetProjectInput>;
+};
+
+
+export type QueryGetCustomerProjectsArgs = {
+  userId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetPlanWithPlanIdArgs = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetProjectBidUsersArgs = {
+  projectBidId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetProjectDetailArgs = {
+  projectId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetProjectUsersArgs = {
+  projectId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetUserWithUserIdArgs = {
+  paranoid?: InputMaybe<Scalars['Boolean']>;
+  userId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetVendorDetailArgs = {
+  companyId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetVendorProjectArgs = {
+  data?: InputMaybe<GetProjectInput>;
+};
+
+
+export type QueryGetVendorProjectsArgs = {
+  userId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryLoginArgs = {
+  data?: InputMaybe<UserLoginInput>;
+};
+
+
+export type QuerySearchCustomerProjectsArgs = {
+  searchInput?: InputMaybe<SearchProjectInput>;
+};
+
+
+export type QuerySearchVendorCompaniesArgs = {
+  searchInput?: InputMaybe<SearchCompanyInput>;
+};
+
 export type SearchCompanyInput = {
   leadTime?: InputMaybe<Scalars['Int']>;
-  locations?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  locations?: InputMaybe<Array<Scalars['String']>>;
   moq?: InputMaybe<Scalars['Int']>;
   userInput: Scalars['String'];
 };
@@ -423,12 +700,12 @@ export type UpdateCustomerInput = {
 
 export type UpdateCustomerInputData = {
   companyUrl?: InputMaybe<Scalars['String']>;
-  contactEmail?: InputMaybe<Scalars['String']>;
-  country?: InputMaybe<Scalars['String']>;
+  contactEmail: Scalars['String'];
+  country: Scalars['String'];
   fax?: InputMaybe<Scalars['String']>;
   logo?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
-  phone?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  phone: Scalars['String'];
 };
 
 export type UpdateProjectBidComponentInput = {
@@ -505,16 +782,16 @@ export type UpdateVendorInput = {
 
 export type UpdateVendorInputData = {
   companyUrl?: InputMaybe<Scalars['String']>;
-  contactEmail?: InputMaybe<Scalars['String']>;
-  country?: InputMaybe<Scalars['String']>;
+  contactEmail: Scalars['String'];
+  country: Scalars['String'];
   fax?: InputMaybe<Scalars['String']>;
-  leadTime?: InputMaybe<Scalars['Int']>;
-  locations?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  leadTime: Scalars['Int'];
+  locations: Array<Scalars['String']>;
   logo?: InputMaybe<Scalars['String']>;
-  materials?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  moq?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
-  phone?: InputMaybe<Scalars['String']>;
+  materials: Array<Scalars['String']>;
+  moq: Scalars['String'];
+  name: Scalars['String'];
+  phone: Scalars['String'];
 };
 
 export type User = {
@@ -541,31 +818,10 @@ export type UserPermission = {
   userId: Scalars['String'];
 };
 
-export type Vendor = {
-  __typename?: 'Vendor';
-  companyUrl?: Maybe<Scalars['String']>;
-  contactEmail: Scalars['String'];
-  country: Scalars['String'];
-  createdAt: Scalars['String'];
-  fax: Scalars['String'];
-  id: Scalars['String'];
-  isActive: Scalars['Boolean'];
-  isVendor: Scalars['Boolean'];
-  isVerified: Scalars['Boolean'];
-  leadTime: Scalars['Int'];
-  locations: Array<Maybe<Scalars['String']>>;
-  logo: Scalars['String'];
-  materials?: Maybe<Array<Maybe<Scalars['String']>>>;
-  moq: Scalars['Int'];
-  name: Scalars['String'];
-  phone: Scalars['String'];
-  planId: Scalars['String'];
-  updatedAt: Scalars['String'];
-};
-
 export type VendorDetail = {
   __typename?: 'VendorDetail';
   companyUrl?: Maybe<Scalars['String']>;
+  contactEmail: Scalars['String'];
   country: Scalars['String'];
   fax?: Maybe<Scalars['String']>;
   id: Scalars['String'];
@@ -695,7 +951,6 @@ export type ResolversTypes = ResolversObject<{
   CreateUserInput: CreateUserInput;
   CreateVendorInput: CreateVendorInput;
   CreateVendorSubscriptionInput: CreateVendorSubscriptionInput;
-  Customer: ResolverTypeWrapper<Customer>;
   CustomerDetail: ResolverTypeWrapper<CustomerDetail>;
   CustomerOverview: ResolverTypeWrapper<CustomerOverview>;
   CustomerProject: ResolverTypeWrapper<CustomerProject>;
@@ -709,6 +964,7 @@ export type ResolversTypes = ResolversObject<{
   GetProjectInput: GetProjectInput;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   LoggedInUser: ResolverTypeWrapper<LoggedInUser>;
+  Mutation: ResolverTypeWrapper<{}>;
   PermissionedCompany: ResolverTypeWrapper<PermissionedCompany>;
   PermissionedProjectBid: ResolverTypeWrapper<PermissionedProjectBid>;
   Plan: ResolverTypeWrapper<Plan>;
@@ -722,6 +978,7 @@ export type ResolversTypes = ResolversObject<{
   ProjectOverview: ResolverTypeWrapper<ProjectOverview>;
   QuantityPrice: ResolverTypeWrapper<QuantityPrice>;
   QuantityPriceInput: QuantityPriceInput;
+  Query: ResolverTypeWrapper<{}>;
   SearchCompanyInput: SearchCompanyInput;
   SearchProjectInput: SearchProjectInput;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -746,7 +1003,6 @@ export type ResolversTypes = ResolversObject<{
   User: ResolverTypeWrapper<User>;
   UserLoginInput: UserLoginInput;
   UserPermission: ResolverTypeWrapper<UserPermission>;
-  Vendor: ResolverTypeWrapper<Vendor>;
   VendorDetail: ResolverTypeWrapper<VendorDetail>;
   VendorOverview: ResolverTypeWrapper<VendorOverview>;
   VendorProject: ResolverTypeWrapper<VendorProject>;
@@ -766,7 +1022,6 @@ export type ResolversParentTypes = ResolversObject<{
   CreateUserInput: CreateUserInput;
   CreateVendorInput: CreateVendorInput;
   CreateVendorSubscriptionInput: CreateVendorSubscriptionInput;
-  Customer: Customer;
   CustomerDetail: CustomerDetail;
   CustomerOverview: CustomerOverview;
   CustomerProject: CustomerProject;
@@ -780,6 +1035,7 @@ export type ResolversParentTypes = ResolversObject<{
   GetProjectInput: GetProjectInput;
   Int: Scalars['Int'];
   LoggedInUser: LoggedInUser;
+  Mutation: {};
   PermissionedCompany: PermissionedCompany;
   PermissionedProjectBid: PermissionedProjectBid;
   Plan: Plan;
@@ -793,6 +1049,7 @@ export type ResolversParentTypes = ResolversObject<{
   ProjectOverview: ProjectOverview;
   QuantityPrice: QuantityPrice;
   QuantityPriceInput: QuantityPriceInput;
+  Query: {};
   SearchCompanyInput: SearchCompanyInput;
   SearchProjectInput: SearchProjectInput;
   String: Scalars['String'];
@@ -817,7 +1074,6 @@ export type ResolversParentTypes = ResolversObject<{
   User: User;
   UserLoginInput: UserLoginInput;
   UserPermission: UserPermission;
-  Vendor: Vendor;
   VendorDetail: VendorDetail;
   VendorOverview: VendorOverview;
   VendorProject: VendorProject;
@@ -853,7 +1109,6 @@ export type CompanyPlanResolvers<ContextType = any, ParentType extends Resolvers
 
 export type CompanyPlanDetailResolvers<ContextType = any, ParentType extends ResolversParentTypes['CompanyPlanDetail'] = ResolversParentTypes['CompanyPlanDetail']> = ResolversObject<{
   billingFrequency?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   memberSince?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   price?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   subscriptionEndDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -864,26 +1119,9 @@ export type CompanyPlanDetailResolvers<ContextType = any, ParentType extends Res
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type CustomerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Customer'] = ResolversParentTypes['Customer']> = ResolversObject<{
-  companyUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  contactEmail?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  country?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  fax?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  isActive?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  isVendor?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  isVerified?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  logo?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  phone?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  planId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
 export type CustomerDetailResolvers<ContextType = any, ParentType extends ResolversParentTypes['CustomerDetail'] = ResolversParentTypes['CustomerDetail']> = ResolversObject<{
   companyUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  contactEmail?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   country?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   fax?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -952,6 +1190,35 @@ export type LoggedInUserResolvers<ContextType = any, ParentType extends Resolver
   notificationToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  createCustomer?: Resolver<ResolversTypes['String'], ParentType, ContextType, Partial<MutationCreateCustomerArgs>>;
+  createCustomerSubscription?: Resolver<ResolversTypes['StripeSubscription'], ParentType, ContextType, Partial<MutationCreateCustomerSubscriptionArgs>>;
+  createProject?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationCreateProjectArgs>>;
+  createProjectBid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationCreateProjectBidArgs>>;
+  createStripeCustomer?: Resolver<ResolversTypes['String'], ParentType, ContextType, Partial<MutationCreateStripeCustomerArgs>>;
+  createUser?: Resolver<ResolversTypes['LoggedInUser'], ParentType, ContextType, Partial<MutationCreateUserArgs>>;
+  createVendor?: Resolver<ResolversTypes['String'], ParentType, ContextType, Partial<MutationCreateVendorArgs>>;
+  createVendorSubscription?: Resolver<ResolversTypes['StripeSubscription'], ParentType, ContextType, Partial<MutationCreateVendorSubscriptionArgs>>;
+  deactivateUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationDeactivateUserArgs>>;
+  deleteProject?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationDeleteProjectArgs>>;
+  deleteProjectBidPermissions?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationDeleteProjectBidPermissionsArgs>>;
+  deleteProjectPermissions?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationDeleteProjectPermissionsArgs>>;
+  inviteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationInviteUserArgs>>;
+  reset?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationResetArgs>>;
+  updateCompanyPlan?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationUpdateCompanyPlanArgs>>;
+  updateCompanyPlanSubscriptionInfo?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationUpdateCompanyPlanSubscriptionInfoArgs>>;
+  updateCompanyStatus?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationUpdateCompanyStatusArgs>>;
+  updateCustomer?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationUpdateCustomerArgs>>;
+  updateProjectBidPermissions?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationUpdateProjectBidPermissionsArgs>>;
+  updateProjectPermissions?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationUpdateProjectPermissionsArgs>>;
+  updateSubscription?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationUpdateSubscriptionArgs>>;
+  updateUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationUpdateUserArgs>>;
+  updateUserPassword?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationUpdateUserPasswordArgs>>;
+  updateUserPower?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationUpdateUserPowerArgs>>;
+  updateVendor?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationUpdateVendorArgs>>;
+  uploadProjectDesign?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationUploadProjectDesignArgs, 'file'>>;
 }>;
 
 export type PermissionedCompanyResolvers<ContextType = any, ParentType extends ResolversParentTypes['PermissionedCompany'] = ResolversParentTypes['PermissionedCompany']> = ResolversObject<{
@@ -1087,6 +1354,30 @@ export type QuantityPriceResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  checkCompanyName?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<QueryCheckCompanyNameArgs>>;
+  checkUserEmail?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<QueryCheckUserEmailArgs>>;
+  getAllPlans?: Resolver<Maybe<Array<Maybe<ResolversTypes['Plan']>>>, ParentType, ContextType, Partial<QueryGetAllPlansArgs>>;
+  getAllUsersWithinCompany?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType, Partial<QueryGetAllUsersWithinCompanyArgs>>;
+  getCompanyDetail?: Resolver<Maybe<ResolversTypes['CompanyDetail']>, ParentType, ContextType, Partial<QueryGetCompanyDetailArgs>>;
+  getCompanyPlanDetail?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<QueryGetCompanyPlanDetailArgs>>;
+  getCompanyPlanWithCompanyId?: Resolver<Maybe<ResolversTypes['CompanyPlanDetail']>, ParentType, ContextType, Partial<QueryGetCompanyPlanWithCompanyIdArgs>>;
+  getCustomerDetail?: Resolver<Maybe<ResolversTypes['CustomerDetail']>, ParentType, ContextType, Partial<QueryGetCustomerDetailArgs>>;
+  getCustomerProject?: Resolver<Maybe<ResolversTypes['CustomerProject']>, ParentType, ContextType, Partial<QueryGetCustomerProjectArgs>>;
+  getCustomerProjects?: Resolver<Maybe<Array<Maybe<ResolversTypes['CustomerProject']>>>, ParentType, ContextType, Partial<QueryGetCustomerProjectsArgs>>;
+  getPlanWithPlanId?: Resolver<Maybe<ResolversTypes['Plan']>, ParentType, ContextType, Partial<QueryGetPlanWithPlanIdArgs>>;
+  getProjectBidUsers?: Resolver<Maybe<Array<Maybe<ResolversTypes['UserPermission']>>>, ParentType, ContextType, Partial<QueryGetProjectBidUsersArgs>>;
+  getProjectDetail?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, Partial<QueryGetProjectDetailArgs>>;
+  getProjectUsers?: Resolver<Maybe<Array<Maybe<ResolversTypes['UserPermission']>>>, ParentType, ContextType, Partial<QueryGetProjectUsersArgs>>;
+  getUserWithUserId?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<QueryGetUserWithUserIdArgs>>;
+  getVendorDetail?: Resolver<Maybe<ResolversTypes['VendorDetail']>, ParentType, ContextType, Partial<QueryGetVendorDetailArgs>>;
+  getVendorProject?: Resolver<Maybe<ResolversTypes['VendorProject']>, ParentType, ContextType, Partial<QueryGetVendorProjectArgs>>;
+  getVendorProjects?: Resolver<Maybe<Array<Maybe<ResolversTypes['VendorProject']>>>, ParentType, ContextType, Partial<QueryGetVendorProjectsArgs>>;
+  login?: Resolver<Maybe<ResolversTypes['LoggedInUser']>, ParentType, ContextType, Partial<QueryLoginArgs>>;
+  searchCustomerProjects?: Resolver<Maybe<Array<Maybe<ResolversTypes['ProjectOverview']>>>, ParentType, ContextType, Partial<QuerySearchCustomerProjectsArgs>>;
+  searchVendorCompanies?: Resolver<Maybe<Array<Maybe<ResolversTypes['VendorOverview']>>>, ParentType, ContextType, Partial<QuerySearchVendorCompaniesArgs>>;
+}>;
+
 export type StripeSubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['StripeSubscription'] = ResolversParentTypes['StripeSubscription']> = ResolversObject<{
   clientSecret?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   subscriptionId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1116,30 +1407,9 @@ export type UserPermissionResolvers<ContextType = any, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type VendorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Vendor'] = ResolversParentTypes['Vendor']> = ResolversObject<{
-  companyUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  contactEmail?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  country?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  fax?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  isActive?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  isVendor?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  isVerified?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  leadTime?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  locations?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
-  logo?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  materials?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
-  moq?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  phone?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  planId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
 export type VendorDetailResolvers<ContextType = any, ParentType extends ResolversParentTypes['VendorDetail'] = ResolversParentTypes['VendorDetail']> = ResolversObject<{
   companyUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  contactEmail?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   country?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   fax?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1192,13 +1462,13 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   CompanyDetail?: CompanyDetailResolvers<ContextType>;
   CompanyPlan?: CompanyPlanResolvers<ContextType>;
   CompanyPlanDetail?: CompanyPlanDetailResolvers<ContextType>;
-  Customer?: CustomerResolvers<ContextType>;
   CustomerDetail?: CustomerDetailResolvers<ContextType>;
   CustomerOverview?: CustomerOverviewResolvers<ContextType>;
   CustomerProject?: CustomerProjectResolvers<ContextType>;
   File?: FileResolvers<ContextType>;
   FileUploadResponse?: FileUploadResponseResolvers<ContextType>;
   LoggedInUser?: LoggedInUserResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   PermissionedCompany?: PermissionedCompanyResolvers<ContextType>;
   PermissionedProjectBid?: PermissionedProjectBidResolvers<ContextType>;
   Plan?: PlanResolvers<ContextType>;
@@ -1211,11 +1481,11 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   ProjectDesign?: ProjectDesignResolvers<ContextType>;
   ProjectOverview?: ProjectOverviewResolvers<ContextType>;
   QuantityPrice?: QuantityPriceResolvers<ContextType>;
+  Query?: QueryResolvers<ContextType>;
   StripeSubscription?: StripeSubscriptionResolvers<ContextType>;
   Upload?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
   UserPermission?: UserPermissionResolvers<ContextType>;
-  Vendor?: VendorResolvers<ContextType>;
   VendorDetail?: VendorDetailResolvers<ContextType>;
   VendorOverview?: VendorOverviewResolvers<ContextType>;
   VendorProject?: VendorProjectResolvers<ContextType>;

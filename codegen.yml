@@ -1,4 +1,4 @@
-schema: ./app/graphql/schema.graphql
+schema: ./app/graphql/types/**/*.ts
 generates:
   ./app/graphql/resolvers-types.ts:
     config:

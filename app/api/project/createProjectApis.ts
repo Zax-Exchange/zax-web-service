@@ -7,8 +7,9 @@ import UserApiUtils from "../utils/userUtils";
 import ElasticProjectService from "../../elastic/project/ElasticProjectService";
 import { v4 as uuidv4} from "uuid"
 import notificationService from "../../stream/StreamService";
+import { CreateProjectBidComponentInput, CreateProjectBidInput, CreateProjectComponentInput, CreateProjectInput, UpdateProjectBidPermissionsInputData, UpdateProjectPermissionsInputData } from "../../graphql/resolvers-types";
 //TODO: findOrCreate product or materials when creating project
-const createProject = async(data: projectTypes.CreateProjectInput): Promise<boolean> => {
+const createProject = async(data: CreateProjectInput): Promise<boolean> => {
   const projects = sequelize.models.projects;
   const users = sequelize.models.users;
   const {userId, name, designId, deliveryDate, deliveryAddress, budget, components} = data;
@@ -50,7 +51,7 @@ const createProject = async(data: projectTypes.CreateProjectInput): Promise<bool
         }
       }
       await createProjectComponents(projectId, components, companyId, transaction);
-      await createOrUpdateProjectPermission({ userId, projectId, permission: enums.ProjectPermission.OWNER }, transaction);
+      await createOrUpdateProjectPermission({ userIds: [userId], projectId, permission: enums.ProjectPermission.OWNER }, transaction);
       ElasticProjectService.createProjectDocument({
         userId,
         projectId,
@@ -81,7 +82,7 @@ const createProjectDesign = async (id: string, fileName: string) => {
   }
 }
 
-const createProjectComponents = async(projectId: string, components: projectTypes.CreateProjectComponentInput[], companyId: number, transaction: Transaction): Promise<boolean> => {
+const createProjectComponents = async(projectId: string, components: CreateProjectComponentInput[], companyId: number, transaction: Transaction): Promise<boolean> => {
   const project_components = sequelize.models.project_components;
 
   try {
@@ -100,7 +101,7 @@ const createProjectComponents = async(projectId: string, components: projectType
 
 
 
-const createProjectBid = async(data: projectTypes.CreateProjectBidInput): Promise<boolean> => {
+const createProjectBid = async(data: CreateProjectBidInput): Promise<boolean> => {
   const project_bids = sequelize.models.project_bids;
   const { userId, projectId, comments, components } = data;
   
@@ -119,7 +120,7 @@ const createProjectBid = async(data: projectTypes.CreateProjectBidInput): Promis
       }, { transaction });
       const projectBidId = bid.getDataValue("id");
       await createProjectBidComponents(projectBidId, components, transaction);
-      await createOrUpdateProjectBidPermission({ userId, projectId, projectBidId, permission: enums.ProjectPermission.OWNER }, transaction);
+      await createOrUpdateProjectBidPermission({ userIds: [userId], projectId, projectBidId, permission: enums.ProjectPermission.OWNER }, transaction);
       await ProjectApiUtils.updateProjectStatus(projectId, enums.ProjectStatus.IN_PROGRESS);
     });
     notificationService.broadcastNewBid(data);
@@ -130,7 +131,7 @@ const createProjectBid = async(data: projectTypes.CreateProjectBidInput): Promis
   }
 };
 
-const createProjectBidComponents = async(projectBidId: string, components: projectTypes.CreateProjectBidComponentInput[], transaction: Transaction): Promise<boolean> => {
+const createProjectBidComponents = async(projectBidId: string, components: CreateProjectBidComponentInput[], transaction: Transaction): Promise<boolean> => {
   const project_bid_components = sequelize.models.project_bid_components;
   try {
     for (let component of components) {
@@ -149,26 +150,28 @@ const createProjectBidComponents = async(projectBidId: string, components: proje
   }
 };
 
-const createOrUpdateProjectPermission = async(data: projectTypes.CreateOrUpdateProjectPermissionInput, transaction?: Transaction): Promise<boolean> => {
-  const { userId, projectId, permission } = data;
+const createOrUpdateProjectPermission = async(data: UpdateProjectPermissionsInputData, transaction?: Transaction): Promise<boolean> => {
+  const { userIds, projectId, permission } = data;
   const project_permissions = sequelize.models.project_permissions;
 
   try {    
-    await project_permissions.findOrCreate({
-      where: {
-        userId,
-        projectId
-      },
-      defaults: {
-        id: uuidv4(),
-        permission
-      },
-      transaction
-    }).then(async ([foundPermission, created]) => {
-      if (!created) {
-        await foundPermission.update({"permission": permission}, {transaction});
-      }
-    });
+    for (let userId of userIds) {
+      await project_permissions.findOrCreate({
+        where: {
+          userId,
+          projectId
+        },
+        defaults: {
+          id: uuidv4(),
+          permission
+        },
+        transaction
+      }).then(async ([foundPermission, created]) => {
+        if (!created) {
+          await foundPermission.update({"permission": permission}, {transaction});
+        }
+      });
+    }
     return true;
   } catch (e) {
     console.error(e)
@@ -176,27 +179,29 @@ const createOrUpdateProjectPermission = async(data: projectTypes.CreateOrUpdateP
   }
 };
 
-const createOrUpdateProjectBidPermission = async(data: projectTypes.CreateOrUpdateProjectBidPermissionInput, transaction?: Transaction): Promise<boolean> => {
-  const { userId, projectId, projectBidId, permission } = data;
+const createOrUpdateProjectBidPermission = async(data: UpdateProjectBidPermissionsInputData, transaction?: Transaction): Promise<boolean> => {
+  const { userIds, projectId, projectBidId, permission } = data;
   const project_bid_permissions = sequelize.models.project_bid_permissions;
 
   try {
-    await project_bid_permissions.findOrCreate({
-      where: {
-        userId,
-        projectId,
-        projectBidId
-      },
-      defaults: {
-        id: uuidv4(),
-        permission
-      },
-      transaction
-    }).then(async ([foundPermission, created]) => {
-      if (!created) {
-        await foundPermission.update({"permission": permission}, {transaction});
-      }
-    });
+    for (let userId of userIds) {
+      await project_bid_permissions.findOrCreate({
+        where: {
+          userId,
+          projectId,
+          projectBidId
+        },
+        defaults: {
+          id: uuidv4(),
+          permission
+        },
+        transaction
+      }).then(async ([foundPermission, created]) => {
+        if (!created) {
+          await foundPermission.update({"permission": permission}, {transaction});
+        }
+      });
+    }
     return true;
   } catch (e) {
     console.error(e);

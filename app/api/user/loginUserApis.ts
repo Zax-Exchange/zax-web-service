@@ -1,11 +1,10 @@
-import { UserLoginInput } from "../types/common/userTypes";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import sequelize from "../../postgres/dbconnection";
-import { LoggedInUser } from "../types/common/userTypes";
 import { connect } from 'getstream';
 import { usersAttributes } from "../models/users";
 import streamService from "../../stream/StreamService";
+import { LoggedInUser, UserLoginInput } from "../../graphql/resolvers-types";
 
 const login = async (data: UserLoginInput): Promise<LoggedInUser> => {
   try {

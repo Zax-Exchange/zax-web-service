@@ -7,13 +7,14 @@ import CompanyApiUtils from "../utils/companyUtils";
 import { GetProjectInput } from "../types/get/projectTypes";
 import { project_bid_permissionsAttributes } from "../models/project_bid_permissions";
 import { project_permissionsAttributes } from "../models/project_permissions";
+import { CustomerProject, Project, UserPermission, VendorProject } from "../../graphql/resolvers-types";
 
 /**
  * Get the full list of vendor bidded projects with userId
  * @param userId 
  * @returns VendorProject[]
  */
-const getVendorProjects = async(userId:string): Promise<commonProjectTypes.VendorProject[]> => {
+const getVendorProjects = async(userId:string): Promise<VendorProject[]> => {
   // projectBidPermissions -> projectBidId -> projectBid -> projectId -> project
   try {
     const permissions = await ProjectApiUtils.getBidPermissions(userId);
@@ -21,7 +22,7 @@ const getVendorProjects = async(userId:string): Promise<commonProjectTypes.Vendo
     const res = [];
     for (let permission of permissions) {
       const bid = await ProjectApiUtils.getPermissionedProjectBid(permission.projectBidId, permission.permission as enums.ProjectPermission);
-      const project = await ProjectApiUtils.getPermissionedProject(bid.projectId);
+      const project = await ProjectApiUtils.getPermissionedProject(bid.projectId) as VendorProject;
       const company = await CompanyApiUtils.getCompanyWithCompanyId(project.companyId);
 
       res.push({
@@ -43,7 +44,7 @@ const getVendorProjects = async(userId:string): Promise<commonProjectTypes.Vendo
  * @param data 
  * @returns VendorProject
  */
-const getVendorProject = async (data: GetProjectInput): Promise<commonProjectTypes.VendorProject> => {
+const getVendorProject = async (data: GetProjectInput): Promise<VendorProject> => {
   try {
     const { projectId, userId } = data;
     const permission = await sequelize.models.project_bid_permissions.findOne({
@@ -54,7 +55,7 @@ const getVendorProject = async (data: GetProjectInput): Promise<commonProjectTyp
     }).then(p => p?.get({ plain:true }) as project_bid_permissionsAttributes);
 
     const bid = await ProjectApiUtils.getPermissionedProjectBid(permission.projectBidId, permission.permission);
-    const project = await ProjectApiUtils.getPermissionedProject(bid.projectId);
+    const project = await ProjectApiUtils.getPermissionedProject(bid.projectId) as VendorProject;
     const company = await CompanyApiUtils.getCompanyWithCompanyId(project.companyId);
 
     return {
@@ -68,26 +69,26 @@ const getVendorProject = async (data: GetProjectInput): Promise<commonProjectTyp
 }
 
 
-const getCustomerProjects = async(userId: string): Promise<commonProjectTypes.CustomerProject[]> => {
+const getCustomerProjects = async(userId: string): Promise<CustomerProject[]> => {
   try {
     const projectPermissions = await ProjectApiUtils.getProjectPermissions(userId);
 
     const res = [];
     for (let permission of projectPermissions) {
-      const project = await ProjectApiUtils.getPermissionedProject(permission.projectId, permission.permission as enums.ProjectPermission);
+      const project = await ProjectApiUtils.getPermissionedProject(permission.projectId, permission.permission as enums.ProjectPermission) as CustomerProject;
       const bids = await ProjectApiUtils.getProjectBidsByProjectId(permission.projectId);
       res.push({
         ...project,
         bids
       });
     }
-    return Promise.resolve(res);
+    return res;
   } catch(e) {
     return Promise.reject(e);
   }
 };
 
-const getCustomerProject = async(data: GetProjectInput): Promise<commonProjectTypes.CustomerProject> => {
+const getCustomerProject = async(data: GetProjectInput): Promise<CustomerProject> => {
   try {
     const { projectId, userId } = data;
     const permission = await sequelize.models.project_permissions.findOne({
@@ -97,7 +98,7 @@ const getCustomerProject = async(data: GetProjectInput): Promise<commonProjectTy
       }
     }).then(p => p?.get({ plain: true }) as project_permissionsAttributes)
 
-    const project = await ProjectApiUtils.getPermissionedProject(permission.projectId, permission.permission as enums.ProjectPermission);
+    const project = await ProjectApiUtils.getPermissionedProject(permission.projectId, permission.permission as enums.ProjectPermission) as CustomerProject;
     const bids = await ProjectApiUtils.getProjectBidsByProjectId(permission.projectId);
     return {
       ...project,
@@ -109,7 +110,7 @@ const getCustomerProject = async(data: GetProjectInput): Promise<commonProjectTy
   }
 };
 
-const getProjectDetail = async(id: string): Promise<commonProjectTypes.Project> => {
+const getProjectDetail = async(id: string): Promise<Project> => {
   try {
     return await ProjectApiUtils.getProject(id);
   } catch(e) {
@@ -117,7 +118,7 @@ const getProjectDetail = async(id: string): Promise<commonProjectTypes.Project> 
   }
 };
 
-const getProjectUsers = async(projectId: string): Promise<commonProjectTypes.UserPermission[]> => {
+const getProjectUsers = async(projectId: string): Promise<UserPermission[]> => {
 try {
     return await ProjectApiUtils.getProjectUsers(projectId);
   } catch(e) {
@@ -125,7 +126,7 @@ try {
   }
 };
 
-const getProjectBidUsers = async(projectBidId: string): Promise<commonProjectTypes.UserPermission[]> => {
+const getProjectBidUsers = async(projectBidId: string): Promise<UserPermission[]> => {
 try {
     return await ProjectApiUtils.getProjectBidUsers(projectBidId);
   } catch(e) {

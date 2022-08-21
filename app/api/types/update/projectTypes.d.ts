@@ -15,7 +15,7 @@ export interface UpdateProjectInputData {
 
 export interface UpdateProjectComponentsInput {
   toFindOrCreate: UpdateProjectComponentInputData[];
-  toDelete: number[];
+  toDelete: string[];
 }
 
 export interface UpdateProjectComponentInputData {

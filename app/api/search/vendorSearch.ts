@@ -1,16 +1,17 @@
 import ElasticProjectService from "../../elastic/project/ElasticProjectService";
+import { ProjectOverview, SearchProjectInput } from "../../graphql/resolvers-types";
 import * as projectTypes from "../types/common/projectTypes";
 import ProjectApiUtils from "../utils/projectUtils";
 import QueryBuilder from "./queryBuilder";
 
 
 // search by project materials
-const searchCustomerProjects = async (data: projectTypes.SearchProjectInput): Promise<projectTypes.ProjectOverview[]> => {
+const searchCustomerProjects = async (data: SearchProjectInput): Promise<ProjectOverview[]> => {
   try {
     // ProjectDocument -> ProjectOverview -> Project
     const query = QueryBuilder.buildProjectSearchQuery(data);
     const projectDocs = await ElasticProjectService.searchProjectDocuments(query);
-    const res: projectTypes.ProjectOverview[] = [];
+    const res: ProjectOverview[] = [];
 
     for (let project of projectDocs) {
       const proj = await ProjectApiUtils.getProject(project._id);

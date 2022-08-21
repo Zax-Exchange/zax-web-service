@@ -1,27 +1,29 @@
 // builds elastic search query based on filters
-import * as projectTypes from "../types/common/projectTypes";
-import * as companyTypes from "../types/common/companyTypes";
-import type { estypes } from "@elastic/elasticsearch"
+import {
+  SearchCompanyInput,
+  SearchProjectInput,
+} from "../../graphql/resolvers-types";
 export default class QueryBuilder {
-  static buildProjectSearchQuery(data: projectTypes.SearchProjectInput) {
+  static buildProjectSearchQuery(data: SearchProjectInput) {
     //filters include: deliveryCountries, deliveryCities, materials, budget, leadTime
-    const { userInput, deliveryCountries, deliveryCities, budget, leadTime } = data;
+    const { userInput, deliveryCountries, deliveryCities, budget, leadTime } =
+      data;
     // : estypes.QueryDslQueryContainer
 
     const filter = [];
     if (deliveryCountries) {
       filter.push({
         match: {
-          deliveryCountry: deliveryCountries.join(" ")
-        }
+          deliveryCountry: deliveryCountries.join(" "),
+        },
       });
     }
 
     if (deliveryCities) {
       filter.push({
         match: {
-          deliveryCity: deliveryCities.join(" ")
-        }
+          deliveryCity: deliveryCities.join(" "),
+        },
       });
     }
 
@@ -29,47 +31,48 @@ export default class QueryBuilder {
       filter.push({
         range: {
           budget: {
-            lte: budget
-          }
-        }
-      })
+            lte: budget,
+          },
+        },
+      });
     }
 
     if (leadTime) {
       const today = new Date();
-      const newDate = new Date(today.setMonth(today.getMonth() + leadTime)).toISOString().slice(0, 10);
+      const newDate = new Date(today.setMonth(today.getMonth() + leadTime))
+        .toISOString()
+        .slice(0, 10);
       filter.push({
         range: {
           deliveryDate: {
-            lte: newDate
-          }
-        }
-      })
+            lte: newDate,
+          },
+        },
+      });
     }
-    
+
     const query = {
       bool: {
-        must:[
+        must: [
           {
             match: {
-              materials: userInput
-            }
+              materials: userInput,
+            },
           },
           {
             match: {
-              deleted: false
-            }
-          }
+              deleted: false,
+            },
+          },
         ],
-        filter     
-      }
+        filter,
+      },
     };
 
     return query;
   }
-  
-  
-  static buildVendorCompanySearchQuery(data: companyTypes.SearchVendorInput) {
+
+  static buildVendorCompanySearchQuery(data: SearchCompanyInput) {
     //filters include: location, moq, leadtime, materials
     const { userInput, locations, moq, leadTime } = data;
 
@@ -77,8 +80,8 @@ export default class QueryBuilder {
     if (locations) {
       filter.push({
         match: {
-          locations: locations.join(" ")
-        }
+          locations: locations.join(" "),
+        },
       });
     }
 
@@ -86,16 +89,16 @@ export default class QueryBuilder {
       filter.push({
         range: {
           moqMax: {
-            gte: moq
-          }
-        }
+            gte: moq,
+          },
+        },
       });
       filter.push({
         range: {
           moqMin: {
-            lte: moq
-          }
-        }
+            lte: moq,
+          },
+        },
       });
     }
 
@@ -103,10 +106,10 @@ export default class QueryBuilder {
       filter.push({
         range: {
           leadTime: {
-            lte: leadTime
-          }
-        }
-      })
+            lte: leadTime,
+          },
+        },
+      });
     }
     const query = {
       bool: {
@@ -115,13 +118,12 @@ export default class QueryBuilder {
             match: {
               materials: userInput,
             },
-          }
+          },
         ],
-        filter
-      }
-    }
+        filter,
+      },
+    };
 
     return query;
   }
-
 }

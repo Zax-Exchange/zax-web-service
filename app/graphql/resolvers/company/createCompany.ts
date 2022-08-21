@@ -1,15 +1,15 @@
-import * as createCompanyTypes from "../../../api/types/create/companyTypes";
 import { 
   createVendor as createVendorApi,
   createCustomer as createCustomerApi,
   checkCompanyName as checkCompanyNameApi
 } from "../../../api/company/createCompanyApis";
+import { CreateCustomerInput, CreateVendorInput } from "../../resolvers-types";
 
-const createVendor = (parents: any, args: Record<string, createCompanyTypes.CreateVendorInput>, context: any) => {
+const createVendor = (parents: any, args: Record<string, CreateVendorInput>, context: any) => {
   return createVendorApi(args.data);
 }
 
-const createCustomer = (parents: any, args: Record<string, createCompanyTypes.CreateCustomerInput>, context: any) => {  
+const createCustomer = (parents: any, args: Record<string, CreateCustomerInput>, context: any) => {  
   return createCustomerApi(args.data);
 }
 

@@ -1,8 +1,7 @@
 import { Stripe } from "stripe";
 import sequelize from "../../postgres/dbconnection";
-import { stripe_customers } from "../models/stripe_customers";
 import { v4 as uuidv4 } from "uuid";
-import { CreateVendorSubscriptionInput } from "../types/create/planTypes";
+import { CreateVendorSubscriptionInput } from "../../graphql/resolvers-types";
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST!, {
   "apiVersion": "2020-08-27"

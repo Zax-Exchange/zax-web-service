@@ -4,9 +4,10 @@ import * as enums from "../types/common/enums";
 import { Op, Transaction } from "sequelize";
 import ProjectUtils from "../utils/projectUtils";
 import ElasticProjectService from "../../elastic/project/ElasticProjectService";
+import { DeleteProjectBidPermissionsInput, DeleteProjectPermissionsInput } from "../../graphql/resolvers-types";
 
 
-const deleteProject = async(id: string): Promise<boolean> => {
+const deleteProject = async(id: string) => {
   const projects = sequelize.models.projects;
 
   try {
@@ -24,14 +25,13 @@ const deleteProject = async(id: string): Promise<boolean> => {
   }
 };
 
-const deleteProjectComponents = async(data: projectTypes.DeleteProjectComponentsInput): Promise<boolean> => {
+// TODO: finish gql implementation
+const deleteProjectComponents = async(componentIds: string[]) => {
   const project_components = sequelize.models.project_components;
-
-  const { projectComponentIds, projectId, userId } = data;
 
   try {
     await sequelize.transaction(async (transaction: Transaction) => {
-      for (let id of projectComponentIds) {
+      for (let id of componentIds) {
         await project_components.destroy({
           where: {
             id
@@ -48,10 +48,8 @@ const deleteProjectComponents = async(data: projectTypes.DeleteProjectComponents
 };
 
 // TODO: should we withdraw bid? add a status to project bid?
-const deleteProjectBid = async(data: projectTypes.DeleteProjectBidInput): Promise<boolean> => {
+const deleteProjectBid = async(projectBidId: string) => {
   const project_bids = sequelize.models.project_bids;
-
-  const { userId, projectBidId } = data;
 
   try {
     await project_bids.destroy({
@@ -67,14 +65,14 @@ const deleteProjectBid = async(data: projectTypes.DeleteProjectBidInput): Promis
   }
 };
 
-const deleteProjectBidComponents = async(data: projectTypes.DeleteProjectBidComponentsInput): Promise<boolean> => {
+// TODO: not sure if we need this
+const deleteProjectBidComponents = async(componentIds: string[]): Promise<boolean> => {
   const project_components = sequelize.models.project_components;
 
-  const { projectBidComponentIds, projectBidId, userId } = data;
 
   try {
     await sequelize.transaction(async (transaction: Transaction) => {
-      for (let id of projectBidComponentIds) {
+      for (let id of componentIds) {
         await project_components.destroy({
           where: {
             id
@@ -90,7 +88,7 @@ const deleteProjectBidComponents = async(data: projectTypes.DeleteProjectBidComp
   }
 };
 
-const deleteProjectPermissions = async (data: projectTypes.DeleteProjectPermissionsInput): Promise<boolean> => {
+const deleteProjectPermissions = async (data: DeleteProjectPermissionsInput): Promise<boolean> => {
   const { userIds, projectId } = data;
   const project_permissions = sequelize.models.project_permissions;
   //TODO: should also check if user performing action is allowed
@@ -113,7 +111,7 @@ const deleteProjectPermissions = async (data: projectTypes.DeleteProjectPermissi
   }
 };
 
-const deleteProjectBidPermissions = async (data: projectTypes.DeleteProjectBidPermissionsInput): Promise<boolean> => {
+const deleteProjectBidPermissions = async (data: DeleteProjectBidPermissionsInput): Promise<boolean> => {
   const { userIds, projectBidId } = data;
   const project_bid_permissions = sequelize.models.project_bid_permissions;
   try {

@@ -1,9 +1,11 @@
 import { searchCustomerProjects as searchCustomerProjectsApi } from "../../../api/search/vendorSearch";
-import * as projectTypes from "../../../api/types/common/projectTypes";
-const searchCustomerProjects = (parent: any, args: Record<string, projectTypes.SearchProjectInput>, context: any) => {
+import { SearchProjectInput } from "../../resolvers-types";
+const searchCustomerProjects = (
+  parent: any,
+  args: Record<string, SearchProjectInput>,
+  context: any
+) => {
   return searchCustomerProjectsApi(args.searchInput);
 };
 
-export {
-  searchCustomerProjects
-}
+export { searchCustomerProjects };
