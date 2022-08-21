@@ -21,6 +21,7 @@ const project = gql`
     id: String!
     userId: String!
     companyId: String!
+    companyName: String!
     name: String!
     deliveryDate: String!
     deliveryAddress: String!
@@ -122,10 +123,6 @@ const project = gql`
     price: Int!
   }
 
-  input GetProjectInput {
-    projectId: String!
-    userId: String!
-  }
   input CreateProjectComponentInput {
     name: String!
     materials: [String!]!
