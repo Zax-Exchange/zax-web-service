@@ -1,0 +1,579 @@
+type Vendor {
+  id: String!
+  name: String!
+  contactEmail: String!
+  logo: String!
+  phone: String!
+  fax: String!
+  country: String!
+  planId: String!
+  isActive: Boolean!
+  isVendor: Boolean!
+  isVerified: Boolean!
+  leadTime: Int!
+  locations: [String]!
+  moq: Int!
+  materials: [String]
+  companyUrl: String
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Customer {
+  id: String!
+  name: String!
+  contactEmail: String!
+  logo: String!
+  phone: String!
+  fax: String!
+  country: String!
+  planId: String!
+  isActive: Boolean!
+  isVendor: Boolean!
+  isVerified: Boolean!
+  companyUrl: String
+  createdAt: String!
+  updatedAt: String!
+}
+
+type VendorOverview {
+  id: String!
+  name: String!
+  contactEmail: String!
+  logo: String
+  country: String!
+  isVerified: Boolean!
+  locations: [String]!
+  materials: [String]!
+  moq: String!
+  leadTime: Int!
+}
+
+type CustomerOverview {
+  id: String!
+  name: String!
+  contactEmail: String!
+  logo: String
+  country: String!
+  isVerified: Boolean!
+}
+
+type PermissionedCompany {
+  id: String!
+  name: String!
+  contactEmail: String!
+  logo: String!
+  phone: String!
+  fax: String!
+  country: String!
+  planInfo: CompanyPlan!
+  isActive: Boolean!
+  isVendor: Boolean!
+  isVerified: Boolean!
+  leadTime: Int
+  locations: [String]
+  moq: Int
+  materials: [String]
+  isAdmin: Boolean!
+  companyUrl: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type CompanyPlanDetail {
+  id: String!
+}
+
+type CompanyDetail {
+  id: String!
+  name: String!
+  contactEmail: String!
+  logo: String
+  phone: String!
+  fax: String
+  country: String!
+  isActive: Boolean!
+  isVendor: Boolean!
+  isVerified: Boolean!
+  companyUrl: String
+
+  locations: [String]
+  materials: [String]
+  moq: String
+  leadTime: Int
+
+  createdAt: String!
+  updatedAt: String!
+}
+
+type VendorDetail {
+  id: String!
+  name: String!
+  phone: String!
+  logo: String
+  country: String!
+  isActive: Boolean!
+  companyUrl: String
+  fax: String
+  isVerified: Boolean!
+  locations: [String]!
+  materials: [String]!
+  moq: String!
+  leadTime: Int!
+}
+
+type CustomerDetail {
+  id: String!
+  name: String!
+  phone: String!
+  logo: String
+  country: String!
+  isActive: Boolean!
+  companyUrl: String
+  fax: String
+  isVerified: Boolean!
+}
+
+input CreateVendorInput {
+  name: String!
+  contactEmail: String!
+  logo: String
+  phone: String!
+  fax: String
+  country: String!
+  planId: String!
+  isActive: Boolean!
+  isVendor: Boolean!
+  isVerified: Boolean!
+  leadTime: Int!
+  locations: [String!]!
+  moq: String!
+  materials: [String!]!
+  companyUrl: String
+  userEmail: String!
+}
+
+input CreateCustomerInput {
+  name: String!
+  contactEmail: String!
+  logo: String
+  phone: String!
+  fax: String
+  country: String!
+  planId: String!
+  isActive: Boolean!
+  isVendor: Boolean!
+  isVerified: Boolean!
+  companyUrl: String
+  userEmail: String!
+}
+
+input UpdateVendorInput {
+  id: String!
+  data: UpdateVendorInputData!
+}
+
+input UpdateVendorInputData {
+  name: String
+  contactEmail: String
+  logo: String
+  phone: String
+  fax: String
+  country: String
+  companyUrl: String
+  leadTime: Int
+  moq: String
+  locations: [String]
+  materials: [String]
+}
+
+input UpdateCustomerInput {
+  id: String!
+  data: UpdateCustomerInputData!
+}
+
+input UpdateCustomerInputData {
+  name: String
+  contactEmail: String
+  logo: String
+  phone: String
+  fax: String
+  country: String
+  companyUrl: String
+}
+
+input UpdateCompanyPlanInput {
+  planId: String!
+  companyId: String!
+}
+
+input GetPermissionedCompanyInput {
+  companyId: String!
+  userId: String!
+}
+
+input SearchCompanyInput {
+  userInput: String!
+  locations: [String]
+  moq: Int
+  leadTime: Int
+}
+
+type Plan {
+  id: String!
+  isVendor: Boolean!
+  companySize: String
+  tier: String
+  pricings: Pricings!
+}
+
+type Pricings {
+  monthly: PricingDetail
+  annual: PricingDetail
+  perUser: PricingDetail!
+}
+
+type PricingDetail {
+  price: Int!
+  priceId: String!
+}
+
+type CompanyPlan {
+  id: String!
+  planId: String!
+  companyId: String!
+}
+
+type CompanyPlanDetail {
+  tier: String
+  price: Int!
+  billingFrequency: String!
+  memberSince: String!
+  subscriptionStartDate: String!
+  subscriptionEndDate: String!
+  trialStartDate: String
+  trialEndDate: String
+}
+
+type StripeSubscription {
+  subscriptionId: String!
+  clientSecret: String!
+}
+
+input CreateVendorSubscriptionInput {
+  subscriptionPriceId: String!
+  perUserPriceId: String!
+  stripeCustomerId: String!
+}
+
+type ProjectOverview {
+  id: String!
+  companyName: String!
+  companyId: String!
+  name: String!
+  deliveryDate: String!
+  deliveryAddress: String!
+  budget: Int!
+  materials: [String!]!
+  createdAt: String!
+}
+type ProjectDesign {
+  fileName: String!
+  url: String!
+}
+
+type Project {
+  id: String!
+  userId: String!
+  companyId: String!
+  name: String!
+  deliveryDate: String!
+  deliveryAddress: String!
+  budget: Int!
+  design: ProjectDesign
+  status: String!
+  components: [ProjectComponent!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type VendorProject {
+  id: String!
+  userId: String!
+  customerName: String!
+  companyId: String!
+  name: String!
+  deliveryDate: String!
+  deliveryAddress: String!
+  budget: Int!
+  design: ProjectDesign
+  status: String!
+  permission: String!
+  components: [ProjectComponent!]!
+  bidInfo: PermissionedProjectBid!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type CustomerProject {
+  id: String!
+  userId: String!
+  companyId: String!
+  name: String!
+  deliveryDate: String!
+  deliveryAddress: String!
+  budget: Int!
+  design: ProjectDesign
+  status: String!
+  permission: String!
+  components: [ProjectComponent!]!
+  bids: [ProjectBid]
+  createdAt: String!
+  updatedAt: String!
+}
+
+type PermissionedProjectBid {
+  id: String!
+  userId: String!
+  projectId: String!
+  companyId: String!
+  components: [ProjectBidComponent!]!
+  permission: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type ProjectComponent {
+  id: String!
+  projectId: String!
+  name: String!
+  materials: [String!]!
+  dimension: String!
+  postProcess: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type ProjectBid {
+  id: String!
+  userId: String!
+  companyId: String!
+  projectId: String!
+  comments: String!
+  project: Project!
+  components: [ProjectBidComponent!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type ProjectBidComponent {
+  id: String!
+  projectBidId: String!
+  projectComponentId: String!
+  quantityPrices: [QuantityPrice!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type UserPermission {
+  userId: String!
+  email: String!
+  name: String!
+  permission: String!
+}
+
+type QuantityPrice {
+  quantity: Int!
+  price: Int!
+}
+
+input GetProjectInput {
+  projectId: String!
+  userId: String!
+}
+input CreateProjectComponentInput {
+  name: String!
+  materials: [String!]!
+  dimension: String!
+  postProcess: String!
+}
+
+input CreateProjectInput {
+  userId: String!
+  name: String!
+  designId: String
+  deliveryDate: String!
+  deliveryAddress: String!
+  budget: Int!
+  comments: String!
+  components: [CreateProjectComponentInput!]!
+}
+
+input QuantityPriceInput {
+  quantity: Int!
+  price: Int!
+}
+
+input CreateProjectBidInput {
+  userId: String!
+  projectId: String!
+  comments: String!
+  components: [CreateProjectBidComponentInput!]!
+}
+
+input CreateProjectBidComponentInput {
+  projectComponentId: String!
+  quantityPrices: [QuantityPriceInput!]!
+}
+
+input UpdateProjectInput {
+  id: String!
+  name: String!
+  deliveryDate: String!
+  deliveryAddress: String!
+  budget: Int!
+  components: [UpdateProjectComponentInput!]!
+}
+
+input UpdateProjectComponentInput {
+  id: String!
+  name: String!
+  materials: [String!]!
+  dimension: String!
+  postProcess: String!
+}
+
+input UpdateProjectBidInput {
+  id: String!
+  comments: String!
+  components: [UpdateProjectBidComponentInput!]!
+}
+
+input UpdateProjectBidComponentInput {
+  id: String!
+  quantityPrices: [QuantityPriceInput!]!
+}
+
+input UpdateProjectPermissionsInput {
+  viewers: UpdateProjectPermissionsInputData!
+  editors: UpdateProjectPermissionsInputData!
+}
+
+input UpdateProjectPermissionsInputData {
+  userIds: [String]!
+  projectId: String!
+  permission: String!
+}
+
+input UpdateProjectBidPermissionsInput {
+  viewers: UpdateProjectBidPermissionsInputData!
+  editors: UpdateProjectBidPermissionsInputData!
+}
+
+input UpdateProjectBidPermissionsInputData {
+  userIds: [String]!
+  projectId: String!
+  projectBidId: String!
+  permission: String!
+}
+
+input GetProjectInput {
+  userId: String!
+  projectId: String!
+}
+
+input GetProjectBidInput {
+  userId: String!
+  projectBidId: String!
+}
+
+input DeleteProjectInput {
+  userId: String!
+  projectId: String!
+}
+
+input SearchProjectInput {
+  userInput: String!
+  deliveryCountries: [String]
+  deliveryCities: [String]
+  budget: Int
+  leadTime: Int
+}
+
+input DeleteProjectPermissionsInput {
+  userIds: [String!]!
+  projectId: String!
+}
+
+input DeleteProjectBidPermissionsInput {
+  userIds: [String!]!
+  projectBidId: String!
+}
+
+scalar Upload
+
+type File {
+  uri: String!
+  filename: String!
+  mimetype: String!
+  encoding: String!
+}
+
+type FileUploadResponse {
+  ETag: String!
+  Location: String!
+  key: String!
+  Key: String!
+  Bucket: String!
+}
+
+type User {
+  id: String!
+  name: String!
+  email: String!
+  companyId: String!
+  isVendor: Boolean!
+  isAdmin: Boolean!
+  isActive: Boolean!
+}
+
+type LoggedInUser {
+  id: String!
+  name: String!
+  email: String!
+  companyId: String!
+  isVendor: Boolean!
+  isAdmin: Boolean!
+  token: String!
+  notificationToken: String
+  chatToken: String
+  isActive: Boolean!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  password: String!
+  companyId: String!
+}
+
+input UpdateUserInput {
+  id: String!
+  name: String
+}
+
+input UpdateUserPasswordInput {
+  id: String!
+  currentPassword: String!
+  newPassword: String!
+}
+
+input UpdateUserPowerInput {
+  id: String!
+  isAdmin: Boolean!
+}
+
+input UserLoginInput {
+  email: String!
+  password: String!
+}
