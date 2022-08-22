@@ -19,6 +19,8 @@
   "license": "ISC",
   "dependencies": {
     "@elastic/elasticsearch": "~8.2.1",
+    "@graphql-tools/load-files": "^6.6.1",
+    "@graphql-tools/merge": "^8.3.3",
     "@types/graphql-upload": "^8.0.11",
     "apollo-server-core": "^3.10.1",
     "apollo-server-express": "3.9.0",

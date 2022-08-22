@@ -73,7 +73,7 @@ const getCompanyPlanWithCompanyId = async (
       subscriptionEndDate: stripeTimeToUTC(sub.current_period_end)!,
       trialStartDate: stripeTimeToUTC(sub.trial_start),
       trialEndDate: stripeTimeToUTC(sub.trial_end),
-    };
+    } as CompanyPlanDetail;
 
     return res;
   } catch (error) {

@@ -1,7 +1,6 @@
 import { ApolloServer, gql } from "apollo-server-express";
 import express from "express";
 import resolvers from "./graphql/resolvers";
-import typeDefs from "./graphql/schema";
 import sequelize from "./postgres/dbconnection";
 import { initModels } from "./api/models/init-models";
 import dotenv from "dotenv";
@@ -11,25 +10,12 @@ import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import { handleStripeWebhook } from "./rest/stripeWebhook";
 import { graphqlUploadExpress } from "graphql-upload";
 import bodyParser from "body-parser";
+import getTypeDefs from "./graphql/typeDefs";
 
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
 }
 
-const stripeWebhookIPs = [
-  "3.18.12.63",
-  "3.130.192.231",
-  "13.235.14.237",
-  "13.235.122.149",
-  "18.211.135.69",
-  "35.154.171.200",
-  "52.15.183.38",
-  "54.88.130.119",
-  "54.88.130.237",
-  "54.187.174.169",
-  "54.187.205.235",
-  "54.187.216.72",
-];
 const startServer = async () => {
   initModels(sequelize);
 
@@ -44,6 +30,7 @@ const startServer = async () => {
   }
   const app = express();
   const httpServer = http.createServer(app);
+  const typeDefs = await getTypeDefs();
 
   const server = new ApolloServer({
     csrfPrevention: false,

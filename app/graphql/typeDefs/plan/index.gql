@@ -1,0 +1,23 @@
+type Plan {
+  id: String!
+  isVendor: Boolean!
+  companySize: CompanySize
+  tier: PlanTier!
+  pricings: Pricings!
+}
+
+type Pricings {
+  monthly: PricingDetail
+  annual: PricingDetail
+  perUser: PricingDetail!
+}
+
+type PricingDetail {
+  price: Int!
+  priceId: String!
+}
+
+type StripeSubscription {
+  subscriptionId: String!
+  clientSecret: String!
+}

@@ -1,6 +1,5 @@
 import * as commonProjectTypes from "../types/common/projectTypes";
 import * as getProjectTypes from "../types/get/projectTypes";
-import * as enums from "../types/common/enums";
 import UserApiUtils from "./userUtils";
 import { Model, ModelStatic, Op, Transaction } from "sequelize";
 import sequelize from "../../postgres/dbconnection";
@@ -19,6 +18,8 @@ import {
   ProjectBid,
   ProjectBidComponent,
   ProjectOverview,
+  ProjectPermission,
+  ProjectStatus,
   VendorProject,
 } from "../../graphql/resolvers-types";
 
@@ -171,7 +172,7 @@ class ProjectApiUtils {
       for (let bid of bids) {
         res.push({
           ...bid,
-          permission: enums.ProjectPermission.VIEWER,
+          permission: ProjectPermission.Viewer,
         });
       }
       return res;
@@ -183,7 +184,7 @@ class ProjectApiUtils {
   // for vendor & customer
   static async getPermissionedProject(
     projectId: string,
-    userPermission?: enums.ProjectPermission
+    userPermission?: ProjectPermission
   ) {
     try {
       const project = await ProjectApiUtils.getProject(projectId);
@@ -204,7 +205,7 @@ class ProjectApiUtils {
   // for vendor, gets a single projectBid with projectBidId
   static async getPermissionedProjectBid(
     projectBidId: string,
-    permission: enums.ProjectPermission
+    permission: ProjectPermission
   ): Promise<PermissionedProjectBid> {
     try {
       const rawUserBid = await sequelize.models.project_bids.findByPk(
@@ -230,7 +231,7 @@ class ProjectApiUtils {
 
   static async updateProjectStatus(
     projectId: string,
-    status: enums.ProjectStatus,
+    status: ProjectStatus,
     transaction?: Transaction
   ): Promise<boolean> {
     const projects = sequelize.models.projects;

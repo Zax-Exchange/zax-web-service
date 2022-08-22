@@ -1,0 +1,10 @@
+input CreateUserInput {
+  name: String!
+  email: String!
+  password: String!
+  companyId: String!
+}
+
+type Mutation {
+  createUser(data: CreateUserInput!): LoggedInUser!
+}

@@ -1,0 +1,17 @@
+input UpdateCustomerInput {
+  id: String!
+  data: UpdateCustomerInputData!
+}
+
+input UpdateCustomerInputData {
+  name: String!
+  contactEmail: String!
+  logo: String
+  phone: String!
+  fax: String
+  country: String!
+  companyUrl: String
+}
+type Mutation {
+  updateCustomer(data: UpdateCustomerInput!): Boolean!
+}

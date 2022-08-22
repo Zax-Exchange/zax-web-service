@@ -1,0 +1,20 @@
+input DeleteProjectInput {
+  userId: String!
+  projectId: String!
+}
+
+input DeleteProjectPermissionsInput {
+  userIds: [String!]!
+  projectId: String!
+}
+
+input DeleteProjectBidPermissionsInput {
+  userIds: [String!]!
+  projectBidId: String!
+}
+
+type Mutation {
+  deleteProject(projectId: String!): Boolean!
+  deleteProjectPermissions(data: DeleteProjectPermissionsInput!): Boolean!
+  deleteProjectBidPermissions(data: DeleteProjectBidPermissionsInput!): Boolean!
+}

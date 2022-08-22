@@ -1,0 +1,11 @@
+input UpdateCompanyPlanInput {
+  planId: String!
+  companyId: String!
+}
+
+type Mutation {
+  updateCompanyPlan(data: UpdateCompanyPlanInput!): Boolean!
+  updateCompanyStatus(companyId: String!, isActive: Boolean!): Boolean!
+  updateSubscription(subscriptionId: String!): Boolean!
+  updateCompanyPlanSubscriptionInfo(subscriptionId: String!): Boolean!
+}
