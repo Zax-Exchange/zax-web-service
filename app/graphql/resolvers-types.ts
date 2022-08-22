@@ -459,6 +459,7 @@ export type Project = {
   __typename?: 'Project';
   budget: Scalars['Int'];
   companyId: Scalars['String'];
+  companyName: Scalars['String'];
   components: Array<ProjectComponent>;
   createdAt: Scalars['String'];
   deliveryAddress: Scalars['String'];
@@ -1281,6 +1282,7 @@ export type PricingsResolvers<ContextType = any, ParentType extends ResolversPar
 export type ProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = ResolversObject<{
   budget?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   companyId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  companyName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   components?: Resolver<Array<ResolversTypes['ProjectComponent']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   deliveryAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

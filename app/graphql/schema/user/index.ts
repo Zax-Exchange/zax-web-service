@@ -11,6 +11,14 @@ const user = gql`
     isActive: Boolean!
   }
 
+  # for project/projectBid user info, mainly used when sharing projects/bids
+  type UserPermission {
+    userId: String!
+    email: String!
+    name: String!
+    permission: String!
+  }
+
   type LoggedInUser {
     id: String!
     name: String!
@@ -22,29 +30,6 @@ const user = gql`
     notificationToken: String
     chatToken: String
     isActive: Boolean!
-  }
-
-  input CreateUserInput {
-    name: String!
-    email: String!
-    password: String!
-    companyId: String!
-  }
-
-  input UpdateUserInput {
-    id: String!
-    name: String
-  }
-
-  input UpdateUserPasswordInput {
-    id: String!
-    currentPassword: String!
-    newPassword: String!
-  }
-
-  input UpdateUserPowerInput {
-    id: String!
-    isAdmin: Boolean!
   }
 
   input UserLoginInput {

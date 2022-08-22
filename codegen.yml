@@ -1,4 +1,5 @@
-schema: ./app/graphql/types/**/*.ts
+overwrite: true
+schema: ./app/graphql/schema/**/*.ts
 generates:
   ./app/graphql/resolvers-types.ts:
     config:
