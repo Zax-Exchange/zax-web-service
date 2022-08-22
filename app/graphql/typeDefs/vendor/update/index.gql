@@ -1,0 +1,22 @@
+input UpdateVendorInput {
+  id: String!
+  data: UpdateVendorInputData!
+}
+
+input UpdateVendorInputData {
+  name: String!
+  contactEmail: String!
+  logo: String
+  phone: String!
+  fax: String
+  country: String!
+  companyUrl: String
+  leadTime: Int!
+  moq: String!
+  locations: [String!]!
+  materials: [String!]!
+}
+
+type Mutation {
+  updateVendor(data: UpdateVendorInput!): Boolean!
+}

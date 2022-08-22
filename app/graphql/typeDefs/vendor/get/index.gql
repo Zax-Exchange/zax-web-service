@@ -1,0 +1,6 @@
+type Query {
+  getVendorDetail(companyId: String!): VendorDetail!
+  getVendorProject(data: GetProjectInput!): VendorProject!
+  getVendorProjects(userId: String!): [VendorProject]!
+  searchVendorCompanies(searchInput: SearchCompanyInput!): [VendorOverview]
+}

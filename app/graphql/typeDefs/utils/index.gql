@@ -1,0 +1,10 @@
+type Query {
+  checkUserEmail(email: String!): Boolean!
+  checkCompanyName(name: String!): Boolean!
+  login(data: UserLoginInput!): LoggedInUser!
+}
+
+type Mutation {
+  inviteUser(email: String!, userId: String!): Boolean!
+  reset(t: Int): Boolean!
+}

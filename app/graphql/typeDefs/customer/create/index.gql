@@ -1,0 +1,22 @@
+input CreateCustomerInput {
+  name: String!
+  contactEmail: String!
+  logo: String
+  phone: String!
+  fax: String
+  country: String!
+  planId: String!
+  isActive: Boolean!
+  isVendor: Boolean!
+  isVerified: Boolean!
+  companyUrl: String
+  userEmail: String!
+}
+
+type Mutation {
+  createCustomer(data: CreateCustomerInput!): String!
+  createCustomerSubscription(
+    priceId: String!
+    stripeCustomerId: String!
+  ): StripeSubscription!
+}

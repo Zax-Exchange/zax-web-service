@@ -8,8 +8,9 @@ import { Transaction } from "sequelize/types";
 import { LoggedInUser } from "../types/common/userTypes";
 import { v4 as uuidv4 } from "uuid";
 import streamService from "../../stream/StreamService";
+import { CreateUserInput } from "../../graphql/resolvers-types";
 
-const createUser = async(data: userTypes.CreateUserInput): Promise<LoggedInUser> => {
+const createUser = async(data: CreateUserInput): Promise<LoggedInUser> => {
   const users = sequelize.models.users;
 
   const {name, email, companyId, password} = data;

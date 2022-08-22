@@ -1,24 +1,36 @@
-import { 
+import {
   updateUser as updateUserApi,
   updateUserPassword as updateUserPasswordApi,
-  updateUserPower as updateUserPowerApi
- } from "../../../../api/user/updateUserApis";
-import * as userTypes from "../../../../api/types/update/userTypes";
+  updateUserPower as updateUserPowerApi,
+} from "../../../../api/user/updateUserApis";
+import {
+  UpdateUserInput,
+  UpdateUserPasswordInput,
+  UpdateUserPowerInput,
+} from "../../../resolvers-types";
 
-const updateUser = async(parent: any, args: Record<string, userTypes.UpdateUserInput>, context:any) => {
+const updateUser = async (
+  parent: any,
+  args: Record<string, UpdateUserInput>,
+  context: any
+) => {
   return await updateUserApi(args.data);
 };
 
-const updateUserPassword = async(parent: any, args: Record<string, userTypes.UpdateUserPasswordInput>, context: any) => {
+const updateUserPassword = async (
+  parent: any,
+  args: Record<string, UpdateUserPasswordInput>,
+  context: any
+) => {
   return await updateUserPasswordApi(args.data);
 };
 
-const updateUserPower = async(parent: any, args: Record<string, userTypes.UpdateUserPowerInput>, context:any) => {
+const updateUserPower = async (
+  parent: any,
+  args: Record<string, UpdateUserPowerInput>,
+  context: any
+) => {
   return await updateUserPowerApi(args.data);
 };
 
-export {
-  updateUser,
-  updateUserPassword,
-  updateUserPower
-}
+export { updateUser, updateUserPassword, updateUserPower };

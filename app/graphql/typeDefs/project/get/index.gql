@@ -1,0 +1,23 @@
+input GetProjectInput {
+  userId: String!
+  projectId: String!
+}
+
+input GetProjectBidInput {
+  userId: String!
+  projectBidId: String!
+}
+
+input SearchProjectInput {
+  userInput: String!
+  deliveryCountries: [String]
+  deliveryCities: [String]
+  budget: Int
+  leadTime: Int
+}
+
+type Query {
+  getProjectUsers(projectId: String!): [UserPermission!]!
+  getProjectBidUsers(projectBidId: String!): [UserPermission!]!
+  getProjectDetail(projectId: String!): Project!
+}

@@ -1,7 +1,12 @@
 import { updateProjectBidPermissions as updateProjectBidPermissionsApi } from "../../../../api/project/updateProjectApis";
-import { UpdateProjectBidPermissionsInput } from "../../../../api/types/update/projectTypes";
+import { UpdateProjectBidPermissionsInput } from "../../../resolvers-types";
 
-const updateProjectBidPermissions = (parent: any, args: Record<string, UpdateProjectBidPermissionsInput>, context: any, info: any) => {
+const updateProjectBidPermissions = (
+  parent: any,
+  args: Record<string, UpdateProjectBidPermissionsInput>,
+  context: any,
+  info: any
+) => {
   return updateProjectBidPermissionsApi(args.data);
 };
 

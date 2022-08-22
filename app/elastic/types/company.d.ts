@@ -1,8 +1,8 @@
 export interface VendorDocument {
   id: string;
   moq: string;
-  locations: string[] | string;
-  materials: string[] | string;
+  locations: string[];
+  materials: string[];
   leadTime: number;
 }
 

@@ -3,10 +3,12 @@ import * as projectTypes from "../types/update/projectTypes";
 import * as enums from "../types/common/enums";
 import { Transaction } from "sequelize/types";
 import { createOrUpdateProjectPermission, createOrUpdateProjectBidPermission } from "./createProjectApis";
-import { Op } from "sequelize";
 import ElasticProjectService from "../../elastic/project/ElasticProjectService";
 import { deleteProjectPermissions } from "./deleteProjectApis";
 import { v4 as uuidv4 } from "uuid"
+import { UpdateProjectBidPermissionsInput, UpdateProjectPermissionsInput } from "../../graphql/resolvers-types";
+
+// TODO: finish implementation
 const updateProject = async(data: projectTypes.UpdateProjectInput): Promise<boolean> => {
   const { id, projectData, componentsInput } = data;
   const { toFindOrCreate, toDelete } = componentsInput;
@@ -79,6 +81,7 @@ const updateProjectComponents = async(components: projectTypes.UpdateProjectComp
   }
 };
 
+// TODO: finish implementation
 const updateProjectBid = async(data: projectTypes.UpdateProjectBidInput): Promise<boolean> => {
   const { id, comments, components } = data;
   const project_bids = sequelize.models.project_bids;
@@ -127,17 +130,14 @@ const updateProjectBidComponents = async(components: projectTypes.UpdateProjectB
 };
 
 // bulk create or update project permissions
-const updateProjectPermissions = async (data: projectTypes.UpdateProjectPermissionsInput): Promise<boolean> => {
+const updateProjectPermissions = async (data: UpdateProjectPermissionsInput): Promise<boolean> => {
   const { viewers, editors } = data;
   try {
     await sequelize.transaction(async (transaction) => {
-
-      for (let userId of viewers.userIds) {
-        await createOrUpdateProjectPermission({userId, projectId: viewers.projectId, permission: viewers.permission}, transaction);
-      }
-      for (let userId of editors.userIds) {
-        await createOrUpdateProjectPermission({userId, projectId: editors.projectId, permission: editors.permission}, transaction);
-      }
+      Promise.all([
+        await createOrUpdateProjectPermission({userIds: viewers.userIds, projectId: viewers.projectId, permission: viewers.permission}, transaction),
+        await createOrUpdateProjectPermission({userIds: editors.userIds, projectId: editors.projectId, permission: editors.permission}, transaction)
+      ]);
     });
     return Promise.resolve(true);
   } catch(e) {
@@ -146,17 +146,17 @@ const updateProjectPermissions = async (data: projectTypes.UpdateProjectPermissi
   }
 };
 
-const updateProjectBidPermissions = async (data: projectTypes.UpdateProjectBidPermissionsInput): Promise<boolean> => {
+const updateProjectBidPermissions = async (data: UpdateProjectBidPermissionsInput): Promise<boolean> => {
   const { viewers, editors } = data;
 
   try {
     await sequelize.transaction(async (transaction) => {
-      for (let userId of viewers.userIds) {
-        await createOrUpdateProjectBidPermission({userId, projectId:viewers.projectId, projectBidId: viewers.projectBidId, permission: viewers.permission}, transaction);
-      }
-      for (let userId of editors.userIds) {
-        await createOrUpdateProjectBidPermission({userId, projectId:editors.projectId, projectBidId: editors.projectBidId, permission: editors.permission}, transaction);
-      }
+      Promise.all([
+        await createOrUpdateProjectBidPermission({userIds: viewers.userIds, projectId:viewers.projectId, projectBidId: viewers.projectBidId, permission: viewers.permission}, transaction),
+        await createOrUpdateProjectBidPermission({userIds: editors.userIds, projectId:editors.projectId, projectBidId: editors.projectBidId, permission: editors.permission}, transaction)
+
+      ])
+     
     });
     return Promise.resolve(true);
   } catch(e) {

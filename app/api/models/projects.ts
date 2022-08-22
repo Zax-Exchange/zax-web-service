@@ -1,12 +1,18 @@
-import * as Sequelize from 'sequelize';
-import { DataTypes, Model, Optional } from 'sequelize';
-import { ProjectStatus } from '../types/common/enums';
-import type { companies, companiesId } from './companies';
-import type { project_bids, project_bidsId } from './project_bids';
-import type { project_components, project_componentsId } from './project_components';
-import { project_designs, project_designsId } from './project_designs';
-import type { project_permissions, project_permissionsId } from './project_permissions';
-import type { users, usersId } from './users';
+import * as Sequelize from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
+import { ProjectStatus } from "../../graphql/resolvers-types";
+import type { companies, companiesId } from "./companies";
+import type { project_bids, project_bidsId } from "./project_bids";
+import type {
+  project_components,
+  project_componentsId,
+} from "./project_components";
+import { project_designs, project_designsId } from "./project_designs";
+import type {
+  project_permissions,
+  project_permissionsId,
+} from "./project_permissions";
+import type { users, usersId } from "./users";
 
 export interface projectsAttributes {
   id: string;
@@ -24,8 +30,11 @@ export interface projectsAttributes {
 
 export type projectsPk = "id";
 export type projectsId = projects[projectsPk];
-export type projectsOptionalAttributes =  "createdAt" | "updatedAt" | "comments";
-export type projectsCreationAttributes = Optional<projectsAttributes, projectsOptionalAttributes>;
+export type projectsOptionalAttributes = "createdAt" | "updatedAt" | "comments";
+export type projectsCreationAttributes = Optional<
+  projectsAttributes,
+  projectsOptionalAttributes
+>;
 
 export class projects
   extends Model<projectsAttributes, projectsCreationAttributes>

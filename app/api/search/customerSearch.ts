@@ -1,17 +1,22 @@
-import * as projectTypes from "../types/common/projectTypes";
-import * as companyTypes from "../types/common/companyTypes";
-import ProjectApiUtils from "../utils/projectUtils";
 import ElasticCompanyService from "../../elastic/company/ElasticCompanyService";
 import CompanyApiUtils from "../utils/companyUtils";
 import QueryBuilder from "./queryBuilder";
+import {
+  SearchCompanyInput,
+  VendorOverview,
+} from "../../graphql/resolvers-types";
 // search by project materials
 // search by customer company name
 
-const searchVendorCompanies = async(data: companyTypes.SearchVendorInput): Promise<companyTypes.VendorOverview[]> => {
+const searchVendorCompanies = async (
+  data: SearchCompanyInput
+): Promise<VendorOverview[]> => {
   try {
     const query = QueryBuilder.buildVendorCompanySearchQuery(data);
-    const companyDocs = await ElasticCompanyService.searchVendorDocuments(query);
-    const res: companyTypes.VendorOverview[] = [];
+    const companyDocs = await ElasticCompanyService.searchVendorDocuments(
+      query
+    );
+    const res: VendorOverview[] = [];
     const ids: string[] = [];
 
     for (let comp of companyDocs) {
@@ -24,22 +29,21 @@ const searchVendorCompanies = async(data: companyTypes.SearchVendorInput): Promi
       res.push({
         id: company.id,
         name: company.name,
+        contactEmail: company.contactEmail,
         logo: company.logo,
         country: company.country,
         isVerified: company.isVerified,
         locations: vendor.locations,
         materials: vendor.materials,
         leadTime: vendor.leadTime,
-        moq: vendor.moq
-      })
+        moq: vendor.moq,
+      });
     }
     return res;
   } catch (error) {
-    console.error(error)
+    console.error(error);
     return Promise.reject(error);
   }
-}
+};
 
-export {
-  searchVendorCompanies
-}
+export { searchVendorCompanies };

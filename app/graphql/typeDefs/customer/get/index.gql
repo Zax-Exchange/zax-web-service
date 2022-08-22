@@ -1,0 +1,6 @@
+type Query {
+  getCustomerDetail(companyId: String!): CustomerDetail!
+  getCustomerProject(data: GetProjectInput!): CustomerProject!
+  getCustomerProjects(userId: String!): [CustomerProject!]!
+  searchCustomerProjects(searchInput: SearchProjectInput!): [ProjectOverview!]!
+}

@@ -2,10 +2,11 @@ import * as userTypes from "../types/common/userTypes";
 import { companies } from "../models/companies";
 import sequelize from "../../postgres/dbconnection";
 import UserApiUtils from "../utils/userUtils";
+import { User } from "../../graphql/resolvers-types";
 
 
 // returns a list of users with user power
-const getAllUsersWithinCompany = async(companyId: string): Promise<userTypes.User[]> => {
+const getAllUsersWithinCompany = async(companyId: string): Promise<User[]> => {
   const companies = sequelize.models.companies;
   try {
     const userList: any = await companies.findByPk(companyId).then(async comp => {
@@ -20,7 +21,7 @@ const getAllUsersWithinCompany = async(companyId: string): Promise<userTypes.Use
 };
 
 
-const getUserWithUserId = async(id: string, paranoid: boolean = true): Promise<userTypes.User> => {
+const getUserWithUserId = async(id: string, paranoid: boolean = true): Promise<User> => {
   const users = sequelize.models.users;
   try {
     const user = await users.findByPk(id, {
