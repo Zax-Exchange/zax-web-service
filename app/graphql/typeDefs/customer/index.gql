@@ -31,7 +31,7 @@ type CustomerProject {
   budget: Int!
   design: ProjectDesign
   status: String!
-  permission: String!
+  permission: ProjectPermission!
   components: [ProjectComponent!]!
   bids: [ProjectBid]
   createdAt: String!

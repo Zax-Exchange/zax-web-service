@@ -20,6 +20,7 @@ import {
   ProjectOverview,
   ProjectPermission,
   ProjectStatus,
+  UserPermission,
   VendorProject,
 } from "../../graphql/resolvers-types";
 
@@ -266,7 +267,7 @@ class ProjectApiUtils {
           ps.map((p) => {
             return {
               userId: p.get("userId") as string,
-              permission: p.get("permission"),
+              permission: p.get("permission") as ProjectPermission,
             };
           })
         );
@@ -278,7 +279,7 @@ class ProjectApiUtils {
           ...data,
           email: user.email,
           name: user.name,
-        } as commonProjectTypes.UserPermission);
+        } as UserPermission);
       }
 
       return res;
@@ -299,7 +300,7 @@ class ProjectApiUtils {
           ps.map((p) => {
             return {
               userId: p.get("userId") as string,
-              permission: p.get("permission"),
+              permission: p.get("permission") as ProjectPermission,
             };
           })
         );
@@ -311,7 +312,7 @@ class ProjectApiUtils {
           ...data,
           email: user.email,
           name: user.name,
-        } as commonProjectTypes.UserPermission);
+        } as UserPermission);
       }
 
       return res;

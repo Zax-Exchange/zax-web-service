@@ -34,7 +34,7 @@ input UpdateProjectPermissionsInput {
 input UpdateProjectPermissionsInputData {
   userIds: [String]!
   projectId: String!
-  permission: String!
+  permission: ProjectPermission!
 }
 
 input UpdateProjectBidPermissionsInput {
@@ -46,7 +46,7 @@ input UpdateProjectBidPermissionsInputData {
   userIds: [String]!
   projectId: String!
   projectBidId: String!
-  permission: String!
+  permission: ProjectPermission!
 }
 
 type Mutation {

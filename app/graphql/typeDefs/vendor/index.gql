@@ -39,7 +39,7 @@ type VendorProject {
   budget: Int!
   design: ProjectDesign
   status: String!
-  permission: String!
+  permission: ProjectPermission!
   components: [ProjectComponent!]!
   bidInfo: PermissionedProjectBid!
   createdAt: String!

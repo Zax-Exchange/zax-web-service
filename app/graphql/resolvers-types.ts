@@ -186,7 +186,7 @@ export type CustomerProject = {
   design?: Maybe<ProjectDesign>;
   id: Scalars['String'];
   name: Scalars['String'];
-  permission: Scalars['String'];
+  permission: ProjectPermission;
   status: Scalars['String'];
   updatedAt: Scalars['String'];
   userId: Scalars['String'];
@@ -445,7 +445,7 @@ export type PermissionedProjectBid = {
   components: Array<ProjectBidComponent>;
   createdAt: Scalars['String'];
   id: Scalars['String'];
-  permission: Scalars['String'];
+  permission: ProjectPermission;
   projectId: Scalars['String'];
   updatedAt: Scalars['String'];
   userId: Scalars['String'];
@@ -761,7 +761,7 @@ export type UpdateProjectBidPermissionsInput = {
 };
 
 export type UpdateProjectBidPermissionsInputData = {
-  permission: Scalars['String'];
+  permission: ProjectPermission;
   projectBidId: Scalars['String'];
   projectId: Scalars['String'];
   userIds: Array<InputMaybe<Scalars['String']>>;
@@ -790,7 +790,7 @@ export type UpdateProjectPermissionsInput = {
 };
 
 export type UpdateProjectPermissionsInputData = {
-  permission: Scalars['String'];
+  permission: ProjectPermission;
   projectId: Scalars['String'];
   userIds: Array<InputMaybe<Scalars['String']>>;
 };
@@ -850,7 +850,7 @@ export type UserPermission = {
   __typename?: 'UserPermission';
   email: Scalars['String'];
   name: Scalars['String'];
-  permission: Scalars['String'];
+  permission: ProjectPermission;
   userId: Scalars['String'];
 };
 
@@ -899,7 +899,7 @@ export type VendorProject = {
   design?: Maybe<ProjectDesign>;
   id: Scalars['String'];
   name: Scalars['String'];
-  permission: Scalars['String'];
+  permission: ProjectPermission;
   status: Scalars['String'];
   updatedAt: Scalars['String'];
   userId: Scalars['String'];
@@ -1196,7 +1196,7 @@ export type CustomerProjectResolvers<ContextType = any, ParentType extends Resol
   design?: Resolver<Maybe<ResolversTypes['ProjectDesign']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  permission?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  permission?: Resolver<ResolversTypes['ProjectPermission'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1291,7 +1291,7 @@ export type PermissionedProjectBidResolvers<ContextType = any, ParentType extend
   components?: Resolver<Array<ResolversTypes['ProjectBidComponent']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  permission?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  permission?: Resolver<ResolversTypes['ProjectPermission'], ParentType, ContextType>;
   projectId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1445,7 +1445,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 export type UserPermissionResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserPermission'] = ResolversParentTypes['UserPermission']> = ResolversObject<{
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  permission?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  permission?: Resolver<ResolversTypes['ProjectPermission'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1494,7 +1494,7 @@ export type VendorProjectResolvers<ContextType = any, ParentType extends Resolve
   design?: Resolver<Maybe<ResolversTypes['ProjectDesign']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  permission?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  permission?: Resolver<ResolversTypes['ProjectPermission'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
