@@ -1,4 +1,4 @@
-import { stripe } from "../../api/plan/createSubscriptionsApis";
+import { stripe } from "../../api/subscription/createSubscriptionsApis";
 import sequelize from "../../postgres/dbconnection";
 import elasticClient from "../../../app/elastic/elasticConnection";
 

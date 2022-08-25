@@ -6,6 +6,10 @@ import { vendorsAttributes } from "../models/vendors";
 import { customersAttributes } from "../models/customers";
 
 class CompanyApiUtils {
+  static async checkCompanyName(name: string) {
+    return await this.isDuplicateCompanyNames(name);
+  }
+
   static async getCompanyPlan(companyId: string): Promise<CompanyPlan> {
     const company_plans = sequelize.models.company_plans;
     try {

@@ -3,7 +3,7 @@ import {
   createCustomerSubscription as createCustomerSubscriptionApi,
   createVendorSubscription as createVendorSubscriptionApi,
   checkUserEmail as checkUserEmailApi,
-} from "../../../api/plan/createSubscriptionsApis";
+} from "../../../api/subscription/createSubscriptionsApis";
 import { CreateVendorSubscriptionInput } from "../../resolvers-types.generated";
 
 const createStripeCustomer = (

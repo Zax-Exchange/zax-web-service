@@ -1,10 +1,9 @@
 import {
-  getVendorDetail as getVendorDetailApi,
-  getCustomerDetail as getCustomerDetailApi,
   getCompanyDetail as getCompanyDetailApi,
   getCompanyPlanDetail as getCompanyPlanDetailApi,
 } from "../../../api/company/getCompanyApis";
-
+import { getVendorDetail as getVendorDetailApi } from "../../../api/vendor/getVendorApis";
+import { getCustomerDetail as getCustomerDetailApi } from "../../../api/customer/getCustomerApis";
 const getCompanyDetail = (
   parent: any,
   args: Record<string, string>,

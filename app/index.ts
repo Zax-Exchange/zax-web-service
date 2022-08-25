@@ -56,6 +56,7 @@ const startServer = async () => {
     },
   });
 
+  // TODO: refactor this
   app.post("/webhook", handleStripeWebhook);
 
   await new Promise<void>((resolve) =>

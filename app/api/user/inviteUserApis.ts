@@ -1,6 +1,6 @@
-import EmailService from "../email/EmailService"
-import CompanyApiUtils from "../utils/companyUtils"
-import UserApiUtils from "../utils/userUtils"
+import EmailService from "../../gcp/EmailService";
+import CompanyApiUtils from "../utils/companyUtils";
+import UserApiUtils from "../utils/userUtils";
 
 const inviteUser = async (email: string, userId: string): Promise<Boolean> => {
   try {
@@ -23,8 +23,6 @@ const inviteUser = async (email: string, userId: string): Promise<Boolean> => {
     console.error(e);
     return Promise.reject(e);
   }
-}
+};
 
-export {
-  inviteUser
-}
+export { inviteUser };

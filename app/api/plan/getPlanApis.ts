@@ -2,7 +2,7 @@ import sequelize from "../../postgres/dbconnection";
 import { Transaction } from "sequelize/types";
 import { plansAttributes } from "../models/plans";
 import { company_plans } from "../models/company_plans";
-import { stripe } from "./createSubscriptionsApis";
+import { stripe } from "../subscription/createSubscriptionsApis";
 import { stripeTimeToUTC } from "../utils/timeUtils";
 import {
   CompanyPlanDetail,

@@ -1,12 +1,11 @@
-import {
-  createVendor as createVendorApi,
-  createCustomer as createCustomerApi,
-  checkCompanyName as checkCompanyNameApi,
-} from "../../../api/company/createCompanyApis";
+import { createVendor as createVendorApi } from "../../../api/vendor/createVendorApis";
+import { createCustomer as createCustomerApi } from "../../../api/customer/createCustomerApis";
+
 import {
   CreateCustomerInput,
   CreateVendorInput,
 } from "../../resolvers-types.generated";
+import CompanyApiUtils from "../../../api/utils/companyUtils";
 
 const createVendor = (
   parents: any,
@@ -29,7 +28,7 @@ const checkCompanyName = (
   { name }: { name: string },
   context: any
 ) => {
-  return checkCompanyNameApi(name);
+  return CompanyApiUtils.checkCompanyName(name);
 };
 
 export { createVendor, createCustomer, checkCompanyName };

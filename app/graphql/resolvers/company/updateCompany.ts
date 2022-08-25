@@ -1,9 +1,9 @@
 import {
-  updateCustomer as updateCustomerApi,
-  updateVendor as updateVendorApi,
   updateCompanyPlan as updateCompanyPlanApi,
   updateCompanyStatus as updateCompanyStatusApi,
 } from "../../../api/company/updateCompanyApis";
+import { updateCustomer as updateCustomerApi } from "../../../api/customer/updateCustomerApis";
+import { updateVendor as updateVendorApi } from "../../../api/vendor/updateVendorApis";
 import {
   UpdateCompanyPlanInput,
   UpdateCustomerInput,

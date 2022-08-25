@@ -3,6 +3,7 @@ import sequelize from "../../postgres/dbconnection";
 import { v4 as uuidv4 } from "uuid";
 import { CreateVendorSubscriptionInput } from "../../graphql/resolvers-types.generated";
 
+// TODO: move this into a Service?
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST!, {
   apiVersion: "2020-08-27",
 });
