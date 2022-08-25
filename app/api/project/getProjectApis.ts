@@ -1,14 +1,12 @@
-import * as commonProjectTypes from "../types/common/projectTypes";
-import * as enums from "../types/common/enums";
 import ProjectApiUtils from "../utils/projectUtils";
 import sequelize from "../../postgres/dbconnection";
 import { users } from "../models/users";
 import CompanyApiUtils from "../utils/companyUtils";
-import { GetProjectInput } from "../types/get/projectTypes";
 import { project_bid_permissionsAttributes } from "../models/project_bid_permissions";
 import { project_permissionsAttributes } from "../models/project_permissions";
 import {
   CustomerProject,
+  GetProjectInput,
   Project,
   ProjectPermission,
   UserPermission,

@@ -1,7 +1,12 @@
 import { createProject as createProjectApi } from "../../../../api/project/createProjectApis";
-import { CreateProjectInput } from "../../../../api/types/create/projectTypes";
+import { CreateProjectInput } from "../../../resolvers-types.generated";
 
-const createProject = (parent: any, args: Record<string, CreateProjectInput>, context: any, info: any) => {
+const createProject = (
+  parent: any,
+  args: Record<string, CreateProjectInput>,
+  context: any,
+  info: any
+) => {
   return createProjectApi(args.data);
 };
 

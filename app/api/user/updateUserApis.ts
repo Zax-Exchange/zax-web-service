@@ -1,8 +1,6 @@
-import * as userTypes from "../types/update/userTypes";
 import sequelize from "../../postgres/dbconnection";
 import UserApiUtils from "../utils/userUtils";
 import bcrypt from "bcryptjs";
-import { ApolloError } from "apollo-server-express";
 import {
   UpdateUserInput,
   UpdateUserPasswordInput,

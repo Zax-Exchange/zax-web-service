@@ -1,6 +1,3 @@
-import * as commonProjectTypes from "../types/common/projectTypes";
-import * as getProjectTypes from "../types/get/projectTypes";
-import UserApiUtils from "./userUtils";
 import { Model, ModelStatic, Op, Transaction } from "sequelize";
 import sequelize from "../../postgres/dbconnection";
 import { project_bids } from "../models/project_bids";
@@ -9,14 +6,14 @@ import { project_bid_permissionsAttributes } from "../models/project_bid_permiss
 import { project_permissionsAttributes } from "../models/project_permissions";
 import { projects, projectsAttributes } from "../models/projects";
 import { getUserWithUserId } from "../user/getUserApis";
-import s3 from "../../aws/s3";
-import { File } from "../types/common/fileTypes";
 import {
   CustomerProject,
   PermissionedProjectBid,
   Project,
   ProjectBid,
   ProjectBidComponent,
+  ProjectComponent,
+  ProjectDesign,
   ProjectOverview,
   ProjectPermission,
   ProjectStatus,
@@ -52,7 +49,7 @@ class ProjectApiUtils {
    */
   static async getProjectComponents(
     projectId: string
-  ): Promise<commonProjectTypes.ProjectComponent[]> {
+  ): Promise<ProjectComponent[]> {
     const project_components = sequelize.models.project_components;
     try {
       const components = await project_components
@@ -75,7 +72,7 @@ class ProjectApiUtils {
    */
   static async getBidComponents(
     projectBidId: string
-  ): Promise<commonProjectTypes.ProjectBidComponent[]> {
+  ): Promise<ProjectBidComponent[]> {
     const project_bid_components = sequelize.models.project_bid_components;
 
     try {
@@ -113,7 +110,7 @@ class ProjectApiUtils {
           design = {
             fileName: designObject.get("fileName"),
             url: `${process.env.AWS_CDN_URL}/${designObject.get("id")}`,
-          } as File;
+          } as ProjectDesign;
         }
 
         return {

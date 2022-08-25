@@ -1,4 +1,3 @@
-import * as getCompanyTypes from "../../../api/types/get/companyTypes";
 import {
   getVendorDetail as getVendorDetailApi,
   getCustomerDetail as getCustomerDetailApi,

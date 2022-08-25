@@ -1,14 +1,15 @@
-import * as userTypes from "../types/create/userTypes";
 import sequelize from "../../postgres/dbconnection";
 import UserApiUtils from "../utils/userUtils";
 import CompanyApiUtils from "../utils/companyUtils";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Transaction } from "sequelize/types";
-import { LoggedInUser } from "../types/common/userTypes";
 import { v4 as uuidv4 } from "uuid";
 import streamService from "../../stream/StreamService";
-import { CreateUserInput } from "../../graphql/resolvers-types.generated";
+import {
+  CreateUserInput,
+  LoggedInUser,
+} from "../../graphql/resolvers-types.generated";
 
 const createUser = async (data: CreateUserInput): Promise<LoggedInUser> => {
   const users = sequelize.models.users;

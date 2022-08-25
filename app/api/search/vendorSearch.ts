@@ -3,7 +3,6 @@ import {
   ProjectOverview,
   SearchProjectInput,
 } from "../../graphql/resolvers-types.generated";
-import * as projectTypes from "../types/common/projectTypes";
 import ProjectApiUtils from "../utils/projectUtils";
 import QueryBuilder from "./queryBuilder";
 

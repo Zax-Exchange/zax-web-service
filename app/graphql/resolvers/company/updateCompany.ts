@@ -1,4 +1,3 @@
-import * as updatePlanTypes from "../../../api/types/update/planTypes";
 import {
   updateCustomer as updateCustomerApi,
   updateVendor as updateVendorApi,
@@ -6,6 +5,7 @@ import {
   updateCompanyStatus as updateCompanyStatusApi,
 } from "../../../api/company/updateCompanyApis";
 import {
+  UpdateCompanyPlanInput,
   UpdateCustomerInput,
   UpdateVendorInput,
 } from "../../resolvers-types.generated";
@@ -28,7 +28,7 @@ const updateVendor = (
 
 const updateCompanyPlan = (
   parents: any,
-  args: Record<string, updatePlanTypes.UpdateCompanyPlanInput>,
+  args: Record<string, UpdateCompanyPlanInput>,
   context: any
 ) => {
   return updateCompanyPlanApi(args.data);

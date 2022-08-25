@@ -1,6 +1,4 @@
 import sequelize from "../../postgres/dbconnection";
-import * as projectTypes from "../types/delete/projectTypes";
-import * as enums from "../types/common/enums";
 import { Op, Transaction } from "sequelize";
 import ProjectUtils from "../utils/projectUtils";
 import ElasticProjectService from "../../elastic/project/ElasticProjectService";
