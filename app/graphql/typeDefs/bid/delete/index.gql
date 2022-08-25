@@ -1,0 +1,8 @@
+input DeleteProjectBidPermissionsInput {
+  userIds: [String!]!
+  projectBidId: String!
+}
+
+type Mutation {
+  deleteProjectBidPermissions(data: DeleteProjectBidPermissionsInput!): Boolean!
+}

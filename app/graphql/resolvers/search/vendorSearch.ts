@@ -8,4 +8,6 @@ const searchCustomerProjects = (
   return searchCustomerProjectsApi(args.searchInput);
 };
 
-export { searchCustomerProjects };
+export default {
+  Query: { searchCustomerProjects },
+};

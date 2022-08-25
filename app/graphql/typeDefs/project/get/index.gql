@@ -3,11 +3,6 @@ input GetProjectInput {
   projectId: String!
 }
 
-input GetProjectBidInput {
-  userId: String!
-  projectBidId: String!
-}
-
 input SearchProjectInput {
   userInput: String!
   deliveryCountries: [String]

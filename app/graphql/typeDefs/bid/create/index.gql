@@ -1,0 +1,20 @@
+input QuantityPriceInput {
+  quantity: Int!
+  price: Int!
+}
+
+input CreateProjectBidInput {
+  userId: String!
+  projectId: String!
+  comments: String!
+  components: [CreateProjectBidComponentInput!]!
+}
+
+input CreateProjectBidComponentInput {
+  projectComponentId: String!
+  quantityPrices: [QuantityPriceInput!]!
+}
+
+type Mutation {
+  createProjectBid(data: CreateProjectBidInput!): Boolean!
+}

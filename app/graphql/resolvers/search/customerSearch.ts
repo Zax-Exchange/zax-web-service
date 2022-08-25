@@ -9,4 +9,6 @@ const searchVendorCompanies = async (
   return searchVendorCompaniesApi(args.searchInput);
 };
 
-export { searchVendorCompanies };
+export default {
+  Query: { searchVendorCompanies },
+};

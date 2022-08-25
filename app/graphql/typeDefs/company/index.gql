@@ -26,9 +26,9 @@ type PermissionedCompany {
   isVendor: Boolean!
   isVerified: Boolean!
   leadTime: Int
-  locations: [String]
+  locations: [String!]
   moq: Int
-  materials: [String]
+  materials: [String!]
   isAdmin: Boolean!
   companyUrl: String!
   createdAt: String!
@@ -48,8 +48,8 @@ type CompanyDetail {
   isVerified: Boolean!
   companyUrl: String
 
-  locations: [String]
-  materials: [String]
+  locations: [String!]
+  materials: [String!]
   moq: String
   leadTime: Int
 

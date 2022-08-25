@@ -15,17 +15,6 @@ input UpdateProjectComponentInput {
   postProcess: String!
 }
 
-input UpdateProjectBidInput {
-  id: String!
-  comments: String!
-  components: [UpdateProjectBidComponentInput!]!
-}
-
-input UpdateProjectBidComponentInput {
-  id: String!
-  quantityPrices: [QuantityPriceInput!]!
-}
-
 input UpdateProjectPermissionsInput {
   viewers: UpdateProjectPermissionsInputData!
   editors: UpdateProjectPermissionsInputData!
@@ -37,21 +26,7 @@ input UpdateProjectPermissionsInputData {
   permission: ProjectPermission!
 }
 
-input UpdateProjectBidPermissionsInput {
-  viewers: UpdateProjectBidPermissionsInputData!
-  editors: UpdateProjectBidPermissionsInputData!
-}
-
-input UpdateProjectBidPermissionsInputData {
-  userIds: [String]!
-  projectId: String!
-  projectBidId: String!
-  permission: ProjectPermission!
-}
-
 type Mutation {
   updateProjectPermissions(data: UpdateProjectPermissionsInput!): Boolean!
-  updateProjectBidPermissions(data: UpdateProjectBidPermissionsInput!): Boolean!
   # updateProject(data: UpdateProjectInput): Boolean
-  # updateProjectBid(data: UpdateProjectBidInput): Boolean
 }

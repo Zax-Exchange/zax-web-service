@@ -1,0 +1,36 @@
+type PermissionedProjectBid {
+  id: String!
+  userId: String!
+  projectId: String!
+  companyId: String!
+  components: [ProjectBidComponent!]!
+  permission: ProjectPermission!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type ProjectBid {
+  id: String!
+  userId: String!
+  companyId: String!
+  projectId: String!
+  comments: String!
+  project: Project!
+  components: [ProjectBidComponent!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type ProjectBidComponent {
+  id: String!
+  projectBidId: String!
+  projectComponentId: String!
+  quantityPrices: [QuantityPrice!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type QuantityPrice {
+  quantity: Int!
+  price: Int!
+}

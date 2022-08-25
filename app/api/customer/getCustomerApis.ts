@@ -1,4 +1,7 @@
-import { CustomerDetail } from "../../graphql/resolvers-types.generated";
+import {
+  CustomerDetail,
+  EditableCustomerDetail,
+} from "../../graphql/resolvers-types.generated";
 import CompanyApiUtils from "../utils/companyUtils";
 
 const getCustomerDetail = async (
@@ -39,4 +42,39 @@ const getCustomerDetail = async (
   }
 };
 
-export { getCustomerDetail };
+const getEditableCustomerDetail = async (
+  companyId: string
+): Promise<EditableCustomerDetail> => {
+  try {
+    const company = await CompanyApiUtils.getCompanyWithCompanyId(companyId);
+    const customer = await CompanyApiUtils.getCustomerWithCompanyId(companyId);
+
+    const {
+      id,
+      name,
+      contactEmail,
+      logo,
+      phone,
+      fax,
+      country,
+      isActive,
+      isVerified,
+      companyUrl,
+    } = company;
+    const res = {
+      name,
+      contactEmail,
+      logo,
+      country,
+      phone,
+      fax,
+      companyUrl,
+    };
+    console.log({ res });
+    return res;
+  } catch (e) {
+    return Promise.reject(e);
+  }
+};
+
+export { getCustomerDetail, getEditableCustomerDetail };

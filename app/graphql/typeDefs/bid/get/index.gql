@@ -1,0 +1,8 @@
+input GetProjectBidInput {
+  userId: String!
+  projectBidId: String!
+}
+
+type Query {
+  getProjectBidUsers(projectBidId: String!): [UserPermission!]!
+}

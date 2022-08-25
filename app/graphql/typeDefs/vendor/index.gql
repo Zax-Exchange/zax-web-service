@@ -5,8 +5,8 @@ type VendorOverview {
   logo: String
   country: String!
   isVerified: Boolean!
-  locations: [String]!
-  materials: [String]!
+  locations: [String!]!
+  materials: [String!]!
   moq: String!
   leadTime: Int!
 }
@@ -22,8 +22,8 @@ type VendorDetail {
   fax: String
   isVerified: Boolean!
 
-  locations: [String]!
-  materials: [String]!
+  locations: [String!]!
+  materials: [String!]!
   moq: String!
   leadTime: Int!
 }

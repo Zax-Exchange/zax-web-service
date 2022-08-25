@@ -37,3 +37,13 @@ type CustomerProject {
   createdAt: String!
   updatedAt: String!
 }
+
+type EditableCustomerDetail {
+  name: String!
+  contactEmail: String!
+  phone: String!
+  logo: String
+  country: String!
+  companyUrl: String
+  fax: String
+}

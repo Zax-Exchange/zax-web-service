@@ -1,0 +1,27 @@
+input UpdateProjectBidInput {
+  id: String!
+  comments: String!
+  components: [UpdateProjectBidComponentInput!]!
+}
+
+input UpdateProjectBidComponentInput {
+  id: String!
+  quantityPrices: [QuantityPriceInput!]!
+}
+
+input UpdateProjectBidPermissionsInput {
+  viewers: UpdateProjectBidPermissionsInputData!
+  editors: UpdateProjectBidPermissionsInputData!
+}
+
+input UpdateProjectBidPermissionsInputData {
+  userIds: [String]!
+  projectId: String!
+  projectBidId: String!
+  permission: ProjectPermission!
+}
+
+type Mutation {
+  updateProjectBidPermissions(data: UpdateProjectBidPermissionsInput!): Boolean!
+  # updateProjectBid(data: UpdateProjectBidInput): Boolean
+}

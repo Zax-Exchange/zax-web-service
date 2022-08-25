@@ -9,6 +9,7 @@ const __dirname = path.dirname(__filename);
 
 async function getTypeDefs() {
   try {
+    // loads all typeDefs
     let loadedFiles = await loadFiles(`${__dirname}/**/*.gql`, {
       extensions: ["gql"],
     });

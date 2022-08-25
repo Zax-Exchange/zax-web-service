@@ -1,6 +1,6 @@
 import { ApolloServer, gql } from "apollo-server-express";
 import express from "express";
-import resolvers from "./graphql/resolvers";
+import getResolvers from "./graphql/resolvers";
 import sequelize from "./postgres/dbconnection";
 import { initModels } from "./api/models/init-models";
 import dotenv from "dotenv";
@@ -31,7 +31,7 @@ const startServer = async () => {
   const app = express();
   const httpServer = http.createServer(app);
   const typeDefs = await getTypeDefs();
-
+  const resolvers = await getResolvers();
   const server = new ApolloServer({
     csrfPrevention: false,
     typeDefs,

@@ -3,4 +3,5 @@ type Query {
   getCustomerProject(data: GetProjectInput!): CustomerProject!
   getCustomerProjects(userId: String!): [CustomerProject!]!
   searchCustomerProjects(searchInput: SearchProjectInput!): [ProjectOverview!]!
+  getEditableCustomerDetail(companyId: String!): EditableCustomerDetail!
 }
