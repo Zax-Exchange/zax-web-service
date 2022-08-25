@@ -22,7 +22,7 @@ import {
   ProjectStatus,
   UserPermission,
   VendorProject,
-} from "../../graphql/resolvers-types";
+} from "../../graphql/resolvers-types.generated";
 
 class ProjectApiUtils {
   static async getBidPermissions(

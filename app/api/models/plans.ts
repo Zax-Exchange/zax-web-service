@@ -1,6 +1,6 @@
 import * as Sequelize from "sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
-import { CompanySize, PlanTier } from "../../graphql/resolvers-types";
+import { CompanySize, PlanTier } from "../../graphql/resolvers-types.generated";
 import { Pricings } from "../types/common/planTypes";
 import type { company_plans, company_plansId } from "./company_plans";
 

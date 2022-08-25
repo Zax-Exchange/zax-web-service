@@ -14,7 +14,7 @@ import {
   ProjectStatus,
   UpdateProjectBidPermissionsInputData,
   UpdateProjectPermissionsInputData,
-} from "../../graphql/resolvers-types";
+} from "../../graphql/resolvers-types.generated";
 //TODO: findOrCreate product or materials when creating project
 const createProject = async (data: CreateProjectInput): Promise<boolean> => {
   const projects = sequelize.models.projects;

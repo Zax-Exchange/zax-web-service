@@ -4,7 +4,10 @@ import sequelize from "../../postgres/dbconnection";
 import { connect } from "getstream";
 import { usersAttributes } from "../models/users";
 import streamService from "../../stream/StreamService";
-import { LoggedInUser, UserLoginInput } from "../../graphql/resolvers-types";
+import {
+  LoggedInUser,
+  UserLoginInput,
+} from "../../graphql/resolvers-types.generated";
 
 const login = async (data: UserLoginInput): Promise<LoggedInUser> => {
   try {

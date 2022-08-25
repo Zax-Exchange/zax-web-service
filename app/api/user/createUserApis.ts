@@ -8,18 +8,18 @@ import { Transaction } from "sequelize/types";
 import { LoggedInUser } from "../types/common/userTypes";
 import { v4 as uuidv4 } from "uuid";
 import streamService from "../../stream/StreamService";
-import { CreateUserInput } from "../../graphql/resolvers-types";
+import { CreateUserInput } from "../../graphql/resolvers-types.generated";
 
-const createUser = async(data: CreateUserInput): Promise<LoggedInUser> => {
+const createUser = async (data: CreateUserInput): Promise<LoggedInUser> => {
   const users = sequelize.models.users;
 
-  const {name, email, companyId, password} = data;
+  const { name, email, companyId, password } = data;
   try {
     const foundUser = await users.findOne({
       where: {
-        email
-      }
-    })
+        email,
+      },
+    });
     if (foundUser) {
       throw new Error("Duplicate email!");
     }
@@ -30,16 +30,21 @@ const createUser = async(data: CreateUserInput): Promise<LoggedInUser> => {
     return await sequelize.transaction(async (transaction: Transaction) => {
       const encrypted = await bcrypt.hash(password, 10);
 
-      const user = await users.create({
-        id: uuidv4(),
-        name,
-        email: email.toLowerCase(),
-        companyId,
-        password: encrypted,
-        isAdmin: isFirst,
-        isVendor,
-        isActive: true
-      }, {transaction}).then(u => u.get({ plain:true }));
+      const user = await users
+        .create(
+          {
+            id: uuidv4(),
+            name,
+            email: email.toLowerCase(),
+            companyId,
+            password: encrypted,
+            isAdmin: isFirst,
+            isVendor,
+            isActive: true,
+          },
+          { transaction }
+        )
+        .then((u) => u.get({ plain: true }));
 
       const notificationToken = streamService.createToken(user.id);
       const chatToken = streamService.createToken(companyId);
@@ -66,16 +71,13 @@ const createUser = async(data: CreateUserInput): Promise<LoggedInUser> => {
         ...user,
         notificationToken,
         chatToken,
-        token
-      }
-    })
+        token,
+      };
+    });
   } catch (e) {
     console.error(e);
     return Promise.reject(e);
   }
 };
 
-
-export {
-  createUser
-}
+export { createUser };

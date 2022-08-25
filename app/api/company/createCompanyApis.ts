@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import {
   CreateCustomerInput,
   CreateVendorInput,
-} from "../../graphql/resolvers-types";
+} from "../../graphql/resolvers-types.generated";
 
 const createVendor = async (data: CreateVendorInput): Promise<string> => {
   const {

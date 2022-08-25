@@ -5,7 +5,10 @@ import {
   updateCompanyPlan as updateCompanyPlanApi,
   updateCompanyStatus as updateCompanyStatusApi,
 } from "../../../api/company/updateCompanyApis";
-import { UpdateCustomerInput, UpdateVendorInput } from "../../resolvers-types";
+import {
+  UpdateCustomerInput,
+  UpdateVendorInput,
+} from "../../resolvers-types.generated";
 
 const updateCustomer = (
   parents: any,

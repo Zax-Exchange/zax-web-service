@@ -6,7 +6,7 @@ import {
 import {
   DeleteProjectBidPermissionsInput,
   DeleteProjectPermissionsInput,
-} from "../../../resolvers-types";
+} from "../../../resolvers-types.generated";
 
 const deleteProject = (
   parent: any,

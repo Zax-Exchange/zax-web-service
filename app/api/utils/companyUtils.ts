@@ -1,7 +1,7 @@
 import sequelize from "../../postgres/dbconnection";
 import { companiesAttributes } from "../models/companies";
 import jwt from "jsonwebtoken";
-import { CompanyPlan } from "../../graphql/resolvers-types";
+import { CompanyPlan } from "../../graphql/resolvers-types.generated";
 import { vendorsAttributes } from "../models/vendors";
 import { customersAttributes } from "../models/customers";
 

@@ -4,7 +4,7 @@ import {
   createVendorSubscription as createVendorSubscriptionApi,
   checkUserEmail as checkUserEmailApi,
 } from "../../../api/plan/createSubscriptionsApis";
-import { CreateVendorSubscriptionInput } from "../../resolvers-types";
+import { CreateVendorSubscriptionInput } from "../../resolvers-types.generated";
 
 const createStripeCustomer = (
   parent: any,

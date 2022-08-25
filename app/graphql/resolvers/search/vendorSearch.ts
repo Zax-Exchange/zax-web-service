@@ -1,5 +1,5 @@
 import { searchCustomerProjects as searchCustomerProjectsApi } from "../../../api/search/vendorSearch";
-import { SearchProjectInput } from "../../resolvers-types";
+import { SearchProjectInput } from "../../resolvers-types.generated";
 const searchCustomerProjects = (
   parent: any,
   args: Record<string, SearchProjectInput>,

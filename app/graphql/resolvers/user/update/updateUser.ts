@@ -7,7 +7,7 @@ import {
   UpdateUserInput,
   UpdateUserPasswordInput,
   UpdateUserPowerInput,
-} from "../../../resolvers-types";
+} from "../../../resolvers-types.generated";
 
 const updateUser = async (
   parent: any,

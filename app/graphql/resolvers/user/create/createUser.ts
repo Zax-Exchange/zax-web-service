@@ -1,5 +1,5 @@
 import { createUser as createUserApi } from "../../../../api/user/createUserApis";
-import { CreateUserInput } from "../../../resolvers-types";
+import { CreateUserInput } from "../../../resolvers-types.generated";
 
 const createUser = (
   parent: any,

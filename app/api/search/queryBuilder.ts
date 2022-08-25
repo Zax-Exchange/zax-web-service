@@ -2,7 +2,7 @@
 import {
   SearchCompanyInput,
   SearchProjectInput,
-} from "../../graphql/resolvers-types";
+} from "../../graphql/resolvers-types.generated";
 export default class QueryBuilder {
   static buildProjectSearchQuery(data: SearchProjectInput) {
     //filters include: deliveryCountries, deliveryCities, materials, budget, leadTime

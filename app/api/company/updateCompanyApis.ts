@@ -5,7 +5,7 @@ import {
   UpdateCompanyPlanInput,
   UpdateCustomerInput,
   UpdateVendorInput,
-} from "../../graphql/resolvers-types";
+} from "../../graphql/resolvers-types.generated";
 
 const updateVendor = async (data: UpdateVendorInput) => {
   const companies = sequelize.models.companies;

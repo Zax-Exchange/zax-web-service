@@ -1,5 +1,5 @@
 import { updateProjectPermissions as updateProjectPermissionsApi } from "../../../../api/project/updateProjectApis";
-import { UpdateProjectPermissionsInput } from "../../../resolvers-types";
+import { UpdateProjectPermissionsInput } from "../../../resolvers-types.generated";
 
 const updateProjectPermissions = (
   parent: any,

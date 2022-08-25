@@ -1,5 +1,5 @@
 import loginApi from "../../../../api/user/loginUserApis";
-import { UserLoginInput } from "../../../resolvers-types";
+import { UserLoginInput } from "../../../resolvers-types.generated";
 
 const login = (
   parent: any,

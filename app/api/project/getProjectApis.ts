@@ -13,7 +13,7 @@ import {
   ProjectPermission,
   UserPermission,
   VendorProject,
-} from "../../graphql/resolvers-types";
+} from "../../graphql/resolvers-types.generated";
 
 /**
  * Get the full list of vendor bidded projects with userId

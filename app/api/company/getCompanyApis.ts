@@ -3,7 +3,10 @@ import CompanyApiUtils from "../utils/companyUtils";
 import { company_plansAttributes } from "../models/company_plans";
 import { plansAttributes } from "../models/plans";
 import { stripe } from "../plan/createSubscriptionsApis";
-import { CustomerDetail, VendorDetail } from "../../graphql/resolvers-types";
+import {
+  CustomerDetail,
+  VendorDetail,
+} from "../../graphql/resolvers-types.generated";
 
 // should only be called with user admin within the company
 const getCompanyDetail = async (

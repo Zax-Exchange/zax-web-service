@@ -1,5 +1,5 @@
 import { searchVendorCompanies as searchVendorCompaniesApi } from "../../../api/search/customerSearch";
-import { SearchCompanyInput } from "../../resolvers-types";
+import { SearchCompanyInput } from "../../resolvers-types.generated";
 
 const searchVendorCompanies = async (
   parent: any,

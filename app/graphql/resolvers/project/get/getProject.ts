@@ -7,7 +7,7 @@ import {
   getProjectUsers as getProjectUsersApi,
   getProjectBidUsers as getProjectBidUsersApi,
 } from "../../../../api/project/getProjectApis";
-import { GetProjectInput } from "../../../resolvers-types";
+import { GetProjectInput } from "../../../resolvers-types.generated";
 
 const getVendorProjects = (
   parent: any,

@@ -4,7 +4,7 @@ import QueryBuilder from "./queryBuilder";
 import {
   SearchCompanyInput,
   VendorOverview,
-} from "../../graphql/resolvers-types";
+} from "../../graphql/resolvers-types.generated";
 // search by project materials
 // search by customer company name
 

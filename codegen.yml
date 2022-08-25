@@ -1,9 +1,22 @@
 overwrite: true
 schema: ./app/graphql/typeDefs/**/*.gql
 generates:
-  ./app/graphql/resolvers-types.ts:
+  app/graphql/resolvers-types.generated.ts:
+    plugins:
+      - add:
+          content: "// THIS FILE IS GENERATED. DO NOT EDIT."
+      - typescript
     config:
       useIndexSignature: true
-    plugins:
-      - typescript
-      - typescript-resolvers
+
+  # app/:
+  #   preset: near-operation-file
+  #   presetConfig:
+  #     extension: .generated.ts
+  #     baseTypesPath: graphql/generated/types.ts
+  #   plugins:
+  #     - add:
+  #         content: "// THIS FILE IS GENERATED. DO NOT EDIT."
+  #     - typescript
+  #   config:
+  #     useGraphQLModules: false

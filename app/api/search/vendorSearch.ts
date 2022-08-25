@@ -1,16 +1,22 @@
 import ElasticProjectService from "../../elastic/project/ElasticProjectService";
-import { ProjectOverview, SearchProjectInput } from "../../graphql/resolvers-types";
+import {
+  ProjectOverview,
+  SearchProjectInput,
+} from "../../graphql/resolvers-types.generated";
 import * as projectTypes from "../types/common/projectTypes";
 import ProjectApiUtils from "../utils/projectUtils";
 import QueryBuilder from "./queryBuilder";
 
-
 // search by project materials
-const searchCustomerProjects = async (data: SearchProjectInput): Promise<ProjectOverview[]> => {
+const searchCustomerProjects = async (
+  data: SearchProjectInput
+): Promise<ProjectOverview[]> => {
   try {
     // ProjectDocument -> ProjectOverview -> Project
     const query = QueryBuilder.buildProjectSearchQuery(data);
-    const projectDocs = await ElasticProjectService.searchProjectDocuments(query);
+    const projectDocs = await ElasticProjectService.searchProjectDocuments(
+      query
+    );
     const res: ProjectOverview[] = [];
 
     for (let project of projectDocs) {
@@ -26,16 +32,13 @@ const searchCustomerProjects = async (data: SearchProjectInput): Promise<Project
         materials: (project._source as any).materials,
         createdAt: proj.createdAt,
       });
-
     }
 
     return res;
-  } catch(e) {
+  } catch (e) {
     console.error(e);
     return Promise.reject(e);
   }
 };
 
-export {
-  searchCustomerProjects
-}
+export { searchCustomerProjects };

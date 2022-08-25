@@ -4,7 +4,10 @@ import { plansAttributes } from "../models/plans";
 import { company_plans } from "../models/company_plans";
 import { stripe } from "./createSubscriptionsApis";
 import { stripeTimeToUTC } from "../utils/timeUtils";
-import { CompanyPlanDetail, Plan } from "../../graphql/resolvers-types";
+import {
+  CompanyPlanDetail,
+  Plan,
+} from "../../graphql/resolvers-types.generated";
 
 const getPlanWithPlanId = async (
   id: string,
