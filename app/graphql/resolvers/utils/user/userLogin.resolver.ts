@@ -33,28 +33,28 @@ const login = async (
     }
 
     const valid = await bcrypt.compare(data.password, user.password);
+
     if (user && valid) {
+      const loggedInUser = {
+        id: user.id,
+        companyId: user.companyId,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        isVendor: user.isVendor,
+        notificationToken,
+        chatToken,
+      };
       const token = jwt.sign(
-        {
-          id: user.id,
-          companyId: user.companyId,
-          name: user.name,
-          email: user.email,
-          isAdmin: user.isAdmin,
-          isVendor: user.isVendor,
-          isActive: user.isActive,
-          notificationToken,
-          chatToken,
-        },
+        loggedInUser,
         process.env.USER_SESSION_TOKEN_SECRET!,
         {
           expiresIn: "8h",
         }
       );
+
       return {
-        ...user,
-        notificationToken,
-        chatToken,
+        ...loggedInUser,
         token,
       } as LoggedInUser;
     } else {

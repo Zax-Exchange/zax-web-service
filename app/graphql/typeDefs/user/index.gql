@@ -9,7 +9,7 @@ type User {
 }
 
 # for project/projectBid user info, mainly used when sharing projects/bids
-type UserPermission {
+type UserProjectPermission {
   userId: String!
   email: String!
   name: String!
@@ -26,5 +26,4 @@ type LoggedInUser {
   token: String!
   notificationToken: String!
   chatToken: String!
-  isActive: Boolean!
 }

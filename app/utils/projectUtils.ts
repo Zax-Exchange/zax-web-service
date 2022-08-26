@@ -16,7 +16,7 @@ import {
   ProjectOverview,
   ProjectPermission,
   ProjectStatus,
-  UserPermission,
+  UserProjectPermission,
   VendorProject,
 } from "../graphql/resolvers-types.generated";
 
@@ -277,7 +277,7 @@ class ProjectApiUtils {
           ...data,
           email: user.email,
           name: user.name,
-        } as UserPermission);
+        } as UserProjectPermission);
       }
 
       return res;
@@ -312,7 +312,7 @@ class ProjectApiUtils {
           ...data,
           email: user.email,
           name: user.name,
-        } as UserPermission);
+        } as UserProjectPermission);
       }
 
       return res;

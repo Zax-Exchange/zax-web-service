@@ -3,5 +3,5 @@ input GetProjectBidUsersInput {
 }
 
 type Query {
-  getProjectBidUsers(data: GetProjectBidUsersInput!): [UserPermission!]!
+  getProjectBidUsers(data: GetProjectBidUsersInput!): [UserProjectPermission!]!
 }

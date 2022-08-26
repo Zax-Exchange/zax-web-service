@@ -29,3 +29,9 @@ const inviteUser = async (
     return Promise.reject(e);
   }
 };
+
+export default {
+  Mutation: {
+    inviteUser,
+  },
+};

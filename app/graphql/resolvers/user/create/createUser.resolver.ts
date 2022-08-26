@@ -54,18 +54,18 @@ const createUser = async (
       const notificationToken = streamService.createToken(user.id);
       const chatToken = streamService.createToken(companyId);
 
+      const loggedInUser = {
+        id: user.id,
+        companyId: user.companyId,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        isVendor: user.isVendor,
+        notificationToken,
+        chatToken,
+      };
       const token = jwt.sign(
-        {
-          id: user.id,
-          companyId: user.companyId,
-          name: user.name,
-          email: user.email,
-          isAdmin: user.isAdmin,
-          isVendor: user.isVendor,
-          isActive: user.isActive,
-          notificationToken,
-          chatToken,
-        },
+        loggedInUser,
         process.env.USER_PASSWORD_TOKEN_SECRET!,
         {
           expiresIn: "8h",
@@ -73,9 +73,7 @@ const createUser = async (
       );
 
       return {
-        ...user,
-        notificationToken,
-        chatToken,
+        ...loggedInUser,
         token,
       } as LoggedInUser;
     });

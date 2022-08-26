@@ -7,7 +7,7 @@ input GetProjectUsersInput {
 }
 
 type Query {
-  getProjectUsers(data: GetProjectUsersInput!): [UserPermission!]!
+  getProjectUsers(data: GetProjectUsersInput!): [UserProjectPermission!]!
 
   getProjectDetail(data: GetProjectDetailInput!): Project!
 }

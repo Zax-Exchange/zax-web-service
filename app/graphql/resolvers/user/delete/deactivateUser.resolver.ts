@@ -11,20 +11,24 @@ const deactivateUser = async (
   const users = sequelize.models.users;
 
   try {
-    await users.update(
-      {
-        isActive: false,
-      },
-      {
-        where: { email },
-      }
-    );
-    await users.destroy({
-      where: {
-        email,
-      },
-      individualHooks: true,
+    const user = await users.findOne({ where: { email } });
+    await user?.update({
+      isActive: false,
     });
+    // await users.update(
+    //   {
+    //     isActive: false,
+    //   },
+    //   {
+    //     where: { email },
+    //   }
+    // );
+    // await users.destroy({
+    //   where: {
+    //     email,
+    //   },
+    //   individualHooks: true,
+    // });
     return true;
   } catch (e) {
     return Promise.reject(e);
