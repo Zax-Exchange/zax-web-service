@@ -15,7 +15,7 @@ const getVendorProjects = async (
   try {
     const permissions = await ProjectApiUtils.getBidPermissions(userId);
 
-    const res = [];
+    const res: VendorProject[] = [];
     for (let permission of permissions) {
       const bid = await ProjectApiUtils.getPermissionedProjectBid(
         permission.projectBidId,
@@ -30,6 +30,7 @@ const getVendorProjects = async (
 
       res.push({
         ...project,
+        // overwriting permission on project, else it will always be VIEWER
         permission: permission.permission,
         customerName: company.name,
         bidInfo: bid,

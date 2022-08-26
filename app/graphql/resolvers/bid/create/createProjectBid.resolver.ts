@@ -1,5 +1,6 @@
 import sequelize from "../../../../postgres/dbconnection";
 import {
+  BidStatus,
   CreateProjectBidComponentInput,
   CreateProjectBidInput,
   ProjectPermission,
@@ -34,6 +35,7 @@ const createProjectBid = async (
           companyId,
           projectId,
           comments,
+          status: BidStatus.Open,
         },
         { transaction }
       );

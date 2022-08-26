@@ -5,6 +5,7 @@ type PermissionedProjectBid {
   companyId: String!
   components: [ProjectBidComponent!]!
   permission: ProjectPermission!
+  status: BidStatus!
   createdAt: String!
   updatedAt: String!
 }
@@ -17,6 +18,7 @@ type ProjectBid {
   comments: String!
   project: Project!
   components: [ProjectBidComponent!]!
+  status: BidStatus!
   createdAt: String!
   updatedAt: String!
 }
