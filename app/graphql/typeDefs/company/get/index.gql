@@ -1,18 +1,16 @@
-input GetPermissionedCompanyInput {
+input GetCompanyDetailInput {
   companyId: String!
-  userId: String!
 }
 
-input SearchCompanyInput {
-  userInput: String!
-  locations: [String!]
-  moq: Int
-  leadTime: Int
+input GetAllUsersWithinCompanyInput {
+  companyId: String!
+}
+
+input GetCompanyPlanDetailInput {
+  companyId: String!
 }
 
 type Query {
-  getCompanyPlanWithCompanyId(companyId: String): CompanyPlanDetail!
-  getAllUsersWithinCompany(companyId: String): [User!]!
-  getCompanyPlanDetail(companyId: String): CompanyPlanDetail!
-  getCompanyDetail(companyId: String): CompanyDetail
+  getCompanyPlanDetail(data: GetCompanyPlanDetailInput!): CompanyPlanDetail!
+  getCompanyDetail(data: GetCompanyDetailInput): CompanyDetail
 }

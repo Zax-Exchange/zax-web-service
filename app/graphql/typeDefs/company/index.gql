@@ -56,3 +56,15 @@ type CompanyDetail {
   createdAt: String!
   updatedAt: String!
 }
+
+enum CompanyPermission {
+  ADMIN
+  USER
+}
+
+enum CompanySize {
+  XS
+  S
+  M
+  L
+}

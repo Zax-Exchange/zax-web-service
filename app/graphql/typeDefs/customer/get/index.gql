@@ -1,7 +1,24 @@
+input GetCustomerProjectsInput {
+  userId: String!
+}
+
+input GetCustomerDetailInput {
+  companyId: String!
+}
+
+input GetCustomerProjectInput {
+  userId: String!
+  projectId: String!
+}
+
+input GetEditableCustomerDetailInput {
+  companyId: String!
+}
 type Query {
-  getCustomerDetail(companyId: String!): CustomerDetail!
-  getCustomerProject(data: GetProjectInput!): CustomerProject!
-  getCustomerProjects(userId: String!): [CustomerProject!]!
-  searchCustomerProjects(searchInput: SearchProjectInput!): [ProjectOverview!]!
-  getEditableCustomerDetail(companyId: String!): EditableCustomerDetail!
+  getCustomerDetail(data: GetCustomerDetailInput!): CustomerDetail!
+  getCustomerProject(data: GetCustomerProjectInput!): CustomerProject!
+  getCustomerProjects(data: GetCustomerProjectsInput!): [CustomerProject!]!
+  getEditableCustomerDetail(
+    data: GetEditableCustomerDetailInput!
+  ): EditableCustomerDetail!
 }

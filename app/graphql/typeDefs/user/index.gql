@@ -28,8 +28,3 @@ type LoggedInUser {
   chatToken: String!
   isActive: Boolean!
 }
-
-input UserLoginInput {
-  email: String!
-  password: String!
-}

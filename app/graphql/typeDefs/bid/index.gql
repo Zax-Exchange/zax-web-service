@@ -34,3 +34,9 @@ type QuantityPrice {
   quantity: Int!
   price: Int!
 }
+
+enum BidStatus {
+  OPEN
+  ACCEPTED
+  REJECTED
+}

@@ -1,18 +1,13 @@
-input GetProjectInput {
-  userId: String!
+input GetProjectDetailInput {
   projectId: String!
 }
 
-input SearchProjectInput {
-  userInput: String!
-  deliveryCountries: [String]
-  deliveryCities: [String]
-  budget: Int
-  leadTime: Int
+input GetProjectUsersInput {
+  projectId: String!
 }
 
 type Query {
-  getProjectUsers(projectId: String!): [UserPermission!]!
-  getProjectBidUsers(projectBidId: String!): [UserPermission!]!
-  getProjectDetail(projectId: String!): Project!
+  getProjectUsers(data: GetProjectUsersInput!): [UserPermission!]!
+
+  getProjectDetail(data: GetProjectDetailInput!): Project!
 }

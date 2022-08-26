@@ -6,9 +6,9 @@ import {
   StreamFeed,
 } from "getstream";
 import sequelize from "../postgres/dbconnection";
-import CompanyApiUtils from "../api/utils/companyUtils";
-import ProjectApiUtils from "../api/utils/projectUtils";
-import UserApiUtils from "../api/utils/userUtils";
+import CompanyApiUtils from "../utils/companyUtils";
+import ProjectApiUtils from "../utils/projectUtils";
+import UserApiUtils from "../utils/userUtils";
 import { CreateProjectBidInput } from "../graphql/resolvers-types.generated";
 
 class StreamService {

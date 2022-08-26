@@ -21,3 +21,8 @@ type StripeSubscription {
   subscriptionId: String!
   clientSecret: String!
 }
+
+enum PlanTier {
+  PREMIUM
+  BUSINESS
+}

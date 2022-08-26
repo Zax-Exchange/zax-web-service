@@ -1,0 +1,7 @@
+input CancelStripeSubscriptionInput {
+  email: String!
+}
+
+type Mutation {
+  cancelStripeSubscription(data: CancelStripeSubscriptionInput!): Boolean!
+}

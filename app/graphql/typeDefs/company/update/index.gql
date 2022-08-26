@@ -3,9 +3,19 @@ input UpdateCompanyPlanInput {
   companyId: String!
 }
 
+input UpdateCompanyStatusInput {
+  companyId: String!
+  isActive: Boolean!
+}
+
+input UpdateCompanyPlanSubscriptionInfoInput {
+  subscriptionId: String!
+}
+
 type Mutation {
   updateCompanyPlan(data: UpdateCompanyPlanInput!): Boolean!
-  updateCompanyStatus(companyId: String!, isActive: Boolean!): Boolean!
-  updateSubscription(subscriptionId: String!): Boolean!
-  updateCompanyPlanSubscriptionInfo(subscriptionId: String!): Boolean!
+  updateCompanyStatus(data: UpdateCompanyStatusInput!): Boolean!
+  updateCompanyPlanSubscriptionInfo(
+    data: UpdateCompanyPlanSubscriptionInfoInput!
+  ): Boolean!
 }

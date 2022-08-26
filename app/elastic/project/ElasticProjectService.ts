@@ -2,8 +2,8 @@ import elasticClient from "../elasticConnection";
 import * as projectTypes from "../types/project";
 import * as companyTypes from "../types/company";
 import sequelize from "../../postgres/dbconnection";
-import UserApiUtils from "../../api/utils/userUtils";
-import CompanyApiUtils from "../../api/utils/companyUtils";
+import UserApiUtils from "../../utils/userUtils";
+import CompanyApiUtils from "../../utils/companyUtils";
 
 export default class ElasticProjectService {
   static async createProjectDocument(

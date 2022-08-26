@@ -1,3 +1,0 @@
-type Mutation {
-  createStripeCustomer(email: String): String!
-}

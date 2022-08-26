@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 async function getResolvers() {
   try {
     // loads all resolves files
-    let loadedFiles = await loadFiles(`${__dirname}/**/*.ts`, {
+    let loadedFiles = await loadFiles(`${__dirname}/**/*.resolver.ts`, {
       extensions: ["ts"],
     });
 

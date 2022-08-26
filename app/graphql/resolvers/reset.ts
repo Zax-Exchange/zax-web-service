@@ -1,6 +1,6 @@
-import { stripe } from "../../api/subscription/createSubscriptionsApis";
 import sequelize from "../../postgres/dbconnection";
 import elasticClient from "../../elastic/elasticConnection";
+import { stripe } from "../../stripe/StripeService";
 
 const reset = async () => {
   try {

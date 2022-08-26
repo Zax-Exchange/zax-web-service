@@ -1,0 +1,7 @@
+input UpdateStripeSubscriptionInput {
+  subscriptionId: String!
+}
+
+type Mutation {
+  updateStripeSubscription(data: UpdateStripeSubscriptionInput!): Boolean!
+}

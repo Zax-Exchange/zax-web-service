@@ -1,5 +1,4 @@
 input DeleteProjectInput {
-  userId: String!
   projectId: String!
 }
 
@@ -9,6 +8,6 @@ input DeleteProjectPermissionsInput {
 }
 
 type Mutation {
-  deleteProject(projectId: String!): Boolean!
+  deleteProject(data: DeleteProjectInput!): Boolean!
   deleteProjectPermissions(data: DeleteProjectPermissionsInput!): Boolean!
 }

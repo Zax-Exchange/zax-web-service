@@ -2,7 +2,7 @@ import { ApolloServer, gql } from "apollo-server-express";
 import express from "express";
 import getResolvers from "./graphql/resolvers";
 import sequelize from "./postgres/dbconnection";
-import { initModels } from "./api/models/init-models";
+import { initModels } from "./models/init-models";
 import dotenv from "dotenv";
 import cors from "cors";
 import http from "http";
@@ -19,15 +19,15 @@ if (process.env.NODE_ENV !== "production") {
 const startServer = async () => {
   initModels(sequelize);
 
-  try {
-    await sequelize
-      .sync({ alter: true })
-      .then(() => console.log("db initialized@"));
-    await sequelize.authenticate();
-    console.log("Connection has been established successfully.");
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
-  }
+  // try {
+  //   await sequelize
+  //     .sync({ alter: true })
+  //     .then(() => console.log("db initialized@"));
+  //   await sequelize.authenticate();
+  //   console.log("Connection has been established successfully.");
+  // } catch (error) {
+  //   console.error("Unable to connect to the database:", error);
+  // }
   const app = express();
   const httpServer = http.createServer(app);
   const typeDefs = await getTypeDefs();

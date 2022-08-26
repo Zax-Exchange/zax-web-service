@@ -1,21 +1,21 @@
-input UpdateUserInput {
-  id: String!
+input UpdateUserInfoInput {
+  userId: String!
   name: String
 }
 
 input UpdateUserPasswordInput {
-  id: String!
+  userId: String!
   currentPassword: String!
   newPassword: String!
 }
 
 input UpdateUserPowerInput {
-  id: String!
+  userId: String!
   isAdmin: Boolean!
 }
 
 type Mutation {
-  updateUser(data: UpdateUserInput!): Boolean!
+  updateUserInfo(data: UpdateUserInfoInput!): Boolean!
   updateUserPassword(data: UpdateUserPasswordInput!): Boolean!
   updateUserPower(data: UpdateUserPowerInput!): Boolean!
 }

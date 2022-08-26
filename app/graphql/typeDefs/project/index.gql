@@ -40,3 +40,15 @@ type ProjectComponent {
   createdAt: String!
   updatedAt: String!
 }
+
+enum ProjectPermission {
+  OWNER
+  VIEWER
+  EDITOR
+}
+
+enum ProjectStatus {
+  OPEN
+  IN_PROGRESS
+  CLOSED
+}

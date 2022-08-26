@@ -1,8 +1,7 @@
-input GetProjectBidInput {
-  userId: String!
+input GetProjectBidUsersInput {
   projectBidId: String!
 }
 
 type Query {
-  getProjectBidUsers(projectBidId: String!): [UserPermission!]!
+  getProjectBidUsers(data: GetProjectBidUsersInput!): [UserPermission!]!
 }

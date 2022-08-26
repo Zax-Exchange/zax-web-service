@@ -1,3 +1,11 @@
+input GetAllUsersWithinCompanyInput {
+  companyId: String!
+}
+
+input GetUserInput {
+  userId: String!
+}
 type Query {
-  getUserWithUserId(userId: String!, paranoid: Boolean): User!
+  getAllUsersWithinCompany(data: GetAllUsersWithinCompanyInput!): [User!]!
+  getUser(data: GetUserInput!): User!
 }

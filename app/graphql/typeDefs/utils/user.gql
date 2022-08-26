@@ -1,0 +1,22 @@
+input InviteUserInput {
+  email: String!
+  userId: String!
+}
+
+input CheckUserEmailInput {
+  email: String!
+}
+
+input UserLoginInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  inviteUser(data: InviteUserInput!): Boolean!
+}
+
+type Query {
+  checkUserEmail(data: CheckUserEmailInput!): Boolean!
+  login(data: UserLoginInput!): LoggedInUser!
+}

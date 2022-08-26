@@ -1,4 +1,12 @@
+input GetPlanInput {
+  planId: String!
+}
+
+input GetAllPlansInput {
+  isVendor: Boolean!
+}
+
 type Query {
-  getPlanWithPlanId(id: String!): Plan!
-  getAllPlans(isVendor: Boolean!): [Plan!]!
+  getPlan(data: GetPlanInput!): Plan!
+  getAllPlans(data: GetAllPlansInput!): [Plan!]!
 }

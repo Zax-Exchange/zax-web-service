@@ -1,0 +1,10 @@
+input SearchVendorCompanyInput {
+  userInput: String!
+  locations: [String!]
+  moq: Int
+  leadTime: Int
+}
+
+type Query {
+  searchVendorCompanies(data: SearchVendorCompanyInput!): [VendorOverview!]!
+}

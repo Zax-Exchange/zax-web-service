@@ -1,0 +1,7 @@
+input CreateStripeCustomerInput {
+  email: String!
+}
+
+type Mutation {
+  createStripeCustomer(data: CreateStripeCustomerInput!): String!
+}

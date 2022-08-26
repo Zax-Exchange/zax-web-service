@@ -1,6 +1,18 @@
+input GetVendorProjectsInput {
+  userId: String!
+}
+
+input GetVendorDetailInput {
+  companyId: String!
+}
+
+input GetVendorProjectInput {
+  projectId: String!
+  userId: String!
+}
+
 type Query {
-  getVendorDetail(companyId: String!): VendorDetail!
-  getVendorProject(data: GetProjectInput!): VendorProject!
-  getVendorProjects(userId: String!): [VendorProject!]!
-  searchVendorCompanies(searchInput: SearchCompanyInput!): [VendorOverview!]!
+  getVendorDetail(data: GetVendorDetailInput): VendorDetail!
+  getVendorProject(data: GetVendorProjectInput!): VendorProject!
+  getVendorProjects(data: GetVendorProjectsInput!): [VendorProject!]!
 }
