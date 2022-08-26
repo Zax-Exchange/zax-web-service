@@ -11,14 +11,8 @@ input GetCustomerProjectInput {
   projectId: String!
 }
 
-input GetEditableCustomerDetailInput {
-  companyId: String!
-}
 type Query {
   getCustomerDetail(data: GetCustomerDetailInput!): CustomerDetail!
   getCustomerProject(data: GetCustomerProjectInput!): CustomerProject!
   getCustomerProjects(data: GetCustomerProjectsInput!): [CustomerProject!]!
-  getEditableCustomerDetail(
-    data: GetEditableCustomerDetailInput!
-  ): EditableCustomerDetail!
 }

@@ -1,5 +1,8 @@
 import CompanyApiUtils from "../../../../utils/companyUtils";
-import { GetCustomerDetailInput } from "../../../resolvers-types.generated";
+import {
+  CustomerDetail,
+  GetCustomerDetailInput,
+} from "../../../resolvers-types.generated";
 
 const getCustomerDetail = async (
   parent: any,
@@ -24,6 +27,7 @@ const getCustomerDetail = async (
       isVerified,
       companyUrl,
     } = company;
+
     const res = {
       id,
       name,
@@ -36,7 +40,7 @@ const getCustomerDetail = async (
       isVerified,
       isActive,
       companyUrl,
-    };
+    } as CustomerDetail;
     return res;
   } catch (e) {
     return Promise.reject(e);
