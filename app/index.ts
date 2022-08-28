@@ -6,11 +6,15 @@ import { initModels } from "./models/init-models";
 import dotenv from "dotenv";
 import cors from "cors";
 import http from "http";
-import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
+import {
+  ApolloServerPluginDrainHttpServer,
+  AuthenticationError,
+} from "apollo-server-core";
 import { handleStripeWebhook } from "./rest/stripeWebhook";
 import { graphqlUploadExpress } from "graphql-upload";
 import bodyParser from "body-parser";
 import getTypeDefs from "./graphql/typeDefs";
+import jwt from "jsonwebtoken";
 
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
@@ -37,6 +41,20 @@ const startServer = async () => {
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    context: (ctx) => {
+      try {
+        if (ctx.req.headers.authorization) {
+          const token = ctx.req.headers.authorization.split(" ")[1];
+
+          const payload = jwt.verify(
+            token,
+            process.env.USER_SESSION_TOKEN_SECRET!
+          );
+        }
+      } catch (error) {
+        throw new AuthenticationError("INVALID_TOKEN");
+      }
+    },
   });
 
   await server.start();

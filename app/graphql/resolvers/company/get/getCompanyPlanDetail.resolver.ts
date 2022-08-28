@@ -2,14 +2,18 @@ import { company_plans } from "../../../../models/company_plans";
 import { plansAttributes } from "../../../../models/plans";
 import sequelize from "../../../../postgres/dbconnection";
 import { stripeTimeToUTC } from "../../../../utils/timeUtils";
-import { CompanyPlanDetail } from "../../../resolvers-types.generated";
+import {
+  CompanyPlanDetail,
+  GetCompanyDetailInput,
+} from "../../../resolvers-types.generated";
 import stripeService from "../../../../stripe/StripeService";
 
 const getCompanyPlanDetail = async (
   parent: any,
-  { companyId }: { companyId: string },
+  { data }: { data: GetCompanyDetailInput },
   context: any
 ) => {
+  const { companyId } = data;
   try {
     const companyPlan = (await sequelize.models.company_plans.findOne({
       where: {
