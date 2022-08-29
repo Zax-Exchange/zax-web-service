@@ -64,10 +64,10 @@ const createProject = async (
           { transaction }
         );
       }
-      const materials = [];
+      const products = [];
       for (let comp of components) {
-        for (let mat of comp.materials) {
-          materials.push(mat);
+        for (let mat of comp.products) {
+          products.push(mat);
         }
       }
       await createProjectComponents(
@@ -86,7 +86,7 @@ const createProject = async (
         deliveryDate,
         deliveryAddress,
         budget,
-        materials,
+        products,
       });
     });
 

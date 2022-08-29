@@ -1,6 +1,6 @@
 input CreateProjectComponentInput {
   name: String!
-  materials: [String!]!
+  products: [String!]!
   dimension: String!
   postProcess: String!
 }

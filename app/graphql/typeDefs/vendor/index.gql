@@ -6,7 +6,7 @@ type VendorOverview {
   country: String!
   isVerified: Boolean!
   locations: [String!]!
-  materials: [String!]!
+  products: [String!]!
   moq: String!
   leadTime: Int!
 }
@@ -23,7 +23,7 @@ type VendorDetail {
   isVerified: Boolean!
 
   locations: [String!]!
-  materials: [String!]!
+  products: [String!]!
   moq: String!
   leadTime: Int!
 }

@@ -10,7 +10,7 @@ input UpdateVendorInfoInput {
   leadTime: Int!
   moq: String!
   locations: [String!]!
-  materials: [String!]!
+  products: [String!]!
 }
 
 type Mutation {

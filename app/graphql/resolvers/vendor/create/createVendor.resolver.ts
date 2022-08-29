@@ -23,7 +23,7 @@ const createVendor = async (
     planId,
     locations,
     moq,
-    materials,
+    products,
     userEmail,
   } = data;
 
@@ -68,7 +68,7 @@ const createVendor = async (
           leadTime,
           locations,
           moq,
-          materials,
+          products,
         },
         { transaction }
       );
@@ -88,7 +88,7 @@ const createVendor = async (
         leadTime: leadTime,
         locations: locations,
         moq: moq,
-        materials: materials,
+        products: products,
       });
 
       return companyId;

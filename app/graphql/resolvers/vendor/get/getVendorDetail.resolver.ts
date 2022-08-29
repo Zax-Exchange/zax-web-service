@@ -10,7 +10,7 @@ const getVendorDetail = async (
   try {
     const company = await CompanyApiUtils.getCompanyWithCompanyId(companyId);
     const vendor = await CompanyApiUtils.getVendorWithCompanyId(companyId);
-    const { moq, locations, materials, leadTime } = vendor;
+    const { moq, locations, products, leadTime } = vendor;
     const {
       id,
       name,
@@ -36,7 +36,7 @@ const getVendorDetail = async (
       leadTime,
       moq,
       locations,
-      materials,
+      products,
       companyUrl,
     };
     return res;

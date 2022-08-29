@@ -10,7 +10,7 @@ export default class QueryBuilder {
    * @returns
    */
   static buildProjectSearchQuery(data: SearchCustomerProjectInput) {
-    //filters include: deliveryCountries, deliveryCities, materials, budget, leadTime
+    //filters include: deliveryCountries, deliveryCities, products, budget, leadTime
     const { userInput, deliveryCountries, deliveryCities, budget, leadTime } =
       data;
     // : estypes.QueryDslQueryContainer
@@ -61,7 +61,7 @@ export default class QueryBuilder {
         must: [
           {
             match: {
-              materials: userInput,
+              products: userInput,
             },
           },
           {
@@ -83,7 +83,7 @@ export default class QueryBuilder {
    * @returns
    */
   static buildVendorCompanySearchQuery(data: SearchVendorCompanyInput) {
-    //filters include: location, moq, leadtime, materials
+    //filters include: location, moq, leadtime, products
     const { userInput, locations, moq, leadTime } = data;
 
     const filter = [];
@@ -126,7 +126,7 @@ export default class QueryBuilder {
         must: [
           {
             match: {
-              materials: userInput,
+              products: userInput,
             },
           },
         ],

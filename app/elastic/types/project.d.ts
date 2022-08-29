@@ -4,7 +4,7 @@ export interface CreateProjectDocumentInput {
   deliveryAddress: string;
   deliveryDate: string;
   budget: number;
-  materials: string[];
+  products: string[];
 }
 
 export interface UpdateProjectDocumentInput {
@@ -12,5 +12,5 @@ export interface UpdateProjectDocumentInput {
   deliveryAddress?: string;
   deliveryDate?: string;
   budget?: number;
-  materials?: string[];
+  products?: string[];
 }

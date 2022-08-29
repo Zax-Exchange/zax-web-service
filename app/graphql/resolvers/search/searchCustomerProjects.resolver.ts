@@ -28,7 +28,7 @@ const searchCustomerProjects = async (
         deliveryDate: proj.deliveryDate,
         deliveryAddress: proj.deliveryAddress,
         budget: proj.budget,
-        materials: (project._source as any).materials,
+        products: (project._source as any).products,
         createdAt: proj.createdAt,
       });
     }

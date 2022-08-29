@@ -26,7 +26,7 @@ const getCompanyPlanDetail = async (
         .getPlan()
         .then((p) => p.get({ plain: true }) as plansAttributes),
       companyPlan
-        .getStripe_customer()
+        .getStripeCustomer()
         .then((cus) => cus.get("subscriptionId") as string),
     ]);
 

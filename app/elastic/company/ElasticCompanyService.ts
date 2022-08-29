@@ -9,21 +9,21 @@ export default class ElasticCompanyService {
 
       if (!exist) {
         await elasticClient.indices.create({
-          "index": "vendor",
+          index: "vendor",
           mappings: {
-            "properties": {
+            properties: {
               id: { type: "text" },
               moqMin: { type: "integer" },
               moqMax: { type: "integer" },
               locations: { type: "text" },
               leadTime: { type: "integer" },
-              materials: { type: "text" }
+              products: { type: "text" },
             },
-          }
+          },
         });
       }
-  
-      const { id, moq, locations, leadTime, materials } = data;
+
+      const { id, moq, locations, leadTime, products } = data;
       const moqMin = moq.split("-")[0];
       const moqMax = moq.split("-")[1];
       await elasticClient.index({
@@ -34,17 +34,17 @@ export default class ElasticCompanyService {
           moqMax,
           locations,
           leadTime,
-          materials
-        }
+          products,
+        },
       });
-    } catch(e) {
+    } catch (e) {
       console.error(e);
     }
   }
 
   static async updateVendorDocument(data: companyTypes.VendorDocument) {
     try {
-      const { id, moq, locations, leadTime, materials } = data;
+      const { id, moq, locations, leadTime, products } = data;
       const moqMin = moq.split("-")[0];
       const moqMax = moq.split("-")[1];
       await elasticClient.update({
@@ -55,23 +55,26 @@ export default class ElasticCompanyService {
           moqMax,
           locations,
           leadTime,
-          materials
-        }
+          products,
+        },
       });
-    } catch(e) {
+    } catch (e) {
       console.error(e);
     }
   }
 
   static async searchVendorDocuments(query: any) {
-    return await elasticClient.search({
-      "index": "vendor",
-      "query": query
-    }).then((res) => {
-      return res.hits.hits;
-    }).catch(e => {
-      console.error(e);
-      return Promise.reject(e);
-    });
+    return await elasticClient
+      .search({
+        index: "vendor",
+        query: query,
+      })
+      .then((res) => {
+        return res.hits.hits;
+      })
+      .catch((e) => {
+        console.error(e);
+        return Promise.reject(e);
+      });
   }
 }

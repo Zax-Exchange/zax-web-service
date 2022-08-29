@@ -12,7 +12,7 @@ input CreateVendorInput {
   leadTime: Int!
   locations: [String!]!
   moq: String!
-  materials: [String!]!
+  products: [String!]!
   companyUrl: String
   userEmail: String!
 }

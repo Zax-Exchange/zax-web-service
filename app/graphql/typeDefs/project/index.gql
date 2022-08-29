@@ -6,7 +6,7 @@ type ProjectOverview {
   deliveryDate: String!
   deliveryAddress: String!
   budget: Int!
-  materials: [String!]!
+  products: [String!]!
   createdAt: String!
 }
 type ProjectDesign {
@@ -34,7 +34,7 @@ type ProjectComponent {
   id: String!
   projectId: String!
   name: String!
-  materials: [String!]!
+  products: [String!]!
   dimension: String!
   postProcess: String!
   createdAt: String!

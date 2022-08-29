@@ -10,7 +10,7 @@ input UpdateProjectInput {
 input UpdateProjectComponentInput {
   id: String!
   name: String!
-  materials: [String!]!
+  products: [String!]!
   dimension: String!
   postProcess: String!
 }
