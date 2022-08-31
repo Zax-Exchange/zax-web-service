@@ -10,3 +10,4 @@ Project setup
 
 # Notes
 - Node version > 16
+- [Get started on server tech stack](https://github.com/Zax-Exchange/zax-exchange-server/wiki/Get-Started)
