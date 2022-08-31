@@ -11,7 +11,6 @@ export interface project_componentsAttributes {
   id: string;
   projectId: string;
   name: string;
-  product: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -34,7 +33,6 @@ export class project_components
   id!: string;
   projectId!: string;
   name!: string;
-  product!: string;
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -78,8 +76,8 @@ export class project_components
   createProject!: Sequelize.BelongsToCreateAssociationMixin<projects>;
 
   component_specs!: component_specs[];
-  getComponent_specs!: Sequelize.HasOneGetAssociationMixin<component_specs>;
-  setComponent_specs!: Sequelize.HasOneSetAssociationMixin<
+  getComponent_spec!: Sequelize.HasOneGetAssociationMixin<component_specs>;
+  setComponent_spec!: Sequelize.HasOneSetAssociationMixin<
     component_specs,
     component_specsId
   >;
@@ -104,10 +102,6 @@ export class project_components
           onUpdate: "CASCADE",
         },
         name: {
-          type: DataTypes.STRING,
-          allowNull: false,
-        },
-        product: {
           type: DataTypes.STRING,
           allowNull: false,
         },

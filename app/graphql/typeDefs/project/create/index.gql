@@ -1,6 +1,11 @@
+input CreateProjectComponentSpecInput {
+  productName: String!
+  dimension: String!
+}
+
 input CreateProjectComponentInput {
   name: String!
-  product: String!
+  componentSpec: CreateProjectComponentSpecInput!
 }
 
 input CreateProjectInput {

@@ -100,7 +100,15 @@ class ProjectApiUtils {
       return await projects.findByPk(id).then(async (p) => {
         const components = await (p as projects)
           ?.getProject_components()
-          .then((comps) => comps.map((comp) => comp.get({ plain: true })));
+          .then((comps) =>
+            comps.map(async (comp) => {
+              const componentSpec = await comp.getComponent_spec();
+              return {
+                ...comp.get({ plain: true }),
+                componentSpec,
+              };
+            })
+          );
         const designObject = await (p as projects)?.getProject_design();
 
         let design = null;

@@ -30,11 +30,17 @@ type Project {
   updatedAt: String!
 }
 
+type ProjectComponentSpec {
+  id: String!
+  productName: String!
+  dimension: String!
+}
+
 type ProjectComponent {
   id: String!
   projectId: String!
   name: String!
-  product: String!
+  componentSpec: ProjectComponentSpec!
   createdAt: String!
   updatedAt: String!
 }

@@ -65,7 +65,7 @@ const createProject = async (
       }
       const products = [];
       for (let comp of components) {
-        products.push(comp.product);
+        products.push(comp.componentSpec.productName);
       }
       await createProjectComponents(
         projectId,
