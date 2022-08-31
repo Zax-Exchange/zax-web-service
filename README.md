@@ -9,4 +9,4 @@ Project setup
 5. should see `db synced` and `server ready` log when server starts successfully
 
 # Notes
-- Node version 18.4.0
+- Node version > 16
