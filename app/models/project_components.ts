@@ -11,6 +11,7 @@ export interface project_componentsAttributes {
   id: string;
   projectId: string;
   name: string;
+  product: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -33,6 +34,7 @@ export class project_components
   id!: string;
   projectId!: string;
   name!: string;
+  product!: string;
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -102,6 +104,10 @@ export class project_components
           onUpdate: "CASCADE",
         },
         name: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        product: {
           type: DataTypes.STRING,
           allowNull: false,
         },

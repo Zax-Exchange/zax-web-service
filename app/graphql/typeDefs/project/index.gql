@@ -34,9 +34,7 @@ type ProjectComponent {
   id: String!
   projectId: String!
   name: String!
-  products: [String!]!
-  dimension: String!
-  postProcess: String!
+  product: String!
   createdAt: String!
   updatedAt: String!
 }

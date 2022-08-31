@@ -9,7 +9,6 @@ import createProjectComponents from "./createProjectComponents";
 import createOrUpdateProjectPermission from "./createOrUpdateProjectPermission";
 import ElasticProjectService from "../../../../elastic/project/ElasticProjectService";
 
-//TODO: findOrCreate product or materials when creating project
 const createProject = async (
   parent: any,
   { data }: { data: CreateProjectInput },
@@ -66,9 +65,7 @@ const createProject = async (
       }
       const products = [];
       for (let comp of components) {
-        for (let mat of comp.products) {
-          products.push(mat);
-        }
+        products.push(comp.product);
       }
       await createProjectComponents(
         projectId,

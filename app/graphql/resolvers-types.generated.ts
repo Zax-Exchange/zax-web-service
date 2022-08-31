@@ -112,10 +112,8 @@ export type CreateProjectBidInput = {
 };
 
 export type CreateProjectComponentInput = {
-  dimension: Scalars['String'];
   name: Scalars['String'];
-  postProcess: Scalars['String'];
-  products: Array<Scalars['String']>;
+  product: Scalars['String'];
 };
 
 export type CreateProjectInput = {
@@ -607,11 +605,9 @@ export type ProjectBidComponent = {
 export type ProjectComponent = {
   __typename?: 'ProjectComponent';
   createdAt: Scalars['String'];
-  dimension: Scalars['String'];
   id: Scalars['String'];
   name: Scalars['String'];
-  postProcess: Scalars['String'];
-  products: Array<Scalars['String']>;
+  product: Scalars['String'];
   projectId: Scalars['String'];
   updatedAt: Scalars['String'];
 };
