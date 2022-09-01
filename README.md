@@ -2,7 +2,7 @@
 
 Project setup
 
-1. clone zax-exchange-db
+1. clone zax-exchange-db (If you plan on changing seed data)
 2. clone this repo
 3. Make sure your node version is >= 16
 4. create `.env` file and put necessary credentials (Request joseph@zaxexchange.com for credentials)
