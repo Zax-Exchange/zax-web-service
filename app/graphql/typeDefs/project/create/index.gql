@@ -1,6 +1,32 @@
 input CreateProjectComponentSpecInput {
   productName: String!
   dimension: String!
+
+  # unique attribute for corrugate
+  flute: String
+  # unique attribute for molded fiber
+  manufacturingProcess: String
+
+  # common attributes for products that do not have inside/outside difference
+  thickness: String
+  color: String
+  material: String
+  materialSource: String
+  postProcess: String
+  finish: String
+
+  # common attributes for products that have inside/outside difference
+  outsideColor: String
+  outsideMaterial: String
+  outsideMaterialSource: String
+  outsidePostProcess: String
+  outsideFinish: String
+
+  insideColor: String
+  insideMaterial: String
+  insideMaterialSource: String
+  insidePostProcess: String
+  insideFinish: String
 }
 
 input CreateProjectComponentInput {

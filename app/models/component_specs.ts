@@ -9,11 +9,35 @@ export interface component_specsAttributes {
   id: string;
   projectComponentId: string;
   productName: string;
-  thickness?: string;
-  flute?: string;
-  manufacturingProcess?: string;
-  color?: string;
   dimension: string;
+
+  /* unique attribute for molded fiber */
+  manufacturingProcess?: string;
+
+  /* unique attribute for corrugate */
+  flute?: string;
+
+  /* common attributes for products that do not have inside/outside difference */
+  thickness?: string;
+  color?: string;
+  material?: string;
+  materialSource?: string;
+  postProcess?: string;
+  finish?: string;
+
+  /* common attributes for products that have inside/outside difference */
+  outsideColor?: string;
+  outsideMaterial?: string;
+  outsideMaterialSource?: string;
+  outsidePostProcess?: string;
+  outsideFinish?: string;
+
+  insideColor?: string;
+  insideMaterial?: string;
+  insideMaterialSource?: string;
+  insidePostProcess?: string;
+  insideFinish?: string;
+
   createdAt: Date;
   updatedAt: Date;
 }
@@ -25,6 +49,20 @@ export type component_specsOptionalAttributes =
   | "flute"
   | "manufacturingProcess"
   | "color"
+  | "material"
+  | "materialSource"
+  | "postProcess"
+  | "finish"
+  | "outsideColor"
+  | "outsideMaterial"
+  | "outsideMaterialSource"
+  | "outsidePostProcess"
+  | "outsideFinish"
+  | "insideColor"
+  | "insideMaterial"
+  | "insideMaterialSource"
+  | "insidePostProcess"
+  | "insideFinish"
   | "createdAt"
   | "updatedAt";
 export type component_specsCreationAttributes = Optional<
@@ -39,11 +77,30 @@ export class component_specs
   id!: string;
   projectComponentId!: string;
   productName!: string;
+  dimension!: string;
+
   thickness?: string;
   flute?: string;
   manufacturingProcess?: string;
+
   color?: string;
-  dimension!: string;
+  material?: string;
+  materialSource?: string;
+  postProcess?: string;
+  finish?: string;
+
+  outsideColor?: string;
+  outsideMaterial?: string;
+  outsideMaterialSource?: string;
+  outsidePostProcess?: string;
+  outsideFinish?: string;
+
+  insideColor?: string;
+  insideMaterial?: string;
+  insideMaterialSource?: string;
+  insidePostProcess?: string;
+  insideFinish?: string;
+
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -77,6 +134,10 @@ export class component_specs
           type: DataTypes.STRING(255),
           allowNull: false,
         },
+        dimension: {
+          type: DataTypes.STRING(255),
+          allowNull: false,
+        },
         thickness: {
           type: DataTypes.STRING(255),
           allowNull: true,
@@ -93,9 +154,61 @@ export class component_specs
           type: DataTypes.STRING(255),
           allowNull: true,
         },
-        dimension: {
+        material: {
           type: DataTypes.STRING(255),
-          allowNull: false,
+          allowNull: true,
+        },
+        materialSource: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        postProcess: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        finish: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        outsideColor: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        outsideMaterial: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        outsideMaterialSource: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        outsidePostProcess: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        outsideFinish: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        insideColor: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        insideMaterial: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        insideMaterialSource: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        insidePostProcess: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        insideFinish: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
         },
       },
       {
