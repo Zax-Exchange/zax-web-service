@@ -3,10 +3,12 @@
 Project setup
 
 1. clone zax-exchange-db
-2. create `.env` file and put necessary credentials
-3. run `npm install`
-4. run `npm run start`
-5. should see `db synced` and `server ready` log when server starts successfully
+2. clone this repo
+3. Make sure your node version is >= 16
+4. create `.env` file and put necessary credentials (Request joseph@zaxexchange.com for credentials)
+5. run `npm install`
+6. run `npm run start`
+7. should see `db synced` and `server ready` log when server starts successfully
 
 # Notes
-- Node version > 16
+- [Get started on server tech stack](https://github.com/Zax-Exchange/zax-exchange-server/wiki/Get-Started)
