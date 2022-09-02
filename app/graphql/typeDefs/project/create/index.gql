@@ -12,20 +12,20 @@ input CreateProjectComponentSpecInput {
   color: String
   material: String
   materialSource: String
-  postProcess: String
+  postProcess: [String!]
   finish: String
 
   # common attributes for products that have inside/outside difference
   outsideColor: String
   outsideMaterial: String
   outsideMaterialSource: String
-  outsidePostProcess: String
+  outsidePostProcess: [String!]
   outsideFinish: String
 
   insideColor: String
   insideMaterial: String
   insideMaterialSource: String
-  insidePostProcess: String
+  insidePostProcess: [String!]
   insideFinish: String
 }
 

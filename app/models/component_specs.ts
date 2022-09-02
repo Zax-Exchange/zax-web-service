@@ -22,20 +22,20 @@ export interface component_specsAttributes {
   color?: string;
   material?: string;
   materialSource?: string;
-  postProcess?: string;
+  postProcess?: string[];
   finish?: string;
 
   /* common attributes for products that have inside/outside difference */
   outsideColor?: string;
   outsideMaterial?: string;
   outsideMaterialSource?: string;
-  outsidePostProcess?: string;
+  outsidePostProcess?: string[];
   outsideFinish?: string;
 
   insideColor?: string;
   insideMaterial?: string;
   insideMaterialSource?: string;
-  insidePostProcess?: string;
+  insidePostProcess?: string[];
   insideFinish?: string;
 
   createdAt: Date;
@@ -86,19 +86,19 @@ export class component_specs
   color?: string;
   material?: string;
   materialSource?: string;
-  postProcess?: string;
+  postProcess?: string[];
   finish?: string;
 
   outsideColor?: string;
   outsideMaterial?: string;
   outsideMaterialSource?: string;
-  outsidePostProcess?: string;
+  outsidePostProcess?: string[];
   outsideFinish?: string;
 
   insideColor?: string;
   insideMaterial?: string;
   insideMaterialSource?: string;
-  insidePostProcess?: string;
+  insidePostProcess?: string[];
   insideFinish?: string;
 
   createdAt!: Date;
@@ -163,7 +163,7 @@ export class component_specs
           allowNull: true,
         },
         postProcess: {
-          type: DataTypes.STRING(255),
+          type: DataTypes.ARRAY(DataTypes.STRING),
           allowNull: true,
         },
         finish: {
@@ -183,7 +183,7 @@ export class component_specs
           allowNull: true,
         },
         outsidePostProcess: {
-          type: DataTypes.STRING(255),
+          type: DataTypes.ARRAY(DataTypes.STRING),
           allowNull: true,
         },
         outsideFinish: {
@@ -203,7 +203,7 @@ export class component_specs
           allowNull: true,
         },
         insidePostProcess: {
-          type: DataTypes.STRING(255),
+          type: DataTypes.ARRAY(DataTypes.STRING),
           allowNull: true,
         },
         insideFinish: {
