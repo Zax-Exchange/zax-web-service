@@ -42,6 +42,8 @@ class StreamService {
         companyId
       ).then((c) => c.name);
       const project = await ProjectApiUtils.getProject(data.projectId);
+      // If unable to fetch project, do nothing.
+      if (!project) return;
       const activityData = {
         actor: data.userId,
         verb: `bid for ${project.id}`,

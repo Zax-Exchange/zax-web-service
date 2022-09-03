@@ -93,11 +93,14 @@ class ProjectApiUtils {
    * @param id
    * @returns Project
    */
-  static async getProject(id: string): Promise<Project> {
+  static async getProject(id: string): Promise<Project | null> {
     const projects = sequelize.models.projects;
 
     try {
       return await projects.findByPk(id).then(async (p) => {
+        // If somehow db action fails, we return null
+        if (!p) return null;
+
         const components = await (p as projects)
           ?.getProject_components()
           .then((comps) =>

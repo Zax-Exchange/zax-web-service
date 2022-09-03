@@ -20,6 +20,8 @@ const searchCustomerProjects = async (
 
     for (let project of projectDocs) {
       const proj = await ProjectApiUtils.getProject(project._id);
+
+      if (!proj) continue;
       res.push({
         id: project._id,
         companyName: (project._source as any).companyName,
