@@ -16,21 +16,22 @@ const getCustomerProjects = async (
       userId
     );
 
-    const res: CustomerProject[] = [];
-    for (let permission of projectPermissions) {
-      const project = (await ProjectApiUtils.getPermissionedProject(
-        permission.projectId,
-        permission.permission as ProjectPermission
-      )) as CustomerProject;
-      const bids = await ProjectApiUtils.getProjectBidsByProjectId(
-        permission.projectId
-      );
-      res.push({
-        ...project,
-        bids,
-      });
-    }
-    return res;
+    return Promise.all(
+      projectPermissions.map(async (permission) => {
+        const [project, bids] = await Promise.all([
+          ProjectApiUtils.getPermissionedProject(
+            permission.projectId,
+            permission.permission as ProjectPermission
+          ),
+          ProjectApiUtils.getProjectBidsByProjectId(permission.projectId),
+        ]);
+
+        return {
+          ...project,
+          bids,
+        } as CustomerProject;
+      })
+    );
   } catch (e) {
     return Promise.reject(e);
   }

@@ -101,10 +101,14 @@ class ProjectApiUtils {
         // If somehow db action fails, we return null
         if (!p) return null;
 
-        const components = await (p as projects)
-          ?.getProject_components()
-          .then((comps) =>
-            comps.map(async (comp) => {
+        return Promise.all([
+          (p as projects).getProject_components(),
+          (p as projects).getProject_design(),
+          (p as projects).getCompany(),
+        ]).then(async (res) => {
+          const [componentInstances, designInstance, companyInstance] = res;
+          const components = await Promise.all(
+            componentInstances.map(async (comp) => {
               const componentSpec = await comp.getComponent_spec();
               return {
                 ...comp.get({ plain: true }),
@@ -112,22 +116,23 @@ class ProjectApiUtils {
               };
             })
           );
-        const designObject = await (p as projects)?.getProject_design();
 
-        let design = null;
+          let design = null;
 
-        if (designObject) {
-          design = {
-            fileName: designObject.get("fileName"),
-            url: `${process.env.AWS_CDN_URL}/${designObject.get("id")}`,
-          } as ProjectDesign;
-        }
+          if (designInstance) {
+            design = {
+              fileName: designInstance.fileName,
+              url: `${process.env.AWS_CDN_URL}/${designInstance.id}`,
+            } as ProjectDesign;
+          }
 
-        return {
-          ...p?.get({ plain: true }),
-          design,
-          components,
-        };
+          return {
+            ...p?.get({ plain: true }),
+            companyName: companyInstance.name,
+            design,
+            components,
+          };
+        });
       });
     } catch (e) {
       return Promise.reject(e);

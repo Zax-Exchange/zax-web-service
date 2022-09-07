@@ -33,7 +33,7 @@ type CustomerProject {
   status: String!
   permission: ProjectPermission!
   components: [ProjectComponent!]!
-  bids: [ProjectBid]
+  bids: [ProjectBid!]
   createdAt: String!
   updatedAt: String!
 }

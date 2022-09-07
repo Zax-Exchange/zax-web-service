@@ -24,17 +24,18 @@ const getCustomerProject = async (
       })
       .then((p) => p?.get({ plain: true }) as project_permissionsAttributes);
 
-    const project = (await ProjectApiUtils.getPermissionedProject(
-      permission.projectId,
-      permission.permission as ProjectPermission
-    )) as CustomerProject;
-    const bids = await ProjectApiUtils.getProjectBidsByProjectId(
-      permission.projectId
-    );
+    const [project, bids] = await Promise.all([
+      ProjectApiUtils.getPermissionedProject(
+        permission.projectId,
+        permission.permission as ProjectPermission
+      ),
+      ProjectApiUtils.getProjectBidsByProjectId(permission.projectId),
+    ]);
+
     return {
       ...project,
       bids,
-    };
+    } as CustomerProject;
   } catch (e) {
     return Promise.reject(e);
   }

@@ -212,7 +212,7 @@ export type CustomerOverview = {
 
 export type CustomerProject = {
   __typename?: 'CustomerProject';
-  bids?: Maybe<Array<Maybe<ProjectBid>>>;
+  bids?: Maybe<Array<ProjectBid>>;
   budget: Scalars['Int'];
   companyId: Scalars['String'];
   components: Array<ProjectComponent>;
