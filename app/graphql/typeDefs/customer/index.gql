@@ -25,6 +25,7 @@ type CustomerProject {
   id: String!
   userId: String!
   companyId: String!
+  companyName: String!
   name: String!
   deliveryDate: String!
   deliveryAddress: String!

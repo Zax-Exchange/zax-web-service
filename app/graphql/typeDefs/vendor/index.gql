@@ -31,7 +31,7 @@ type VendorDetail {
 type VendorProject {
   id: String!
   userId: String!
-  customerName: String!
+  companyName: String!
   companyId: String!
   name: String!
   deliveryDate: String!

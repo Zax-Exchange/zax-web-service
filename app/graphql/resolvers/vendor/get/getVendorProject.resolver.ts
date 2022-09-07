@@ -32,15 +32,11 @@ const getVendorProject = async (
     const project = (await ProjectApiUtils.getPermissionedProject(
       bid.projectId
     )) as VendorProject;
-    const company = await CompanyApiUtils.getCompanyWithCompanyId(
-      project.companyId
-    );
 
     return {
       ...project,
-      customerName: company.name,
       bidInfo: bid,
-    };
+    } as VendorProject;
   } catch (error) {
     return Promise.reject(error);
   }
