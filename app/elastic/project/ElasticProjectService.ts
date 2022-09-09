@@ -94,6 +94,11 @@ export default class ElasticProjectService {
       .search({
         index: "project",
         query: query,
+        highlight: {
+          fields: {
+            products: {},
+          },
+        },
       })
       .then((res) => {
         return res.hits.hits;

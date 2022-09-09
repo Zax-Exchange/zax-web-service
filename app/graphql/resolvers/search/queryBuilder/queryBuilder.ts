@@ -10,52 +10,31 @@ export default class QueryBuilder {
    * @returns
    */
   static buildProjectSearchQuery(data: SearchCustomerProjectInput) {
-    //filters include: deliveryCountries, deliveryCities, products, budget, leadTime
-    const { userInput, deliveryCountries, deliveryCities, budget, leadTime } =
-      data;
-    // : estypes.QueryDslQueryContainer
+    // TODO: finish filters implementation
+
+    const { userInput, budget, deliveryDate } = data;
 
     const filter = [];
-    if (deliveryCountries) {
-      filter.push({
-        match: {
-          deliveryCountry: deliveryCountries.join(" "),
-        },
-      });
-    }
-
-    if (deliveryCities) {
-      filter.push({
-        match: {
-          deliveryCity: deliveryCities.join(" "),
-        },
-      });
-    }
 
     if (budget) {
       filter.push({
         range: {
           budget: {
-            lte: budget,
+            gte: parseInt(budget, 10),
           },
         },
       });
     }
 
-    if (leadTime) {
-      const today = new Date();
-      const newDate = new Date(today.setMonth(today.getMonth() + leadTime))
-        .toISOString()
-        .slice(0, 10);
+    if (deliveryDate) {
       filter.push({
         range: {
           deliveryDate: {
-            lte: newDate,
+            lte: deliveryDate,
           },
         },
       });
     }
-
     const query = {
       bool: {
         must: [
@@ -84,34 +63,45 @@ export default class QueryBuilder {
    */
   static buildVendorCompanySearchQuery(data: SearchVendorCompanyInput) {
     //filters include: location, moq, leadtime, products
-    const { userInput, locations, moq, leadTime } = data;
+    const { userInput, countries, factoryLocations, moqMin, moqMax, leadTime } =
+      data;
 
     const filter = [];
-    if (locations) {
+
+    if (countries) {
       filter.push({
         match: {
-          locations: locations.join(" "),
+          country: countries.join(" "),
+        },
+      });
+    }
+    if (factoryLocations) {
+      filter.push({
+        match: {
+          locations: factoryLocations.join(" "),
         },
       });
     }
 
-    if (moq) {
-      filter.push({
-        range: {
-          moqMax: {
-            gte: moq,
-          },
-        },
-      });
+    if (moqMin) {
       filter.push({
         range: {
           moqMin: {
-            lte: moq,
+            gte: moqMin,
           },
         },
       });
     }
 
+    if (moqMax) {
+      filter.push({
+        range: {
+          moqMax: {
+            lte: moqMax,
+          },
+        },
+      });
+    }
     if (leadTime) {
       filter.push({
         range: {

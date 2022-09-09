@@ -1,9 +1,7 @@
 input SearchCustomerProjectInput {
   userInput: String!
-  deliveryCountries: [String]
-  deliveryCities: [String]
-  budget: Int
-  leadTime: Int
+  budget: String
+  deliveryDate: String
 }
 
 type Query {

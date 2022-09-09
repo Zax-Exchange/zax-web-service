@@ -828,17 +828,17 @@ export type QuerySearchVendorCompaniesArgs = {
 };
 
 export type SearchCustomerProjectInput = {
-  budget?: InputMaybe<Scalars['Int']>;
-  deliveryCities?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  deliveryCountries?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  leadTime?: InputMaybe<Scalars['Int']>;
+  budget?: InputMaybe<Scalars['String']>;
+  deliveryDate?: InputMaybe<Scalars['String']>;
   userInput: Scalars['String'];
 };
 
 export type SearchVendorCompanyInput = {
-  leadTime?: InputMaybe<Scalars['Int']>;
-  locations?: InputMaybe<Array<Scalars['String']>>;
-  moq?: InputMaybe<Scalars['Int']>;
+  countries?: InputMaybe<Array<Scalars['String']>>;
+  factoryLocations?: InputMaybe<Array<Scalars['String']>>;
+  leadTime?: InputMaybe<Scalars['String']>;
+  moqMax?: InputMaybe<Scalars['String']>;
+  moqMin?: InputMaybe<Scalars['String']>;
   userInput: Scalars['String'];
 };
 

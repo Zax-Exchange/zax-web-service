@@ -1,8 +1,10 @@
 input SearchVendorCompanyInput {
   userInput: String!
-  locations: [String!]
-  moq: Int
-  leadTime: Int
+  countries: [String!]
+  factoryLocations: [String!]
+  moqMin: String
+  moqMax: String
+  leadTime: String
 }
 
 type Query {

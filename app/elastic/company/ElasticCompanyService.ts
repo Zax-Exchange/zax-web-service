@@ -15,6 +15,7 @@ export default class ElasticCompanyService {
               id: { type: "text" },
               moqMin: { type: "integer" },
               moqMax: { type: "integer" },
+              country: { type: "text" },
               locations: { type: "text" },
               leadTime: { type: "integer" },
               products: { type: "text" },
@@ -23,7 +24,7 @@ export default class ElasticCompanyService {
         });
       }
 
-      const { id, moq, locations, leadTime, products } = data;
+      const { id, moq, locations, leadTime, products, country } = data;
       const moqMin = moq.split("-")[0];
       const moqMax = moq.split("-")[1];
       await elasticClient.index({
@@ -32,6 +33,7 @@ export default class ElasticCompanyService {
         document: {
           moqMin,
           moqMax,
+          country,
           locations,
           leadTime,
           products,
