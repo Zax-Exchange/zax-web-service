@@ -12,15 +12,15 @@ export default class QueryBuilder {
   static buildProjectSearchQuery(data: SearchCustomerProjectInput) {
     // TODO: finish filters implementation
 
-    const { userInput, budget, deliveryDate } = data;
+    const { userInput, targetPrice, deliveryDate } = data;
 
     const filter = [];
 
-    if (budget) {
+    if (targetPrice) {
       filter.push({
         range: {
-          budget: {
-            gte: parseInt(budget, 10),
+          targetPrice: {
+            gte: parseInt(targetPrice, 10),
           },
         },
       });

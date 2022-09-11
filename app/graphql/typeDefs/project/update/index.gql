@@ -1,10 +1,11 @@
 input UpdateProjectInput {
   id: String!
-  name: String!
-  deliveryDate: String!
-  deliveryAddress: String!
-  budget: Int!
-  components: [UpdateProjectComponentInput!]!
+  name: String
+  deliveryDate: String
+  deliveryAddress: String
+  targetPrice: Int
+  orderQuantities: [Int!]
+  components: [UpdateProjectComponentInput!]
 }
 
 input UpdateProjectComponentInput {

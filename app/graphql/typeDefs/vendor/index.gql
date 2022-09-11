@@ -36,7 +36,8 @@ type VendorProject {
   name: String!
   deliveryDate: String!
   deliveryAddress: String!
-  budget: Int!
+  targetPrice: Int!
+  orderQuantities: [Int!]!
   design: ProjectDesign
   status: String!
   permission: ProjectPermission!

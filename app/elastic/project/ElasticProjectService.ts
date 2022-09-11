@@ -14,7 +14,7 @@ export default class ElasticProjectService {
       projectId,
       deliveryAddress,
       deliveryDate,
-      budget,
+      targetPrice,
       products,
     } = data;
 
@@ -34,7 +34,7 @@ export default class ElasticProjectService {
               companyName: { type: "text" },
               deliveryDate: { type: "date" },
               deliveryAddress: { type: "text" },
-              budget: { type: "integer" },
+              targetPrice: { type: "integer" },
               products: { type: "text" },
               deleted: { type: "boolean" },
             },
@@ -48,7 +48,7 @@ export default class ElasticProjectService {
           companyName: company.name,
           deliveryAddress,
           deliveryDate,
-          budget,
+          targetPrice,
           products,
           deleted: false,
         },
@@ -62,7 +62,8 @@ export default class ElasticProjectService {
   static async updateProjectDocument(
     data: projectTypes.UpdateProjectDocumentInput
   ) {
-    const { projectId, deliveryAddress, deliveryDate, budget, products } = data;
+    const { projectId, deliveryAddress, deliveryDate, targetPrice, products } =
+      data;
     await elasticClient
       .update({
         index: "project",
@@ -70,7 +71,7 @@ export default class ElasticProjectService {
         doc: {
           deliveryAddress,
           deliveryDate,
-          budget,
+          targetPrice,
           products,
         },
       })

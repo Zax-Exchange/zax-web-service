@@ -21,7 +21,8 @@ export interface projectsAttributes {
   name: string;
   deliveryDate: string;
   deliveryAddress: string;
-  budget: number;
+  targetPrice: number;
+  orderQuantities: number[];
   status: ProjectStatus;
   comments?: string;
   updatedAt: Date;
@@ -46,7 +47,8 @@ export class projects
   name!: string;
   deliveryDate!: string;
   deliveryAddress!: string;
-  budget!: number;
+  targetPrice!: number;
+  orderQuantities!: number[];
   status!: ProjectStatus;
   comments?: string;
   createdAt!: Date;
@@ -174,6 +176,22 @@ export class projects
           allowNull: false,
           primaryKey: true,
         },
+        userId: {
+          type: DataTypes.UUID,
+          allowNull: false,
+          references: {
+            model: "users",
+            key: "id",
+          },
+        },
+        companyId: {
+          type: DataTypes.UUID,
+          allowNull: false,
+          references: {
+            model: "companies",
+            key: "id",
+          },
+        },
         name: {
           type: DataTypes.STRING(255),
           allowNull: false,
@@ -186,25 +204,17 @@ export class projects
           type: DataTypes.STRING,
           allowNull: false,
         },
-        budget: {
+        targetPrice: {
           type: DataTypes.INTEGER,
           allowNull: false,
         },
-        userId: {
-          type: DataTypes.UUID,
+        orderQuantities: {
+          type: DataTypes.ARRAY(DataTypes.INTEGER),
           allowNull: false,
         },
         status: {
           type: DataTypes.STRING(20),
           allowNull: false,
-        },
-        companyId: {
-          type: DataTypes.UUID,
-          allowNull: false,
-          references: {
-            model: "companies",
-            key: "id",
-          },
         },
         comments: {
           type: DataTypes.STRING,

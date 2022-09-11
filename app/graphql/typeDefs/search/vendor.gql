@@ -1,6 +1,7 @@
 input SearchCustomerProjectInput {
   userInput: String!
-  budget: String
+  targetPrice: String
+  orderQuantities: [String!]
   deliveryDate: String
 }
 

@@ -5,7 +5,8 @@ type ProjectOverview {
   name: String!
   deliveryDate: String!
   deliveryAddress: String!
-  budget: Int!
+  targetPrice: Int!
+  orderQuantities: [Int!]!
   products: [String!]!
   createdAt: String!
 }
@@ -22,7 +23,8 @@ type Project {
   name: String!
   deliveryDate: String!
   deliveryAddress: String!
-  budget: Int!
+  targetPrice: Int!
+  orderQuantities: [Int!]!
   design: ProjectDesign
   status: String!
   components: [ProjectComponent!]!

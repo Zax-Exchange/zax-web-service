@@ -23,7 +23,8 @@ const createProject = async (
     designId,
     deliveryDate,
     deliveryAddress,
-    budget,
+    targetPrice,
+    orderQuantities,
     components,
   } = data;
   try {
@@ -42,7 +43,8 @@ const createProject = async (
           name,
           deliveryDate,
           deliveryAddress,
-          budget,
+          targetPrice,
+          orderQuantities,
           companyId,
           status: ProjectStatus.Open,
         },
@@ -82,7 +84,8 @@ const createProject = async (
         projectId,
         deliveryDate,
         deliveryAddress,
-        budget,
+        targetPrice,
+        orderQuantities,
         products,
       });
     });

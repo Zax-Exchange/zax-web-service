@@ -29,7 +29,8 @@ const searchCustomerProjects = async (
         name: proj.name,
         deliveryDate: proj.deliveryDate,
         deliveryAddress: proj.deliveryAddress,
-        budget: proj.budget,
+        targetPrice: proj.targetPrice,
+        orderQuantities: proj.orderQuantities,
         products: (project._source as any).products,
         createdAt: proj.createdAt,
       });

@@ -40,7 +40,8 @@ input CreateProjectInput {
   designId: String
   deliveryDate: String!
   deliveryAddress: String!
-  budget: Int!
+  targetPrice: Int!
+  orderQuantities: [Int!]!
   comments: String!
   components: [CreateProjectComponentInput!]!
 }
