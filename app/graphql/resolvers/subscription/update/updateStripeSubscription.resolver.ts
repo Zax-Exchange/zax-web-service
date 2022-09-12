@@ -1,6 +1,7 @@
 import stripeService from "../../../../stripe/StripeService";
 import { UpdateStripeSubscriptionInput } from "../../../resolvers-types.generated";
 
+// TODO: finish imeplementation
 const updateStripeSubscription = async (
   parent: any,
   { data }: { data: UpdateStripeSubscriptionInput },

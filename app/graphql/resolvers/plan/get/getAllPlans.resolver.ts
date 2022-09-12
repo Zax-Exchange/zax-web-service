@@ -1,5 +1,5 @@
-import sequelize from "../../../postgres/dbconnection";
-import { GetAllPlansInput } from "../../resolvers-types.generated";
+import sequelize from "../../../../postgres/dbconnection";
+import { GetAllPlansInput } from "../../../resolvers-types.generated";
 
 const getAllPlans = async (
   parent: any,

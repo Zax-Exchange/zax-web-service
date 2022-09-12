@@ -1,5 +1,5 @@
-import sequelize from "../../../postgres/dbconnection";
-import { GetPlanInput, Plan } from "../../resolvers-types.generated";
+import sequelize from "../../../../postgres/dbconnection";
+import { GetPlanInput, Plan } from "../../../resolvers-types.generated";
 
 /** Gets a specific plan based on planId */
 const getPlan = async (

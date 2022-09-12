@@ -21,14 +21,14 @@ const createStripeCustomer = async (
           email,
         },
       })
-      .then(async ([foundCustomer, created]) => {
+      .then(async ([customerInstance, created]) => {
         if (created) {
           const customer = await stripeService.createCustomer(email);
-          foundCustomer.set("customerId", customer.id);
-          foundCustomer.save();
+          customerInstance.set("customerId", customer.id);
+          customerInstance.save();
           return customer.id;
         } else {
-          return foundCustomer.get("customerId") as string;
+          return customerInstance.get("customerId") as string;
         }
       });
   } catch (error) {
