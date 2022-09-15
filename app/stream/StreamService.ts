@@ -11,6 +11,14 @@ import ProjectApiUtils from "../utils/projectUtils";
 import UserApiUtils from "../utils/userUtils";
 import { CreateProjectBidInput } from "../graphql/resolvers-types.generated";
 
+enum NotificationType {
+  NEW_BID = "NEW_BID",
+  BID_DATA_UPDATE = "BID_DATA_UPDATE",
+  PROJECT_DATA_UPDATE = "PROJECT_DATA_UPDATE",
+  BID_STATUS_UPDATE = "BID_STATUS_UPDATE",
+  PROJECT_STATUS_UPDATE = "PROJECT_STATUS_UPDATE",
+}
+
 class StreamService {
   client?: StreamClient<DefaultGenerics>;
 
@@ -37,6 +45,7 @@ class StreamService {
     if (!this.client) return;
     try {
       const users = await ProjectApiUtils.getProjectUsers(data.projectId);
+      // TODO: refactor
       const companyId = await UserApiUtils.getUserCompanyId(data.userId);
       const companyName = await CompanyApiUtils.getCompanyWithCompanyId(
         companyId
@@ -44,17 +53,23 @@ class StreamService {
       const project = await ProjectApiUtils.getProject(data.projectId);
       // If unable to fetch project, do nothing.
       if (!project) return;
+
+      // getstream uses verb to group notifications
       const activityData = {
         actor: data.userId,
-        verb: `bid for ${project.id}`,
+        verb: StreamService.getNotificationVerb(
+          NotificationType.NEW_BID,
+          project.id
+        ),
         foreign_id: project.id + companyId,
+        notificationType: NotificationType.NEW_BID,
         object: {
           projectId: project.id,
           projectName: project.name,
           companyName,
         },
-        time: new Date(),
-      } as any;
+        time: new Date().toISOString(),
+      };
 
       for (let user of users) {
         const feed = this.client.feed("notification", user.userId);
@@ -63,6 +78,11 @@ class StreamService {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  // returns a formatted verb for notification, id could be project/bid id
+  static getNotificationVerb(type: NotificationType, id: string) {
+    return `${type}:${id}`;
   }
 }
 
