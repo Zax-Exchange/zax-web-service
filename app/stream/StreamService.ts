@@ -9,7 +9,10 @@ import sequelize from "../postgres/dbconnection";
 import CompanyApiUtils from "../utils/companyUtils";
 import ProjectApiUtils from "../utils/projectUtils";
 import UserApiUtils from "../utils/userUtils";
-import { CreateProjectBidInput } from "../graphql/resolvers-types.generated";
+import {
+  CreateProjectBidInput,
+  UpdateProjectInput,
+} from "../graphql/resolvers-types.generated";
 
 enum NotificationType {
   NEW_BID = "NEW_BID",
@@ -80,6 +83,40 @@ class StreamService {
     }
   }
 
+  async broadcastProjectUpdate(projectId: string) {
+    if (!this.client) return;
+    try {
+      const [users, project] = await Promise.all([
+        ProjectApiUtils.getBiddingVendorUserIdsForProject(projectId),
+        ProjectApiUtils.getProject(projectId),
+      ]);
+      // If unable to fetch project, do nothing.
+      if (!project) return;
+
+      // getstream uses verb to group notifications
+      const activityData = {
+        actor: project.companyId,
+        verb: StreamService.getNotificationVerb(
+          NotificationType.PROJECT_DATA_UPDATE,
+          project.id
+        ),
+        foreign_id: project.id,
+        notificationType: NotificationType.PROJECT_DATA_UPDATE,
+        object: {
+          projectId: project.id,
+          projectName: project.name,
+        },
+        time: new Date().toISOString(),
+      };
+
+      for (let id of users) {
+        const feed = this.client.feed("notification", id);
+        feed.addActivity(activityData);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
   // returns a formatted verb for notification, id could be project/bid id
   static getNotificationVerb(type: NotificationType, id: string) {
     return `${type}:${id}`;

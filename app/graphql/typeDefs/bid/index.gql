@@ -16,7 +16,6 @@ type ProjectBid {
   companyId: String!
   projectId: String!
   comments: String!
-  project: Project!
   components: [ProjectBidComponent!]!
   status: BidStatus!
   createdAt: String!
@@ -28,8 +27,6 @@ type ProjectBidComponent {
   projectBidId: String!
   projectComponentId: String!
   quantityPrices: [QuantityPrice!]!
-  createdAt: String!
-  updatedAt: String!
 }
 
 type QuantityPrice {
@@ -41,4 +38,6 @@ enum BidStatus {
   OPEN
   ACCEPTED
   REJECTED
+  OUTDATED
+  EXPIRED
 }

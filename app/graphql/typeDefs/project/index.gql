@@ -68,8 +68,6 @@ type ProjectComponent {
   projectId: String!
   name: String!
   componentSpec: ProjectComponentSpec!
-  createdAt: String!
-  updatedAt: String!
 }
 
 enum ProjectPermission {
@@ -82,4 +80,6 @@ enum ProjectStatus {
   OPEN
   IN_PROGRESS
   CLOSED
+  COMPLETED
+  OVERDUE
 }

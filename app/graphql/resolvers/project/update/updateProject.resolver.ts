@@ -1,5 +1,9 @@
 import sequelize from "../../../../postgres/dbconnection";
-import { UpdateProjectInput } from "../../../resolvers-types.generated";
+import streamService from "../../../../stream/StreamService";
+import {
+  BidStatus,
+  UpdateProjectInput,
+} from "../../../resolvers-types.generated";
 
 // TODO: broadcast update project even to vendors
 const updateProject = async (
@@ -9,32 +13,44 @@ const updateProject = async (
   info: any
 ) => {
   const {
-    id,
+    projectId,
     name,
     deliveryAddress,
     deliveryDate,
     targetPrice,
     orderQuantities,
-    components,
   } = data;
   try {
     await sequelize.transaction(async (transaction) => {
-      await sequelize.models.projects.update(
-        {
-          name,
-          deliveryAddress,
-          deliveryDate,
-          targetPrice,
-          orderQuantities,
-        },
-        {
-          where: {
-            id,
+      await Promise.all([
+        sequelize.models.projects.update(
+          {
+            name,
+            deliveryAddress,
+            deliveryDate,
+            targetPrice,
+            orderQuantities,
           },
-          transaction,
-        }
-      );
+          {
+            where: {
+              id: projectId,
+            },
+            transaction,
+          }
+        ),
+        sequelize.models.project_bids.update(
+          {
+            status: BidStatus.Outdated,
+          },
+          {
+            where: {
+              projectId,
+            },
+          }
+        ),
+      ]);
     });
+    streamService.broadcastProjectUpdate(data.projectId);
     return true;
   } catch (e) {
     console.error(e);

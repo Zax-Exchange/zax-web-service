@@ -21,6 +21,17 @@ import {
 } from "../graphql/resolvers-types.generated";
 
 class ProjectApiUtils {
+  // Returns a list of vendor user ids that have bids for the project
+  static async getBiddingVendorUserIdsForProject(projectId: string) {
+    return await sequelize.models.project_bid_permissions
+      .findAll({
+        where: {
+          projectId,
+        },
+      })
+      .then((perms) => perms.map((perm) => perm.get("userId") as string));
+  }
+
   static async getBidPermissions(
     userId: string
   ): Promise<project_bid_permissionsAttributes[]> {
