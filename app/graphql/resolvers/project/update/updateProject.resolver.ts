@@ -46,6 +46,7 @@ const updateProject = async (
             where: {
               projectId,
             },
+            transaction,
           }
         ),
       ]);
