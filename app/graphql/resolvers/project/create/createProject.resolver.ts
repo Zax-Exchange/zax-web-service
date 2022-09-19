@@ -19,13 +19,16 @@ const createProject = async (
   const users = sequelize.models.users;
   const {
     userId,
-    name,
     designId,
+    name,
+    category,
+    totalWeight,
     deliveryDate,
     deliveryAddress,
     targetPrice,
     orderQuantities,
     components,
+    comments,
   } = data;
   try {
     await sequelize.transaction(async (transaction) => {
@@ -43,9 +46,12 @@ const createProject = async (
           name,
           deliveryDate,
           deliveryAddress,
+          category,
+          totalWeight,
           targetPrice,
           orderQuantities,
           companyId,
+          comments,
           status: ProjectStatus.Open,
         },
         { transaction }
@@ -82,6 +88,7 @@ const createProject = async (
       ElasticProjectService.createProjectDocument({
         userId,
         projectId,
+        category,
         deliveryDate,
         deliveryAddress,
         targetPrice,

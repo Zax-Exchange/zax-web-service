@@ -1,6 +1,7 @@
 export interface CreateProjectDocumentInput {
   userId: string;
   projectId: string;
+  category: string;
   deliveryAddress: string;
   deliveryDate: string;
   targetPrice: number;

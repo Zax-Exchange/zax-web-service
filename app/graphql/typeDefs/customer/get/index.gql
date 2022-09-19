@@ -14,5 +14,7 @@ input GetCustomerProjectInput {
 type Query {
   getCustomerDetail(data: GetCustomerDetailInput!): CustomerDetail!
   getCustomerProject(data: GetCustomerProjectInput!): CustomerProject!
-  getCustomerProjects(data: GetCustomerProjectsInput!): [CustomerProject!]!
+  getCustomerProjects(
+    data: GetCustomerProjectsInput!
+  ): [CustomerProjectOverview!]!
 }

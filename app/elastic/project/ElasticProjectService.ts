@@ -12,6 +12,7 @@ export default class ElasticProjectService {
     const {
       userId,
       projectId,
+      category,
       deliveryAddress,
       deliveryDate,
       targetPrice,
@@ -19,7 +20,7 @@ export default class ElasticProjectService {
     } = data;
 
     try {
-      // await elasticClient.indices.delete({ index: "project" });
+      await elasticClient.indices.delete({ index: "project" });
       const exist = await elasticClient.indices.exists({ index: "project" });
 
       const companyId = await UserApiUtils.getUserCompanyId(userId);
@@ -32,6 +33,7 @@ export default class ElasticProjectService {
             properties: {
               id: { type: "text" },
               companyName: { type: "text" },
+              category: { type: "text" },
               deliveryDate: { type: "date" },
               deliveryAddress: { type: "text" },
               targetPrice: { type: "integer" },
@@ -46,6 +48,7 @@ export default class ElasticProjectService {
         id: projectId,
         document: {
           companyName: company.name,
+          category,
           deliveryAddress,
           deliveryDate,
           targetPrice,

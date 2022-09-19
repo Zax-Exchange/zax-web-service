@@ -19,6 +19,8 @@ export interface projectsAttributes {
   userId: string;
   companyId: string;
   name: string;
+  category: string;
+  totalWeight: string;
   deliveryDate: string;
   deliveryAddress: string;
   targetPrice: number;
@@ -45,6 +47,8 @@ export class projects
   userId!: string;
   companyId!: string;
   name!: string;
+  category!: string;
+  totalWeight!: string;
   deliveryDate!: string;
   deliveryAddress!: string;
   targetPrice!: number;
@@ -193,6 +197,14 @@ export class projects
           },
         },
         name: {
+          type: DataTypes.STRING(255),
+          allowNull: false,
+        },
+        category: {
+          type: DataTypes.STRING(255),
+          allowNull: false,
+        },
+        totalWeight: {
           type: DataTypes.STRING(255),
           allowNull: false,
         },

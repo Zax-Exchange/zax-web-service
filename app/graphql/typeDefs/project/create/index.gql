@@ -1,7 +1,7 @@
 input CreateProjectComponentSpecInput {
   productName: String!
   dimension: String!
-
+  boxStyle: String
   # unique attribute for corrugate
   flute: String
   # unique attribute for molded fiber
@@ -37,6 +37,8 @@ input CreateProjectComponentInput {
 input CreateProjectInput {
   userId: String!
   name: String!
+  category: String!
+  totalWeight: String!
   designId: String
   deliveryDate: String!
   deliveryAddress: String!

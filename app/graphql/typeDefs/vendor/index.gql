@@ -34,6 +34,8 @@ type VendorProject {
   companyName: String!
   companyId: String!
   name: String!
+  category: String!
+  totalWeight: String!
   deliveryDate: String!
   deliveryAddress: String!
   targetPrice: Int!

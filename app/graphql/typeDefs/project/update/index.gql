@@ -1,6 +1,8 @@
 input UpdateProjectInput {
   projectId: String!
   name: String!
+  category: String!
+  totalWeight: String!
   deliveryDate: String!
   deliveryAddress: String!
   targetPrice: Int!
@@ -16,7 +18,7 @@ input UpdateProjectComponentInput {
 input UpdateProjectComponentSpecInput {
   productName: String!
   dimension: String!
-
+  boxStyle: String
   flute: String
   manufacturingProcess: String
 

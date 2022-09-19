@@ -1,8 +1,9 @@
 type ProjectOverview {
   id: String!
-  companyName: String!
   companyId: String!
   name: String!
+  companyName: String!
+  category: String!
   deliveryDate: String!
   deliveryAddress: String!
   targetPrice: Int!
@@ -21,6 +22,8 @@ type Project {
   companyId: String!
   companyName: String!
   name: String!
+  category: String!
+  totalWeight: String!
   deliveryDate: String!
   deliveryAddress: String!
   targetPrice: Int!
@@ -28,6 +31,7 @@ type Project {
   design: ProjectDesign
   status: String!
   components: [ProjectComponent!]!
+  comments: String!
   createdAt: String!
   updatedAt: String!
 }
@@ -36,6 +40,7 @@ type ProjectComponentSpec {
   id: String!
   productName: String!
   dimension: String!
+  boxStyle: String
   # unique attribute for corrugate
   flute: String
   # unique attribute for molded fiber

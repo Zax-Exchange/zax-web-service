@@ -27,6 +27,7 @@ const searchCustomerProjects = async (
         companyName: (project._source as any).companyName,
         companyId: proj.companyId,
         name: proj.name,
+        category: proj.category,
         deliveryDate: proj.deliveryDate,
         deliveryAddress: proj.deliveryAddress,
         targetPrice: proj.targetPrice,

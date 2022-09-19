@@ -10,7 +10,7 @@ export interface component_specsAttributes {
   projectComponentId: string;
   productName: string;
   dimension: string;
-
+  boxStyle?: string;
   /* unique attribute for molded fiber */
   manufacturingProcess?: string;
 
@@ -45,6 +45,7 @@ export interface component_specsAttributes {
 export type component_specsPk = "id";
 export type component_specsId = component_specs[component_specsPk];
 export type component_specsOptionalAttributes =
+  | "boxStyle"
   | "thickness"
   | "flute"
   | "manufacturingProcess"
@@ -79,6 +80,7 @@ export class component_specs
   productName!: string;
   dimension!: string;
 
+  boxStyle?: string;
   thickness?: string;
   flute?: string;
   manufacturingProcess?: string;
@@ -137,6 +139,10 @@ export class component_specs
         dimension: {
           type: DataTypes.STRING(255),
           allowNull: false,
+        },
+        boxStyle: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
         },
         thickness: {
           type: DataTypes.STRING(255),

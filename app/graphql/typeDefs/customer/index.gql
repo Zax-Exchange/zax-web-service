@@ -7,6 +7,22 @@ type CustomerOverview {
   isVerified: Boolean!
 }
 
+type CustomerProjectOverview {
+  id: String!
+  userId: String!
+  name: String!
+  category: String!
+  totalWeight: String!
+  deliveryDate: String!
+  deliveryAddress: String!
+  targetPrice: Int!
+  orderQuantities: [Int!]!
+  status: String!
+  permission: ProjectPermission!
+  createdAt: String!
+  updatedAt: String!
+}
+
 # to be augmented later when customer have more attributes
 type CustomerDetail {
   id: String!
@@ -27,6 +43,8 @@ type CustomerProject {
   companyId: String!
   companyName: String!
   name: String!
+  category: String!
+  totalWeight: String!
   deliveryDate: String!
   deliveryAddress: String!
   targetPrice: Int!
@@ -38,14 +56,4 @@ type CustomerProject {
   bids: [ProjectBid!]
   createdAt: String!
   updatedAt: String!
-}
-
-type EditableCustomerDetail {
-  name: String!
-  contactEmail: String!
-  phone: String!
-  logo: String
-  country: String!
-  companyUrl: String
-  fax: String
 }

@@ -15,6 +15,8 @@ const updateProject = async (
   const {
     projectId,
     name,
+    category,
+    totalWeight,
     deliveryAddress,
     deliveryDate,
     targetPrice,
@@ -26,6 +28,8 @@ const updateProject = async (
         sequelize.models.projects.update(
           {
             name,
+            category,
+            totalWeight,
             deliveryAddress,
             deliveryDate,
             targetPrice,
