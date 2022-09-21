@@ -28,6 +28,25 @@ type VendorDetail {
   leadTime: Int!
 }
 
+type VendorProjectOverview {
+  id: String!
+  userId: String!
+  bidId: String!
+  bidStatus: BidStatus!
+  name: String!
+  companyName: String!
+  category: String!
+  totalWeight: String!
+  deliveryDate: String!
+  deliveryAddress: String!
+  targetPrice: Int!
+  orderQuantities: [Int!]!
+  status: String!
+  permission: ProjectPermission!
+  createdAt: String!
+  updatedAt: String!
+}
+
 type VendorProject {
   id: String!
   userId: String!

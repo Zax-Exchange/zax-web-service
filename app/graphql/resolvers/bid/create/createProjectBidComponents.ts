@@ -18,13 +18,14 @@ const createProjectBidComponents = async (
   const project_bid_components = sequelize.models.project_bid_components;
   try {
     for (let component of components) {
-      const { projectComponentId, quantityPrices } = component;
+      const { projectComponentId, quantityPrices, samplingFee } = component;
       await project_bid_components.create(
         {
           id: uuidv4(),
           projectBidId,
           projectComponentId,
           quantityPrices,
+          samplingFee,
         },
         { transaction }
       );

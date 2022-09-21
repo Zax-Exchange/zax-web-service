@@ -7,6 +7,7 @@ import { project_permissionsAttributes } from "../models/project_permissions";
 import { projects, projectsAttributes } from "../models/projects";
 import {
   CustomerProject,
+  CustomerProjectOverview,
   PermissionedProjectBid,
   Project,
   ProjectBid,
@@ -18,6 +19,7 @@ import {
   ProjectStatus,
   UserProjectPermission,
   VendorProject,
+  VendorProjectOverview,
 } from "../graphql/resolvers-types.generated";
 
 class ProjectApiUtils {
@@ -96,6 +98,22 @@ class ProjectApiUtils {
       return Promise.resolve(components);
     } catch (e) {
       return Promise.reject(e);
+    }
+  }
+
+  /**
+   * Returns project attributes without nested fields
+   * @param projectId
+   */
+  static async getProjectInstance(
+    projectId: string
+  ): Promise<projectsAttributes> {
+    try {
+      return await sequelize.models.projects
+        .findByPk(projectId)
+        .then((p) => p?.get({ plain: true }) as projectsAttributes);
+    } catch (error) {
+      return Promise.reject(error);
     }
   }
 

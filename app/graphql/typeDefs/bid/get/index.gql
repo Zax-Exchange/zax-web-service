@@ -6,6 +6,7 @@ input GetProjectBidInput {
   companyId: String!
   projectId: String!
 }
+
 type Query {
   getProjectBidUsers(data: GetProjectBidUsersInput!): [UserProjectPermission!]!
   getProjectBid(data: GetProjectBidInput!): ProjectBid

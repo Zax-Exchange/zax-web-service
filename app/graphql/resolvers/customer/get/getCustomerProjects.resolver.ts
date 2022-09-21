@@ -5,7 +5,6 @@ import {
   CustomerProject,
   CustomerProjectOverview,
   GetCustomerProjectsInput,
-  ProjectOverview,
   ProjectPermission,
 } from "../../../resolvers-types.generated";
 

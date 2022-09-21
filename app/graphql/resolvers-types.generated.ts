@@ -104,6 +104,7 @@ export type CreateCustomerInput = {
 export type CreateProjectBidComponentInput = {
   projectComponentId: Scalars['String'];
   quantityPrices: Array<QuantityPriceInput>;
+  samplingFee: Scalars['Int'];
 };
 
 export type CreateProjectBidInput = {
@@ -651,6 +652,7 @@ export type ProjectBidComponent = {
   projectBidId: Scalars['String'];
   projectComponentId: Scalars['String'];
   quantityPrices: Array<QuantityPrice>;
+  samplingFee: Scalars['Int'];
 };
 
 export type ProjectComponent = {
@@ -752,7 +754,7 @@ export type Query = {
   getUser: User;
   getVendorDetail: VendorDetail;
   getVendorProject: VendorProject;
-  getVendorProjects: Array<VendorProject>;
+  getVendorProjects: Array<VendorProjectOverview>;
   login: LoggedInUser;
   searchCustomerProjects: Array<ProjectOverview>;
   searchVendorCompanies: Array<VendorOverview>;
@@ -1087,6 +1089,26 @@ export type VendorProject = {
   deliveryAddress: Scalars['String'];
   deliveryDate: Scalars['String'];
   design?: Maybe<ProjectDesign>;
+  id: Scalars['String'];
+  name: Scalars['String'];
+  orderQuantities: Array<Scalars['Int']>;
+  permission: ProjectPermission;
+  status: Scalars['String'];
+  targetPrice: Scalars['Int'];
+  totalWeight: Scalars['String'];
+  updatedAt: Scalars['String'];
+  userId: Scalars['String'];
+};
+
+export type VendorProjectOverview = {
+  __typename?: 'VendorProjectOverview';
+  bidId: Scalars['String'];
+  bidStatus: BidStatus;
+  category: Scalars['String'];
+  companyName: Scalars['String'];
+  createdAt: Scalars['String'];
+  deliveryAddress: Scalars['String'];
+  deliveryDate: Scalars['String'];
   id: Scalars['String'];
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;

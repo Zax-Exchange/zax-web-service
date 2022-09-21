@@ -3,7 +3,7 @@ import ProjectApiUtils from "../../../../utils/projectUtils";
 import {
   GetVendorProjectsInput,
   ProjectPermission,
-  VendorProject,
+  VendorProjectOverview,
 } from "../../../resolvers-types.generated";
 
 const getVendorProjects = async (
@@ -15,21 +15,27 @@ const getVendorProjects = async (
   try {
     const permissions = await ProjectApiUtils.getBidPermissions(userId);
 
-    const res: VendorProject[] = [];
+    const res: VendorProjectOverview[] = [];
     for (let permission of permissions) {
-      const bid = await ProjectApiUtils.getPermissionedProjectBid(
-        permission.projectBidId,
-        permission.permission as ProjectPermission
+      const [bid, project] = await Promise.all([
+        ProjectApiUtils.getPermissionedProjectBid(
+          permission.projectBidId,
+          permission.permission as ProjectPermission
+        ),
+        ProjectApiUtils.getProjectInstance(permission.projectId),
+      ]);
+      const company = await CompanyApiUtils.getCompanyWithCompanyId(
+        project.companyId
       );
-      const project = (await ProjectApiUtils.getPermissionedProject(
-        bid.projectId
-      )) as VendorProject;
 
       res.push({
         ...project,
-        // overwriting permission on project, else it will always be VIEWER
+        companyName: company.name,
+        bidStatus: bid.status,
+        bidId: bid.id,
         permission: permission.permission,
-        bidInfo: bid,
+        createdAt: project.createdAt as any,
+        updatedAt: project.updatedAt as any,
       });
     }
 
