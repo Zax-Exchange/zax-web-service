@@ -1,6 +1,7 @@
+import { UserInputError } from "apollo-server-core";
 import { v4 as uuidv4 } from "uuid";
 import { projects, projectsAttributes } from "../../../../models/projects";
-import { project_changelog } from "../../../../models/project_changelog";
+import { project_changelogs } from "../../../../models/project_changelogs";
 import sequelize from "../../../../postgres/dbconnection";
 import streamService from "../../../../stream/StreamService";
 import {
@@ -8,13 +9,11 @@ import {
   UpdateProjectInput,
 } from "../../../resolvers-types.generated";
 
-const determineProjectDiffs = (originalEntity: projects, projectUpdateData: UpdateProjectInput ) => {
+const getProjectDiffs = (originalEntity: projects, projectUpdateData: UpdateProjectInput ) => {
   console.debug('originalmodel=', originalEntity);
   console.debug('updatedata=', projectUpdateData);
-  var output: project_changelog[] = [];
+  const output: project_changelogs[] = [];
   const changeId = uuidv4();
-  const changeTime = new Date();
-  var index = 0;
   Object.entries(projectUpdateData)
     .filter(([k,v]) => k !== 'projectId') // projectId is not changeable but is in UpdateProjectInput
     .forEach(([key, value]) =>  {
@@ -24,13 +23,10 @@ const determineProjectDiffs = (originalEntity: projects, projectUpdateData: Upda
         output.push({
           projectId: originalEntity.id,
           id: changeId,
-          index,
           propertyName: key,
           oldValue: originalValue,
-          newValue: value,
-          changeTime
-        } as project_changelog);
-        index++;
+          newValue: value
+        } as project_changelogs);
       }
     }
   );
@@ -57,8 +53,11 @@ const updateProject = async (
   try {
     await sequelize.transaction(async (transaction) => {
       const originalModel: projects = await sequelize.models.projects.findByPk(projectId) as projects;
-      const changes: project_changelog[] = determineProjectDiffs( originalModel, data);
-      console.log(changes)
+      if (originalModel === null) {
+        return Promise.reject(new UserInputError(`could not find project with id ${projectId}`))
+      }
+
+      const changes: project_changelogs[] = getProjectDiffs( originalModel, data);
       const updates: Promise<any>[] = [
         sequelize.models.projects.update(
           {
@@ -89,18 +88,16 @@ const updateProject = async (
           }
         )
       ]
-      changes.forEach((change: project_changelog) => {
+      changes.forEach((change: project_changelogs) => {
         updates.push(sequelize.models.project_changelog.create(
           {
             projectId: change.projectId,
             id: change.id,
-            index: change.index,
             propertyName: change.propertyName,
             oldValue: change.oldValue,
-            newValue: change.newValue,
-            changeTime: change.changeTime
+            newValue: change.newValue
           },
-          // { transaction }
+          { transaction }
         ));
       })
       await Promise.all(updates);
