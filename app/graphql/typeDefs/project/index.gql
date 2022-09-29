@@ -88,3 +88,8 @@ enum ProjectStatus {
   COMPLETED
   OVERDUE
 }
+
+enum ProjectCreationMode {
+  GUIDED
+  ADVANCED
+}

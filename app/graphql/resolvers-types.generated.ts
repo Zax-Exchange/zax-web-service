@@ -147,6 +147,7 @@ export type CreateProjectInput = {
   category: Scalars['String'];
   comments: Scalars['String'];
   components: Array<CreateProjectComponentInput>;
+  creationMode: ProjectCreationMode;
   deliveryAddress: Scalars['String'];
   deliveryDate: Scalars['String'];
   designId?: InputMaybe<Scalars['String']>;
@@ -225,6 +226,7 @@ export type CustomerProject = {
   companyName: Scalars['String'];
   components: Array<ProjectComponent>;
   createdAt: Scalars['String'];
+  creationMode: ProjectCreationMode;
   deliveryAddress: Scalars['String'];
   deliveryDate: Scalars['String'];
   design?: Maybe<ProjectDesign>;
@@ -689,6 +691,11 @@ export type ProjectComponentSpec = {
   thickness?: Maybe<Scalars['String']>;
 };
 
+export enum ProjectCreationMode {
+  Advanced = 'ADVANCED',
+  Guided = 'GUIDED'
+}
+
 export type ProjectDesign = {
   __typename?: 'ProjectDesign';
   fileName: Scalars['String'];
@@ -752,8 +759,8 @@ export type Query = {
   getProjectDetail?: Maybe<Project>;
   getProjectUsers: Array<UserProjectPermission>;
   getUser: User;
-  getVendorDetail: VendorDetail;
-  getVendorProject: VendorProject;
+  getVendorDetail?: Maybe<VendorDetail>;
+  getVendorProject?: Maybe<VendorProject>;
   getVendorProjects: Array<VendorProjectOverview>;
   login: LoggedInUser;
   searchCustomerProjects: Array<ProjectOverview>;

@@ -1,6 +1,9 @@
 import * as Sequelize from "sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
-import { ProjectStatus } from "../graphql/resolvers-types.generated";
+import {
+  ProjectCreationMode,
+  ProjectStatus,
+} from "../graphql/resolvers-types.generated";
 import type { companies, companiesId } from "./companies";
 import type { project_bids, project_bidsId } from "./project_bids";
 import type {
@@ -18,6 +21,7 @@ export interface projectsAttributes {
   id: string;
   userId: string;
   companyId: string;
+  creationMode: ProjectCreationMode;
   name: string;
   category: string;
   totalWeight: string;
@@ -46,6 +50,7 @@ export class projects
   id!: string;
   userId!: string;
   companyId!: string;
+  creationMode!: ProjectCreationMode;
   name!: string;
   category!: string;
   totalWeight!: string;
@@ -195,6 +200,10 @@ export class projects
             model: "companies",
             key: "id",
           },
+        },
+        creationMode: {
+          type: DataTypes.STRING(10),
+          allowNull: false,
         },
         name: {
           type: DataTypes.STRING(255),

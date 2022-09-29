@@ -36,6 +36,7 @@ input CreateProjectComponentInput {
 
 input CreateProjectInput {
   userId: String!
+  creationMode: ProjectCreationMode!
   name: String!
   category: String!
   totalWeight: String!

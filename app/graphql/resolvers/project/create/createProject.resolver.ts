@@ -20,6 +20,7 @@ const createProject = async (
   const {
     userId,
     designId,
+    creationMode,
     name,
     category,
     totalWeight,
@@ -43,6 +44,7 @@ const createProject = async (
         {
           id: uuidv4(),
           userId,
+          creationMode,
           name,
           deliveryDate,
           deliveryAddress,
