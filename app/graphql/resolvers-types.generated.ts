@@ -405,7 +405,7 @@ export type Mutation = {
   updateUserPassword: Scalars['Boolean'];
   updateUserPower: Scalars['Boolean'];
   updateVendorInfo: Scalars['Boolean'];
-  uploadProjectDesign: Scalars['String'];
+  uploadProjectDesign: UploadProjectDesignResponse;
 };
 
 
@@ -749,7 +749,7 @@ export type Query = {
   getPlan: Plan;
   getProjectBid?: Maybe<ProjectBid>;
   getProjectBidUsers: Array<UserProjectPermission>;
-  getProjectDetail: Project;
+  getProjectDetail?: Maybe<Project>;
   getProjectUsers: Array<UserProjectPermission>;
   getUser: User;
   getVendorDetail: VendorDetail;
@@ -1020,6 +1020,13 @@ export type UpdateVendorInfoInput = {
   name: Scalars['String'];
   phone: Scalars['String'];
   products: Array<Scalars['String']>;
+};
+
+export type UploadProjectDesignResponse = {
+  __typename?: 'UploadProjectDesignResponse';
+  designId: Scalars['String'];
+  filename: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export type User = {

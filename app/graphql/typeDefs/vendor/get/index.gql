@@ -12,7 +12,7 @@ input GetVendorProjectInput {
 }
 
 type Query {
-  getVendorDetail(data: GetVendorDetailInput): VendorDetail!
-  getVendorProject(data: GetVendorProjectInput!): VendorProject!
+  getVendorDetail(data: GetVendorDetailInput): VendorDetail
+  getVendorProject(data: GetVendorProjectInput!): VendorProject
   getVendorProjects(data: GetVendorProjectsInput!): [VendorProjectOverview!]!
 }

@@ -1,7 +1,10 @@
+import ElasticProjectService from "../../../../elastic/project/ElasticProjectService";
+import { updateProjectDocumentWithProjectSpecInput } from "../../../../elastic/types/project";
 import sequelize from "../../../../postgres/dbconnection";
 import streamService from "../../../../stream/StreamService";
 import {
   BidStatus,
+  UpdateProjectBidComponentInput,
   UpdateProjectInput,
 } from "../../../resolvers-types.generated";
 
@@ -55,6 +58,9 @@ const updateProject = async (
         ),
       ]);
     });
+    ElasticProjectService.updateProjectDocumentWithProjectSpec(
+      data as updateProjectDocumentWithProjectSpecInput
+    );
     streamService.broadcastProjectUpdate(data.projectId);
     return true;
   } catch (e) {

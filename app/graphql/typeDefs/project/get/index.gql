@@ -9,5 +9,5 @@ input GetProjectUsersInput {
 type Query {
   getProjectUsers(data: GetProjectUsersInput!): [UserProjectPermission!]!
 
-  getProjectDetail(data: GetProjectDetailInput!): Project!
+  getProjectDetail(data: GetProjectDetailInput!): Project
 }
