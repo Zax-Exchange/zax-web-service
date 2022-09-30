@@ -54,11 +54,11 @@ export class project_changelogs
         },
         oldValue: {
           type: DataTypes.JSON,
-          allowNull: false
+          allowNull: true
         },
         newValue: {
           type: DataTypes.JSON,
-          allowNull: false
+          allowNull: true
         },
         createdAt: {
           type: DataTypes.DATE,
@@ -74,7 +74,7 @@ export class project_changelogs
           {
             name: "project_changelogs_pkey",
             unique: true,
-            fields: [{name: "id"}, {name: "index"}]
+            fields: [{name: "id"}, {name: "propertyName"}]
           },
           {
             name: "project_changelogs_projectid_foreign_key_search_index",

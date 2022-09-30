@@ -53,6 +53,7 @@ import type {
 } from "./project_permissions";
 import { projects as _projects } from "./projects";
 import { project_changelogs as _project_changelogs } from "./project_changelogs";
+import { project_component_changelogs as _project_component_changelogs } from "./project_component_changelogs"
 import type {
   projectsAttributes,
   projectsCreationAttributes,
@@ -83,6 +84,7 @@ export {
   _project_bid_permissions as project_bid_permissions,
   _project_bids as project_bids,
   _project_components as project_components,
+  _project_component_changelogs as project_component_changelogs,
   _component_specs as component_specs,
   _project_permissions as project_permissions,
   _projects as projects,
@@ -146,6 +148,7 @@ export function initModels(sequelize: Sequelize) {
 
   const project_designs = _project_designs.initModel(sequelize);
   const project_changelogs = _project_changelogs.initModel(sequelize);
+  const project_component_changelogs = _project_component_changelogs.initModel(sequelize);
 
   company_plans.belongsTo(companies, {
     as: "company",
