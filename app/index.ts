@@ -32,8 +32,10 @@ const startServer = async () => {
   }
   const app = express();
   const httpServer = http.createServer(app);
-  const typeDefs = await getTypeDefs();
-  const resolvers = await getResolvers();
+  const [typeDefs, resolvers] = await Promise.all([
+    getTypeDefs(),
+    getResolvers(),
+  ]);
   const server = new ApolloServer({
     csrfPrevention: false,
     typeDefs,

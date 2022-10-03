@@ -33,10 +33,7 @@ const createProject = async (
   } = data;
   try {
     await sequelize.transaction(async (transaction) => {
-      const user = await users.findOne({
-        where: {
-          id: userId,
-        },
+      const user = await users.findByPk(userId, {
         transaction,
       });
       const companyId = await user?.getDataValue("companyId");
@@ -73,20 +70,11 @@ const createProject = async (
           { transaction }
         );
       }
+
       const products = [];
       for (let comp of components) {
         products.push(comp.componentSpec.productName);
       }
-      await createProjectComponents(
-        projectId,
-        components,
-        companyId,
-        transaction
-      );
-      await createOrUpdateProjectPermission(
-        { userIds: [userId], projectId, permission: ProjectPermission.Owner },
-        transaction
-      );
       ElasticProjectService.createProjectDocument({
         userId,
         projectId,
@@ -97,6 +85,14 @@ const createProject = async (
         orderQuantities,
         products,
       });
+
+      await Promise.all([
+        createProjectComponents(projectId, components, companyId, transaction),
+        createOrUpdateProjectPermission(
+          { userIds: [userId], projectId, permission: ProjectPermission.Owner },
+          transaction
+        ),
+      ]);
     });
 
     return Promise.resolve(true);

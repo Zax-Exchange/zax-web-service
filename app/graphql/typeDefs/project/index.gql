@@ -28,7 +28,7 @@ type Project {
   deliveryAddress: String!
   targetPrice: Int!
   orderQuantities: [Int!]!
-  design: ProjectDesign
+  design: [ProjectDesign!]
   status: String!
   components: [ProjectComponent!]!
   comments: String!
