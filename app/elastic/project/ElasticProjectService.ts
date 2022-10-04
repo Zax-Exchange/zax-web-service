@@ -62,23 +62,43 @@ export default class ElasticProjectService {
     }
   }
 
-  static async updateProjectDocument(
-    data: projectTypes.UpdateProjectDocumentInput
+  // Updates project spec, without updating components (products)
+  static async updateProjectDocumentWithProjectSpec(
+    data: projectTypes.updateProjectDocumentWithProjectSpecInput
   ) {
-    const { projectId, deliveryAddress, deliveryDate, targetPrice, products } =
+    const { projectId, deliveryAddress, deliveryDate, targetPrice, category } =
       data;
     await elasticClient
       .update({
         index: "project",
         id: projectId,
         doc: {
+          category,
           deliveryAddress,
           deliveryDate,
           targetPrice,
-          products,
         },
       })
       .catch((e) => console.error(e));
+  }
+
+  // Updates project document with updated products list
+  static async updateProjectDocumentProducts(
+    data: projectTypes.updateProjectDocumentProductsInput
+  ) {
+    const { products, projectId } = data;
+
+    try {
+      await elasticClient.update({
+        index: "project",
+        id: projectId,
+        doc: {
+          products,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   static async deleteProjectDocument(id: string) {

@@ -8,8 +8,11 @@ const getVendorDetail = async (
 ) => {
   const { companyId } = data;
   try {
-    const company = await CompanyApiUtils.getCompanyWithCompanyId(companyId);
-    const vendor = await CompanyApiUtils.getVendorWithCompanyId(companyId);
+    const [company, vendor] = await Promise.all([
+      CompanyApiUtils.getCompanyWithCompanyId(companyId),
+      CompanyApiUtils.getVendorWithCompanyId(companyId),
+    ]);
+    if (!company || !vendor) return null;
     const { moq, locations, products, leadTime } = vendor;
     const {
       id,

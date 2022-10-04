@@ -148,6 +148,7 @@ export type CreateProjectInput = {
   category: Scalars['String'];
   comments: Scalars['String'];
   components: Array<CreateProjectComponentInput>;
+  creationMode: ProjectCreationMode;
   deliveryAddress: Scalars['String'];
   deliveryDate: Scalars['String'];
   designId?: InputMaybe<Scalars['String']>;
@@ -226,6 +227,7 @@ export type CustomerProject = {
   companyName: Scalars['String'];
   components: Array<ProjectComponent>;
   createdAt: Scalars['String'];
+  creationMode: ProjectCreationMode;
   deliveryAddress: Scalars['String'];
   deliveryDate: Scalars['String'];
   design?: Maybe<ProjectDesign>;
@@ -415,7 +417,7 @@ export type Mutation = {
   updateUserPassword: Scalars['Boolean'];
   updateUserPower: Scalars['Boolean'];
   updateVendorInfo: Scalars['Boolean'];
-  uploadProjectDesign: Scalars['String'];
+  uploadProjectDesign: UploadProjectDesignResponse;
 };
 
 
@@ -726,6 +728,11 @@ export type ProjectComponentSpec = {
   thickness?: Maybe<Scalars['String']>;
 };
 
+export enum ProjectCreationMode {
+  Advanced = 'ADVANCED',
+  Guided = 'GUIDED'
+}
+
 export type ProjectDesign = {
   __typename?: 'ProjectDesign';
   fileName: Scalars['String'];
@@ -795,11 +802,11 @@ export type Query = {
   getProjectBidUsers: Array<UserProjectPermission>;
   getProjectChangelog: Array<Maybe<ProjectChangelog>>;
   getProjectComponentChangelog: Array<Maybe<ProjectComponentChangelog>>;
-  getProjectDetail: Project;
+  getProjectDetail?: Maybe<Project>;
   getProjectUsers: Array<UserProjectPermission>;
   getUser: User;
-  getVendorDetail: VendorDetail;
-  getVendorProject: VendorProject;
+  getVendorDetail?: Maybe<VendorDetail>;
+  getVendorProject?: Maybe<VendorProject>;
   getVendorProjects: Array<VendorProjectOverview>;
   login: LoggedInUser;
   searchCustomerProjects: Array<ProjectOverview>;
@@ -1076,6 +1083,13 @@ export type UpdateVendorInfoInput = {
   name: Scalars['String'];
   phone: Scalars['String'];
   products: Array<Scalars['String']>;
+};
+
+export type UploadProjectDesignResponse = {
+  __typename?: 'UploadProjectDesignResponse';
+  designId: Scalars['String'];
+  filename: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export type User = {

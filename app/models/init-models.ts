@@ -382,13 +382,13 @@ export function initModels(sequelize: Sequelize) {
     onDelete: "CASCADE",
   });
 
-  project_designs.belongsTo(projects, {
-    as: "project",
+  projects.hasMany(project_designs, {
+    as: "project_design",
     foreignKey: "projectId",
     onDelete: "CASCADE",
   });
-  projects.hasOne(project_designs, {
-    as: "project_design",
+  project_designs.belongsTo(projects, {
+    as: "project",
     foreignKey: "projectId",
     onDelete: "CASCADE",
   });

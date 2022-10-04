@@ -15,6 +15,11 @@ type FileUploadResponse {
   Bucket: String!
 }
 
+type UploadProjectDesignResponse {
+  filename: String!
+  designId: String!
+  url: String!
+}
 type Mutation {
-  uploadProjectDesign(file: Upload!): String!
+  uploadProjectDesign(file: Upload!): UploadProjectDesignResponse!
 }

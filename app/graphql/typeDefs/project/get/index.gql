@@ -17,7 +17,7 @@ input GetProjectComponentChangelogInput {
 type Query {
   getProjectUsers(data: GetProjectUsersInput!): [UserProjectPermission!]!
 
-  getProjectDetail(data: GetProjectDetailInput!): Project!
+  getProjectDetail(data: GetProjectDetailInput!): Project
 
   getProjectChangelog(data: GetProjectChangelogInput): [ProjectChangelog]!
 

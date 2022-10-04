@@ -141,7 +141,7 @@ class ProjectApiUtils {
           (p as projects).getProject_design(),
           (p as projects).getCompany(),
         ]).then(async (res) => {
-          const [componentInstances, designInstance, companyInstance] = res;
+          const [componentInstances, designInstances, companyInstance] = res;
           const components = await Promise.all(
             componentInstances.map(async (comp) => {
               const componentSpec = await comp.getComponent_spec();
@@ -154,11 +154,14 @@ class ProjectApiUtils {
 
           let design = null;
 
-          if (designInstance) {
-            design = {
-              fileName: designInstance.fileName,
-              url: `${process.env.AWS_CDN_URL}/${designInstance.id}`,
-            } as ProjectDesign;
+          if (designInstances) {
+            design = designInstances.map(
+              (designInstance) =>
+                ({
+                  fileName: designInstance.fileName,
+                  url: `${process.env.AWS_CDN_URL}/${designInstance.id}`,
+                } as ProjectDesign)
+            );
           }
 
           return {

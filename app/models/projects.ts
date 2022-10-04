@@ -1,6 +1,9 @@
 import * as Sequelize from "sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
-import { ProjectStatus } from "../graphql/resolvers-types.generated";
+import {
+  ProjectCreationMode,
+  ProjectStatus,
+} from "../graphql/resolvers-types.generated";
 import type { companies, companiesId } from "./companies";
 import type { project_bids, project_bidsId } from "./project_bids";
 import type {
@@ -18,6 +21,7 @@ export interface projectsAttributes {
   id: string;
   userId: string;
   companyId: string;
+  creationMode: ProjectCreationMode;
   name: string;
   category: string;
   totalWeight: string;
@@ -46,6 +50,7 @@ export class projects
   id!: string;
   userId!: string;
   companyId!: string;
+  creationMode!: ProjectCreationMode;
   name!: string;
   category!: string;
   totalWeight!: string;
@@ -168,8 +173,8 @@ export class projects
   setUser!: Sequelize.BelongsToSetAssociationMixin<users, usersId>;
   createUser!: Sequelize.BelongsToCreateAssociationMixin<users>;
   // projects hasMany project_designs via projectId
-  project_designs!: project_designs[];
-  getProject_design!: Sequelize.HasOneGetAssociationMixin<project_designs>;
+  project_design!: project_designs[];
+  getProject_design!: Sequelize.HasManyGetAssociationsMixin<project_designs>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof projects {
     return sequelize.define(
@@ -195,6 +200,10 @@ export class projects
             model: "companies",
             key: "id",
           },
+        },
+        creationMode: {
+          type: DataTypes.STRING(10),
+          allowNull: false,
         },
         name: {
           type: DataTypes.STRING(255),

@@ -2,10 +2,13 @@ import { UserInputError } from "apollo-server-core";
 import { v4 as uuidv4 } from "uuid";
 import { projects, projectsAttributes } from "../../../../models/projects";
 import { project_changelogs } from "../../../../models/project_changelogs";
+import ElasticProjectService from "../../../../elastic/project/ElasticProjectService";
+import { updateProjectDocumentWithProjectSpecInput } from "../../../../elastic/types/project";
 import sequelize from "../../../../postgres/dbconnection";
 import streamService from "../../../../stream/StreamService";
 import {
   BidStatus,
+  UpdateProjectBidComponentInput,
   UpdateProjectInput,
 } from "../../../resolvers-types.generated";
 
@@ -102,6 +105,9 @@ const updateProject = async (
       })
       await Promise.all(updates);
     });
+    ElasticProjectService.updateProjectDocumentWithProjectSpec(
+      data as updateProjectDocumentWithProjectSpecInput
+    );
     streamService.broadcastProjectUpdate(data.projectId);
     return true;
   } catch (e) {

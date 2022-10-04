@@ -5,24 +5,30 @@ import s3 from "../../../aws/s3";
 import sequelize from "../../../postgres/dbconnection";
 
 const uploadProjectDesign = async (_parent: any, { file }: any) => {
-  const { createReadStream, filename, mimetype, encoding } = await file;
-  const stream = createReadStream();
-
   try {
-    const Key = uuidv4();
+    const resolvedFile = await file;
+    const { createReadStream, filename, mimetype, encoding } =
+      resolvedFile.file;
+    const stream = createReadStream();
+    const designId = uuidv4();
     await s3
       .upload({
         Body: stream,
-        Key,
+        Key: designId,
         ContentType: mimetype,
         Bucket: process.env.AWS_PROJECT_DESIGNS_BUCKET!,
       })
       .promise();
     await sequelize.models.project_designs.create({
-      id: Key,
+      id: designId,
       fileName: filename,
     });
-    return Key;
+    console.log({ designId, filename });
+    return {
+      designId,
+      filename,
+      url: `${process.env.AWS_CDN_URL}/${designId}`,
+    };
   } catch (error: any) {
     throw new ApolloError("Error uploading file");
   }

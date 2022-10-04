@@ -41,6 +41,7 @@ type CustomerProject {
   id: String!
   userId: String!
   companyId: String!
+  creationMode: ProjectCreationMode!
   companyName: String!
   name: String!
   category: String!
@@ -49,7 +50,7 @@ type CustomerProject {
   deliveryAddress: String!
   targetPrice: Int!
   orderQuantities: [Int!]!
-  design: ProjectDesign
+  design: [ProjectDesign!]
   status: String!
   permission: ProjectPermission!
   components: [ProjectComponent!]!

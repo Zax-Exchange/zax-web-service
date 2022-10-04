@@ -9,11 +9,16 @@ export interface CreateProjectDocumentInput {
   products: string[];
 }
 
-export interface UpdateProjectDocumentInput {
+export interface updateProjectDocumentWithProjectSpecInput {
   projectId: string;
-  deliveryAddress?: string;
-  deliveryDate?: string;
-  targetPrice?: number;
-  orderQuantities?: number[];
-  products?: string[];
+  category: string;
+  deliveryAddress: string;
+  deliveryDate: string;
+  targetPrice: number;
+  orderQuantities: number[];
+}
+
+export interface updateProjectDocumentProductsInput {
+  projectId: string;
+  products: string[];
 }

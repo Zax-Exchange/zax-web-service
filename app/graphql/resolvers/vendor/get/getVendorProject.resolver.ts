@@ -25,6 +25,8 @@ const getVendorProject = async (
         (p) => p?.get({ plain: true }) as project_bid_permissionsAttributes
       );
 
+    if (!permission) return null;
+
     const bid = await ProjectApiUtils.getPermissionedProjectBid(
       permission.projectBidId,
       permission.permission

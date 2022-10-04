@@ -28,7 +28,7 @@ type Project {
   deliveryAddress: String!
   targetPrice: Int!
   orderQuantities: [Int!]!
-  design: ProjectDesign
+  design: [ProjectDesign!]
   status: String!
   components: [ProjectComponent!]!
   comments: String!
@@ -112,4 +112,9 @@ enum ProjectStatus {
   CLOSED
   COMPLETED
   OVERDUE
+}
+
+enum ProjectCreationMode {
+  GUIDED
+  ADVANCED
 }

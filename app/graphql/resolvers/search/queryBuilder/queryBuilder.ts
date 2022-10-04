@@ -40,15 +40,27 @@ export default class QueryBuilder {
         must: [
           {
             match: {
-              products: userInput,
-            },
-          },
-          {
-            match: {
               deleted: false,
             },
           },
+          {
+            bool: {
+              should: [
+                {
+                  match: {
+                    products: userInput,
+                  },
+                },
+                {
+                  match: {
+                    category: userInput,
+                  },
+                },
+              ],
+            },
+          },
         ],
+
         filter,
       },
     };
