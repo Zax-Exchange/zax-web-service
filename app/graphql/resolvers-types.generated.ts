@@ -11,6 +11,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  JSON: any;
   Upload: any;
 };
 
@@ -333,6 +334,10 @@ export type GetProjectBidUsersInput = {
   projectBidId: Scalars['String'];
 };
 
+export type GetProjectChangelogInput = {
+  projectId: Scalars['String'];
+};
+
 export type GetProjectDetailInput = {
   projectId: Scalars['String'];
 };
@@ -399,6 +404,7 @@ export type Mutation = {
   updateCustomerInfo: Scalars['Boolean'];
   updateProject?: Maybe<Scalars['Boolean']>;
   updateProjectBidPermissions: Scalars['Boolean'];
+  updateProjectComponent?: Maybe<Scalars['Boolean']>;
   updateProjectPermissions: Scalars['Boolean'];
   updateStripeSubscription: Scalars['Boolean'];
   updateUserInfo: Scalars['Boolean'];
@@ -512,6 +518,11 @@ export type MutationUpdateProjectArgs = {
 
 export type MutationUpdateProjectBidPermissionsArgs = {
   data: UpdateProjectBidPermissionsInput;
+};
+
+
+export type MutationUpdateProjectComponentArgs = {
+  data?: InputMaybe<UpdateProjectComponentInput>;
 };
 
 
@@ -655,6 +666,13 @@ export type ProjectBidComponent = {
   samplingFee: Scalars['Int'];
 };
 
+export type ProjectChangelog = {
+  __typename?: 'ProjectChangelog';
+  changedAt: Scalars['String'];
+  changes: Array<ProjectPropertyChange>;
+  projectId: Scalars['String'];
+};
+
 export type ProjectComponent = {
   __typename?: 'ProjectComponent';
   componentSpec: ProjectComponentSpec;
@@ -716,6 +734,13 @@ export enum ProjectPermission {
   Viewer = 'VIEWER'
 }
 
+export type ProjectPropertyChange = {
+  __typename?: 'ProjectPropertyChange';
+  newValue: Scalars['JSON'];
+  oldValue: Scalars['JSON'];
+  propertyName: Scalars['String'];
+};
+
 export enum ProjectStatus {
   Closed = 'CLOSED',
   Completed = 'COMPLETED',
@@ -749,6 +774,7 @@ export type Query = {
   getPlan: Plan;
   getProjectBid?: Maybe<ProjectBid>;
   getProjectBidUsers: Array<UserProjectPermission>;
+  getProjectChangelog: Array<Maybe<ProjectChangelog>>;
   getProjectDetail: Project;
   getProjectUsers: Array<UserProjectPermission>;
   getUser: User;
@@ -818,6 +844,11 @@ export type QueryGetProjectBidArgs = {
 
 export type QueryGetProjectBidUsersArgs = {
   data: GetProjectBidUsersInput;
+};
+
+
+export type QueryGetProjectChangelogArgs = {
+  data?: InputMaybe<GetProjectChangelogInput>;
 };
 
 

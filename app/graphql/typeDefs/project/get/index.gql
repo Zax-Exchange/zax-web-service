@@ -6,8 +6,14 @@ input GetProjectUsersInput {
   projectId: String!
 }
 
+input GetProjectChangelogInput {
+  projectId: String!
+}
+
 type Query {
   getProjectUsers(data: GetProjectUsersInput!): [UserProjectPermission!]!
 
   getProjectDetail(data: GetProjectDetailInput!): Project!
+
+  getProjectChangelog(data: GetProjectChangelogInput): [ProjectChangelog]!
 }

@@ -36,6 +36,18 @@ type Project {
   updatedAt: String!
 }
 
+type ProjectChangelog {
+  projectId: String!
+  changedAt: String!
+  changes: [ProjectPropertyChange!]!
+}
+
+type ProjectPropertyChange {
+  propertyName: String!
+  oldValue: JSON!
+  newValue: JSON!
+}
+
 type ProjectComponentSpec {
   id: String!
   productName: String!
