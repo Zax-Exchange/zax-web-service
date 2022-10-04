@@ -338,6 +338,10 @@ export type GetProjectChangelogInput = {
   projectId: Scalars['String'];
 };
 
+export type GetProjectComponentChangelogInput = {
+  projectComponentId: Scalars['String'];
+};
+
 export type GetProjectDetailInput = {
   projectId: Scalars['String'];
 };
@@ -681,6 +685,21 @@ export type ProjectComponent = {
   projectId: Scalars['String'];
 };
 
+export type ProjectComponentChangelog = {
+  __typename?: 'ProjectComponentChangelog';
+  changedAt: Scalars['String'];
+  changes: Array<ProjectComponentPropertyChange>;
+  projectComponentId: Scalars['String'];
+};
+
+export type ProjectComponentPropertyChange = {
+  __typename?: 'ProjectComponentPropertyChange';
+  newValue?: Maybe<Scalars['JSON']>;
+  oldValue?: Maybe<Scalars['JSON']>;
+  projectComponentSpecId?: Maybe<Scalars['String']>;
+  propertyName: Scalars['String'];
+};
+
 export type ProjectComponentSpec = {
   __typename?: 'ProjectComponentSpec';
   boxStyle?: Maybe<Scalars['String']>;
@@ -736,8 +755,8 @@ export enum ProjectPermission {
 
 export type ProjectPropertyChange = {
   __typename?: 'ProjectPropertyChange';
-  newValue: Scalars['JSON'];
-  oldValue: Scalars['JSON'];
+  newValue?: Maybe<Scalars['JSON']>;
+  oldValue?: Maybe<Scalars['JSON']>;
   propertyName: Scalars['String'];
 };
 
@@ -775,6 +794,7 @@ export type Query = {
   getProjectBid?: Maybe<ProjectBid>;
   getProjectBidUsers: Array<UserProjectPermission>;
   getProjectChangelog: Array<Maybe<ProjectChangelog>>;
+  getProjectComponentChangelog: Array<Maybe<ProjectComponentChangelog>>;
   getProjectDetail: Project;
   getProjectUsers: Array<UserProjectPermission>;
   getUser: User;
@@ -849,6 +869,11 @@ export type QueryGetProjectBidUsersArgs = {
 
 export type QueryGetProjectChangelogArgs = {
   data?: InputMaybe<GetProjectChangelogInput>;
+};
+
+
+export type QueryGetProjectComponentChangelogArgs = {
+  data?: InputMaybe<GetProjectComponentChangelogInput>;
 };
 
 

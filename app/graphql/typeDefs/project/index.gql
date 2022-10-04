@@ -44,8 +44,8 @@ type ProjectChangelog {
 
 type ProjectPropertyChange {
   propertyName: String!
-  oldValue: JSON!
-  newValue: JSON!
+  oldValue: JSON
+  newValue: JSON
 }
 
 type ProjectComponentSpec {
@@ -85,6 +85,19 @@ type ProjectComponent {
   projectId: String!
   name: String!
   componentSpec: ProjectComponentSpec!
+}
+
+type ProjectComponentChangelog {
+  projectComponentId: String!
+  changedAt: String!
+  changes: [ProjectComponentPropertyChange!]!
+}
+
+type ProjectComponentPropertyChange {
+  projectComponentSpecId: String
+  propertyName: String!
+  oldValue: JSON
+  newValue: JSON
 }
 
 enum ProjectPermission {

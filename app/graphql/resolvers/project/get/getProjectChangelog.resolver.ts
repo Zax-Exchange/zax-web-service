@@ -1,5 +1,5 @@
 import ProjectApiUtils from "../../../../utils/projectUtils";
-import { GetProjectChangelogInput } from "../../../resolvers-types.generated";
+import { GetProjectChangelogInput, GetProjectComponentChangelogInput } from "../../../resolvers-types.generated";
 
 const getProjectChangelog = async (
   parent: any,
@@ -14,8 +14,22 @@ const getProjectChangelog = async (
   }
 };
 
+const getProjectComponentChangelog = async (
+  parent: any,
+  { data }: { data: GetProjectComponentChangelogInput },
+  context: any
+) => {
+  const { projectComponentId } = data;
+  try {
+    return await ProjectApiUtils.getProjectComponentChangelog(projectComponentId);
+  } catch (e) {
+    return Promise.reject(e);
+  }
+};
+
 export default {
   Query: {
     getProjectChangelog,
+    getProjectComponentChangelog,
   },
 };

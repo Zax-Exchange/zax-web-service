@@ -10,10 +10,16 @@ input GetProjectChangelogInput {
   projectId: String!
 }
 
+input GetProjectComponentChangelogInput {
+  projectComponentId: String!
+}
+
 type Query {
   getProjectUsers(data: GetProjectUsersInput!): [UserProjectPermission!]!
 
   getProjectDetail(data: GetProjectDetailInput!): Project!
 
   getProjectChangelog(data: GetProjectChangelogInput): [ProjectChangelog]!
+
+  getProjectComponentChangelog(data: GetProjectComponentChangelogInput): [ProjectComponentChangelog]!
 }

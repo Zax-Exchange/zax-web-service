@@ -14,6 +14,8 @@ import {
   ProjectBidComponent,
   ProjectChangelog,
   ProjectComponent,
+  ProjectComponentChangelog,
+  ProjectComponentPropertyChange,
   ProjectDesign,
   ProjectOverview,
   ProjectPermission,
@@ -24,6 +26,7 @@ import {
   VendorProjectOverview,
 } from "../graphql/resolvers-types.generated";
 import { project_changelogs } from "../models/project_changelogs";
+import { project_component_changelogs } from "../models/project_component_changelogs";
 
 class ProjectApiUtils {
   // Returns a list of vendor user ids that have bids for the project
@@ -390,6 +393,34 @@ class ProjectApiUtils {
         }
         const changes = groupedChanges.at(-1)!.changes;
         changes.push(changelog as ProjectPropertyChange);
+      }
+      return groupedChanges;
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
+
+  static async getProjectComponentChangelog(projectComponentId: string) {
+    try {
+      const projectChangelogs: project_component_changelogs[] = await sequelize.models.project_component_changelogs
+        .findAll({
+          where: {
+            projectComponentId,
+          },
+        }) as project_component_changelogs[];
+      const groupedChanges: ProjectComponentChangelog[] = [];
+      let lastChangeId = null
+      for (let changelog of projectChangelogs) {
+        if (changelog.id !== lastChangeId) {
+          groupedChanges.push({
+            projectComponentId,
+            changedAt: changelog.createdAt.toISOString(),
+            changes: []
+          } as ProjectComponentChangelog)
+          lastChangeId = changelog.id;
+        }
+        const changes = groupedChanges.at(-1)!.changes;
+        changes.push(changelog as ProjectComponentPropertyChange);
       }
       return groupedChanges;
     } catch (e) {
