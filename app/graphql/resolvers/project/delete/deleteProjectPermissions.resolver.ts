@@ -9,7 +9,7 @@ const deleteProjectPermissions = async (
 ) => {
   const { userIds, projectId } = data;
   const project_permissions = sequelize.models.project_permissions;
-  //TODO: should also check if user performing action is allowed
+
   try {
     await sequelize.transaction(async (transaction) => {
       for (let userId of userIds) {

@@ -40,7 +40,7 @@ input CreateProjectInput {
   name: String!
   category: String!
   totalWeight: String!
-  designId: String
+  designIds: [String!]!
   deliveryDate: String!
   deliveryAddress: String!
   targetPrice: Int!

@@ -3,6 +3,7 @@ import { ApolloError } from "apollo-server-express";
 import { v4 as uuidv4 } from "uuid";
 import s3 from "../../../aws/s3";
 import sequelize from "../../../postgres/dbconnection";
+import { UploadProjectDesignResponse } from "../../resolvers-types.generated";
 
 const uploadProjectDesign = async (_parent: any, { file }: any) => {
   try {
@@ -23,12 +24,12 @@ const uploadProjectDesign = async (_parent: any, { file }: any) => {
       id: designId,
       fileName: filename,
     });
-    console.log({ designId, filename });
+
     return {
       designId,
       filename,
       url: `${process.env.AWS_CDN_URL}/${designId}`,
-    };
+    } as UploadProjectDesignResponse;
   } catch (error: any) {
     throw new ApolloError("Error uploading file");
   }

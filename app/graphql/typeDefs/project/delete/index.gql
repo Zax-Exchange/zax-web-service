@@ -7,7 +7,12 @@ input DeleteProjectPermissionsInput {
   projectId: String!
 }
 
+input DeleteProjectDesignInput {
+  designId: String!
+}
+
 type Mutation {
   deleteProject(data: DeleteProjectInput!): Boolean!
   deleteProjectPermissions(data: DeleteProjectPermissionsInput!): Boolean!
+  deleteProjectDesign(data: DeleteProjectDesignInput!): Boolean!
 }

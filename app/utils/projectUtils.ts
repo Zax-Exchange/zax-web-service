@@ -148,7 +148,7 @@ class ProjectApiUtils {
 
           let design = null;
 
-          if (designInstances) {
+          if (designInstances.length) {
             design = designInstances.map(
               (designInstance) =>
                 ({
