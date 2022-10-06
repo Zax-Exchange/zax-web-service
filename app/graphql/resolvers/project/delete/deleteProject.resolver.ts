@@ -15,7 +15,6 @@ const deleteProject = async (
       where: {
         id: projectId,
       },
-      individualHooks: true,
     });
     ElasticProjectService.deleteProjectDocument(projectId);
     return Promise.resolve(true);

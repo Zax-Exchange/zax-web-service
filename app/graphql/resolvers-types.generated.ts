@@ -151,7 +151,7 @@ export type CreateProjectInput = {
   creationMode: ProjectCreationMode;
   deliveryAddress: Scalars['String'];
   deliveryDate: Scalars['String'];
-  designId?: InputMaybe<Scalars['String']>;
+  designIds: Array<Scalars['String']>;
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;
   targetPrice: Scalars['Int'];
@@ -230,7 +230,7 @@ export type CustomerProject = {
   creationMode: ProjectCreationMode;
   deliveryAddress: Scalars['String'];
   deliveryDate: Scalars['String'];
-  design?: Maybe<ProjectDesign>;
+  design?: Maybe<Array<ProjectDesign>>;
   id: Scalars['String'];
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;
@@ -266,6 +266,10 @@ export type DeactivateUserInput = {
 export type DeleteProjectBidPermissionsInput = {
   projectBidId: Scalars['String'];
   userIds: Array<Scalars['String']>;
+};
+
+export type DeleteProjectDesignInput = {
+  designId: Scalars['String'];
 };
 
 export type DeleteProjectInput = {
@@ -401,6 +405,7 @@ export type Mutation = {
   deactivateUser: Scalars['Boolean'];
   deleteProject: Scalars['Boolean'];
   deleteProjectBidPermissions: Scalars['Boolean'];
+  deleteProjectDesign: Scalars['Boolean'];
   deleteProjectPermissions: Scalars['Boolean'];
   inviteUser: Scalars['Boolean'];
   reset: Scalars['Boolean'];
@@ -479,6 +484,11 @@ export type MutationDeleteProjectArgs = {
 
 export type MutationDeleteProjectBidPermissionsArgs = {
   data: DeleteProjectBidPermissionsInput;
+};
+
+
+export type MutationDeleteProjectDesignArgs = {
+  data: DeleteProjectDesignInput;
 };
 
 
@@ -639,7 +649,7 @@ export type Project = {
   createdAt: Scalars['String'];
   deliveryAddress: Scalars['String'];
   deliveryDate: Scalars['String'];
-  design?: Maybe<ProjectDesign>;
+  design?: Maybe<Array<ProjectDesign>>;
   id: Scalars['String'];
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;
@@ -1158,7 +1168,7 @@ export type VendorProject = {
   createdAt: Scalars['String'];
   deliveryAddress: Scalars['String'];
   deliveryDate: Scalars['String'];
-  design?: Maybe<ProjectDesign>;
+  design?: Maybe<Array<ProjectDesign>>;
   id: Scalars['String'];
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;

@@ -10,5 +10,15 @@ Project setup
 6. run `npm run start`
 7. should see `db synced` and `server ready` log when server starts successfully
 
+VS Code Extensions
+- Required
+   - ESLint
+   - Prettier
+   - Run On Save
+   - YAML
+- Optional
+   - GraphQL for VS Code
+   - Import Cost
+
 # Notes
 - [Get started on server tech stack](https://github.com/Zax-Exchange/zax-exchange-server/wiki/Get-Started)

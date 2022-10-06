@@ -19,7 +19,7 @@ const createProject = async (
   const users = sequelize.models.users;
   const {
     userId,
-    designId,
+    designIds,
     creationMode,
     name,
     category,
@@ -58,17 +58,23 @@ const createProject = async (
       const projectId = project.getDataValue("id");
 
       // designId exists if user uploaded a project design
-      if (designId) {
-        const design = await sequelize.models.project_designs.findByPk(
-          designId
+      if (designIds.length) {
+        const [designs] = await Promise.all(
+          designIds.map((designId) => {
+            return sequelize.models.project_designs.findByPk(designId);
+          })
         );
-
-        await design?.update(
-          {
-            projectId,
-          },
-          { transaction }
-        );
+        for (let designId of designIds) {
+          const design = await sequelize.models.project_designs.findByPk(
+            designId
+          );
+          design?.update(
+            {
+              projectId,
+            },
+            { transaction }
+          );
+        }
       }
 
       const products = [];

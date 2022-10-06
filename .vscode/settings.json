@@ -5,5 +5,14 @@
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
- "editor.bracketPairColorization.enabled": true
+  "editor.bracketPairColorization.enabled": true,
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": ".gql",
+        "isAsync": true,
+        "cmd": "npm run codegen"
+      }
+    ]
+  }
 }
