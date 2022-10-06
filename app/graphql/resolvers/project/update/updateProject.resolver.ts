@@ -13,8 +13,6 @@ import {
 } from "../../../resolvers-types.generated";
 
 const getProjectDiffs = (originalEntity: projects, projectUpdateData: UpdateProjectInput ) => {
-  console.debug('originalmodel=', originalEntity);
-  console.debug('updatedata=', projectUpdateData);
   const output: project_changelogs[] = [];
   const changeId = uuidv4();
   Object.entries(projectUpdateData)
@@ -93,13 +91,7 @@ const updateProject = async (
       ]
       changes.forEach((change: project_changelogs) => {
         updates.push(sequelize.models.project_changelog.create(
-          {
-            projectId: change.projectId,
-            id: change.id,
-            propertyName: change.propertyName,
-            oldValue: change.oldValue,
-            newValue: change.newValue
-          },
+          {...change},
           { transaction }
         ));
       })
@@ -108,6 +100,7 @@ const updateProject = async (
     ElasticProjectService.updateProjectDocumentWithProjectSpec(
       data as updateProjectDocumentWithProjectSpecInput
     );
+    //TODO: we should also update component spec name in Elastic
     streamService.broadcastProjectUpdate(data.projectId);
     return true;
   } catch (e) {

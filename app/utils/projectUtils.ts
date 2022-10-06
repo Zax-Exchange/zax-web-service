@@ -12,14 +12,10 @@ import {
   Project,
   ProjectBid,
   ProjectBidComponent,
-  ProjectChangelog,
   ProjectComponent,
-  ProjectComponentChangelog,
-  ProjectComponentPropertyChange,
   ProjectDesign,
   ProjectOverview,
   ProjectPermission,
-  ProjectPropertyChange,
   ProjectStatus,
   UserProjectPermission,
   VendorProject,
@@ -370,62 +366,6 @@ class ProjectApiUtils {
       }
 
       return res;
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  }
-
-  static async getProjectChangelog(projectId: string) {
-    try {
-      const projectChangelogs: project_changelogs[] = await sequelize.models.project_changelog
-        .findAll({
-          where: {
-            projectId,
-          },
-        }) as project_changelogs[];
-      const groupedChanges: ProjectChangelog[] = [];
-      let lastChangeId = null
-      for (let changelog of projectChangelogs) {
-        if (changelog.id !== lastChangeId) {
-          groupedChanges.push({
-            projectId,
-            changedAt: changelog.createdAt.toISOString(),
-            changes: []
-          } as ProjectChangelog)
-          lastChangeId = changelog.id;
-        }
-        const changes = groupedChanges.at(-1)!.changes;
-        changes.push(changelog as ProjectPropertyChange);
-      }
-      return groupedChanges;
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  }
-
-  static async getProjectComponentChangelog(projectComponentId: string) {
-    try {
-      const projectChangelogs: project_component_changelogs[] = await sequelize.models.project_component_changelogs
-        .findAll({
-          where: {
-            projectComponentId,
-          },
-        }) as project_component_changelogs[];
-      const groupedChanges: ProjectComponentChangelog[] = [];
-      let lastChangeId = null
-      for (let changelog of projectChangelogs) {
-        if (changelog.id !== lastChangeId) {
-          groupedChanges.push({
-            projectComponentId,
-            changedAt: changelog.createdAt.toISOString(),
-            changes: []
-          } as ProjectComponentChangelog)
-          lastChangeId = changelog.id;
-        }
-        const changes = groupedChanges.at(-1)!.changes;
-        changes.push(changelog as ProjectComponentPropertyChange);
-      }
-      return groupedChanges;
     } catch (e) {
       return Promise.reject(e);
     }

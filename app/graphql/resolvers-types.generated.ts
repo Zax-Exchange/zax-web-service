@@ -810,8 +810,8 @@ export type Query = {
   getPlan: Plan;
   getProjectBid?: Maybe<ProjectBid>;
   getProjectBidUsers: Array<UserProjectPermission>;
-  getProjectChangelog: Array<Maybe<ProjectChangelog>>;
-  getProjectComponentChangelog: Array<Maybe<ProjectComponentChangelog>>;
+  getProjectChangelog: Array<ProjectChangelog>;
+  getProjectComponentChangelog: Array<ProjectComponentChangelog>;
   getProjectDetail?: Maybe<Project>;
   getProjectUsers: Array<UserProjectPermission>;
   getUser: User;
@@ -885,12 +885,12 @@ export type QueryGetProjectBidUsersArgs = {
 
 
 export type QueryGetProjectChangelogArgs = {
-  data?: InputMaybe<GetProjectChangelogInput>;
+  data: GetProjectChangelogInput;
 };
 
 
 export type QueryGetProjectComponentChangelogArgs = {
-  data?: InputMaybe<GetProjectComponentChangelogInput>;
+  data: GetProjectComponentChangelogInput;
 };
 
 

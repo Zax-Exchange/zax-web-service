@@ -19,7 +19,7 @@ type Query {
 
   getProjectDetail(data: GetProjectDetailInput!): Project
 
-  getProjectChangelog(data: GetProjectChangelogInput): [ProjectChangelog]!
+  getProjectChangelog(data: GetProjectChangelogInput!): [ProjectChangelog!]!
 
-  getProjectComponentChangelog(data: GetProjectComponentChangelogInput): [ProjectComponentChangelog]!
+  getProjectComponentChangelog(data: GetProjectComponentChangelogInput!): [ProjectComponentChangelog!]!
 }

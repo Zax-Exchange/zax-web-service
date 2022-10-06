@@ -99,14 +99,7 @@ const updateProjectComponent = async (
       ]
       changes.forEach((change: project_component_changelogs) => {
         updates.push(sequelize.models.project_component_changelogs.create(
-          {
-            projectComponentId: change.projectComponentId,
-            projectComponentSpecId: change.projectComponentSpecId,
-            id: change.id,
-            propertyName: change.propertyName,
-            oldValue: change.oldValue,
-            newValue: change.newValue
-          },
+          {...change},
           { transaction }
         ));
       })

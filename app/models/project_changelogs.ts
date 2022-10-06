@@ -60,10 +60,6 @@ export class project_changelogs
           type: DataTypes.JSON,
           allowNull: true
         },
-        createdAt: {
-          type: DataTypes.DATE,
-          allowNull: false
-        },
       },
       {
         tableName: "project_changelogs",
