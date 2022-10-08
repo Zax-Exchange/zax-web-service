@@ -40,6 +40,7 @@ type ProjectComponentSpec {
   id: String!
   productName: String!
   dimension: String!
+  style: String
   boxStyle: String
   # unique attribute for corrugate
   flute: String

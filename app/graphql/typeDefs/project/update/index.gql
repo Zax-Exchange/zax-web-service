@@ -18,6 +18,7 @@ input UpdateProjectComponentInput {
 input UpdateProjectComponentSpecInput {
   productName: String!
   dimension: String!
+  style: String
   boxStyle: String
   flute: String
   manufacturingProcess: String
