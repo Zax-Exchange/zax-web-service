@@ -36,6 +36,18 @@ type Project {
   updatedAt: String!
 }
 
+type ProjectChangelog {
+  projectId: String!
+  changedAt: String!
+  changes: [ProjectPropertyChange!]!
+}
+
+type ProjectPropertyChange {
+  propertyName: String!
+  oldValue: JSON
+  newValue: JSON
+}
+
 type ProjectComponentSpec {
   id: String!
   productName: String!
@@ -74,6 +86,19 @@ type ProjectComponent {
   projectId: String!
   name: String!
   componentSpec: ProjectComponentSpec!
+}
+
+type ProjectComponentChangelog {
+  projectComponentId: String!
+  changedAt: String!
+  changes: [ProjectComponentPropertyChange!]!
+}
+
+type ProjectComponentPropertyChange {
+  projectComponentSpecId: String
+  propertyName: String!
+  oldValue: JSON
+  newValue: JSON
 }
 
 enum ProjectPermission {

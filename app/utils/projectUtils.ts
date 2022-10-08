@@ -21,6 +21,8 @@ import {
   VendorProject,
   VendorProjectOverview,
 } from "../graphql/resolvers-types.generated";
+import { project_changelogs } from "../models/project_changelogs";
+import { project_component_changelogs } from "../models/project_component_changelogs";
 
 class ProjectApiUtils {
   // Returns a list of vendor user ids that have bids for the project
