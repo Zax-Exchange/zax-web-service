@@ -1,6 +1,7 @@
 import sequelize from "../../../../postgres/dbconnection";
 import { UpdateUserPasswordInput } from "../../../resolvers-types.generated";
 import bcrypt from "bcryptjs";
+import cacheService from "../../../../redis/CacheService";
 
 const updateUserPassword = async (
   parent: any,
@@ -22,6 +23,7 @@ const updateUserPassword = async (
     await user?.update({
       password: encrypted,
     });
+    await cacheService.invalidateUserInCache(userId);
 
     return true;
   } catch (error) {

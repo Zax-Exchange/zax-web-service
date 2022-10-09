@@ -1,4 +1,5 @@
 import sequelize from "../../../../postgres/dbconnection";
+import cacheService from "../../../../redis/CacheService";
 import { UpdateUserInfoInput } from "../../../resolvers-types.generated";
 
 const updateUserInfo = async (
@@ -15,6 +16,7 @@ const updateUserInfo = async (
         where: { id: userId },
       }
     );
+    await cacheService.invalidateUserInCache(userId);
     return Promise.resolve(true);
   } catch (e) {
     console.error(e);
