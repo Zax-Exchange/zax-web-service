@@ -12,7 +12,7 @@ type ProjectOverview {
   createdAt: String!
 }
 type ProjectDesign {
-  fileName: String!
+  filename: String!
   url: String!
 }
 
@@ -28,7 +28,6 @@ type Project {
   deliveryAddress: String!
   targetPrice: Int!
   orderQuantities: [Int!]!
-  design: [ProjectDesign!]
   status: String!
   components: [ProjectComponent!]!
   comments: String!
@@ -85,6 +84,7 @@ type ProjectComponent {
   id: String!
   projectId: String!
   name: String!
+  designs: [ProjectDesign!]
   componentSpec: ProjectComponentSpec!
 }
 

@@ -6,6 +6,7 @@ import type {
 } from "./project_bid_components";
 import type { projects, projectsId } from "./projects";
 import { component_specs, component_specsId } from "./component_specs";
+import { project_designs } from "./project_designs";
 
 export interface project_componentsAttributes {
   id: string;
@@ -81,6 +82,10 @@ export class project_components
     component_specs,
     component_specsId
   >;
+
+  // project_components hasMany project_designs via projectId
+  project_design!: project_designs[];
+  getProject_design!: Sequelize.HasManyGetAssociationsMixin<project_designs>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof project_components {
     return sequelize.define(

@@ -117,6 +117,7 @@ export type CreateProjectBidInput = {
 
 export type CreateProjectComponentInput = {
   componentSpec: CreateProjectComponentSpecInput;
+  designIds?: InputMaybe<Array<Scalars['String']>>;
   name: Scalars['String'];
 };
 
@@ -152,7 +153,6 @@ export type CreateProjectInput = {
   creationMode: ProjectCreationMode;
   deliveryAddress: Scalars['String'];
   deliveryDate: Scalars['String'];
-  designIds: Array<Scalars['String']>;
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;
   targetPrice: Scalars['Int'];
@@ -231,7 +231,6 @@ export type CustomerProject = {
   creationMode: ProjectCreationMode;
   deliveryAddress: Scalars['String'];
   deliveryDate: Scalars['String'];
-  design?: Maybe<Array<ProjectDesign>>;
   id: Scalars['String'];
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;
@@ -650,7 +649,6 @@ export type Project = {
   createdAt: Scalars['String'];
   deliveryAddress: Scalars['String'];
   deliveryDate: Scalars['String'];
-  design?: Maybe<Array<ProjectDesign>>;
   id: Scalars['String'];
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;
@@ -693,6 +691,7 @@ export type ProjectChangelog = {
 export type ProjectComponent = {
   __typename?: 'ProjectComponent';
   componentSpec: ProjectComponentSpec;
+  designs?: Maybe<Array<ProjectDesign>>;
   id: Scalars['String'];
   name: Scalars['String'];
   projectId: Scalars['String'];
@@ -747,7 +746,7 @@ export enum ProjectCreationMode {
 
 export type ProjectDesign = {
   __typename?: 'ProjectDesign';
-  fileName: Scalars['String'];
+  filename: Scalars['String'];
   url: Scalars['String'];
 };
 
@@ -1171,7 +1170,6 @@ export type VendorProject = {
   createdAt: Scalars['String'];
   deliveryAddress: Scalars['String'];
   deliveryDate: Scalars['String'];
-  design?: Maybe<Array<ProjectDesign>>;
   id: Scalars['String'];
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;

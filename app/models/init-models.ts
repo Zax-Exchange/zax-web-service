@@ -53,7 +53,7 @@ import type {
 } from "./project_permissions";
 import { projects as _projects } from "./projects";
 import { project_changelogs as _project_changelogs } from "./project_changelogs";
-import { project_component_changelogs as _project_component_changelogs } from "./project_component_changelogs"
+import { project_component_changelogs as _project_component_changelogs } from "./project_component_changelogs";
 import type {
   projectsAttributes,
   projectsCreationAttributes,
@@ -148,7 +148,8 @@ export function initModels(sequelize: Sequelize) {
 
   const project_designs = _project_designs.initModel(sequelize);
   const project_changelogs = _project_changelogs.initModel(sequelize);
-  const project_component_changelogs = _project_component_changelogs.initModel(sequelize);
+  const project_component_changelogs =
+    _project_component_changelogs.initModel(sequelize);
 
   company_plans.belongsTo(companies, {
     as: "company",
@@ -309,6 +310,18 @@ export function initModels(sequelize: Sequelize) {
     foreignKey: "projectComponentId",
     onDelete: "CASCADE",
   });
+
+  project_components.hasMany(project_designs, {
+    as: "project_design",
+    foreignKey: "projectComponentId",
+    onDelete: "CASCADE",
+  });
+  project_designs.belongsTo(project_components, {
+    as: "project_component",
+    foreignKey: "projectComponentId",
+    onDelete: "CASCADE",
+  });
+
   component_specs.belongsTo(project_bid_components, {
     as: "projectComponent",
     foreignKey: "projectComponentId",

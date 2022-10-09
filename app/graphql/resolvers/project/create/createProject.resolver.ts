@@ -19,7 +19,6 @@ const createProject = async (
   const users = sequelize.models.users;
   const {
     userId,
-    designIds,
     creationMode,
     name,
     category,
@@ -57,26 +56,6 @@ const createProject = async (
       );
       const projectId = project.getDataValue("id");
 
-      // designId exists if user uploaded a project design
-      if (designIds.length) {
-        const [designs] = await Promise.all(
-          designIds.map((designId) => {
-            return sequelize.models.project_designs.findByPk(designId);
-          })
-        );
-        for (let designId of designIds) {
-          const design = await sequelize.models.project_designs.findByPk(
-            designId
-          );
-          design?.update(
-            {
-              projectId,
-            },
-            { transaction }
-          );
-        }
-      }
-
       const products = [];
       for (let comp of components) {
         products.push(comp.componentSpec.productName);
@@ -93,7 +72,7 @@ const createProject = async (
       });
 
       await Promise.all([
-        createProjectComponents(projectId, components, companyId, transaction),
+        createProjectComponents(projectId, components, transaction),
         createOrUpdateProjectPermission(
           { userIds: [userId], projectId, permission: ProjectPermission.Owner },
           transaction

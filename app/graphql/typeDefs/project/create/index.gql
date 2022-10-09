@@ -32,6 +32,7 @@ input CreateProjectComponentSpecInput {
 
 input CreateProjectComponentInput {
   name: String!
+  designIds: [String!]
   componentSpec: CreateProjectComponentSpecInput!
 }
 
@@ -41,7 +42,6 @@ input CreateProjectInput {
   name: String!
   category: String!
   totalWeight: String!
-  designIds: [String!]!
   deliveryDate: String!
   deliveryAddress: String!
   targetPrice: Int!
