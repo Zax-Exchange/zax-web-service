@@ -12,6 +12,7 @@ input UpdateProjectInput {
 input UpdateProjectComponentInput {
   componentId: String!
   name: String!
+  designIds: [String!]
   componentSpec: UpdateProjectComponentSpecInput!
 }
 

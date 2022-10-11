@@ -422,7 +422,7 @@ export type Mutation = {
   updateUserPassword: Scalars['Boolean'];
   updateUserPower: Scalars['Boolean'];
   updateVendorInfo: Scalars['Boolean'];
-  uploadProjectDesign: UploadProjectDesignResponse;
+  uploadProjectDesign: ProjectDesign;
 };
 
 
@@ -746,6 +746,7 @@ export enum ProjectCreationMode {
 
 export type ProjectDesign = {
   __typename?: 'ProjectDesign';
+  designId: Scalars['String'];
   filename: Scalars['String'];
   url: Scalars['String'];
 };
@@ -1012,6 +1013,7 @@ export type UpdateProjectBidPermissionsInputData = {
 export type UpdateProjectComponentInput = {
   componentId: Scalars['String'];
   componentSpec: UpdateProjectComponentSpecInput;
+  designIds?: InputMaybe<Array<Scalars['String']>>;
   name: Scalars['String'];
 };
 
@@ -1095,13 +1097,6 @@ export type UpdateVendorInfoInput = {
   name: Scalars['String'];
   phone: Scalars['String'];
   products: Array<Scalars['String']>;
-};
-
-export type UploadProjectDesignResponse = {
-  __typename?: 'UploadProjectDesignResponse';
-  designId: Scalars['String'];
-  filename: Scalars['String'];
-  url: Scalars['String'];
 };
 
 export type User = {

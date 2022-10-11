@@ -149,6 +149,7 @@ class ProjectApiUtils {
                   ...componentSpec.get({ plain: true }),
                 },
                 designs: designs.map((design) => ({
+                  designId: design.id,
                   filename: design.fileName,
                   url: `${process.env.AWS_CDN_URL}/${design.id}`,
                 })),

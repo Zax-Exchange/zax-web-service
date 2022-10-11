@@ -12,6 +12,7 @@ type ProjectOverview {
   createdAt: String!
 }
 type ProjectDesign {
+  designId: String!
   filename: String!
   url: String!
 }
