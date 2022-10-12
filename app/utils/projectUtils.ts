@@ -134,7 +134,7 @@ class ProjectApiUtils {
 
         return Promise.all([
           (p as projects).getProject_components(),
-          (p as projects).getProject_design(),
+          (p as projects).getProject_designs(),
           (p as projects).getCompany(),
         ]).then(async (res) => {
           const [componentInstances, designInstances, companyInstance] = res;

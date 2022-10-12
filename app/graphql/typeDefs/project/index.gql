@@ -54,6 +54,11 @@ type ProjectComponentSpec {
   dimension: String!
   style: String
   boxStyle: String
+
+  # unique attribute for sticker
+  purpose: String
+  shape: String
+
   # unique attribute for corrugate
   flute: String
   # unique attribute for molded fiber

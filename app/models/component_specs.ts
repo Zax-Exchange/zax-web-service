@@ -12,6 +12,11 @@ export interface component_specsAttributes {
   dimension: string;
   boxStyle?: string;
   style?: string;
+
+  /* unique attr for sticker */
+  purpose?: string;
+  shape?: string;
+
   /* unique attribute for molded fiber */
   manufacturingProcess?: string;
 
@@ -48,6 +53,8 @@ export type component_specsId = component_specs[component_specsPk];
 export type component_specsOptionalAttributes =
   | "style"
   | "boxStyle"
+  | "purpose"
+  | "shape"
   | "thickness"
   | "flute"
   | "manufacturingProcess"
@@ -83,6 +90,8 @@ export class component_specs
   dimension!: string;
   style?: string;
   boxStyle?: string;
+  purpose?: string;
+  shape?: string;
   thickness?: string;
   flute?: string;
   manufacturingProcess?: string;
@@ -147,6 +156,14 @@ export class component_specs
           allowNull: true,
         },
         boxStyle: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        purpose: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        shape: {
           type: DataTypes.STRING(255),
           allowNull: true,
         },

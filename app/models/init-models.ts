@@ -154,7 +154,6 @@ export function initModels(sequelize: Sequelize) {
   company_plans.belongsTo(companies, {
     as: "company",
     foreignKey: "companyId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   company_plans.belongsTo(stripe_customers, {
@@ -170,110 +169,92 @@ export function initModels(sequelize: Sequelize) {
   companies.hasOne(company_plans, {
     as: "company_plan",
     foreignKey: "companyId",
-    hooks: true,
     onDelete: "CASCADE",
   });
 
   customers.belongsTo(companies, {
     as: "company",
     foreignKey: "companyId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   companies.hasOne(customers, {
     as: "customer",
     foreignKey: "companyId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   project_bids.belongsTo(companies, {
     as: "company",
     foreignKey: "companyId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   companies.hasMany(project_bids, {
     as: "project_bids",
     foreignKey: "companyId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   projects.belongsTo(companies, {
     as: "company",
     foreignKey: "companyId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   companies.hasMany(projects, {
     as: "projects",
     foreignKey: "companyId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   users.belongsTo(companies, {
     as: "company",
     foreignKey: "companyId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   companies.hasMany(users, {
     as: "users",
     foreignKey: "companyId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   vendors.belongsTo(companies, {
     as: "company",
     foreignKey: "companyId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   companies.hasOne(vendors, {
     as: "vendor",
     foreignKey: "companyId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   company_plans.belongsTo(plans, {
     as: "plan",
     foreignKey: "planId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   plans.hasMany(company_plans, {
     as: "company_plans",
     foreignKey: "planId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   project_bid_components.belongsTo(project_bids, {
     as: "projectBid",
     foreignKey: "projectBidId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   project_bids.hasMany(project_bid_components, {
     as: "project_bid_components",
     foreignKey: "projectBidId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   project_bid_permissions.belongsTo(project_bids, {
     as: "projectBid",
     foreignKey: "projectBidId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   project_bid_permissions.belongsTo(projects, {
     as: "project",
     foreignKey: "projectId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   project_bids.hasMany(project_bid_permissions, {
     as: "project_bid_permissions",
     foreignKey: "projectBidId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   project_bid_components.belongsTo(project_components, {
@@ -283,26 +264,22 @@ export function initModels(sequelize: Sequelize) {
   project_components.hasMany(project_bid_components, {
     as: "project_bid_components",
     foreignKey: "projectComponentId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   project_bids.belongsTo(projects, {
     as: "project",
     foreignKey: "projectId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   projects.hasMany(project_bids, {
     as: "project_bids",
     foreignKey: "projectId",
-    hooks: true,
     onDelete: "CASCADE",
   });
 
   project_components.belongsTo(projects, {
     as: "project",
     foreignKey: "projectId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   project_components.hasOne(component_specs, {
@@ -330,79 +307,92 @@ export function initModels(sequelize: Sequelize) {
   projects.hasMany(project_components, {
     as: "project_components",
     foreignKey: "projectId",
-    hooks: true,
     onDelete: "CASCADE",
   });
 
   project_permissions.belongsTo(projects, {
     as: "project",
     foreignKey: "projectId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   projects.hasMany(project_permissions, {
     as: "project_permissions",
     foreignKey: "projectId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   project_bid_permissions.belongsTo(users, {
     as: "user",
     foreignKey: "userId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   users.hasMany(project_bid_permissions, {
     as: "project_bid_permissions",
     foreignKey: "userId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   project_bids.belongsTo(users, {
     as: "user",
     foreignKey: "userId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   users.hasMany(project_bids, {
     as: "project_bids",
     foreignKey: "userId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   project_permissions.belongsTo(users, {
     as: "user",
     foreignKey: "userId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   users.hasMany(project_permissions, {
     as: "project_permissions",
     foreignKey: "userId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   projects.belongsTo(users, {
     as: "user",
     foreignKey: "userId",
-    hooks: true,
     onDelete: "CASCADE",
   });
   users.hasMany(projects, {
     as: "projects",
     foreignKey: "userId",
-    hooks: true,
     onDelete: "CASCADE",
   });
 
   projects.hasMany(project_designs, {
-    as: "project_design",
+    as: "project_designs",
     foreignKey: "projectId",
     onDelete: "CASCADE",
   });
   project_designs.belongsTo(projects, {
     as: "project",
     foreignKey: "projectId",
+    onDelete: "CASCADE",
+  });
+
+  project_changelogs.belongsTo(projects, {
+    as: "project",
+    foreignKey: "projectId",
+    onDelete: "CASCADE",
+  });
+
+  projects.hasMany(project_changelogs, {
+    as: "project_changelogs",
+    foreignKey: "projectId",
+    onDelete: "CASCADE",
+  });
+
+  project_component_changelogs.belongsTo(project_components, {
+    as: "project_component",
+    foreignKey: "projectComponentId",
+    onDelete: "CASCADE",
+  });
+
+  project_components.hasMany(project_component_changelogs, {
+    as: "project_component_changelogs",
+    foreignKey: "projectComponentId",
     onDelete: "CASCADE",
   });
 

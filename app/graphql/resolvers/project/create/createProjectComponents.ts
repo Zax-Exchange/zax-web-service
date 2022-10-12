@@ -7,7 +7,6 @@ import { v4 as uuidv4 } from "uuid";
  * Creates a list of project components associated with projectId
  * @param projectId
  * @param components
- * @param companyId
  * @param transaction
  * @returns boolean
  */
@@ -23,14 +22,7 @@ const createProjectComponents = async (
     await Promise.all(
       components.map(async (component) => {
         const projectComponentId = uuidv4();
-        await project_components.create(
-          {
-            id: projectComponentId,
-            projectId,
-            ...component,
-          },
-          { transaction }
-        );
+
         const { designIds } = component;
 
         if (designIds) {
@@ -48,14 +40,24 @@ const createProjectComponents = async (
           );
         }
 
-        await component_specs.create(
-          {
-            id: uuidv4(),
-            projectComponentId,
-            ...component.componentSpec,
-          },
-          { transaction }
-        );
+        await Promise.all([
+          project_components.create(
+            {
+              id: projectComponentId,
+              projectId,
+              ...component,
+            },
+            { transaction }
+          ),
+          component_specs.create(
+            {
+              id: uuidv4(),
+              projectComponentId,
+              ...component.componentSpec,
+            },
+            { transaction }
+          ),
+        ]);
       })
     );
 
