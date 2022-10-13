@@ -18,7 +18,7 @@ const searchCustomerProjects = async (
     );
     const projectOverviews = await Promise.all(
       projectDocs.map(async (project) => {
-        const proj = await ProjectApiUtils.getProject(project._id);
+        const proj = await ProjectApiUtils.getProjectInstance(project._id);
 
         if (!proj) return null;
 
@@ -33,7 +33,7 @@ const searchCustomerProjects = async (
           targetPrice: proj.targetPrice,
           orderQuantities: proj.orderQuantities,
           products: (project._source as any).products,
-          createdAt: proj.createdAt,
+          createdAt: proj.createdAt.toISOString(),
         } as ProjectOverview;
       })
     );
