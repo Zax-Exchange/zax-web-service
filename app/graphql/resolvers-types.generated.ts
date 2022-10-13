@@ -226,6 +226,7 @@ export type CustomerProject = {
   __typename?: 'CustomerProject';
   bids?: Maybe<Array<ProjectBid>>;
   category: Scalars['String'];
+  comments: Scalars['String'];
   companyId: Scalars['String'];
   companyName: Scalars['String'];
   components: Array<ProjectComponent>;
@@ -1048,6 +1049,7 @@ export type UpdateProjectComponentSpecInput = {
 
 export type UpdateProjectInput = {
   category: Scalars['String'];
+  comments?: InputMaybe<Scalars['String']>;
   deliveryAddress: Scalars['String'];
   deliveryDate: Scalars['String'];
   name: Scalars['String'];
@@ -1163,6 +1165,7 @@ export type VendorProject = {
   __typename?: 'VendorProject';
   bidInfo: PermissionedProjectBid;
   category: Scalars['String'];
+  comments: Scalars['String'];
   companyId: Scalars['String'];
   companyName: Scalars['String'];
   components: Array<ProjectComponent>;

@@ -21,13 +21,15 @@ const getCustomerProjects = async (
 
     return await Promise.all(
       projectPermissions.map(async (permission) => {
-        const project = await sequelize.models.projects
-          .findByPk(permission.projectId)
-          .then((p) => p?.get({ plain: true }));
+        const project = await ProjectApiUtils.getProjectInstance(
+          permission.projectId
+        );
 
         return {
           ...project,
           permission: permission.permission,
+          createdAt: project.createdAt.toISOString(),
+          updatedAt: project.updatedAt.toISOString(),
         } as CustomerProjectOverview;
       })
     );

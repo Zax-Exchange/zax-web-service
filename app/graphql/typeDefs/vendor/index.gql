@@ -59,6 +59,7 @@ type VendorProject {
   deliveryAddress: String!
   targetPrice: Int!
   orderQuantities: [Int!]!
+  comments: String!
   status: String!
   permission: ProjectPermission!
   components: [ProjectComponent!]!

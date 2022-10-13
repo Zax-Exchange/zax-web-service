@@ -34,8 +34,8 @@ const getVendorProjects = async (
         bidStatus: bid.status,
         bidId: bid.id,
         permission: permission.permission,
-        createdAt: project.createdAt as any,
-        updatedAt: project.updatedAt as any,
+        createdAt: project.createdAt.toISOString(),
+        updatedAt: project.updatedAt.toISOString(),
       });
     }
 

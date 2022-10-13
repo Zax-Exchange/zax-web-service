@@ -57,29 +57,6 @@ class ProjectApiUtils {
   }
 
   /**
-   * Get project components with projectId
-   * @param projectId
-   * @returns commonProjectTypes.ProjectComponent
-   */
-  static async getProjectComponents(
-    projectId: string
-  ): Promise<ProjectComponent[]> {
-    const project_components = sequelize.models.project_components;
-    try {
-      const components = await project_components
-        .findAll({
-          where: {
-            projectId,
-          },
-        })
-        .then((comps) => comps.map((comp) => comp.get({ plain: true })));
-      return Promise.resolve(components);
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  }
-
-  /**
    * Get project bid components with projectBidId
    * @param projectBidId
    * @returns
@@ -231,8 +208,6 @@ class ProjectApiUtils {
   ) {
     try {
       const project = await ProjectApiUtils.getProject(projectId);
-
-      // const components = await ProjectApiUtils.getProjectComponents(projectId);
 
       // vendor permission will always be viewer, customer permission will vary
       const res = {
