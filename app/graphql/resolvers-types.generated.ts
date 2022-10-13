@@ -117,6 +117,7 @@ export type CreateProjectBidInput = {
 
 export type CreateProjectComponentInput = {
   componentSpec: CreateProjectComponentSpecInput;
+  designIds?: InputMaybe<Array<Scalars['String']>>;
   name: Scalars['String'];
 };
 
@@ -141,6 +142,8 @@ export type CreateProjectComponentSpecInput = {
   outsidePostProcess?: InputMaybe<Array<Scalars['String']>>;
   postProcess?: InputMaybe<Array<Scalars['String']>>;
   productName: Scalars['String'];
+  purpose?: InputMaybe<Scalars['String']>;
+  shape?: InputMaybe<Scalars['String']>;
   style?: InputMaybe<Scalars['String']>;
   thickness?: InputMaybe<Scalars['String']>;
 };
@@ -152,7 +155,6 @@ export type CreateProjectInput = {
   creationMode: ProjectCreationMode;
   deliveryAddress: Scalars['String'];
   deliveryDate: Scalars['String'];
-  designIds: Array<Scalars['String']>;
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;
   targetPrice: Scalars['Int'];
@@ -231,7 +233,6 @@ export type CustomerProject = {
   creationMode: ProjectCreationMode;
   deliveryAddress: Scalars['String'];
   deliveryDate: Scalars['String'];
-  design?: Maybe<Array<ProjectDesign>>;
   id: Scalars['String'];
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;
@@ -423,7 +424,7 @@ export type Mutation = {
   updateUserPassword: Scalars['Boolean'];
   updateUserPower: Scalars['Boolean'];
   updateVendorInfo: Scalars['Boolean'];
-  uploadProjectDesign: UploadProjectDesignResponse;
+  uploadProjectDesign: ProjectDesign;
 };
 
 
@@ -650,7 +651,6 @@ export type Project = {
   createdAt: Scalars['String'];
   deliveryAddress: Scalars['String'];
   deliveryDate: Scalars['String'];
-  design?: Maybe<Array<ProjectDesign>>;
   id: Scalars['String'];
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;
@@ -693,6 +693,7 @@ export type ProjectChangelog = {
 export type ProjectComponent = {
   __typename?: 'ProjectComponent';
   componentSpec: ProjectComponentSpec;
+  designs?: Maybe<Array<ProjectDesign>>;
   id: Scalars['String'];
   name: Scalars['String'];
   projectId: Scalars['String'];
@@ -736,6 +737,8 @@ export type ProjectComponentSpec = {
   outsidePostProcess?: Maybe<Array<Scalars['String']>>;
   postProcess?: Maybe<Array<Scalars['String']>>;
   productName: Scalars['String'];
+  purpose?: Maybe<Scalars['String']>;
+  shape?: Maybe<Scalars['String']>;
   style?: Maybe<Scalars['String']>;
   thickness?: Maybe<Scalars['String']>;
 };
@@ -747,7 +750,8 @@ export enum ProjectCreationMode {
 
 export type ProjectDesign = {
   __typename?: 'ProjectDesign';
-  fileName: Scalars['String'];
+  designId: Scalars['String'];
+  filename: Scalars['String'];
   url: Scalars['String'];
 };
 
@@ -1013,6 +1017,7 @@ export type UpdateProjectBidPermissionsInputData = {
 export type UpdateProjectComponentInput = {
   componentId: Scalars['String'];
   componentSpec: UpdateProjectComponentSpecInput;
+  designIds?: InputMaybe<Array<Scalars['String']>>;
   name: Scalars['String'];
 };
 
@@ -1098,13 +1103,6 @@ export type UpdateVendorInfoInput = {
   products: Array<Scalars['String']>;
 };
 
-export type UploadProjectDesignResponse = {
-  __typename?: 'UploadProjectDesignResponse';
-  designId: Scalars['String'];
-  filename: Scalars['String'];
-  url: Scalars['String'];
-};
-
 export type User = {
   __typename?: 'User';
   companyId: Scalars['String'];
@@ -1171,7 +1169,6 @@ export type VendorProject = {
   createdAt: Scalars['String'];
   deliveryAddress: Scalars['String'];
   deliveryDate: Scalars['String'];
-  design?: Maybe<Array<ProjectDesign>>;
   id: Scalars['String'];
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;

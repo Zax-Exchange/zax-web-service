@@ -173,8 +173,8 @@ export class projects
   setUser!: Sequelize.BelongsToSetAssociationMixin<users, usersId>;
   createUser!: Sequelize.BelongsToCreateAssociationMixin<users>;
   // projects hasMany project_designs via projectId
-  project_design!: project_designs[];
-  getProject_design!: Sequelize.HasManyGetAssociationsMixin<project_designs>;
+  project_designs!: project_designs[];
+  getProject_designs!: Sequelize.HasManyGetAssociationsMixin<project_designs>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof projects {
     return sequelize.define(

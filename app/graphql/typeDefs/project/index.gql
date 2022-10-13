@@ -12,7 +12,8 @@ type ProjectOverview {
   createdAt: String!
 }
 type ProjectDesign {
-  fileName: String!
+  designId: String!
+  filename: String!
   url: String!
 }
 
@@ -28,7 +29,6 @@ type Project {
   deliveryAddress: String!
   targetPrice: Int!
   orderQuantities: [Int!]!
-  design: [ProjectDesign!]
   status: String!
   components: [ProjectComponent!]!
   comments: String!
@@ -54,6 +54,11 @@ type ProjectComponentSpec {
   dimension: String!
   style: String
   boxStyle: String
+
+  # unique attribute for sticker
+  purpose: String
+  shape: String
+
   # unique attribute for corrugate
   flute: String
   # unique attribute for molded fiber
@@ -85,6 +90,7 @@ type ProjectComponent {
   id: String!
   projectId: String!
   name: String!
+  designs: [ProjectDesign!]
   componentSpec: ProjectComponentSpec!
 }
 
