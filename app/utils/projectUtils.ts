@@ -140,14 +140,12 @@ class ProjectApiUtils {
 
         return Promise.all([
           (p as projects).getProject_components(),
-          (p as projects).getProject_designs(),
           (p as projects).getCompany(),
         ]).then(async (res) => {
-          const [componentInstances, designInstances, companyInstance] = res;
+          const [componentInstances, companyInstance] = res;
           const components = await Promise.all(
             componentInstances.map(async (comp) => {
               const componentSpec = await comp.getComponent_spec();
-
               const designs = await comp.getProject_design();
               return {
                 ...comp.get({ plain: true }),
