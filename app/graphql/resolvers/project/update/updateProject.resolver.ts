@@ -11,6 +11,7 @@ import {
   UpdateProjectBidComponentInput,
   UpdateProjectInput,
 } from "../../../resolvers-types.generated";
+import cacheService from "../../../../redis/CacheService";
 
 const getProjectDiffs = (originalEntity: projects, projectUpdateData: UpdateProjectInput ) => {
   const output: project_changelogs[] = [];
@@ -94,12 +95,14 @@ const updateProject = async (
           {...change},
           { transaction }
         ));
-      })
+      });
       await Promise.all(updates);
     });
     ElasticProjectService.updateProjectDocumentWithProjectSpec(
       data as updateProjectDocumentWithProjectSpecInput
     );
+
+    await cacheService.invalidateProjectInCache(projectId);
     //TODO: we should also update component spec name in Elastic
     streamService.broadcastProjectUpdate(data.projectId);
     return true;

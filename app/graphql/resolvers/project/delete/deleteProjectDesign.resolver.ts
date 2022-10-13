@@ -1,5 +1,7 @@
 import s3 from "../../../../aws/s3";
+import { project_designs } from "../../../../models/project_designs";
 import sequelize from "../../../../postgres/dbconnection";
+import cacheService from "../../../../redis/CacheService";
 import { DeleteProjectDesignInput } from "../../../resolvers-types.generated";
 
 const deleteProjectDesign = async (
@@ -9,6 +11,7 @@ const deleteProjectDesign = async (
   try {
     const { designId } = data;
 
+    const valueToDelete = await sequelize.models.project_designs.findByPk(designId) as project_designs | null;
     await sequelize.models.project_designs.destroy({
       where: {
         id: designId,
@@ -21,6 +24,10 @@ const deleteProjectDesign = async (
         Key: designId,
       })
       .promise();
+    
+    if (valueToDelete !== null && valueToDelete.projectId !== null) {
+      await cacheService.invalidateProjectInCache(valueToDelete.projectId!);
+    }
     return true;
   } catch (error: any) {
     throw error;

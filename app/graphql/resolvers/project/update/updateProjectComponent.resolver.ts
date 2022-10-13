@@ -8,6 +8,7 @@ import {
   UpdateProjectComponentInput,
 } from "../../../resolvers-types.generated";
 import streamService from "../../../../stream/StreamService";
+import cacheService from "../../../../redis/CacheService";
 
 const getProjectDiffs = (originalComponent: project_components, originalSpec: component_specs, componentUpdateData: UpdateProjectComponentInput ) => {
   const output: project_component_changelogs[] = [];
@@ -107,6 +108,7 @@ const updateProjectComponent = async (
     });
     if (projectId != null) {
       streamService.broadcastProjectUpdate(projectId);
+      await cacheService.invalidateProjectInCache(projectId);
     }
     return true;
   } catch (e) {

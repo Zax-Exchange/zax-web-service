@@ -23,6 +23,7 @@ import {
 } from "../graphql/resolvers-types.generated";
 import { project_changelogs } from "../models/project_changelogs";
 import { project_component_changelogs } from "../models/project_component_changelogs";
+import cacheService from "../redis/CacheService";
 
 class ProjectApiUtils {
   // Returns a list of vendor user ids that have bids for the project
@@ -125,8 +126,13 @@ class ProjectApiUtils {
    * @returns Project
    */
   static async getProject(id: string): Promise<Project | null> {
-    const projects = sequelize.models.projects;
+    // check if value is in cache, and if so, return it
+    const cachedValue: Project | null = await cacheService.getProjectInCache(id);
+    if (cachedValue !== null) {
+      return Promise.resolve(cachedValue);
+    }
 
+    const projects = sequelize.models.projects;
     try {
       return await projects.findByPk(id).then(async (p) => {
         // If somehow db action fails, we return null
@@ -160,12 +166,16 @@ class ProjectApiUtils {
             );
           }
 
-          return {
+          const retValue: Project = {
             ...p?.get({ plain: true }),
             companyName: companyInstance.name,
             design,
             components,
           };
+
+          // store the value into cache and then return it
+          await cacheService.setProjectInCache(retValue);
+          return retValue;
         });
       });
     } catch (e) {

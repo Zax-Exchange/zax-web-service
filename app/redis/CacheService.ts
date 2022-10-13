@@ -1,5 +1,5 @@
 import { createClient } from 'redis';
-import { User } from '../graphql/resolvers-types.generated';
+import { Project, User } from '../graphql/resolvers-types.generated';
 
 const port = process.env.CACHE_PORT
 const host = process.env.CACHE_HOST
@@ -19,7 +19,8 @@ const connectionString = `redis://${host}:${port}/${db}`;
 
 class CacheService {
 
-  static readonly USER_TTL_MS = 300000;   // 300000ms is 5 mins 
+  static readonly PROJECT_TTL_MS = 600000;    // 600000ms is 10 mins 
+  static readonly USER_TTL_MS = 300000;       // 300000ms is 5 mins 
 
   private readonly client;
 
@@ -36,6 +37,53 @@ class CacheService {
       console.error(`could not connect to redis at ${connectionString}`);
     })
   }
+
+  /*
+   * Project Cacheing Methods
+   */
+
+  private getProjectCacheKey(userId: string): string {
+    return `PROJECT:{${userId}}`;
+  }
+
+  async getProjectInCache(projectId: string): Promise<Project|null> {
+    try {
+      const cacheKey = this.getProjectCacheKey(projectId);
+      const valueInCacheString: string = (await this.client.GET(cacheKey))!;
+      const valueInCache = JSON.parse(valueInCacheString) as Project
+      return Promise.resolve(valueInCache);
+    } catch (err) {
+      console.error(`Error retrieving project ${projectId} from cache`, err)
+      return Promise.resolve(null);
+    }
+  }
+
+  async setProjectInCache(value: Project): Promise<boolean> {
+    try {
+      const projectId: string = value.id;
+      const cacheKey = this.getProjectCacheKey(projectId);
+      const valueAsString = JSON.stringify(value);
+      const response: string = (await this.client.SET(cacheKey, valueAsString, {PX: CacheService.PROJECT_TTL_MS}))!;
+      return Promise.resolve(response === "OK");
+    } catch (err) {
+      console.error(`Error storing project ${value} into cache`, err)
+      return Promise.resolve(false);
+    }
+  }
+
+  async invalidateProjectInCache(projectId: string): Promise<number> {
+    try {
+      const cacheKey = this.getProjectCacheKey(projectId);
+      return await this.client.DEL(cacheKey);
+    } catch (err) {
+      console.error(`Error invalidating project ${projectId} into cache`, err)
+      return Promise.resolve(0);
+    }
+  }
+
+  /*
+   * User Cacheing Methods
+   */
 
   private getUserCacheKey(userId: string): string {
     return `USER:{${userId}}`;
