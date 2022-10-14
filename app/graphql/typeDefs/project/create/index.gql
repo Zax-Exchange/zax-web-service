@@ -1,8 +1,15 @@
+input ProductDimensionInput {
+  x: String
+  y: String
+  z: String
+}
+
 input CreateProjectComponentSpecInput {
   productName: String!
-  dimension: String!
+  dimension: ProductDimensionInput!
   style: String
   boxStyle: String
+  includeArtworkInQuote: Boolean
 
   # unique attribute for sticker
   purpose: String
@@ -49,7 +56,7 @@ input CreateProjectInput {
   totalWeight: String!
   deliveryDate: String!
   deliveryAddress: String!
-  targetPrice: Int!
+  targetPrice: String!
   orderQuantities: [Int!]!
   comments: String!
   components: [CreateProjectComponentInput!]!

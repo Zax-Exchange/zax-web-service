@@ -39,7 +39,7 @@ type VendorProjectOverview {
   totalWeight: String!
   deliveryDate: String!
   deliveryAddress: String!
-  targetPrice: Int!
+  targetPrice: String!
   orderQuantities: [Int!]!
   status: String!
   permission: ProjectPermission!
@@ -57,7 +57,7 @@ type VendorProject {
   totalWeight: String!
   deliveryDate: String!
   deliveryAddress: String!
-  targetPrice: Int!
+  targetPrice: String!
   orderQuantities: [Int!]!
   comments: String!
   status: String!

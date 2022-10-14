@@ -12,6 +12,7 @@ export interface component_specsAttributes {
   dimension: string;
   boxStyle?: string;
   style?: string;
+  includeArtworkInQuote?: boolean;
 
   /* unique attr for sticker */
   purpose?: string;
@@ -51,6 +52,7 @@ export interface component_specsAttributes {
 export type component_specsPk = "id";
 export type component_specsId = component_specs[component_specsPk];
 export type component_specsOptionalAttributes =
+  | "includeArtworkInQuote"
   | "style"
   | "boxStyle"
   | "purpose"
@@ -88,6 +90,7 @@ export class component_specs
   projectComponentId!: string;
   productName!: string;
   dimension!: string;
+  includeArtworkInQuote?: boolean;
   style?: string;
   boxStyle?: string;
   purpose?: string;
@@ -148,8 +151,12 @@ export class component_specs
           allowNull: false,
         },
         dimension: {
-          type: DataTypes.STRING(255),
+          type: DataTypes.JSON,
           allowNull: false,
+        },
+        includeArtworkInQuote: {
+          type: DataTypes.BOOLEAN,
+          allowNull: true,
         },
         style: {
           type: DataTypes.STRING(255),

@@ -54,6 +54,9 @@ const createProjectComponents = async (
               id: uuidv4(),
               projectComponentId,
               ...component.componentSpec,
+              dimension: component.componentSpec.dimension
+                ? JSON.stringify(component.componentSpec.dimension)
+                : null,
             },
             { transaction }
           ),

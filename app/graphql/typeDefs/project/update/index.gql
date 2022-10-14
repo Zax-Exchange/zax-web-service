@@ -5,7 +5,7 @@ input UpdateProjectInput {
   totalWeight: String!
   deliveryDate: String!
   deliveryAddress: String!
-  targetPrice: Int!
+  targetPrice: String!
   orderQuantities: [Int!]!
   comments: String
 }
@@ -19,7 +19,8 @@ input UpdateProjectComponentInput {
 
 input UpdateProjectComponentSpecInput {
   productName: String!
-  dimension: String!
+  dimension: ProductDimensionInput!
+  includeArtworkInQuote: Boolean
   style: String
   boxStyle: String
   flute: String

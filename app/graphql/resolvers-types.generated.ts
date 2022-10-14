@@ -124,9 +124,10 @@ export type CreateProjectComponentInput = {
 export type CreateProjectComponentSpecInput = {
   boxStyle?: InputMaybe<Scalars['String']>;
   color?: InputMaybe<Scalars['String']>;
-  dimension: Scalars['String'];
+  dimension: ProductDimensionInput;
   finish?: InputMaybe<Scalars['String']>;
   flute?: InputMaybe<Scalars['String']>;
+  includeArtworkInQuote?: InputMaybe<Scalars['Boolean']>;
   insideColor?: InputMaybe<Scalars['String']>;
   insideFinish?: InputMaybe<Scalars['String']>;
   insideMaterial?: InputMaybe<Scalars['String']>;
@@ -157,7 +158,7 @@ export type CreateProjectInput = {
   deliveryDate: Scalars['String'];
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;
-  targetPrice: Scalars['Int'];
+  targetPrice: Scalars['String'];
   totalWeight: Scalars['String'];
   userId: Scalars['String'];
 };
@@ -239,7 +240,7 @@ export type CustomerProject = {
   orderQuantities: Array<Scalars['Int']>;
   permission: ProjectPermission;
   status: Scalars['String'];
-  targetPrice: Scalars['Int'];
+  targetPrice: Scalars['String'];
   totalWeight: Scalars['String'];
   updatedAt: Scalars['String'];
   userId: Scalars['String'];
@@ -256,7 +257,7 @@ export type CustomerProjectOverview = {
   orderQuantities: Array<Scalars['Int']>;
   permission: ProjectPermission;
   status: Scalars['String'];
-  targetPrice: Scalars['Int'];
+  targetPrice: Scalars['String'];
   totalWeight: Scalars['String'];
   updatedAt: Scalars['String'];
   userId: Scalars['String'];
@@ -642,6 +643,19 @@ export type Pricings = {
   perUser: PricingDetail;
 };
 
+export type ProductDimension = {
+  __typename?: 'ProductDimension';
+  x: Scalars['String'];
+  y: Scalars['String'];
+  z?: Maybe<Scalars['String']>;
+};
+
+export type ProductDimensionInput = {
+  x?: InputMaybe<Scalars['String']>;
+  y?: InputMaybe<Scalars['String']>;
+  z?: InputMaybe<Scalars['String']>;
+};
+
 export type Project = {
   __typename?: 'Project';
   category: Scalars['String'];
@@ -656,7 +670,7 @@ export type Project = {
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;
   status: Scalars['String'];
-  targetPrice: Scalars['Int'];
+  targetPrice: Scalars['String'];
   totalWeight: Scalars['String'];
   updatedAt: Scalars['String'];
   userId: Scalars['String'];
@@ -719,10 +733,11 @@ export type ProjectComponentSpec = {
   __typename?: 'ProjectComponentSpec';
   boxStyle?: Maybe<Scalars['String']>;
   color?: Maybe<Scalars['String']>;
-  dimension: Scalars['String'];
+  dimension: ProductDimension;
   finish?: Maybe<Scalars['String']>;
   flute?: Maybe<Scalars['String']>;
   id: Scalars['String'];
+  includeArtworkInQuote?: Maybe<Scalars['Boolean']>;
   insideColor?: Maybe<Scalars['String']>;
   insideFinish?: Maybe<Scalars['String']>;
   insideMaterial?: Maybe<Scalars['String']>;
@@ -768,7 +783,7 @@ export type ProjectOverview = {
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;
   products: Array<Scalars['String']>;
-  targetPrice: Scalars['Int'];
+  targetPrice: Scalars['String'];
 };
 
 export enum ProjectPermission {
@@ -1025,9 +1040,10 @@ export type UpdateProjectComponentInput = {
 export type UpdateProjectComponentSpecInput = {
   boxStyle?: InputMaybe<Scalars['String']>;
   color?: InputMaybe<Scalars['String']>;
-  dimension: Scalars['String'];
+  dimension: ProductDimensionInput;
   finish?: InputMaybe<Scalars['String']>;
   flute?: InputMaybe<Scalars['String']>;
+  includeArtworkInQuote?: InputMaybe<Scalars['Boolean']>;
   insideColor?: InputMaybe<Scalars['String']>;
   insideFinish?: InputMaybe<Scalars['String']>;
   insideMaterial?: InputMaybe<Scalars['String']>;
@@ -1055,7 +1071,7 @@ export type UpdateProjectInput = {
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;
   projectId: Scalars['String'];
-  targetPrice: Scalars['Int'];
+  targetPrice: Scalars['String'];
   totalWeight: Scalars['String'];
 };
 
@@ -1177,7 +1193,7 @@ export type VendorProject = {
   orderQuantities: Array<Scalars['Int']>;
   permission: ProjectPermission;
   status: Scalars['String'];
-  targetPrice: Scalars['Int'];
+  targetPrice: Scalars['String'];
   totalWeight: Scalars['String'];
   updatedAt: Scalars['String'];
   userId: Scalars['String'];
@@ -1197,7 +1213,7 @@ export type VendorProjectOverview = {
   orderQuantities: Array<Scalars['Int']>;
   permission: ProjectPermission;
   status: Scalars['String'];
-  targetPrice: Scalars['Int'];
+  targetPrice: Scalars['String'];
   totalWeight: Scalars['String'];
   updatedAt: Scalars['String'];
   userId: Scalars['String'];

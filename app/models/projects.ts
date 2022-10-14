@@ -27,7 +27,7 @@ export interface projectsAttributes {
   totalWeight: string;
   deliveryDate: string;
   deliveryAddress: string;
-  targetPrice: number;
+  targetPrice: string;
   orderQuantities: number[];
   status: ProjectStatus;
   comments?: string;
@@ -56,7 +56,7 @@ export class projects
   totalWeight!: string;
   deliveryDate!: string;
   deliveryAddress!: string;
-  targetPrice!: number;
+  targetPrice!: string;
   orderQuantities!: number[];
   status!: ProjectStatus;
   comments?: string;
@@ -226,7 +226,7 @@ export class projects
           allowNull: false,
         },
         targetPrice: {
-          type: DataTypes.INTEGER,
+          type: DataTypes.STRING,
           allowNull: false,
         },
         orderQuantities: {

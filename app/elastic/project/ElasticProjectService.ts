@@ -36,7 +36,7 @@ export default class ElasticProjectService {
               category: { type: "text" },
               deliveryDate: { type: "date" },
               deliveryAddress: { type: "text" },
-              targetPrice: { type: "integer" },
+              targetPrice: { type: "float" },
               products: { type: "text" },
               deleted: { type: "boolean" },
             },

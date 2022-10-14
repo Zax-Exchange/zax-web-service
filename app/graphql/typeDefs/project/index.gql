@@ -6,7 +6,7 @@ type ProjectOverview {
   category: String!
   deliveryDate: String!
   deliveryAddress: String!
-  targetPrice: Int!
+  targetPrice: String!
   orderQuantities: [Int!]!
   products: [String!]!
   createdAt: String!
@@ -27,7 +27,7 @@ type Project {
   totalWeight: String!
   deliveryDate: String!
   deliveryAddress: String!
-  targetPrice: Int!
+  targetPrice: String!
   orderQuantities: [Int!]!
   status: String!
   components: [ProjectComponent!]!
@@ -48,12 +48,19 @@ type ProjectPropertyChange {
   newValue: JSON
 }
 
+type ProductDimension {
+  x: String!
+  y: String!
+  z: String
+}
+
 type ProjectComponentSpec {
   id: String!
   productName: String!
-  dimension: String!
+  dimension: ProductDimension!
   style: String
   boxStyle: String
+  includeArtworkInQuote: Boolean
 
   # unique attribute for sticker
   purpose: String

@@ -124,6 +124,7 @@ class ProjectApiUtils {
                 ...comp.get({ plain: true }),
                 componentSpec: {
                   ...componentSpec.get({ plain: true }),
+                  dimension: JSON.parse(componentSpec.dimension),
                 },
                 designs: designs.map((design) => ({
                   designId: design.id,
