@@ -112,9 +112,15 @@ class ProjectApiUtils {
     projectId: string
   ): Promise<projectsAttributes> {
     try {
-      return await sequelize.models.projects
+      const cachedValue: projectsAttributes | null = await cacheService.getProjectInCache(projectId);
+      if (cachedValue !== null) {
+        return cachedValue;
+      }
+      const retValue = await sequelize.models.projects
         .findByPk(projectId)
         .then((p) => p?.get({ plain: true }) as projectsAttributes);
+      await cacheService.setProjectInCache(retValue);
+      return retValue;
     } catch (error) {
       return Promise.reject(error);
     }
@@ -127,14 +133,13 @@ class ProjectApiUtils {
    */
   static async getProject(id: string): Promise<Project | null> {
     // check if value is in cache, and if so, return it
-    const cachedValue: Project | null = await cacheService.getProjectInCache(id);
+    const cachedValue: Project | null = await cacheService.getDetailedProjectInCache(id);
     if (cachedValue !== null) {
       return Promise.resolve(cachedValue);
     }
 
-    const projects = sequelize.models.projects;
     try {
-      return await projects.findByPk(id).then(async (p) => {
+      return await sequelize.models.projects.findByPk(id).then(async (p) => {
         // If somehow db action fails, we return null
         if (!p) return null;
 
@@ -168,7 +173,10 @@ class ProjectApiUtils {
           };
 
           // store the value into cache and then return it
-          await cacheService.setProjectInCache(retValue);
+          await Promise.all([
+            cacheService.setProjectInCache(p.get({ plain: true }) as projectsAttributes),
+            cacheService.setDetailedProjectInCache(retValue)
+          ]);
           return retValue;
         });
       });

@@ -1,5 +1,6 @@
 import { createClient } from 'redis';
 import { Project, User } from '../graphql/resolvers-types.generated';
+import { projectsAttributes } from '../models/projects';
 
 const port = process.env.CACHE_PORT
 const host = process.env.CACHE_HOST
@@ -42,15 +43,19 @@ class CacheService {
    * Project Cacheing Methods
    */
 
-  private getProjectCacheKey(userId: string): string {
-    return `PROJECT:{${userId}}`;
+  private getProjectCacheKey(projectId: string): string {
+    return `PROJECT:{${projectId}}`;
   }
 
-  async getProjectInCache(projectId: string): Promise<Project|null> {
+  private getDetailedProjectCacheKey(projectId: string): string {
+    return `DETAILED_PROJECT:{${projectId}}`;
+  }
+
+  async getProjectInCache(projectId: string): Promise<projectsAttributes|null> {
     try {
       const cacheKey = this.getProjectCacheKey(projectId);
       const valueInCacheString: string = (await this.client.GET(cacheKey))!;
-      const valueInCache = JSON.parse(valueInCacheString) as Project
+      const valueInCache = JSON.parse(valueInCacheString) as projectsAttributes
       return Promise.resolve(valueInCache);
     } catch (err) {
       console.error(`Error retrieving project ${projectId} from cache`, err)
@@ -58,7 +63,7 @@ class CacheService {
     }
   }
 
-  async setProjectInCache(value: Project): Promise<boolean> {
+  async setProjectInCache(value: projectsAttributes): Promise<boolean> {
     try {
       const projectId: string = value.id;
       const cacheKey = this.getProjectCacheKey(projectId);
@@ -71,10 +76,40 @@ class CacheService {
     }
   }
 
+  async getDetailedProjectInCache(projectId: string): Promise<Project|null> {
+    try {
+      const cacheKey = this.getDetailedProjectCacheKey(projectId);
+      const valueInCacheString: string = (await this.client.GET(cacheKey))!;
+      const valueInCache = JSON.parse(valueInCacheString) as Project
+      return Promise.resolve(valueInCache);
+    } catch (err) {
+      console.error(`Error retrieving detailed project ${projectId} from cache`, err)
+      return Promise.resolve(null);
+    }
+  }
+
+  async setDetailedProjectInCache(value: Project): Promise<boolean> {
+    try {
+      const projectId: string = value.id;
+      const cacheKey = this.getDetailedProjectCacheKey(projectId);
+      const valueAsString = JSON.stringify(value);
+      const response: string = (await this.client.SET(cacheKey, valueAsString, {PX: CacheService.PROJECT_TTL_MS}))!;
+      return Promise.resolve(response === "OK");
+    } catch (err) {
+      console.error(`Error storing detailed project ${value} into cache`, err)
+      return Promise.resolve(false);
+    }
+  }
+
   async invalidateProjectInCache(projectId: string): Promise<number> {
     try {
       const cacheKey = this.getProjectCacheKey(projectId);
-      return await this.client.DEL(cacheKey);
+      const cacheKeyDetailed = this.getDetailedProjectCacheKey(projectId);
+      const numDeleted = await Promise.all([
+        this.client.DEL(cacheKey),
+        this.client.DEL(cacheKeyDetailed)
+      ]);
+      return numDeleted[0] + numDeleted[1]
     } catch (err) {
       console.error(`Error invalidating project ${projectId} into cache`, err)
       return Promise.resolve(0);
