@@ -1,5 +1,6 @@
 import * as Sequelize from "sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
+import { QuantityPrice } from "../graphql/resolvers-types.generated";
 import type { project_bids, project_bidsId } from "./project_bids";
 import type {
   project_components,
@@ -10,7 +11,7 @@ export interface project_bid_componentsAttributes {
   id: string;
   projectBidId: string;
   projectComponentId: string;
-  quantityPrices: object;
+  quantityPrices: QuantityPrice[];
   samplingFee: number;
   createdAt: Date;
   updatedAt: Date;
@@ -37,7 +38,7 @@ export class project_bid_components
   id!: string;
   projectBidId!: string;
   projectComponentId!: string;
-  quantityPrices!: object;
+  quantityPrices!: QuantityPrice[];
   samplingFee!: number;
   createdAt!: Date;
   updatedAt!: Date;
@@ -95,6 +96,10 @@ export class project_bid_components
         samplingFee: {
           type: DataTypes.INTEGER,
           allowNull: false,
+        },
+        toolingFee: {
+          type: DataTypes.INTEGER,
+          allowNull: true,
         },
       },
       {

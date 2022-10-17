@@ -28,11 +28,12 @@ type ProjectBidComponent {
   projectComponentId: String!
   quantityPrices: [QuantityPrice!]!
   samplingFee: Int!
+  toolingFee: Int
 }
 
 type QuantityPrice {
   quantity: Int!
-  price: Int!
+  price: String!
 }
 
 enum BidStatus {

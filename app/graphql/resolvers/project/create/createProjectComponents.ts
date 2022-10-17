@@ -25,21 +25,6 @@ const createProjectComponents = async (
 
         const { designIds } = component;
 
-        if (designIds) {
-          await Promise.all(
-            designIds.map(async (id) => {
-              const design = await designs.findByPk(id);
-              design?.update(
-                {
-                  projectId,
-                  projectComponentId,
-                },
-                { transaction }
-              );
-            })
-          );
-        }
-
         await Promise.all([
           project_components.create(
             {
@@ -61,6 +46,21 @@ const createProjectComponents = async (
             { transaction }
           ),
         ]);
+
+        if (designIds) {
+          await Promise.all(
+            designIds.map(async (id) => {
+              const design = await designs.findByPk(id);
+              design?.update(
+                {
+                  projectId,
+                  projectComponentId,
+                },
+                { transaction }
+              );
+            })
+          );
+        }
       })
     );
 
