@@ -32,7 +32,6 @@ const getCustomerProject = async (
       ProjectApiUtils.getProjectBidsByProjectId(permission.projectId),
     ]);
 
-    console.log(project);
     return {
       ...project,
       bids,
