@@ -6,8 +6,8 @@ type PermissionedProjectBid {
   components: [ProjectBidComponent!]!
   permission: ProjectPermission!
   status: BidStatus!
-  createdAt: String!
-  updatedAt: String!
+  createdAt: Date!
+  updatedAt: Date!
 }
 
 type ProjectBid {
@@ -18,8 +18,8 @@ type ProjectBid {
   comments: String!
   components: [ProjectBidComponent!]!
   status: BidStatus!
-  createdAt: String!
-  updatedAt: String!
+  createdAt: Date!
+  updatedAt: Date!
 }
 
 type ProjectBidComponent {

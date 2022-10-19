@@ -89,14 +89,18 @@ class ProjectApiUtils {
     projectId: string
   ): Promise<projectsAttributes> {
     try {
-      const cachedValue: projectsAttributes | null = await cacheService.getProjectInCache(projectId);
+      const cachedValue: projectsAttributes | null =
+        await cacheService.getProjectInCache(projectId);
       if (cachedValue !== null) {
         return cachedValue;
       }
       const retValue = await sequelize.models.projects
         .findByPk(projectId)
         .then((p) => p?.get({ plain: true }) as projectsAttributes);
-      await cacheService.setProjectInCache(retValue);
+
+      // Set in cache async
+      cacheService.setProjectInCache(retValue);
+
       return retValue;
     } catch (error) {
       return Promise.reject(error);
@@ -110,7 +114,8 @@ class ProjectApiUtils {
    */
   static async getProject(id: string): Promise<Project | null> {
     // check if value is in cache, and if so, return it
-    const cachedValue: Project | null = await cacheService.getDetailedProjectInCache(id);
+    const cachedValue: Project | null =
+      await cacheService.getDetailedProjectInCache(id);
     if (cachedValue !== null) {
       return Promise.resolve(cachedValue);
     }
@@ -143,17 +148,18 @@ class ProjectApiUtils {
               } as ProjectComponent;
             })
           );
-          
+
           const retValue: Project = {
             ...p?.get({ plain: true }),
             companyName: companyInstance.name,
             components,
           };
-
-          // store the value into cache and then return it
-          await Promise.all([
-            cacheService.setProjectInCache(p.get({ plain: true }) as projectsAttributes),
-            cacheService.setDetailedProjectInCache(retValue)
+          // store the value into cache async
+          Promise.all([
+            cacheService.setProjectInCache(
+              p.get({ plain: true }) as projectsAttributes
+            ),
+            cacheService.setDetailedProjectInCache(retValue),
           ]);
           return retValue;
         });
@@ -187,32 +193,8 @@ class ProjectApiUtils {
           }
           return res;
         });
+
       return bids;
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  }
-  // for customer, get all bids with projectId
-  static async getPermissionedProjectBids(
-    projectId: string
-  ): Promise<PermissionedProjectBid[]> {
-    const project_bids = sequelize.models.project_bids;
-    try {
-      const bids = await project_bids
-        .findAll({
-          where: {
-            projectId,
-          },
-        })
-        .then((bids) => bids.map((b) => b.get({ plain: true })));
-      const res = [];
-      for (let bid of bids) {
-        res.push({
-          ...bid,
-          permission: ProjectPermission.Viewer,
-        });
-      }
-      return res;
     } catch (e) {
       return Promise.reject(e);
     }
@@ -229,7 +211,7 @@ class ProjectApiUtils {
       // vendor permission will always be viewer, customer permission will vary
       const res = {
         ...project,
-        permission: userPermission ? userPermission : "VIEWER",
+        permission: userPermission ? userPermission : ProjectPermission.Viewer,
       } as VendorProject | CustomerProject;
       return Promise.resolve(res);
     } catch (e) {

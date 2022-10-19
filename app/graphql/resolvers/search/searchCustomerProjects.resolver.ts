@@ -33,7 +33,7 @@ const searchCustomerProjects = async (
           targetPrice: proj.targetPrice,
           orderQuantities: proj.orderQuantities,
           products: (project._source as any).products,
-          createdAt: proj.createdAt.toISOString(),
+          createdAt: proj.createdAt,
         } as ProjectOverview;
       })
     );

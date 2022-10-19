@@ -31,8 +31,8 @@ type PermissionedCompany {
   products: [String!]
   isAdmin: Boolean!
   companyUrl: String!
-  createdAt: String!
-  updatedAt: String!
+  createdAt: Date!
+  updatedAt: Date!
 }
 
 type CompanyDetail {
@@ -53,8 +53,8 @@ type CompanyDetail {
   moq: String
   leadTime: Int
 
-  createdAt: String!
-  updatedAt: String!
+  createdAt: Date!
+  updatedAt: Date!
 }
 
 enum CompanyPermission {

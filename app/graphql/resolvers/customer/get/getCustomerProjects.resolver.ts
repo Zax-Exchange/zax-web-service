@@ -28,8 +28,6 @@ const getCustomerProjects = async (
         return {
           ...project,
           permission: permission.permission,
-          createdAt: project.createdAt.toISOString(),
-          updatedAt: project.updatedAt.toISOString(),
         } as CustomerProjectOverview;
       })
     );

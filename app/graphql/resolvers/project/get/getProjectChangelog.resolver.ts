@@ -1,28 +1,33 @@
 import { project_changelogs } from "../../../../models/project_changelogs";
 import { project_component_changelogs } from "../../../../models/project_component_changelogs";
 import sequelize from "../../../../postgres/dbconnection";
-import { GetProjectChangelogInput, GetProjectComponentChangelogInput, ProjectChangelog, ProjectComponentChangelog, ProjectComponentPropertyChange, ProjectPropertyChange } from "../../../resolvers-types.generated";
+import {
+  GetProjectChangelogInput,
+  GetProjectComponentChangelogInput,
+  ProjectChangelog,
+  ProjectComponentChangelog,
+  ProjectComponentPropertyChange,
+  ProjectPropertyChange,
+} from "../../../resolvers-types.generated";
 
 const getProjectChangelogHelper = async (projectId: string) => {
   try {
-    const projectChangelogs: project_changelogs[] = await sequelize.models.project_changelog
-      .findAll({
+    const projectChangelogs: project_changelogs[] =
+      (await sequelize.models.project_changelog.findAll({
         where: {
           projectId,
         },
-        order: [
-            ['createdAt', 'DESC']
-        ],
-      }) as project_changelogs[];
+        order: [["createdAt", "DESC"]],
+      })) as project_changelogs[];
     const groupedChanges: ProjectChangelog[] = [];
-    let lastChangeId = null
+    let lastChangeId = null;
     for (let changelog of projectChangelogs) {
       if (changelog.id !== lastChangeId) {
         groupedChanges.push({
           projectId,
-          changedAt: changelog.createdAt.toISOString(),
-          changes: []
-        } as ProjectChangelog)
+          changedAt: changelog.createdAt.toISOString().slice(0, 10),
+          changes: [],
+        } as ProjectChangelog);
         lastChangeId = changelog.id;
       }
       const changes = groupedChanges.at(-1)!.changes;
@@ -32,7 +37,7 @@ const getProjectChangelogHelper = async (projectId: string) => {
   } catch (e) {
     return Promise.reject(e);
   }
-}
+};
 
 const getProjectChangelog = async (
   parent: any,
@@ -47,26 +52,26 @@ const getProjectChangelog = async (
   }
 };
 
-const getProjectComponentChangelogHelper = async (projectComponentId: string) => {
+const getProjectComponentChangelogHelper = async (
+  projectComponentId: string
+) => {
   try {
-    const projectChangelogs: project_component_changelogs[] = await sequelize.models.project_component_changelogs
-      .findAll({
+    const projectChangelogs: project_component_changelogs[] =
+      (await sequelize.models.project_component_changelogs.findAll({
         where: {
           projectComponentId,
         },
-        order: [
-            ['createdAt', 'DESC']
-        ],
-      }) as project_component_changelogs[];
+        order: [["createdAt", "DESC"]],
+      })) as project_component_changelogs[];
     const groupedChanges: ProjectComponentChangelog[] = [];
-    let lastChangeId = null
+    let lastChangeId = null;
     for (let changelog of projectChangelogs) {
       if (changelog.id !== lastChangeId) {
         groupedChanges.push({
           projectComponentId,
-          changedAt: changelog.createdAt.toISOString(),
-          changes: []
-        } as ProjectComponentChangelog)
+          changedAt: changelog.createdAt.toISOString().slice(0, 10),
+          changes: [],
+        } as ProjectComponentChangelog);
         lastChangeId = changelog.id;
       }
       const changes = groupedChanges.at(-1)!.changes;
@@ -76,7 +81,7 @@ const getProjectComponentChangelogHelper = async (projectComponentId: string) =>
   } catch (e) {
     return Promise.reject(e);
   }
-}
+};
 
 const getProjectComponentChangelog = async (
   parent: any,

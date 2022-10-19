@@ -43,8 +43,8 @@ type VendorProjectOverview {
   orderQuantities: [Int!]!
   status: String!
   permission: ProjectPermission!
-  createdAt: String!
-  updatedAt: String!
+  createdAt: Date!
+  updatedAt: Date!
 }
 
 type VendorProject {
@@ -64,6 +64,6 @@ type VendorProject {
   permission: ProjectPermission!
   components: [ProjectComponent!]!
   bidInfo: PermissionedProjectBid!
-  createdAt: String!
-  updatedAt: String!
+  createdAt: Date!
+  updatedAt: Date!
 }

@@ -9,7 +9,7 @@ type ProjectOverview {
   targetPrice: String!
   orderQuantities: [Int!]!
   products: [String!]!
-  createdAt: String!
+  createdAt: Date!
 }
 type ProjectDesign {
   designId: String!
@@ -32,8 +32,8 @@ type Project {
   status: String!
   components: [ProjectComponent!]!
   comments: String!
-  createdAt: String!
-  updatedAt: String!
+  createdAt: Date!
+  updatedAt: Date!
 }
 
 type ProjectChangelog {

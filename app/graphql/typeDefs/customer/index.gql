@@ -19,8 +19,8 @@ type CustomerProjectOverview {
   orderQuantities: [Int!]!
   status: String!
   permission: ProjectPermission!
-  createdAt: String!
-  updatedAt: String!
+  createdAt: Date!
+  updatedAt: Date!
 }
 
 # to be augmented later when customer have more attributes
@@ -55,6 +55,6 @@ type CustomerProject {
   permission: ProjectPermission!
   components: [ProjectComponent!]!
   bids: [ProjectBid!]
-  createdAt: String!
-  updatedAt: String!
+  createdAt: Date!
+  updatedAt: Date!
 }
