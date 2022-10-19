@@ -1,5 +1,6 @@
 import ElasticProjectService from "../../../../elastic/project/ElasticProjectService";
 import sequelize from "../../../../postgres/dbconnection";
+import cacheService from "../../../../redis/CacheService";
 import { DeleteProjectInput } from "../../../resolvers-types.generated";
 
 const deleteProject = async (
@@ -17,6 +18,7 @@ const deleteProject = async (
       },
     });
     ElasticProjectService.deleteProjectDocument(projectId);
+    await cacheService.invalidateProjectInCache(projectId);
     return Promise.resolve(true);
   } catch (e) {
     console.error(e);

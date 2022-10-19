@@ -12,6 +12,7 @@ import { project_component_changelogs } from "../../../../models/project_compone
 import sequelize from "../../../../postgres/dbconnection";
 import { UpdateProjectComponentInput } from "../../../resolvers-types.generated";
 import streamService from "../../../../stream/StreamService";
+import cacheService from "../../../../redis/CacheService";
 
 const getProjectDiffs = (
   originalComponent: project_components,
@@ -150,6 +151,7 @@ const updateProjectComponent = async (
     });
     if (projectId != null) {
       streamService.broadcastProjectUpdate(projectId);
+      await cacheService.invalidateProjectInCache(projectId);
     }
     return true;
   } catch (e) {

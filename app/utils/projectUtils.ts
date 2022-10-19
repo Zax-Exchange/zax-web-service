@@ -23,6 +23,7 @@ import {
 } from "../graphql/resolvers-types.generated";
 import { project_changelogs } from "../models/project_changelogs";
 import { project_component_changelogs } from "../models/project_component_changelogs";
+import cacheService from "../redis/CacheService";
 
 class ProjectApiUtils {
   // Returns a list of vendor user ids that have bids for the project
@@ -88,9 +89,15 @@ class ProjectApiUtils {
     projectId: string
   ): Promise<projectsAttributes> {
     try {
-      return await sequelize.models.projects
+      const cachedValue: projectsAttributes | null = await cacheService.getProjectInCache(projectId);
+      if (cachedValue !== null) {
+        return cachedValue;
+      }
+      const retValue = await sequelize.models.projects
         .findByPk(projectId)
         .then((p) => p?.get({ plain: true }) as projectsAttributes);
+      await cacheService.setProjectInCache(retValue);
+      return retValue;
     } catch (error) {
       return Promise.reject(error);
     }
@@ -102,23 +109,25 @@ class ProjectApiUtils {
    * @returns Project
    */
   static async getProject(id: string): Promise<Project | null> {
-    const projects = sequelize.models.projects;
+    // check if value is in cache, and if so, return it
+    const cachedValue: Project | null = await cacheService.getDetailedProjectInCache(id);
+    if (cachedValue !== null) {
+      return Promise.resolve(cachedValue);
+    }
 
     try {
-      return await projects.findByPk(id).then(async (p) => {
+      return await sequelize.models.projects.findByPk(id).then(async (p) => {
         // If somehow db action fails, we return null
         if (!p) return null;
 
         return Promise.all([
           (p as projects).getProject_components(),
-          (p as projects).getProject_designs(),
           (p as projects).getCompany(),
         ]).then(async (res) => {
-          const [componentInstances, designInstances, companyInstance] = res;
+          const [componentInstances, companyInstance] = res;
           const components = await Promise.all(
             componentInstances.map(async (comp) => {
               const componentSpec = await comp.getComponent_spec();
-
               const designs = await comp.getProject_design();
               return {
                 ...comp.get({ plain: true }),
@@ -134,12 +143,19 @@ class ProjectApiUtils {
               } as ProjectComponent;
             })
           );
-
-          return {
+          
+          const retValue: Project = {
             ...p?.get({ plain: true }),
             companyName: companyInstance.name,
             components,
           };
+
+          // store the value into cache and then return it
+          await Promise.all([
+            cacheService.setProjectInCache(p.get({ plain: true }) as projectsAttributes),
+            cacheService.setDetailedProjectInCache(retValue)
+          ]);
+          return retValue;
         });
       });
     } catch (e) {

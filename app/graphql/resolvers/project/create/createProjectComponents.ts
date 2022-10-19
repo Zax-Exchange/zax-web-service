@@ -2,6 +2,7 @@ import { Transaction } from "sequelize/types";
 import sequelize from "../../../../postgres/dbconnection";
 import { CreateProjectComponentInput } from "../../../resolvers-types.generated";
 import { v4 as uuidv4 } from "uuid";
+import cacheService from "../../../../redis/CacheService";
 
 /**
  * Creates a list of project components associated with projectId
@@ -63,7 +64,7 @@ const createProjectComponents = async (
         }
       })
     );
-
+    await cacheService.invalidateProjectInCache(projectId);
     return true;
   } catch (e) {
     return Promise.reject(e);

@@ -1,4 +1,6 @@
+import { users } from "../../../../models/users";
 import sequelize from "../../../../postgres/dbconnection";
+import cacheService from "../../../../redis/CacheService";
 import { DeactivateUserInput } from "../../../resolvers-types.generated";
 
 // TODO: should update company stripe subscription to decrease user count/charge
@@ -29,6 +31,10 @@ const deactivateUser = async (
     //   },
     //   individualHooks: true,
     // });
+    if (user !== null) {
+      const userId = (user as users).id
+      await cacheService.invalidateUserInCache(userId);
+    }
     return true;
   } catch (e) {
     return Promise.reject(e);
