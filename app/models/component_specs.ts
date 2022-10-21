@@ -14,6 +14,9 @@ export interface component_specsAttributes {
   style?: string;
   includeArtworkInQuote?: boolean;
 
+  /* unique attr for booklet */
+  numberOfPages?: string;
+
   /* unique attr for sticker */
   purpose?: string;
   shape?: string;
@@ -55,6 +58,7 @@ export type component_specsOptionalAttributes =
   | "includeArtworkInQuote"
   | "style"
   | "boxStyle"
+  | "numberOfPages"
   | "purpose"
   | "shape"
   | "thickness"
@@ -92,6 +96,7 @@ export class component_specs
   dimension!: string;
   includeArtworkInQuote?: boolean;
   style?: string;
+  numberOfPages?: string;
   boxStyle?: string;
   purpose?: string;
   shape?: string;
@@ -156,6 +161,10 @@ export class component_specs
         },
         includeArtworkInQuote: {
           type: DataTypes.BOOLEAN,
+          allowNull: true,
+        },
+        numberOfPages: {
+          type: DataTypes.STRING(255),
           allowNull: true,
         },
         style: {

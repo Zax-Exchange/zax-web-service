@@ -24,6 +24,10 @@ const getVendorProjects = async (
         ),
         ProjectApiUtils.getProjectInstance(permission.projectId),
       ]);
+
+      // If somehow we cannot find project based on the found permission
+      if (!project) continue;
+
       const company = await CompanyApiUtils.getCompanyWithCompanyId(
         project.companyId
       );

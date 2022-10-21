@@ -62,6 +62,9 @@ type ProjectComponentSpec {
   boxStyle: String
   includeArtworkInQuote: Boolean
 
+  # unique attribute for booklet
+  numberOfPages: String
+
   # unique attribute for sticker
   purpose: String
   shape: String

@@ -87,21 +87,23 @@ class ProjectApiUtils {
    */
   static async getProjectInstance(
     projectId: string
-  ): Promise<projectsAttributes> {
+  ): Promise<projectsAttributes | null> {
     try {
       const cachedValue: projectsAttributes | null =
         await cacheService.getProjectInCache(projectId);
       if (cachedValue !== null) {
         return cachedValue;
       }
-      const retValue = await sequelize.models.projects
-        .findByPk(projectId)
-        .then((p) => p?.get({ plain: true }) as projectsAttributes);
+      return await sequelize.models.projects.findByPk(projectId).then((p) => {
+        // If somehow db action fails, we return null
+        if (!p) return null;
 
-      // Set in cache async
-      cacheService.setProjectInCache(retValue);
+        const res = p.get({ plain: true }) as projectsAttributes;
 
-      return retValue;
+        // Set in cache async
+        cacheService.setProjectInCache(res);
+        return res;
+      });
     } catch (error) {
       return Promise.reject(error);
     }
@@ -174,7 +176,7 @@ class ProjectApiUtils {
   ): Promise<ProjectBid[]> {
     const project_bids = sequelize.models.project_bids;
     try {
-      const bids = await project_bids
+      return await project_bids
         .findAll({
           where: {
             projectId,
@@ -193,8 +195,6 @@ class ProjectApiUtils {
           }
           return res;
         });
-
-      return bids;
     } catch (e) {
       return Promise.reject(e);
     }
@@ -207,6 +207,8 @@ class ProjectApiUtils {
   ) {
     try {
       const project = await ProjectApiUtils.getProject(projectId);
+
+      if (!project) return null;
 
       // vendor permission will always be viewer, customer permission will vary
       const res = {
