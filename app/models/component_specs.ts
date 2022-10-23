@@ -32,20 +32,18 @@ export interface component_specsAttributes {
   color?: string;
   material?: string;
   materialSource?: string;
-  postProcess?: string[];
+  postProcess?: string;
   finish?: string;
 
   /* common attributes for products that have inside/outside difference */
   outsideColor?: string;
   outsideMaterial?: string;
   outsideMaterialSource?: string;
-  outsidePostProcess?: string[];
   outsideFinish?: string;
 
   insideColor?: string;
   insideMaterial?: string;
   insideMaterialSource?: string;
-  insidePostProcess?: string[];
   insideFinish?: string;
 
   createdAt: Date;
@@ -72,12 +70,10 @@ export type component_specsOptionalAttributes =
   | "outsideColor"
   | "outsideMaterial"
   | "outsideMaterialSource"
-  | "outsidePostProcess"
   | "outsideFinish"
   | "insideColor"
   | "insideMaterial"
   | "insideMaterialSource"
-  | "insidePostProcess"
   | "insideFinish"
   | "createdAt"
   | "updatedAt";
@@ -107,19 +103,17 @@ export class component_specs
   color?: string;
   material?: string;
   materialSource?: string;
-  postProcess?: string[];
+  postProcess?: string;
   finish?: string;
 
   outsideColor?: string;
   outsideMaterial?: string;
   outsideMaterialSource?: string;
-  outsidePostProcess?: string[];
   outsideFinish?: string;
 
   insideColor?: string;
   insideMaterial?: string;
   insideMaterialSource?: string;
-  insidePostProcess?: string[];
   insideFinish?: string;
 
   createdAt!: Date;
@@ -208,7 +202,7 @@ export class component_specs
           allowNull: true,
         },
         postProcess: {
-          type: DataTypes.ARRAY(DataTypes.STRING),
+          type: DataTypes.JSON,
           allowNull: true,
         },
         finish: {
@@ -227,10 +221,7 @@ export class component_specs
           type: DataTypes.STRING(255),
           allowNull: true,
         },
-        outsidePostProcess: {
-          type: DataTypes.ARRAY(DataTypes.STRING),
-          allowNull: true,
-        },
+
         outsideFinish: {
           type: DataTypes.STRING(255),
           allowNull: true,
@@ -247,10 +238,7 @@ export class component_specs
           type: DataTypes.STRING(255),
           allowNull: true,
         },
-        insidePostProcess: {
-          type: DataTypes.ARRAY(DataTypes.STRING),
-          allowNull: true,
-        },
+
         insideFinish: {
           type: DataTypes.STRING(255),
           allowNull: true,

@@ -30,19 +30,17 @@ input UpdateProjectComponentSpecInput {
   color: String
   material: String
   materialSource: String
-  postProcess: [String!]
+  postProcess: [PostProcessDetailInput!]
   finish: String
 
   outsideColor: String
   outsideMaterial: String
   outsideMaterialSource: String
-  outsidePostProcess: [String!]
   outsideFinish: String
 
   insideColor: String
   insideMaterial: String
   insideMaterialSource: String
-  insidePostProcess: [String!]
   insideFinish: String
 }
 input UpdateProjectPermissionsInput {

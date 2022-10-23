@@ -54,6 +54,16 @@ type ProductDimension {
   z: String
 }
 
+type PostProcessDetail {
+  postProcessName: String!
+  isInside: Boolean
+  printingMethod: String
+  numberOfColors: String
+  color: String
+  estimatedArea: ProductDimension
+  fontSize: String
+}
+
 type ProjectComponentSpec {
   id: String!
   productName: String!
@@ -79,20 +89,18 @@ type ProjectComponentSpec {
   color: String
   material: String
   materialSource: String
-  postProcess: [String!]
+  postProcess: [PostProcessDetail!]
   finish: String
 
   # common attributes for products that have inside/outside difference
   outsideColor: String
   outsideMaterial: String
   outsideMaterialSource: String
-  outsidePostProcess: [String!]
   outsideFinish: String
 
   insideColor: String
   insideMaterial: String
   insideMaterialSource: String
-  insidePostProcess: [String!]
   insideFinish: String
 }
 

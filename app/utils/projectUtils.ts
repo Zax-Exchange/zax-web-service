@@ -141,6 +141,9 @@ class ProjectApiUtils {
                 componentSpec: {
                   ...componentSpec.get({ plain: true }),
                   dimension: JSON.parse(componentSpec.dimension),
+                  postProcess: componentSpec.postProcess
+                    ? JSON.parse(componentSpec.postProcess)
+                    : null,
                 },
                 designs: designs.map((design) => ({
                   designId: design.id,

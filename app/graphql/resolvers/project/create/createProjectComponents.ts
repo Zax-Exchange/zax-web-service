@@ -43,6 +43,9 @@ const createProjectComponents = async (
               dimension: component.componentSpec.dimension
                 ? JSON.stringify(component.componentSpec.dimension)
                 : null,
+              postProcess: component.componentSpec.postProcess
+                ? JSON.stringify(component.componentSpec.postProcess)
+                : null,
             },
             { transaction }
           ),
