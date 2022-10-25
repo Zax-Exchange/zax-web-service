@@ -106,6 +106,7 @@ export class project_bid_components
         tableName: "project_bid_components",
         schema: "public",
         timestamps: true,
+        paranoid: true,
         indexes: [
           {
             name: "project_bid_components_pkey",

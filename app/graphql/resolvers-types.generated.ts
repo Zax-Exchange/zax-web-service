@@ -278,6 +278,10 @@ export type DeleteProjectBidPermissionsInput = {
   userIds: Array<Scalars['String']>;
 };
 
+export type DeleteProjectComponentInput = {
+  componentId: Scalars['String'];
+};
+
 export type DeleteProjectDesignInput = {
   designId: Scalars['String'];
 };

@@ -7,6 +7,7 @@ import type {
 import type { projects, projectsId } from "./projects";
 import { component_specs, component_specsId } from "./component_specs";
 import { project_designs } from "./project_designs";
+import { deleteProjectDesign } from "../graphql/resolvers/project/delete/deleteProjectDesign.resolver";
 
 export interface project_componentsAttributes {
   id: string;
@@ -76,7 +77,7 @@ export class project_components
   setProject!: Sequelize.BelongsToSetAssociationMixin<projects, projectsId>;
   createProject!: Sequelize.BelongsToCreateAssociationMixin<projects>;
 
-  component_specs!: component_specs[];
+  component_specs!: component_specs;
   getComponent_spec!: Sequelize.HasOneGetAssociationMixin<component_specs>;
   setComponent_spec!: Sequelize.HasOneSetAssociationMixin<
     component_specs,
@@ -116,6 +117,7 @@ export class project_components
         schema: "public",
         hasTrigger: true,
         timestamps: true,
+        paranoid: true,
         indexes: [
           {
             name: "project_components_pkey",
@@ -123,6 +125,52 @@ export class project_components
             fields: [{ name: "id" }],
           },
         ],
+        hooks: {
+          afterDestroy: async (instance, options) => {
+            try {  
+              await sequelize.transaction(async (t) => {
+                // delete spec
+                await instance.getComponent_spec().then(spec => spec.destroy({ transaction: t }));
+                
+                // delete project bids
+                const bids = await instance.getProject_bid_components();
+                const bidsDeletion: Promise<any>[] = [];
+                for (const bid of bids) {
+                  bidsDeletion.push(bid.destroy({ transaction: t }));
+                }
+                await Promise.all(bidsDeletion);
+  
+                // delete changelogs
+                await sequelize.models.project_component_changelogs.destroy({
+                  where: {
+                    projectComponentId: instance.id
+                  },
+                  transaction: t
+                });
+              });
+
+              // delete designs last because it cannot be rolled back
+              const projectDesigns = await instance.getProject_design();
+              const designDeletionJobs: Promise<any>[] = []
+              for (const design of projectDesigns) {
+                if (design.projectComponentId === instance.id) {
+                  // assuming project components is doing a soft delete.
+                  // not sure if this will break if cascade deletion gets triggered causing
+                  // double deletion. 
+                  designDeletionJobs.push(deleteProjectDesign(null, { 
+                    data: { 
+                      designId: design.id 
+                    } 
+                  })) 
+                }
+              }
+              await Promise.all(designDeletionJobs);  
+            } catch (error) {
+              console.error(error);
+              await options.transaction?.rollback();
+            }
+          }
+        }
       }
     ) as typeof project_components;
   }
