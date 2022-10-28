@@ -278,34 +278,34 @@ class ProjectApiUtils {
 
   static async getProjectUsers(projectId: string) {
     try {
-      const projectUsers = await sequelize.models.project_permissions
-        .findAll({
-          where: {
-            projectId,
-          },
-        })
-        .then((ps) =>
-          ps.map((p) => {
-            return {
-              userId: p.get("userId") as string,
-              permission: p.get("permission") as ProjectPermission,
-            };
+      const projectUsers: Partial<UserProjectPermission>[] =
+        await sequelize.models.project_permissions
+          .findAll({
+            where: {
+              projectId,
+            },
           })
-        );
-      const res = [];
-      for (let data of projectUsers) {
-        const user = await sequelize.models.users
-          .findByPk(data.userId)
-          .then((u) => u?.get({ plain: true }));
+          .then((ps) =>
+            ps.map((p) => {
+              return {
+                userId: p.get("userId") as string,
+                permission: p.get("permission") as ProjectPermission,
+              };
+            })
+          );
 
-        res.push({
-          ...data,
-          email: user.email,
-          name: user.name,
-        } as UserProjectPermission);
-      }
-
-      return res;
+      return await Promise.all(
+        projectUsers.map(async (data) => {
+          const user = await sequelize.models.users
+            .findByPk(data.userId)
+            .then((u) => u?.get({ plain: true }));
+          return {
+            ...data,
+            email: user.email,
+            name: user.name,
+          } as UserProjectPermission;
+        })
+      );
     } catch (e) {
       return Promise.reject(e);
     }

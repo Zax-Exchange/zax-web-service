@@ -11,6 +11,8 @@ import createProjectBidComponents from "./createProjectBidComponents";
 import ProjectApiUtils from "../../../../utils/projectUtils";
 import streamService from "../../../../stream/StreamService";
 import createOrUpdateProjectBidPermission from "./createOrUpdateProjectBidPermission";
+import NotificationService from "../../../../notification/NotificationService";
+import { BID_CREATE_ROUTE } from "../../../../notification/notificationRoutes";
 
 // Creates a project bid instance associated with projectId in db
 const createProjectBid = async (
@@ -55,7 +57,21 @@ const createProjectBid = async (
         ProjectStatus.InProgress
       );
     });
-    streamService.broadcastNewBid(data);
+
+    Promise.all([
+      ProjectApiUtils.getProjectUsers(projectId),
+      ProjectApiUtils.getProjectInstance(projectId),
+    ]).then(([users, project]) => {
+      if (!users.length || !project) return;
+
+      NotificationService.sendNotification(BID_CREATE_ROUTE, {
+        receivers: users.map((u) => u.userId),
+        data: {
+          message: `There is a new bid for ${project?.name}`,
+          projectId: project?.id,
+        },
+      });
+    });
     return Promise.resolve(true);
   } catch (e) {
     console.error(e);

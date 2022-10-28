@@ -18,11 +18,18 @@ input UpdateProjectComponentInput {
 }
 
 input UpdateProjectComponentSpecInput {
+  componentSpecId: String!
   productName: String!
   dimension: ProductDimensionInput!
-  includeArtworkInQuote: Boolean
   style: String
   boxStyle: String
+  includeArtworkInQuote: Boolean
+
+  numberOfPages: String
+
+  purpose: String
+  shape: String
+
   flute: String
   manufacturingProcess: String
 
@@ -43,6 +50,7 @@ input UpdateProjectComponentSpecInput {
   insideMaterialSource: String
   insideFinish: String
 }
+
 input UpdateProjectPermissionsInput {
   viewers: UpdateProjectPermissionsInputData!
   editors: UpdateProjectPermissionsInputData!

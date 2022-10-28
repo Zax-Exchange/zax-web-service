@@ -1,3 +1,4 @@
+import NotificationService from "../../../../notification/NotificationService";
 import sequelize from "../../../../postgres/dbconnection";
 import { UpdateProjectPermissionsInput } from "../../../resolvers-types.generated";
 import createOrUpdateProjectPermission from "../create/createOrUpdateProjectPermission";
@@ -11,8 +12,8 @@ const updateProjectPermissions = async (
   const { viewers, editors } = data;
   try {
     await sequelize.transaction(async (transaction) => {
-      Promise.all([
-        await createOrUpdateProjectPermission(
+      await Promise.all([
+        createOrUpdateProjectPermission(
           {
             userIds: viewers.userIds,
             projectId: viewers.projectId,
@@ -20,7 +21,7 @@ const updateProjectPermissions = async (
           },
           transaction
         ),
-        await createOrUpdateProjectPermission(
+        createOrUpdateProjectPermission(
           {
             userIds: editors.userIds,
             projectId: editors.projectId,
@@ -30,6 +31,7 @@ const updateProjectPermissions = async (
         ),
       ]);
     });
+
     return Promise.resolve(true);
   } catch (e) {
     console.error(e);

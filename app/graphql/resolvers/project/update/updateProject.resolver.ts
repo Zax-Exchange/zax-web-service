@@ -12,14 +12,23 @@ import {
   UpdateProjectInput,
 } from "../../../resolvers-types.generated";
 import cacheService from "../../../../redis/CacheService";
+import http from "http";
+import NotificationService from "../../../../notification/NotificationService";
+import ProjectApiUtils from "../../../../utils/projectUtils";
+import { PROJECT_UPDATE_ROUTE } from "../../../../notification/notificationRoutes";
 
-const getProjectDiffs = (originalEntity: projects, projectUpdateData: UpdateProjectInput ) => {
+const getProjectDiffs = (
+  originalEntity: projects,
+  projectUpdateData: UpdateProjectInput
+) => {
   const output: project_changelogs[] = [];
   const changeId = uuidv4();
   Object.entries(projectUpdateData)
-    .filter(([k,v]) => k !== 'projectId') // projectId is not changeable but is in UpdateProjectInput
-    .forEach(([key, value]) =>  {
-      const originalValue = originalEntity.getDataValue(key as keyof projectsAttributes);
+    .filter(([k, v]) => k !== "projectId") // projectId is not changeable but is in UpdateProjectInput
+    .forEach(([key, value]) => {
+      const originalValue = originalEntity.getDataValue(
+        key as keyof projectsAttributes
+      );
       // perform a deep comparison
       if (JSON.stringify(value) !== JSON.stringify(originalValue)) {
         output.push({
@@ -27,13 +36,12 @@ const getProjectDiffs = (originalEntity: projects, projectUpdateData: UpdateProj
           id: changeId,
           propertyName: key,
           oldValue: originalValue,
-          newValue: value
+          newValue: value,
         } as project_changelogs);
       }
-    }
-  );
+    });
   return output;
-}
+};
 
 // TODO: broadcast update project even to vendors
 const updateProject = async (
@@ -54,12 +62,19 @@ const updateProject = async (
   } = data;
   try {
     await sequelize.transaction(async (transaction) => {
-      const originalModel: projects = await sequelize.models.projects.findByPk(projectId) as projects;
+      const originalModel: projects = (await sequelize.models.projects.findByPk(
+        projectId
+      )) as projects;
       if (originalModel === null) {
-        return Promise.reject(new UserInputError(`could not find project with id ${projectId}`))
+        return Promise.reject(
+          new UserInputError(`could not find project with id ${projectId}`)
+        );
       }
 
-      const changes: project_changelogs[] = getProjectDiffs( originalModel, data);
+      const changes: project_changelogs[] = getProjectDiffs(
+        originalModel,
+        data
+      );
       const updates: Promise<any>[] = [
         sequelize.models.projects.update(
           {
@@ -88,13 +103,15 @@ const updateProject = async (
             },
             transaction,
           }
-        )
-      ]
+        ),
+      ];
       changes.forEach((change: project_changelogs) => {
-        updates.push(sequelize.models.project_changelog.create(
-          {...change},
-          { transaction }
-        ));
+        updates.push(
+          sequelize.models.project_changelog.create(
+            { ...change },
+            { transaction }
+          )
+        );
       });
       await Promise.all(updates);
     });
@@ -103,8 +120,28 @@ const updateProject = async (
     );
 
     await cacheService.invalidateProjectInCache(projectId);
+
+    // notify all vendors on the project async
+    ProjectApiUtils.getProjectBidsByProjectId(projectId)
+      .then((bids) => {
+        return Promise.all(
+          bids.map((bid) => ProjectApiUtils.getProjectBidUsers(bid.id))
+        );
+      })
+      .then((bidsUsers) => {
+        for (let bidUsers of bidsUsers) {
+          NotificationService.sendNotification(PROJECT_UPDATE_ROUTE, {
+            receivers: bidUsers.map((u) => u.userId),
+            data: {
+              message: `There is an update on ${name}`,
+              projectId,
+            },
+          });
+        }
+      });
+
     //TODO: we should also update component spec name in Elastic
-    streamService.broadcastProjectUpdate(data.projectId);
+    // streamService.broadcastProjectUpdate(data.projectId);
     return true;
   } catch (e) {
     console.error(e);

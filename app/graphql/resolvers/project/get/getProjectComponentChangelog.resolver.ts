@@ -1,37 +1,38 @@
-import { project_changelogs } from "../../../../models/project_changelogs";
 import { project_component_changelogs } from "../../../../models/project_component_changelogs";
 import sequelize from "../../../../postgres/dbconnection";
 import {
-  GetProjectChangelogInput,
   GetProjectComponentChangelogInput,
-  ProjectChangelog,
   ProjectComponentChangelog,
   ProjectComponentPropertyChange,
-  ProjectPropertyChange,
 } from "../../../resolvers-types.generated";
 
-const getProjectChangelogHelper = async (projectId: string) => {
+const getProjectComponentChangelogHelper = async (
+  projectComponentId: string
+) => {
   try {
-    const projectChangelogs: project_changelogs[] =
-      (await sequelize.models.project_changelog.findAll({
+    const projectChangelogs: project_component_changelogs[] =
+      (await sequelize.models.project_component_changelogs.findAll({
         where: {
-          projectId,
+          projectComponentId,
         },
         order: [["createdAt", "DESC"]],
-      })) as project_changelogs[];
-    const groupedChanges: ProjectChangelog[] = [];
+      })) as project_component_changelogs[];
+
+    const groupedChanges: ProjectComponentChangelog[] = [];
+
     let lastChangeId = null;
+
     for (let changelog of projectChangelogs) {
       if (changelog.id !== lastChangeId) {
         groupedChanges.push({
-          projectId,
+          projectComponentId,
           changedAt: changelog.createdAt,
           changes: [],
-        } as ProjectChangelog);
+        } as ProjectComponentChangelog);
         lastChangeId = changelog.id;
       }
       const changes = groupedChanges.at(-1)!.changes;
-      changes.push(changelog as ProjectPropertyChange);
+      changes.push(changelog as ProjectComponentPropertyChange);
     }
     return groupedChanges;
   } catch (e) {
@@ -39,14 +40,14 @@ const getProjectChangelogHelper = async (projectId: string) => {
   }
 };
 
-const getProjectChangelog = async (
+const getProjectComponentChangelog = async (
   parent: any,
-  { data }: { data: GetProjectChangelogInput },
+  { data }: { data: GetProjectComponentChangelogInput },
   context: any
 ) => {
-  const { projectId } = data;
+  const { projectComponentId } = data;
   try {
-    return await getProjectChangelogHelper(projectId);
+    return await getProjectComponentChangelogHelper(projectComponentId);
   } catch (e) {
     return Promise.reject(e);
   }
@@ -54,6 +55,6 @@ const getProjectChangelog = async (
 
 export default {
   Query: {
-    getProjectChangelog,
+    getProjectComponentChangelog,
   },
 };
