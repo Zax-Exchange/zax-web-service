@@ -102,7 +102,7 @@ const updateProjectComponent = async (
       if (designIds) {
         await Promise.all(
           designIds.map(async (id) => {
-            const design = await sequelize.models.designs.findByPk(id);
+            const design = await sequelize.models.project_designs.findByPk(id);
             design?.update(
               {
                 projectId,
@@ -132,12 +132,21 @@ const updateProjectComponent = async (
             transaction,
           }
         ),
-        sequelize.models.component_specs.update(componentSpecChanges, {
-          where: {
-            id: componentSpecId,
+        sequelize.models.component_specs.update(
+          {
+            ...componentSpecChanges,
+            dimension: JSON.stringify(componentSpecChanges.dimension),
+            postProcess: componentSpecChanges.postProcess
+              ? JSON.stringify(componentSpecChanges.postProcess)
+              : null,
           },
-          transaction,
-        }),
+          {
+            where: {
+              id: componentSpecId,
+            },
+            transaction,
+          }
+        ),
       ];
       changes.forEach((change: project_component_changelogs) => {
         updates.push(

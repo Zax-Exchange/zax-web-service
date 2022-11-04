@@ -54,6 +54,9 @@ input CreateProjectComponentSpecInput {
 }
 
 input CreateProjectComponentInput {
+  # projectId could be null if used as part of CreateProjectInput
+  # if called directly then we will have projectId defined
+  projectId: String
   name: String!
   designIds: [String!]
   componentSpec: CreateProjectComponentSpecInput!
@@ -75,4 +78,5 @@ input CreateProjectInput {
 
 type Mutation {
   createProject(data: CreateProjectInput!): Boolean!
+  createProjectComponents(data: [CreateProjectComponentInput!]!): Boolean!
 }

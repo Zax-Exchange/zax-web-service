@@ -24,6 +24,8 @@ const getCustomerProject = async (
       })
       .then((p) => p?.get({ plain: true }) as project_permissionsAttributes);
 
+    if (!permission) return null;
+
     const [project, bids] = await Promise.all([
       ProjectApiUtils.getPermissionedProject(
         permission.projectId,
