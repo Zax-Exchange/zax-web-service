@@ -62,101 +62,130 @@ const getProjectDiffs = (
   return output;
 };
 
-const updateProjectComponent = async (
+const updateProjectComponents = async (
   parent: any,
-  { data }: { data: UpdateProjectComponentInput },
+  { data }: { data: UpdateProjectComponentInput[] },
   context: any,
   info: any
 ) => {
-  const {
-    componentId,
-    componentSpec: componentSpecChanges,
-    name,
-    designIds,
-  } = data;
-
   try {
     let projectId: string | null = null;
     await sequelize.transaction(async (transaction) => {
-      const projectComponent: project_components =
-        (await sequelize.models.project_components.findByPk(
-          componentId
-        )) as project_components;
-      projectId = projectComponent.projectId;
+      for (let input of data) {
+        const {
+          componentId,
+          componentSpec: componentSpecChanges,
+          name,
+          designIds,
+        } = input;
 
-      if (projectComponent === null) {
-        return Promise.reject(
-          new UserInputError(
-            `could not find project_component with id ${componentId}`
-          )
+        const projectComponent: project_components =
+          (await sequelize.models.project_components.findByPk(
+            componentId
+          )) as project_components;
+        projectId = projectComponent.projectId;
+
+        if (projectComponent === null) {
+          return Promise.reject(
+            new UserInputError(
+              `could not find project_component with id ${componentId}`
+            )
+          );
+        }
+        const componentSpec = await projectComponent.getComponent_spec();
+        if (componentSpec === null) {
+          return Promise.reject(
+            new UserInputError(
+              `project component with id ${componentId} does not have a componentSpec`
+            )
+          );
+        }
+        if (designIds) {
+          await Promise.all(
+            designIds.map(async (id) => {
+              const design = await sequelize.models.project_designs.findByPk(
+                id
+              );
+              design?.update(
+                {
+                  projectId,
+                  projectComponentId: componentId,
+                },
+                { transaction }
+              );
+            })
+          );
+        }
+        const componentSpecId = componentSpec.id;
+
+        // await sequelize.models.project_components.update(
+        //   {
+        //     name,
+        //   },
+        //   {
+        //     where: {
+        //       id: componentId,
+        //     },
+        //     transaction,
+        //   }
+        // );
+        // await sequelize.models.component_specs.update(
+        //   {
+        //     ...componentSpecChanges,
+        //     dimension: JSON.stringify(componentSpecChanges.dimension),
+        //     postProcess: componentSpecChanges.postProcess
+        //       ? JSON.stringify(componentSpecChanges.postProcess)
+        //       : null,
+        //   },
+        //   {
+        //     where: {
+        //       id: componentSpecId,
+        //     },
+        //     transaction,
+        //   }
+        // );
+
+        const changes: project_component_changelogs[] = getProjectDiffs(
+          projectComponent,
+          componentSpec,
+          input
         );
-      }
-      const componentSpec = await projectComponent.getComponent_spec();
-      if (componentSpec === null) {
-        return Promise.reject(
-          new UserInputError(
-            `project component with id ${componentId} does not have a componentSpec`
-          )
-        );
-      }
-      if (designIds) {
-        await Promise.all(
-          designIds.map(async (id) => {
-            const design = await sequelize.models.project_designs.findByPk(id);
-            design?.update(
-              {
-                projectId,
-                projectComponentId: componentId,
-              },
+
+        await Promise.all([
+          ...changes.map((change) => {
+            return sequelize.models.project_component_changelogs.create(
+              { ...change },
               { transaction }
             );
-          })
-        );
+          }),
+          sequelize.models.project_components.update(
+            {
+              name,
+            },
+            {
+              where: {
+                id: componentId,
+              },
+              transaction,
+            }
+          ),
+          sequelize.models.component_specs.update(
+            {
+              ...componentSpecChanges,
+              dimension: JSON.stringify(componentSpecChanges.dimension),
+              postProcess: componentSpecChanges.postProcess
+                ? JSON.stringify(componentSpecChanges.postProcess)
+                : null,
+            },
+            {
+              where: {
+                id: componentSpecId,
+              },
+              transaction,
+            }
+          ),
+        ]);
       }
-
-      const componentSpecId = componentSpec.id;
-      const changes: project_component_changelogs[] = getProjectDiffs(
-        projectComponent,
-        componentSpec,
-        data
-      );
-      const updates: Promise<any>[] = [
-        sequelize.models.project_components.update(
-          {
-            name,
-          },
-          {
-            where: {
-              id: componentId,
-            },
-            transaction,
-          }
-        ),
-        sequelize.models.component_specs.update(
-          {
-            ...componentSpecChanges,
-            dimension: JSON.stringify(componentSpecChanges.dimension),
-            postProcess: componentSpecChanges.postProcess
-              ? JSON.stringify(componentSpecChanges.postProcess)
-              : null,
-          },
-          {
-            where: {
-              id: componentSpecId,
-            },
-            transaction,
-          }
-        ),
-      ];
-      changes.forEach((change: project_component_changelogs) => {
-        updates.push(
-          sequelize.models.project_component_changelogs.create(
-            { ...change },
-            { transaction }
-          )
-        );
-      });
-      await Promise.all(updates);
     });
     if (projectId != null) {
       streamService.broadcastProjectUpdate(projectId);
@@ -171,6 +200,6 @@ const updateProjectComponent = async (
 
 export default {
   Mutation: {
-    updateProjectComponent,
+    updateProjectComponents,
   },
 };

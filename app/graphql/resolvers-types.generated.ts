@@ -422,7 +422,7 @@ export type Mutation = {
   updateCustomerInfo: Scalars['Boolean'];
   updateProject: Scalars['Boolean'];
   updateProjectBidPermissions: Scalars['Boolean'];
-  updateProjectComponent: Scalars['Boolean'];
+  updateProjectComponents: Scalars['Boolean'];
   updateProjectPermissions: Scalars['Boolean'];
   updateStripeSubscription: Scalars['Boolean'];
   updateUserInfo: Scalars['Boolean'];
@@ -549,8 +549,8 @@ export type MutationUpdateProjectBidPermissionsArgs = {
 };
 
 
-export type MutationUpdateProjectComponentArgs = {
-  data: UpdateProjectComponentInput;
+export type MutationUpdateProjectComponentsArgs = {
+  data: Array<UpdateProjectComponentInput>;
 };
 
 

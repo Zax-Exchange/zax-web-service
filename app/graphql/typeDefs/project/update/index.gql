@@ -65,5 +65,5 @@ input UpdateProjectPermissionsInputData {
 type Mutation {
   updateProjectPermissions(data: UpdateProjectPermissionsInput!): Boolean!
   updateProject(data: UpdateProjectInput!): Boolean!
-  updateProjectComponent(data: UpdateProjectComponentInput!): Boolean!
+  updateProjectComponents(data: [UpdateProjectComponentInput!]!): Boolean!
 }
