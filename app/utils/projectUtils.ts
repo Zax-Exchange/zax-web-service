@@ -148,11 +148,11 @@ class ProjectApiUtils {
    */
   static async getProject(id: string): Promise<Project | null> {
     // check if value is in cache, and if so, return it
-    // const cachedValue: Project | null =
-    //   await cacheService.getDetailedProjectInCache(id);
-    // if (cachedValue !== null) {
-    //   return Promise.resolve(cachedValue);
-    // }
+    const cachedValue: Project | null =
+      await cacheService.getDetailedProjectInCache(id);
+    if (cachedValue !== null) {
+      return Promise.resolve(cachedValue);
+    }
 
     try {
       return await sequelize.models.projects.findByPk(id).then(async (p) => {
