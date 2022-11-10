@@ -10,9 +10,26 @@ import {
 } from "../../../../models/component_specs";
 import { project_component_changelogs } from "../../../../models/project_component_changelogs";
 import sequelize from "../../../../postgres/dbconnection";
-import { UpdateProjectComponentInput } from "../../../resolvers-types.generated";
+import {
+  UpdateProjectComponentInput,
+  UpdateProjectComponentSpecInput,
+} from "../../../resolvers-types.generated";
 import streamService from "../../../../stream/StreamService";
 import cacheService from "../../../../redis/CacheService";
+
+const processComponentSpecChanges = (spec: UpdateProjectComponentSpecInput) => {
+  const res = {} as any;
+  for (let attr in spec) {
+    const key = attr as keyof UpdateProjectComponentSpecInput;
+    // handle null here since when client GETS a ProjectComponent, the gql query queries all the fields and many of them will be null
+    if (typeof spec[key] === "object" && spec[key] !== null) {
+      res[key] = JSON.stringify(spec[key]);
+    } else {
+      res[key] = spec[key];
+    }
+  }
+  return res;
+};
 
 const getProjectDiffs = (
   originalComponent: project_components,
@@ -118,33 +135,6 @@ const updateProjectComponents = async (
         }
         const componentSpecId = componentSpec.id;
 
-        // await sequelize.models.project_components.update(
-        //   {
-        //     name,
-        //   },
-        //   {
-        //     where: {
-        //       id: componentId,
-        //     },
-        //     transaction,
-        //   }
-        // );
-        // await sequelize.models.component_specs.update(
-        //   {
-        //     ...componentSpecChanges,
-        //     dimension: JSON.stringify(componentSpecChanges.dimension),
-        //     postProcess: componentSpecChanges.postProcess
-        //       ? JSON.stringify(componentSpecChanges.postProcess)
-        //       : null,
-        //   },
-        //   {
-        //     where: {
-        //       id: componentSpecId,
-        //     },
-        //     transaction,
-        //   }
-        // );
-
         const changes: project_component_changelogs[] = getProjectDiffs(
           projectComponent,
           componentSpec,
@@ -171,11 +161,7 @@ const updateProjectComponents = async (
           ),
           sequelize.models.component_specs.update(
             {
-              ...componentSpecChanges,
-              dimension: JSON.stringify(componentSpecChanges.dimension),
-              postProcess: componentSpecChanges.postProcess
-                ? JSON.stringify(componentSpecChanges.postProcess)
-                : null,
+              ...processComponentSpecChanges(componentSpecChanges),
             },
             {
               where: {

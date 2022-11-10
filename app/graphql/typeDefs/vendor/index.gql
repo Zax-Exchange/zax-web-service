@@ -47,7 +47,7 @@ type VendorProjectOverview {
   updatedAt: Date!
 }
 
-type VendorProject {
+type VendorProject implements ProjectInterface {
   id: String!
   userId: String!
   companyName: String!

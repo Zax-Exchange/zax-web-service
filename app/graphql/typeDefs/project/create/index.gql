@@ -4,11 +4,16 @@ input ProductDimensionInput {
   z: String
 }
 
+input PostProcessPrintingNumberOfColorsInput {
+  c: String!
+  t: String!
+}
+
 input PostProcessDetailInput {
   postProcessName: String!
   isInside: Boolean
   printingMethod: String
-  numberOfColors: String
+  numberOfColors: PostProcessPrintingNumberOfColorsInput
   color: String
   estimatedArea: ProductDimensionInput
   fontSize: String

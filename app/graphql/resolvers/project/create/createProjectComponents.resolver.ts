@@ -1,10 +1,15 @@
 import { Transaction } from "sequelize/types";
 import sequelize from "../../../../postgres/dbconnection";
-import { CreateProjectComponentInput } from "../../../resolvers-types.generated";
+import {
+  CreateProjectComponentInput,
+  CreateProjectComponentSpecInput,
+} from "../../../resolvers-types.generated";
 import { v4 as uuidv4 } from "uuid";
 import cacheService from "../../../../redis/CacheService";
+import { component_specs } from "../../../../models/component_specs";
 
 // Direct create of project component, being called from edit project page
+// If change this, please also update createComponents in createProject.resolver.ts
 const createProjectComponents = async (
   parent: any,
   { data }: { data: CreateProjectComponentInput[] },
@@ -35,13 +40,7 @@ const createProjectComponents = async (
               {
                 id: uuidv4(),
                 projectComponentId,
-                ...component.componentSpec,
-                dimension: component.componentSpec.dimension
-                  ? JSON.stringify(component.componentSpec.dimension)
-                  : null,
-                postProcess: component.componentSpec.postProcess
-                  ? JSON.stringify(component.componentSpec.postProcess)
-                  : null,
+                ...processComponentSpec(component.componentSpec),
               },
               { transaction }
             ),
@@ -67,6 +66,20 @@ const createProjectComponents = async (
   }
 };
 
+export const processComponentSpec = (
+  componentSpec: CreateProjectComponentSpecInput
+): Partial<component_specs> => {
+  const res = {} as any;
+  for (let attr in componentSpec) {
+    const key = attr as keyof CreateProjectComponentSpecInput;
+    if (typeof componentSpec[key] === "object") {
+      res[key] = JSON.stringify(componentSpec[key]);
+    } else {
+      res[key] = componentSpec[key];
+    }
+  }
+  return res;
+};
 export default {
   Mutation: {
     createProjectComponents,

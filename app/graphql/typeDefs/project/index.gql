@@ -17,7 +17,7 @@ type ProjectDesign {
   url: String!
 }
 
-type Project {
+interface ProjectInterface {
   id: String!
   userId: String!
   companyId: String!
@@ -30,8 +30,26 @@ type Project {
   targetPrice: String!
   orderQuantities: [Int!]!
   status: String!
-  components: [ProjectComponent!]!
   comments: String!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type Project implements ProjectInterface {
+  id: String!
+  userId: String!
+  companyId: String!
+  companyName: String!
+  name: String!
+  category: String!
+  totalWeight: String!
+  deliveryDate: String!
+  deliveryAddress: String!
+  targetPrice: String!
+  orderQuantities: [Int!]!
+  status: String!
+  comments: String!
+  components: [ProjectComponent!]!
   createdAt: Date!
   updatedAt: Date!
 }
@@ -54,11 +72,16 @@ type ProductDimension {
   z: String
 }
 
+type PostProcessPrintingNumberOfColors {
+  c: String!
+  t: String!
+}
+
 type PostProcessDetail {
   postProcessName: String!
   isInside: Boolean
   printingMethod: String
-  numberOfColors: String
+  numberOfColors: PostProcessPrintingNumberOfColors
   color: String
   estimatedArea: ProductDimension
   fontSize: String

@@ -37,7 +37,7 @@ type CustomerDetail {
   isVerified: Boolean!
 }
 
-type CustomerProject {
+type CustomerProject implements ProjectInterface {
   id: String!
   userId: String!
   companyId: String!

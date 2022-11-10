@@ -10,6 +10,7 @@ import createOrUpdateProjectPermission from "./createOrUpdateProjectPermission";
 import ElasticProjectService from "../../../../elastic/project/ElasticProjectService";
 import { Transaction } from "sequelize/types";
 import cacheService from "../../../../redis/CacheService";
+import { processComponentSpec } from "./createProjectComponents.resolver";
 
 /**
  * Creates a list of project components associated with projectId
@@ -46,13 +47,7 @@ const createComponents = async (
             {
               id: uuidv4(),
               projectComponentId,
-              ...component.componentSpec,
-              dimension: component.componentSpec.dimension
-                ? JSON.stringify(component.componentSpec.dimension)
-                : null,
-              postProcess: component.componentSpec.postProcess
-                ? JSON.stringify(component.componentSpec.postProcess)
-                : null,
+              ...processComponentSpec(component.componentSpec),
             },
             { transaction }
           ),

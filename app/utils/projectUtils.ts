@@ -13,6 +13,7 @@ import {
   ProjectBid,
   ProjectBidComponent,
   ProjectComponent,
+  ProjectComponentSpec,
   ProjectDesign,
   ProjectOverview,
   ProjectPermission,
@@ -24,6 +25,10 @@ import {
 import { project_changelogs } from "../models/project_changelogs";
 import { project_component_changelogs } from "../models/project_component_changelogs";
 import cacheService from "../redis/CacheService";
+import {
+  component_specs,
+  component_specsAttributes,
+} from "../models/component_specs";
 
 class ProjectApiUtils {
   // Returns a list of vendor user ids that have bids for the project
@@ -110,17 +115,44 @@ class ProjectApiUtils {
   }
 
   /**
-   * Returns a generic project information
+   * Converts JSON stringified strings back to object for fields like dimension, postProcess, etc.
+   * All other fields are preserved as is.
+   * @param componentSpec
+   * @returns ProjectComponentSpec
+   */
+  static convertComponentSpec(
+    componentSpec: component_specsAttributes
+  ): ProjectComponentSpec {
+    const res = {} as any;
+    for (let attr in componentSpec) {
+      const key = attr as keyof component_specsAttributes;
+      try {
+        const parsed = JSON.parse(componentSpec[key] as any);
+        if (typeof parsed === "object") {
+          res[key] = parsed;
+        } else {
+          res[key] = componentSpec[key];
+        }
+      } catch (error) {
+        res[key] = componentSpec[key];
+      }
+    }
+
+    return res;
+  }
+
+  /**
+   * Returns a generic project information with nested fields (project components/component specs)
    * @param id
    * @returns Project
    */
   static async getProject(id: string): Promise<Project | null> {
     // check if value is in cache, and if so, return it
-    const cachedValue: Project | null =
-      await cacheService.getDetailedProjectInCache(id);
-    if (cachedValue !== null) {
-      return Promise.resolve(cachedValue);
-    }
+    // const cachedValue: Project | null =
+    //   await cacheService.getDetailedProjectInCache(id);
+    // if (cachedValue !== null) {
+    //   return Promise.resolve(cachedValue);
+    // }
 
     try {
       return await sequelize.models.projects.findByPk(id).then(async (p) => {
@@ -136,14 +168,13 @@ class ProjectApiUtils {
             componentInstances.map(async (comp) => {
               const componentSpec = await comp.getComponent_spec();
               const designs = await comp.getProject_design();
+
               return {
                 ...comp.get({ plain: true }),
                 componentSpec: {
-                  ...componentSpec.get({ plain: true }),
-                  dimension: JSON.parse(componentSpec.dimension),
-                  postProcess: componentSpec.postProcess
-                    ? JSON.parse(componentSpec.postProcess)
-                    : null,
+                  ...this.convertComponentSpec(
+                    componentSpec.get({ plain: true })
+                  ),
                 },
                 designs: designs.map((design) => ({
                   designId: design.id,
