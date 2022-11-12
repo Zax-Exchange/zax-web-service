@@ -11,7 +11,7 @@ input UpdateUserPasswordInput {
 
 input UpdateUserPowerInput {
   userId: String!
-  isAdmin: Boolean!
+  power: UserPower!
 }
 
 type Mutation {

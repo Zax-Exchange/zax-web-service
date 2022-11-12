@@ -73,6 +73,13 @@ import type {
   component_specsAttributes,
   component_specsCreationAttributes,
 } from "./component_specs";
+
+import { pending_join_requests as _pending_join_requests } from "./pending_join_requests";
+import type {
+  pending_join_requestsAttributes,
+  pending_join_requestsCreationAttributes,
+} from "./pending_join_requests";
+
 export {
   _sequelize_meta as sequelize_meta,
   _companies as companies,
@@ -92,6 +99,7 @@ export {
   _users as users,
   _vendors as vendors,
   _project_designs as project_designs,
+  _pending_join_requests as pending_join_requests,
 };
 
 export type {
@@ -127,6 +135,8 @@ export type {
   vendorsCreationAttributes,
   project_designsAttributes,
   project_designsCreationAttributes,
+  pending_join_requestsAttributes,
+  pending_join_requestsCreationAttributes,
 };
 
 export function initModels(sequelize: Sequelize) {
@@ -150,6 +160,8 @@ export function initModels(sequelize: Sequelize) {
   const project_changelogs = _project_changelogs.initModel(sequelize);
   const project_component_changelogs =
     _project_component_changelogs.initModel(sequelize);
+
+  const pending_join_requests = _pending_join_requests.initModel(sequelize);
 
   company_plans.belongsTo(companies, {
     as: "company",
@@ -396,6 +408,18 @@ export function initModels(sequelize: Sequelize) {
     onDelete: "CASCADE",
   });
 
+  pending_join_requests.belongsTo(companies, {
+    as: "company",
+    foreignKey: "companyId",
+    onDelete: "CASCADE",
+  });
+
+  companies.hasMany(pending_join_requests, {
+    as: "pending_join_requests",
+    foreignKey: "companyId",
+    onDelete: "CASCADE",
+  });
+
   return {
     sequelize_meta,
     companies,
@@ -413,5 +437,8 @@ export function initModels(sequelize: Sequelize) {
     users,
     vendors,
     project_designs,
+    project_changelogs,
+    project_component_changelogs,
+    pending_join_requests,
   };
 }

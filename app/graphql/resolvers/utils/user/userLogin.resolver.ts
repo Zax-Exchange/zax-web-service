@@ -4,6 +4,7 @@ import streamService from "../../../../stream/StreamService";
 import {
   LoggedInUser,
   UserLoginInput,
+  UserStatus,
 } from "../../../resolvers-types.generated";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -21,7 +22,7 @@ const login = async (
         },
       })
       .then((u) => u?.get({ plain: true }) as usersAttributes);
-    if (!user.isActive) {
+    if (user.status !== UserStatus.Active) {
       throw new Error("Account is not active.");
     }
 
@@ -40,7 +41,7 @@ const login = async (
         companyId: user.companyId,
         name: user.name,
         email: user.email,
-        isAdmin: user.isAdmin,
+        power: user.power,
         isVendor: user.isVendor,
         notificationToken,
         chatToken,

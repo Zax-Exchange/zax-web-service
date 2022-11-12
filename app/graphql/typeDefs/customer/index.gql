@@ -51,7 +51,7 @@ type CustomerProject implements ProjectInterface {
   targetPrice: String!
   orderQuantities: [Int!]!
   comments: String!
-  status: String!
+  status: ProjectStatus!
   permission: ProjectPermission!
   components: [ProjectComponent!]!
   bids: [ProjectBid!]

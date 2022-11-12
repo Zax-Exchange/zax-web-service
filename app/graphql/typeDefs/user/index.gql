@@ -4,8 +4,8 @@ type User {
   email: String!
   companyId: String!
   isVendor: Boolean!
-  isAdmin: Boolean!
-  isActive: Boolean!
+  power: UserPower!
+  status: UserStatus
 }
 
 # for project/projectBid user info, mainly used when sharing projects/bids
@@ -22,8 +22,18 @@ type LoggedInUser {
   email: String!
   companyId: String!
   isVendor: Boolean!
-  isAdmin: Boolean!
+  power: UserPower!
   token: String!
   notificationToken: String!
   chatToken: String!
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum UserPower {
+  ADMIN
+  USER
 }

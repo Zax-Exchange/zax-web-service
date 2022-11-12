@@ -12,11 +12,22 @@ input UserLoginInput {
   password: String!
 }
 
+input RequestToJoinInput {
+  companyName: String!
+  email: String!
+}
+
+input GetAllPendingJoinRequestsInput {
+  companyId: String!
+}
+
 type Mutation {
+  requestToJoin(data: RequestToJoinInput!): Boolean!
   inviteUser(data: InviteUserInput!): Boolean!
 }
 
 type Query {
+  getAllPendingJoinRequests(data: GetAllPendingJoinRequestsInput!): [String!]!
   checkUserEmail(data: CheckUserEmailInput!): Boolean!
   login(data: UserLoginInput!): LoggedInUser!
 }

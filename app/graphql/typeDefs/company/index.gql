@@ -29,7 +29,7 @@ type PermissionedCompany {
   locations: [String!]
   moq: Int
   products: [String!]
-  isAdmin: Boolean!
+  power: UserPower!
   companyUrl: String!
   createdAt: Date!
   updatedAt: Date!

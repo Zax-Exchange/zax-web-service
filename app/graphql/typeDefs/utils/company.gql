@@ -1,6 +1,12 @@
 input CheckCompanyNameInput {
   companyName: String!
 }
+
+input GetAllPendingJoinRequestsInput {
+  companyId: String!
+}
+
 type Query {
+  getAllPendingJoinRequests(data: GetAllPendingJoinRequestsInput!): [String!]!
   checkCompanyName(data: CheckCompanyNameInput!): Boolean!
 }

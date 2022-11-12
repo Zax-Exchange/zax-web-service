@@ -29,7 +29,7 @@ interface ProjectInterface {
   deliveryAddress: String!
   targetPrice: String!
   orderQuantities: [Int!]!
-  status: String!
+  status: ProjectStatus!
   comments: String!
   createdAt: Date!
   updatedAt: Date!
@@ -47,7 +47,7 @@ type Project implements ProjectInterface {
   deliveryAddress: String!
   targetPrice: String!
   orderQuantities: [Int!]!
-  status: String!
+  status: ProjectStatus!
   comments: String!
   components: [ProjectComponent!]!
   createdAt: Date!

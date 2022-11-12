@@ -7,11 +7,11 @@ const updateUserPower = async (
   { data }: { data: UpdateUserPowerInput },
   context: any
 ) => {
-  const { userId, isAdmin } = data;
+  const { userId, power } = data;
   try {
     await sequelize.models.users.update(
       {
-        isAdmin,
+        power,
       },
       {
         where: {

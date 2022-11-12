@@ -1,11 +1,26 @@
 import sequelize from "../postgres/dbconnection";
 import { companiesAttributes } from "../models/companies";
 import jwt from "jsonwebtoken";
-import { CompanyPlan } from "../graphql/resolvers-types.generated";
+import { CompanyPlan, UserPower } from "../graphql/resolvers-types.generated";
 import { vendorsAttributes } from "../models/vendors";
 import { customersAttributes } from "../models/customers";
 
 class CompanyApiUtils {
+  static async getAllCompanyAdmins(companyId: string) {
+    try {
+      return await sequelize.models.users
+        .findAll({
+          where: {
+            companyId,
+            power: UserPower.Admin,
+          },
+        })
+        .then((users) => users.map((u) => u.get("id") as string));
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
   static async checkCompanyName(name: string) {
     return await this.isDuplicateCompanyNames(name);
   }

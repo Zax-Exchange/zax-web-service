@@ -241,7 +241,7 @@ export type CustomerProject = ProjectInterface & {
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;
   permission: ProjectPermission;
-  status: Scalars['String'];
+  status: ProjectStatus;
   targetPrice: Scalars['String'];
   totalWeight: Scalars['String'];
   updatedAt: Scalars['Date'];
@@ -302,6 +302,10 @@ export type FileUploadResponse = {
   Key: Scalars['String'];
   Location: Scalars['String'];
   key: Scalars['String'];
+};
+
+export type GetAllPendingJoinRequestsInput = {
+  companyId: Scalars['String'];
 };
 
 export type GetAllPlansInput = {
@@ -390,10 +394,10 @@ export type LoggedInUser = {
   companyId: Scalars['String'];
   email: Scalars['String'];
   id: Scalars['String'];
-  isAdmin: Scalars['Boolean'];
   isVendor: Scalars['Boolean'];
   name: Scalars['String'];
   notificationToken: Scalars['String'];
+  power: UserPower;
   token: Scalars['String'];
 };
 
@@ -415,6 +419,7 @@ export type Mutation = {
   deleteProjectDesign: Scalars['Boolean'];
   deleteProjectPermissions: Scalars['Boolean'];
   inviteUser: Scalars['Boolean'];
+  requestToJoin: Scalars['Boolean'];
   reset: Scalars['Boolean'];
   updateCompanyPlan: Scalars['Boolean'];
   updateCompanyPlanSubscriptionInfo: Scalars['Boolean'];
@@ -514,6 +519,11 @@ export type MutationInviteUserArgs = {
 };
 
 
+export type MutationRequestToJoinArgs = {
+  data: RequestToJoinInput;
+};
+
+
 export type MutationResetArgs = {
   t?: InputMaybe<Scalars['Int']>;
 };
@@ -597,7 +607,6 @@ export type PermissionedCompany = {
   fax: Scalars['String'];
   id: Scalars['String'];
   isActive: Scalars['Boolean'];
-  isAdmin: Scalars['Boolean'];
   isVendor: Scalars['Boolean'];
   isVerified: Scalars['Boolean'];
   leadTime?: Maybe<Scalars['Int']>;
@@ -607,6 +616,7 @@ export type PermissionedCompany = {
   name: Scalars['String'];
   phone: Scalars['String'];
   planInfo: CompanyPlan;
+  power: UserPower;
   products?: Maybe<Array<Scalars['String']>>;
   updatedAt: Scalars['Date'];
 };
@@ -709,7 +719,7 @@ export type Project = ProjectInterface & {
   id: Scalars['String'];
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;
-  status: Scalars['String'];
+  status: ProjectStatus;
   targetPrice: Scalars['String'];
   totalWeight: Scalars['String'];
   updatedAt: Scalars['Date'];
@@ -822,7 +832,7 @@ export type ProjectInterface = {
   id: Scalars['String'];
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;
-  status: Scalars['String'];
+  status: ProjectStatus;
   targetPrice: Scalars['String'];
   totalWeight: Scalars['String'];
   updatedAt: Scalars['Date'];
@@ -880,6 +890,7 @@ export type Query = {
   __typename?: 'Query';
   checkCompanyName: Scalars['Boolean'];
   checkUserEmail: Scalars['Boolean'];
+  getAllPendingJoinRequests: Array<Scalars['String']>;
   getAllPlans: Array<Plan>;
   getAllUsersWithinCompany: Array<User>;
   getCompanyDetail?: Maybe<CompanyDetail>;
@@ -911,6 +922,11 @@ export type QueryCheckCompanyNameArgs = {
 
 export type QueryCheckUserEmailArgs = {
   data: CheckUserEmailInput;
+};
+
+
+export type QueryGetAllPendingJoinRequestsArgs = {
+  data: GetAllPendingJoinRequestsInput;
 };
 
 
@@ -1016,6 +1032,11 @@ export type QuerySearchCustomerProjectsArgs = {
 
 export type QuerySearchVendorCompaniesArgs = {
   data: SearchVendorCompanyInput;
+};
+
+export type RequestToJoinInput = {
+  companyName: Scalars['String'];
+  email: Scalars['String'];
 };
 
 export type SearchCustomerProjectInput = {
@@ -1162,7 +1183,7 @@ export type UpdateUserPasswordInput = {
 };
 
 export type UpdateUserPowerInput = {
-  isAdmin: Scalars['Boolean'];
+  power: UserPower;
   userId: Scalars['String'];
 };
 
@@ -1186,16 +1207,21 @@ export type User = {
   companyId: Scalars['String'];
   email: Scalars['String'];
   id: Scalars['String'];
-  isActive: Scalars['Boolean'];
-  isAdmin: Scalars['Boolean'];
   isVendor: Scalars['Boolean'];
   name: Scalars['String'];
+  power: UserPower;
+  status?: Maybe<UserStatus>;
 };
 
 export type UserLoginInput = {
   email: Scalars['String'];
   password: Scalars['String'];
 };
+
+export enum UserPower {
+  Admin = 'ADMIN',
+  User = 'USER'
+}
 
 export type UserProjectPermission = {
   __typename?: 'UserProjectPermission';
@@ -1204,6 +1230,11 @@ export type UserProjectPermission = {
   permission: ProjectPermission;
   userId: Scalars['String'];
 };
+
+export enum UserStatus {
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE'
+}
 
 export type VendorDetail = {
   __typename?: 'VendorDetail';
@@ -1252,7 +1283,7 @@ export type VendorProject = ProjectInterface & {
   name: Scalars['String'];
   orderQuantities: Array<Scalars['Int']>;
   permission: ProjectPermission;
-  status: Scalars['String'];
+  status: ProjectStatus;
   targetPrice: Scalars['String'];
   totalWeight: Scalars['String'];
   updatedAt: Scalars['Date'];

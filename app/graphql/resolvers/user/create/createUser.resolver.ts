@@ -5,6 +5,8 @@ import UserApiUtils from "../../../../utils/userUtils";
 import {
   CreateUserInput,
   LoggedInUser,
+  UserPower,
+  UserStatus,
 } from "../../../resolvers-types.generated";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
@@ -39,13 +41,13 @@ const createUser = async (
         .create(
           {
             id: uuidv4(),
+            companyId,
             name,
             email: email.toLowerCase(),
-            companyId,
             password: encrypted,
-            isAdmin: isFirst,
+            status: UserStatus.Active,
+            power: isFirst ? UserPower.Admin : UserPower.User,
             isVendor,
-            isActive: true,
           },
           { transaction }
         )
@@ -59,8 +61,8 @@ const createUser = async (
         companyId: user.companyId,
         name: user.name,
         email: user.email,
-        isAdmin: user.isAdmin,
         isVendor: user.isVendor,
+        power: user.power,
         notificationToken,
         chatToken,
       };

@@ -1,5 +1,6 @@
 import sequelize from "../postgres/dbconnection";
 import { users } from "../models/users";
+import { UserPower } from "../graphql/resolvers-types.generated";
 
 class UserApiUtils {
   static async getUserWithUserId(id: string): Promise<users> {
@@ -41,7 +42,9 @@ class UserApiUtils {
   static async isUserAdmin(id: string): Promise<boolean> {
     const users = sequelize.models.users;
     try {
-      return await users.findByPk(id).then((u) => u?.get("isAdmin") as boolean);
+      return await users
+        .findByPk(id)
+        .then((u) => (u?.get("power") as UserPower) === UserPower.Admin);
     } catch (e) {
       return Promise.reject(e);
     }
