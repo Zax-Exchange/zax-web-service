@@ -1,0 +1,7 @@
+input CheckCompanyNameInput {
+  companyName: String!
+}
+
+type Query {
+  checkCompanyName(data: CheckCompanyNameInput!): Boolean!
+}

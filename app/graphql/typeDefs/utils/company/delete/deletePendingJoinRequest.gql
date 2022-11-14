@@ -1,0 +1,7 @@
+input DeletePendingJoinRequestInput {
+  userEmail: String!
+}
+
+type Mutation {
+  deletePendingJoinRequest(data: DeletePendingJoinRequestInput!): Boolean!
+}

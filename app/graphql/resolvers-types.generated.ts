@@ -269,6 +269,10 @@ export type DeactivateUserInput = {
   email: Scalars['String'];
 };
 
+export type DeletePendingJoinRequestInput = {
+  userEmail: Scalars['String'];
+};
+
 export type DeleteProjectBidPermissionsInput = {
   projectBidId: Scalars['String'];
   userIds: Array<Scalars['String']>;
@@ -414,6 +418,7 @@ export type Mutation = {
   createVendor: Scalars['String'];
   createVendorSubscription: StripeSubscription;
   deactivateUser: Scalars['Boolean'];
+  deletePendingJoinRequest: Scalars['Boolean'];
   deleteProject: Scalars['Boolean'];
   deleteProjectBidPermissions: Scalars['Boolean'];
   deleteProjectDesign: Scalars['Boolean'];
@@ -491,6 +496,11 @@ export type MutationCreateVendorSubscriptionArgs = {
 
 export type MutationDeactivateUserArgs = {
   data: DeactivateUserInput;
+};
+
+
+export type MutationDeletePendingJoinRequestArgs = {
+  data: DeletePendingJoinRequestInput;
 };
 
 
