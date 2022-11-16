@@ -8,6 +8,7 @@ import sequelize from "../../../../postgres/dbconnection";
 import streamService from "../../../../stream/StreamService";
 import {
   BidStatus,
+  QuantityPrice,
   UpdateProjectBidComponentInput,
   UpdateProjectInput,
 } from "../../../resolvers-types.generated";
@@ -16,6 +17,42 @@ import http from "http";
 import NotificationService from "../../../../notification/NotificationService";
 import ProjectApiUtils from "../../../../utils/projectUtils";
 import { PROJECT_UPDATE_ROUTE } from "../../../../notification/notificationRoutes";
+import { Model, Transaction } from "sequelize/types";
+import {
+  project_bid_components,
+  project_bid_componentsAttributes,
+  project_bid_componentsCreationAttributes,
+} from "../../../../models/project_bid_components";
+
+const updateProjectBidComponentsQuantities = async (
+  bidsComponents: Model<
+    project_bid_componentsAttributes,
+    project_bid_componentsCreationAttributes
+  >[][],
+  newQuantities: Set<number>,
+  transaction: Transaction
+) => {
+  for (let bidComponents of bidsComponents) {
+    for (let bidComponent of bidComponents) {
+      const oldQp = bidComponent.get("quantityPrices", {
+        plain: true,
+      }) as QuantityPrice[];
+      const newQp: QuantityPrice[] = [];
+      for (let qp of oldQp) {
+        if (newQuantities.has(qp.quantity)) {
+          newQp.push(qp);
+        }
+      }
+
+      await bidComponent.update(
+        {
+          quantityPrices: newQp,
+        },
+        { transaction }
+      );
+    }
+  }
+};
 
 const getProjectDiffs = (
   originalEntity: projects,
@@ -29,6 +66,7 @@ const getProjectDiffs = (
       const originalValue = originalEntity.getDataValue(
         key as keyof projectsAttributes
       );
+
       // perform a deep comparison
       if (JSON.stringify(value) !== JSON.stringify(originalValue)) {
         output.push({
@@ -43,7 +81,6 @@ const getProjectDiffs = (
   return output;
 };
 
-// TODO: broadcast update project even to vendors
 const updateProject = async (
   parent: any,
   { data }: { data: UpdateProjectInput },
@@ -65,16 +102,36 @@ const updateProject = async (
       const originalModel: projects = (await sequelize.models.projects.findByPk(
         projectId
       )) as projects;
+
       if (originalModel === null) {
         return Promise.reject(
           new UserInputError(`could not find project with id ${projectId}`)
         );
       }
 
+      const bids = await originalModel.getProject_bids();
+
+      const allBidComponents = await Promise.all(
+        bids.map((bid) => {
+          return sequelize.models.project_bid_components.findAll({
+            where: {
+              projectBidId: bid.id,
+            },
+          });
+        })
+      );
+
+      await updateProjectBidComponentsQuantities(
+        allBidComponents,
+        new Set(orderQuantities),
+        transaction
+      );
+
       const changes: project_changelogs[] = getProjectDiffs(
         originalModel,
         data
       );
+
       const updates: Promise<any>[] = [
         sequelize.models.projects.update(
           {
@@ -105,6 +162,7 @@ const updateProject = async (
           }
         ),
       ];
+
       changes.forEach((change: project_changelogs) => {
         updates.push(
           sequelize.models.project_changelog.create(
@@ -113,6 +171,7 @@ const updateProject = async (
           )
         );
       });
+
       await Promise.all(updates);
     });
     ElasticProjectService.updateProjectDocumentWithProjectSpec(
@@ -125,7 +184,13 @@ const updateProject = async (
     ProjectApiUtils.getProjectBidsByProjectId(projectId)
       .then((bids) => {
         return Promise.all(
-          bids.map((bid) => ProjectApiUtils.getProjectBidUsers(bid.id))
+          bids.map((bid) => {
+            // updateProjectBidComponentsQuantities(
+            //   bid.components,
+            //   orderQuantities
+            // );
+            return ProjectApiUtils.getProjectBidUsers(bid.id);
+          })
         );
       })
       .then((bidsUsers) => {

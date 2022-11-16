@@ -222,6 +222,7 @@ class ProjectApiUtils {
             const components = await (bid as project_bids)
               .getProject_bid_components()
               .then((comps) => comps.map((comp) => comp.get({ plain: true })));
+
             res.push({
               ...bid?.get({ plain: true }),
               components,

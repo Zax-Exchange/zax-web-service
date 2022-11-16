@@ -1,12 +1,13 @@
 input UpdateProjectBidInput {
   id: String!
   comments: String!
-  components: [UpdateProjectBidComponentInput!]!
 }
 
 input UpdateProjectBidComponentInput {
-  id: String!
+  bidComponentId: String!
   quantityPrices: [QuantityPriceInput!]!
+  samplingFee: Int!
+  toolingFee: Int
 }
 
 input UpdateProjectBidPermissionsInput {
@@ -24,4 +25,5 @@ input UpdateProjectBidPermissionsInputData {
 type Mutation {
   updateProjectBidPermissions(data: UpdateProjectBidPermissionsInput!): Boolean!
   # updateProjectBid(data: UpdateProjectBidInput): Boolean
+  updateProjectBidComponents(data: [UpdateProjectBidComponentInput!]!): Boolean!
 }

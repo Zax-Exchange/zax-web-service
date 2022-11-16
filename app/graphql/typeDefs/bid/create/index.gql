@@ -11,6 +11,7 @@ input CreateProjectBidInput {
 }
 
 input CreateProjectBidComponentInput {
+  projectBidId: String
   projectComponentId: String!
   quantityPrices: [QuantityPriceInput!]!
   samplingFee: Int!
@@ -19,4 +20,5 @@ input CreateProjectBidComponentInput {
 
 type Mutation {
   createProjectBid(data: CreateProjectBidInput!): Boolean!
+  createProjectBidComponents(data: [CreateProjectBidComponentInput!]!): Boolean!
 }

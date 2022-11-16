@@ -7,9 +7,7 @@ import {
   ProjectStatus,
 } from "../../../resolvers-types.generated";
 import { v4 as uuidv4 } from "uuid";
-import createProjectBidComponents from "./createProjectBidComponents";
 import ProjectApiUtils from "../../../../utils/projectUtils";
-import streamService from "../../../../stream/StreamService";
 import createOrUpdateProjectBidPermission from "./createOrUpdateProjectBidPermission";
 import NotificationService from "../../../../notification/NotificationService";
 import { BID_CREATE_ROUTE } from "../../../../notification/notificationRoutes";
@@ -30,9 +28,11 @@ const createProjectBid = async (
         transaction,
       });
       const companyId = await user?.getDataValue("companyId");
-      const bid = await project_bids.create(
+      const projectBidId = uuidv4();
+
+      await project_bids.create(
         {
-          id: uuidv4(),
+          id: projectBidId,
           userId,
           companyId,
           projectId,
@@ -41,21 +41,42 @@ const createProjectBid = async (
         },
         { transaction }
       );
-      const projectBidId = bid.getDataValue("id");
-      await createProjectBidComponents(projectBidId, components, transaction);
-      await createOrUpdateProjectBidPermission(
-        {
-          userIds: [userId],
+
+      await Promise.all([
+        ...components.map(async (comp) => {
+          const {
+            projectComponentId,
+            quantityPrices,
+            samplingFee,
+            toolingFee,
+          } = comp;
+          return sequelize.models.project_bid_components.create(
+            {
+              id: uuidv4(),
+              projectBidId,
+              projectComponentId,
+              quantityPrices,
+              samplingFee,
+              toolingFee,
+            },
+            { transaction }
+          );
+        }),
+        createOrUpdateProjectBidPermission(
+          {
+            userIds: [userId],
+            projectId,
+            projectBidId,
+            permission: ProjectPermission.Owner,
+          },
+          transaction
+        ),
+        ProjectApiUtils.updateProjectStatus(
           projectId,
-          projectBidId,
-          permission: ProjectPermission.Owner,
-        },
-        transaction
-      );
-      await ProjectApiUtils.updateProjectStatus(
-        projectId,
-        ProjectStatus.InProgress
-      );
+          ProjectStatus.InProgress,
+          transaction
+        ),
+      ]);
     });
 
     Promise.all([
