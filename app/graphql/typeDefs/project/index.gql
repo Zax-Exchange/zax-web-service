@@ -11,8 +11,9 @@ type ProjectOverview {
   products: [String!]!
   createdAt: Date!
 }
+
 type ProjectDesign {
-  designId: String!
+  fileId: String!
   filename: String!
   url: String!
 }
@@ -50,6 +51,26 @@ type Project implements ProjectInterface {
   status: ProjectStatus!
   comments: String!
   components: [ProjectComponent!]!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type PermissionedProject implements ProjectInterface {
+  id: String!
+  userId: String!
+  companyId: String!
+  companyName: String!
+  name: String!
+  category: String!
+  totalWeight: String!
+  deliveryDate: String!
+  deliveryAddress: String!
+  targetPrice: String!
+  orderQuantities: [Int!]!
+  status: ProjectStatus!
+  comments: String!
+  components: [ProjectComponent!]!
+  permission: ProjectPermission!
   createdAt: Date!
   updatedAt: Date!
 }

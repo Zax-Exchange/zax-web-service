@@ -28,7 +28,7 @@ const createProjectComponents = async (
           projectId = component.projectId!;
           const { designIds } = component;
 
-          return await Promise.all([
+          await Promise.all([
             project_components.create(
               {
                 id: projectComponentId,
@@ -44,17 +44,26 @@ const createProjectComponents = async (
               },
               { transaction }
             ),
-            designIds?.map(async (id) => {
-              const design = await designs.findByPk(id);
-              design?.update(
-                {
-                  projectId: component.projectId,
-                  projectComponentId,
-                },
-                { transaction }
-              );
-            }),
           ]);
+
+          if (designIds) {
+            await Promise.all(
+              designIds.map((id) => {
+                return sequelize.models.project_designs.update(
+                  {
+                    projectId,
+                    projectComponentId: projectComponentId,
+                  },
+                  {
+                    where: {
+                      id,
+                    },
+                    transaction,
+                  }
+                );
+              })
+            );
+          }
         })
       );
     });

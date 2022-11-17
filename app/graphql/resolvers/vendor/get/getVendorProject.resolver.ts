@@ -31,9 +31,7 @@ const getVendorProject = async (
       permission.projectBidId,
       permission.permission
     );
-    const project = (await ProjectApiUtils.getPermissionedProject(
-      bid.projectId
-    )) as VendorProject;
+    const project = await ProjectApiUtils.getPermissionedProject(bid.projectId);
 
     return {
       ...project,

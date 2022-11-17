@@ -16,6 +16,7 @@ import {
 } from "../../../resolvers-types.generated";
 import streamService from "../../../../stream/StreamService";
 import cacheService from "../../../../redis/CacheService";
+import { Model } from "sequelize/types";
 
 const processComponentSpecChanges = (spec: UpdateProjectComponentSpecInput) => {
   const res = {} as any;
@@ -117,21 +118,24 @@ const updateProjectComponents = async (
             )
           );
         }
+        const updateDesignsPromises: Promise<any>[] = [];
         if (designIds) {
-          await Promise.all(
-            designIds.map(async (id) => {
-              const design = await sequelize.models.project_designs.findByPk(
-                id
-              );
-              design?.update(
+          designIds.forEach((id) => {
+            updateDesignsPromises.push(
+              sequelize.models.project_designs.update(
                 {
                   projectId,
                   projectComponentId: componentId,
                 },
-                { transaction }
-              );
-            })
-          );
+                {
+                  where: {
+                    id,
+                  },
+                  transaction,
+                }
+              )
+            );
+          });
         }
         const componentSpecId = componentSpec.id;
 
@@ -142,6 +146,7 @@ const updateProjectComponents = async (
         );
 
         await Promise.all([
+          // ...updateDesignsPromises,
           ...changes.map((change) => {
             return sequelize.models.project_component_changelogs.create(
               { ...change },

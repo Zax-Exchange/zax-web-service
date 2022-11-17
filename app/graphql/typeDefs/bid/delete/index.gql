@@ -3,6 +3,11 @@ input DeleteProjectBidPermissionsInput {
   projectBidId: String!
 }
 
+input DeleteBidRemarkInput {
+  fileId: String!
+}
+
 type Mutation {
+  deleteBidRemark(data: DeleteBidRemarkInput!): Boolean!
   deleteProjectBidPermissions(data: DeleteProjectBidPermissionsInput!): Boolean!
 }

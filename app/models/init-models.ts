@@ -79,6 +79,11 @@ import type {
   pending_join_requestsAttributes,
   pending_join_requestsCreationAttributes,
 } from "./pending_join_requests";
+import { bid_remarks as _bid_remarks } from "./bid_remarks";
+import type {
+  bid_remarksAttributes,
+  bid_remarksCreationAttributes,
+} from "./bid_remarks";
 
 export {
   _sequelize_meta as sequelize_meta,
@@ -100,6 +105,7 @@ export {
   _vendors as vendors,
   _project_designs as project_designs,
   _pending_join_requests as pending_join_requests,
+  _bid_remarks as bid_remarks,
 };
 
 export type {
@@ -137,6 +143,8 @@ export type {
   project_designsCreationAttributes,
   pending_join_requestsAttributes,
   pending_join_requestsCreationAttributes,
+  bid_remarksAttributes,
+  bid_remarksCreationAttributes,
 };
 
 export function initModels(sequelize: Sequelize) {
@@ -162,6 +170,7 @@ export function initModels(sequelize: Sequelize) {
     _project_component_changelogs.initModel(sequelize);
 
   const pending_join_requests = _pending_join_requests.initModel(sequelize);
+  const bid_remarks = _bid_remarks.initModel(sequelize);
 
   company_plans.belongsTo(companies, {
     as: "company",
@@ -420,6 +429,28 @@ export function initModels(sequelize: Sequelize) {
     onDelete: "CASCADE",
   });
 
+  bid_remarks.belongsTo(projects, {
+    as: "project",
+    foreignKey: "projectId",
+  });
+
+  bid_remarks.belongsTo(project_bids, {
+    as: "project_bid",
+    foreignKey: "projectBidId",
+  });
+
+  projects.hasMany(bid_remarks, {
+    as: "bid_remarks",
+    foreignKey: "projectId",
+    onDelete: "CASCADE",
+  });
+
+  project_bids.hasOne(bid_remarks, {
+    as: "bid_remark",
+    foreignKey: "projectBidId",
+    onDelete: "CASCADE",
+  });
+
   return {
     sequelize_meta,
     companies,
@@ -440,5 +471,6 @@ export function initModels(sequelize: Sequelize) {
     project_changelogs,
     project_component_changelogs,
     pending_join_requests,
+    bid_remarks,
   };
 }

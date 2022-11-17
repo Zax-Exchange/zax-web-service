@@ -20,7 +20,7 @@ const createProjectBid = async (
   info: any
 ) => {
   const project_bids = sequelize.models.project_bids;
-  const { userId, projectId, comments, components } = data;
+  const { userId, projectId, components, bidRemarkFileId } = data;
 
   try {
     await sequelize.transaction(async (transaction) => {
@@ -36,7 +36,6 @@ const createProjectBid = async (
           userId,
           companyId,
           projectId,
-          comments,
           status: BidStatus.Open,
         },
         { transaction }
@@ -62,6 +61,13 @@ const createProjectBid = async (
             { transaction }
           );
         }),
+        sequelize.models.bid_remarks.update(
+          {
+            projectId,
+            projectBidId,
+          },
+          { where: { id: bidRemarkFileId }, transaction }
+        ),
         createOrUpdateProjectBidPermission(
           {
             userIds: [userId],

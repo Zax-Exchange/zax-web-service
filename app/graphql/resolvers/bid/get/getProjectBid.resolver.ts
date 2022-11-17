@@ -1,3 +1,4 @@
+import { bid_remarks } from "../../../../models/bid_remarks";
 import {
   project_bids,
   project_bidsAttributes,
@@ -14,15 +15,22 @@ const getProjectBid = async (
   parent: any,
   { data }: { data: GetProjectBidInput },
   context: any
-) => {
+): Promise<ProjectBid | null> => {
   const { companyId, projectId } = data;
   try {
-    const bid = await sequelize.models.project_bids.findOne({
-      where: {
-        companyId,
-        projectId,
-      },
-    });
+    const [bid, remarkFile] = await Promise.all([
+      sequelize.models.project_bids.findOne({
+        where: {
+          companyId,
+          projectId,
+        },
+      }),
+      sequelize.models.bid_remarks.findOne({
+        where: {
+          projectId,
+        },
+      }),
+    ]);
 
     if (!bid) return null;
 
@@ -31,10 +39,18 @@ const getProjectBid = async (
       .then((comps) =>
         comps.map((comp) => comp.get({ plain: true }) as ProjectBidComponent)
       );
+    const file = remarkFile?.get({ plain: true }) as bid_remarks;
 
     return {
       ...(bid.get({ plain: true }) as ProjectBid),
       components,
+      remarkFile: file
+        ? {
+            fileId: file.id,
+            filename: file.fileName,
+            url: file.url,
+          }
+        : null,
     };
   } catch (error) {
     return Promise.reject(error);

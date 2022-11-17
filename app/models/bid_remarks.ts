@@ -1,59 +1,68 @@
 import * as Sequelize from "sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
 import type { projects, projectsId } from "./projects";
-import type { project_components } from "./project_components";
+import type { project_bids } from "./project_bids";
 
-export interface project_designsAttributes {
+export interface bid_remarksAttributes {
   id: string;
   projectId?: string;
-  projectComponentId?: string;
+  projectBidId?: string;
   fileName: string;
   url: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export type project_designsPk = "id";
-export type project_designsId = project_designs[project_designsPk];
-export type project_designsOptionalAttributes =
+export type bid_remarksPk = "id";
+export type bid_remarksId = bid_remarks[bid_remarksPk];
+export type bid_remarksOptionalAttributes =
   | "projectId"
+  | "projectBidId"
   | "createdAt"
   | "updatedAt";
-export type project_designsCreationAttributes = Optional<
-  project_designsAttributes,
-  project_designsOptionalAttributes
+export type bid_remarksCreationAttributes = Optional<
+  bid_remarksAttributes,
+  bid_remarksOptionalAttributes
 >;
 
-export class project_designs
-  extends Model<project_designsAttributes, project_designsCreationAttributes>
-  implements project_designsAttributes
+export class bid_remarks
+  extends Model<bid_remarksAttributes, bid_remarksCreationAttributes>
+  implements bid_remarksAttributes
 {
   id!: string;
+  projectBidId?: string;
   projectId?: string;
-  projectComponentId?: string;
   fileName!: string;
   url!: string;
   createdAt!: Date;
   updatedAt!: Date;
 
-  // project_designs belongsTo projects via projectId
+  // bid_remarks belongsTo projects via projectId
   project!: projects;
   getProject!: Sequelize.BelongsToGetAssociationMixin<projects>;
   hasProject!: Sequelize.HasOneGetAssociationMixin<projects>;
 
-  // project_designs belongsTo project_components via projectId
-  project_component!: projects;
-  getProject_component!: Sequelize.BelongsToGetAssociationMixin<project_components>;
-  hasProject_component!: Sequelize.HasOneGetAssociationMixin<project_components>;
+  // bid_remarks belongsTo project_bids via projectBidId
+  project_bid!: project_bids;
+  getProject_bid!: Sequelize.BelongsToGetAssociationMixin<project_bids>;
+  hasProject_bid!: Sequelize.HasOneGetAssociationMixin<project_bids>;
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof project_designs {
+  static initModel(sequelize: Sequelize.Sequelize): typeof bid_remarks {
     return sequelize.define(
-      "project_designs",
+      "bid_remarks",
       {
         id: {
           type: DataTypes.UUID,
           allowNull: false,
           primaryKey: true,
+        },
+        projectBidId: {
+          type: DataTypes.UUID,
+          allowNull: true,
+          references: {
+            model: "project_bids",
+            key: "id",
+          },
         },
         projectId: {
           type: DataTypes.UUID,
@@ -63,14 +72,6 @@ export class project_designs
             key: "id",
           },
           onDelete: "cascade",
-        },
-        projectComponentId: {
-          type: DataTypes.UUID,
-          allowNull: true,
-          references: {
-            model: "project_components",
-            key: "id",
-          },
         },
         fileName: {
           type: DataTypes.STRING,
@@ -82,17 +83,17 @@ export class project_designs
         },
       },
       {
-        tableName: "project_designs",
+        tableName: "bid_remarks",
         schema: "public",
         timestamps: true,
         indexes: [
           {
-            name: "project_designs_pKey",
+            name: "bid_remarks_pKey",
             unique: true,
             fields: [{ name: "id" }],
           },
         ],
       }
-    ) as typeof project_designs;
+    ) as typeof bid_remarks;
   }
 }

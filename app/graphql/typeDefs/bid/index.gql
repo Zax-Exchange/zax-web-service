@@ -1,4 +1,14 @@
-type PermissionedProjectBid {
+interface ProjectBidInterface {
+  id: String!
+  userId: String!
+  companyId: String!
+  projectId: String!
+  status: BidStatus!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type PermissionedProjectBid implements ProjectBidInterface {
   id: String!
   userId: String!
   projectId: String!
@@ -6,18 +16,25 @@ type PermissionedProjectBid {
   components: [ProjectBidComponent!]!
   permission: ProjectPermission!
   status: BidStatus!
+  remarkFile: BidRemark
   createdAt: Date!
   updatedAt: Date!
 }
 
-type ProjectBid {
+type BidRemark {
+  fileId: String!
+  filename: String!
+  url: String!
+}
+
+type ProjectBid implements ProjectBidInterface {
   id: String!
   userId: String!
   companyId: String!
   projectId: String!
-  comments: String!
   components: [ProjectBidComponent!]!
   status: BidStatus!
+  remarkFile: BidRemark
   createdAt: Date!
   updatedAt: Date!
 }

@@ -1,9 +1,9 @@
 import { ApolloError } from "apollo-server-express";
 // import { createUploadStream } from "../../../aws/streams";
 import { v4 as uuidv4 } from "uuid";
-import s3 from "../../../aws/s3";
-import sequelize from "../../../postgres/dbconnection";
-import { ProjectDesign } from "../../resolvers-types.generated";
+import s3 from "../../../../aws/s3";
+import sequelize from "../../../../postgres/dbconnection";
+import { ProjectDesign } from "../../../resolvers-types.generated";
 
 const uploadProjectDesign = async (_parent: any, { file }: any) => {
   try {
@@ -11,27 +11,30 @@ const uploadProjectDesign = async (_parent: any, { file }: any) => {
     const { createReadStream, filename, mimetype, encoding } =
       resolvedFile.file;
     const stream = createReadStream();
-    const designId = uuidv4();
+    const fileId = uuidv4();
     await s3
       .upload({
         Body: stream,
-        Key: designId,
+        Key: fileId,
         ContentType: mimetype,
-        Bucket: process.env.AWS_PROJECT_DESIGNS_BUCKET!,
+        Bucket: `${process.env.AWS_S3_CUSTOMER_FILES_BUCKET!}/${
+          process.env.AWS_S3_COMPONENT_DESIGNS_FOLDER
+        }`,
       })
       .promise();
     await sequelize.models.project_designs.create({
-      id: designId,
+      id: fileId,
       fileName: filename,
+      url: `${process.env.AWS_CDN_URL}/${process.env.AWS_S3_COMPONENT_DESIGNS_FOLDER}/${fileId}`,
     });
 
     return {
-      designId,
+      fileId,
       filename,
-      url: `${process.env.AWS_CDN_URL}/${designId}`,
+      url: `${process.env.AWS_CDN_URL}/${process.env.AWS_S3_COMPONENT_DESIGNS_FOLDER}/${fileId}`,
     } as ProjectDesign;
   } catch (error: any) {
-    throw new ApolloError("Error uploading file");
+    throw error;
   }
 };
 

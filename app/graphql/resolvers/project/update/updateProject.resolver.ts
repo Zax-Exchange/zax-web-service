@@ -121,12 +121,6 @@ const updateProject = async (
         })
       );
 
-      await updateProjectBidComponentsQuantities(
-        allBidComponents,
-        new Set(orderQuantities),
-        transaction
-      );
-
       const changes: project_changelogs[] = getProjectDiffs(
         originalModel,
         data
@@ -160,6 +154,11 @@ const updateProject = async (
             },
             transaction,
           }
+        ),
+        updateProjectBidComponentsQuantities(
+          allBidComponents,
+          new Set(orderQuantities),
+          transaction
         ),
       ];
 

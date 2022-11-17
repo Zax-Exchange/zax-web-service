@@ -12,13 +12,13 @@ import type {
 import type { projects, projectsId } from "./projects";
 import type { users, usersId } from "./users";
 import { BidStatus } from "../graphql/resolvers-types.generated";
+import { bid_remarks } from "./bid_remarks";
 
 export interface project_bidsAttributes {
   id: string;
   userId: string;
   projectId: string;
   companyId: string;
-  comments?: string;
   status: BidStatus;
   createdAt: Date;
   updatedAt: Date;
@@ -26,10 +26,7 @@ export interface project_bidsAttributes {
 
 export type project_bidsPk = "id";
 export type project_bidsId = project_bids[project_bidsPk];
-export type project_bidsOptionalAttributes =
-  | "comments"
-  | "createdAt"
-  | "updatedAt";
+export type project_bidsOptionalAttributes = "createdAt" | "updatedAt";
 export type project_bidsCreationAttributes = Optional<
   project_bidsAttributes,
   project_bidsOptionalAttributes
@@ -43,7 +40,6 @@ export class project_bids
   userId!: string;
   projectId!: string;
   companyId!: string;
-  comments?: string;
   status!: BidStatus;
   createdAt!: Date;
   updatedAt!: Date;
@@ -130,6 +126,10 @@ export class project_bids
   setUser!: Sequelize.BelongsToSetAssociationMixin<users, usersId>;
   createUser!: Sequelize.BelongsToCreateAssociationMixin<users>;
 
+  // project_bids hasOne bid_remarks via projectBidId
+  bid_remark!: bid_remarks | null;
+  getBid_remark!: Sequelize.HasOneGetAssociationMixin<bid_remarks | null>;
+
   static initModel(sequelize: Sequelize.Sequelize): typeof project_bids {
     return sequelize.define(
       "project_bids",
@@ -166,10 +166,6 @@ export class project_bids
           },
           unique: "project_bids_projectId_companyId_key",
           onDelete: "cascade",
-        },
-        comments: {
-          type: DataTypes.TEXT,
-          allowNull: true,
         },
         status: {
           type: DataTypes.STRING,

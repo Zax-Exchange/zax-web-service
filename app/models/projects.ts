@@ -4,6 +4,7 @@ import {
   ProjectCreationMode,
   ProjectStatus,
 } from "../graphql/resolvers-types.generated";
+import { bid_remarks } from "./bid_remarks";
 import type { companies, companiesId } from "./companies";
 import type { project_bids, project_bidsId } from "./project_bids";
 import type {
@@ -175,6 +176,10 @@ export class projects
   // projects hasMany project_designs via projectId
   project_designs!: project_designs[];
   getProject_designs!: Sequelize.HasManyGetAssociationsMixin<project_designs>;
+
+  // projects hasMany bid_remarks via projectId
+  bid_remarks!: bid_remarks[];
+  getBid_remarks!: Sequelize.HasOneGetAssociationMixin<bid_remarks[]>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof projects {
     return sequelize.define(

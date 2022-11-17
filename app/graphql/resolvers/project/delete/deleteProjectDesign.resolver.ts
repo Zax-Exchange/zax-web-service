@@ -9,22 +9,26 @@ const deleteProjectDesign = async (
   { data }: { data: DeleteProjectDesignInput }
 ) => {
   try {
-    const { designId } = data;
+    const { fileId } = data;
 
-    const valueToDelete = await sequelize.models.project_designs.findByPk(designId) as project_designs | null;
+    const valueToDelete = (await sequelize.models.project_designs.findByPk(
+      fileId
+    )) as project_designs | null;
     await sequelize.models.project_designs.destroy({
       where: {
-        id: designId,
+        id: fileId,
       },
     });
 
     await s3
       .deleteObject({
-        Bucket: process.env.AWS_PROJECT_DESIGNS_BUCKET!,
-        Key: designId,
+        Bucket: `${process.env.AWS_S3_CUSTOMER_FILES_BUCKET!}/${
+          process.env.AWS_S3_COMPONENT_DESIGNS_FOLDER
+        }`,
+        Key: fileId,
       })
       .promise();
-    
+
     if (valueToDelete !== null && valueToDelete.projectId !== null) {
       await cacheService.invalidateProjectInCache(valueToDelete.projectId!);
     }

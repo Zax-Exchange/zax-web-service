@@ -1,6 +1,7 @@
 input UpdateProjectBidInput {
-  id: String!
-  comments: String!
+  projectId: String!
+  projectBidId: String!
+  bidRemarkFileId: String
 }
 
 input UpdateProjectBidComponentInput {
@@ -24,6 +25,6 @@ input UpdateProjectBidPermissionsInputData {
 
 type Mutation {
   updateProjectBidPermissions(data: UpdateProjectBidPermissionsInput!): Boolean!
-  # updateProjectBid(data: UpdateProjectBidInput): Boolean
+  updateProjectBid(data: UpdateProjectBidInput!): Boolean!
   updateProjectBidComponents(data: [UpdateProjectBidComponentInput!]!): Boolean!
 }

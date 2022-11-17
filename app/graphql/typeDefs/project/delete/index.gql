@@ -8,7 +8,7 @@ input DeleteProjectPermissionsInput {
 }
 
 input DeleteProjectDesignInput {
-  designId: String!
+  fileId: String!
 }
 
 type Mutation {

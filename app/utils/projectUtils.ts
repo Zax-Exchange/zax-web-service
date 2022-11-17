@@ -8,6 +8,7 @@ import { projects, projectsAttributes } from "../models/projects";
 import {
   CustomerProject,
   CustomerProjectOverview,
+  PermissionedProject,
   PermissionedProjectBid,
   Project,
   ProjectBid,
@@ -177,9 +178,9 @@ class ProjectApiUtils {
                   ),
                 },
                 designs: designs.map((design) => ({
-                  designId: design.id,
+                  fileId: design.id,
                   filename: design.fileName,
-                  url: `${process.env.AWS_CDN_URL}/${design.id}`,
+                  url: design.url,
                 })),
               } as ProjectComponent;
             })
@@ -249,7 +250,7 @@ class ProjectApiUtils {
       const res = {
         ...project,
         permission: userPermission ? userPermission : ProjectPermission.Viewer,
-      } as VendorProject | CustomerProject;
+      } as PermissionedProject;
       return Promise.resolve(res);
     } catch (e) {
       return Promise.reject(e);
@@ -262,20 +263,31 @@ class ProjectApiUtils {
     permission: ProjectPermission
   ): Promise<PermissionedProjectBid> {
     try {
-      const rawUserBid = await sequelize.models.project_bids.findByPk(
+      const rawUserBid = (await sequelize.models.project_bids.findByPk(
         projectBidId
+      )) as project_bids;
+      const [componentsInstances, remarkFileInstance] = await Promise.all([
+        rawUserBid.getProject_bid_components(),
+        rawUserBid.getBid_remark(),
+      ]);
+
+      const components = componentsInstances.map((instance) =>
+        instance.get({ plain: true })
       );
-      const components = (await (rawUserBid as project_bids)
-        .getProject_bid_components()
-        .then((comps) =>
-          comps.map((comp) => comp.get({ plain: true }))
-        )) as ProjectBidComponent[];
+      const remarkFile = remarkFileInstance?.get({ plain: true });
 
       const userBid = rawUserBid?.get({ plain: true });
 
       return {
         ...userBid,
         components,
+        remarkFile: remarkFile
+          ? {
+              fileId: remarkFile.id,
+              filename: remarkFile.fileName,
+              url: remarkFile.url,
+            }
+          : null,
         permission,
       };
     } catch (e) {

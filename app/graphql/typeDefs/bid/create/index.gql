@@ -6,7 +6,7 @@ input QuantityPriceInput {
 input CreateProjectBidInput {
   userId: String!
   projectId: String!
-  comments: String!
+  bidRemarkFileId: String
   components: [CreateProjectBidComponentInput!]!
 }
 
