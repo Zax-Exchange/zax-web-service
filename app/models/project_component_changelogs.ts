@@ -73,6 +73,7 @@ export class project_component_changelogs
         schema: "public",
         hasTrigger: true,
         timestamps: true,
+        paranoid: true,
         indexes: [
           {
             name: "project_component_changelogs_pkey",

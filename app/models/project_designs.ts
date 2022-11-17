@@ -85,6 +85,7 @@ export class project_designs
         tableName: "project_designs",
         schema: "public",
         timestamps: true,
+        paranoid: true,
         indexes: [
           {
             name: "project_designs_pKey",
