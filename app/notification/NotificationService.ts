@@ -11,7 +11,7 @@ interface NotificationRequestBody {
 
 export default class NotificationService {
   static host = "localhost";
-  static port = 9090;
+  static port = 8080;
 
   static sendNotification(path: string, body: NotificationRequestBody) {
     var options: RequestOptions = {

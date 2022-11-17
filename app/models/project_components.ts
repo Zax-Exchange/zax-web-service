@@ -127,11 +127,13 @@ export class project_components
         ],
         hooks: {
           afterDestroy: async (instance, options) => {
-            try {  
+            try {
               await sequelize.transaction(async (t) => {
                 // delete spec
-                await instance.getComponent_spec().then(spec => spec.destroy({ transaction: t }));
-                
+                await instance
+                  .getComponent_spec()
+                  .then((spec) => spec.destroy({ transaction: t }));
+
                 // delete project bids
                 const bids = await instance.getProject_bid_components();
                 const bidsDeletion: Promise<any>[] = [];
@@ -139,38 +141,40 @@ export class project_components
                   bidsDeletion.push(bid.destroy({ transaction: t }));
                 }
                 await Promise.all(bidsDeletion);
-  
+
                 // delete changelogs
                 await sequelize.models.project_component_changelogs.destroy({
                   where: {
-                    projectComponentId: instance.id
+                    projectComponentId: instance.id,
                   },
-                  transaction: t
+                  transaction: t,
                 });
               });
 
               // delete designs last because it cannot be rolled back
               const projectDesigns = await instance.getProject_design();
-              const designDeletionJobs: Promise<any>[] = []
+              const designDeletionJobs: Promise<any>[] = [];
               for (const design of projectDesigns) {
                 if (design.projectComponentId === instance.id) {
                   // assuming project components is doing a soft delete.
                   // not sure if this will break if cascade deletion gets triggered causing
-                  // double deletion. 
-                  designDeletionJobs.push(deleteProjectDesign(null, { 
-                    data: { 
-                      designId: design.id 
-                    } 
-                  })) 
+                  // double deletion.
+                  designDeletionJobs.push(
+                    deleteProjectDesign(null, {
+                      data: {
+                        fileId: design.id,
+                      },
+                    })
+                  );
                 }
               }
-              await Promise.all(designDeletionJobs);  
+              await Promise.all(designDeletionJobs);
             } catch (error) {
               console.error(error);
               await options.transaction?.rollback();
             }
-          }
-        }
+          },
+        },
       }
     ) as typeof project_components;
   }

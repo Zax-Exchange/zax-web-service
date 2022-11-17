@@ -426,6 +426,7 @@ export type Mutation = {
   deletePendingJoinRequest: Scalars['Boolean'];
   deleteProject: Scalars['Boolean'];
   deleteProjectBidPermissions: Scalars['Boolean'];
+  deleteProjectComponent: Scalars['Boolean'];
   deleteProjectDesign: Scalars['Boolean'];
   deleteProjectPermissions: Scalars['Boolean'];
   inviteUser: Scalars['Boolean'];
@@ -529,6 +530,11 @@ export type MutationDeleteProjectArgs = {
 
 export type MutationDeleteProjectBidPermissionsArgs = {
   data: DeleteProjectBidPermissionsInput;
+};
+
+
+export type MutationDeleteProjectComponentArgs = {
+  data: DeleteProjectComponentInput;
 };
 
 
