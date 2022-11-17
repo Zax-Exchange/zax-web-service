@@ -4,7 +4,7 @@ import sequelize from "../../../../postgres/dbconnection";
 import cacheService from "../../../../redis/CacheService";
 import { DeleteProjectDesignInput } from "../../../resolvers-types.generated";
 
-const deleteProjectDesign = async (
+export const deleteProjectDesign = async (
   _parent: any,
   { data }: { data: DeleteProjectDesignInput }
 ) => {

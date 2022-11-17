@@ -248,6 +248,7 @@ export class component_specs
         tableName: "component_specs",
         schema: "public",
         timestamps: true,
+        paranoid: true,
         indexes: [
           {
             name: "component_specs_pkey",
