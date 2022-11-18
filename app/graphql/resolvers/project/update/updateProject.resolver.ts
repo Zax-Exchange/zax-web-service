@@ -10,6 +10,7 @@ import {
   BidStatus,
   QuantityPrice,
   UpdateProjectBidComponentInput,
+  UpdateProjectData,
   UpdateProjectInput,
 } from "../../../resolvers-types.generated";
 import cacheService from "../../../../redis/CacheService";
@@ -23,6 +24,8 @@ import {
   project_bid_componentsAttributes,
   project_bid_componentsCreationAttributes,
 } from "../../../../models/project_bid_components";
+import updateProjectComponents from "./updateProjectComponents";
+import deleteProjectComponents from "../delete/deleteProjectComponent.resolver";
 
 const updateProjectBidComponentsQuantities = async (
   bidsComponents: Model<
@@ -56,7 +59,7 @@ const updateProjectBidComponentsQuantities = async (
 
 const getProjectDiffs = (
   originalEntity: projects,
-  projectUpdateData: UpdateProjectInput
+  projectUpdateData: UpdateProjectData
 ) => {
   const output: project_changelogs[] = [];
   const changeId = uuidv4();
@@ -87,17 +90,20 @@ const updateProject = async (
   context: any,
   info: any
 ) => {
-  const {
-    projectId,
-    name,
-    category,
-    totalWeight,
-    deliveryAddress,
-    deliveryDate,
-    targetPrice,
-    orderQuantities,
-  } = data;
+  const { projectData, componentsData, componentIdsToDelete } = data;
+
   try {
+    const {
+      projectId,
+      name,
+      category,
+      totalWeight,
+      deliveryAddress,
+      deliveryDate,
+      targetPrice,
+      orderQuantities,
+    } = projectData;
+
     await sequelize.transaction(async (transaction) => {
       const originalModel: projects = (await sequelize.models.projects.findByPk(
         projectId
@@ -123,7 +129,7 @@ const updateProject = async (
 
       const changes: project_changelogs[] = getProjectDiffs(
         originalModel,
-        data
+        data.projectData
       );
 
       const updates: Promise<any>[] = [
@@ -160,6 +166,8 @@ const updateProject = async (
           new Set(orderQuantities),
           transaction
         ),
+        updateProjectComponents(componentsData, transaction),
+        deleteProjectComponents(componentIdsToDelete, transaction),
       ];
 
       changes.forEach((change: project_changelogs) => {
@@ -174,7 +182,7 @@ const updateProject = async (
       await Promise.all(updates);
     });
     ElasticProjectService.updateProjectDocumentWithProjectSpec(
-      data as updateProjectDocumentWithProjectSpecInput
+      data.projectData as updateProjectDocumentWithProjectSpecInput
     );
 
     await cacheService.invalidateProjectInCache(projectId);
@@ -184,10 +192,6 @@ const updateProject = async (
       .then((bids) => {
         return Promise.all(
           bids.map((bid) => {
-            // updateProjectBidComponentsQuantities(
-            //   bid.components,
-            //   orderQuantities
-            // );
             return ProjectApiUtils.getProjectBidUsers(bid.id);
           })
         );
@@ -204,8 +208,6 @@ const updateProject = async (
         }
       });
 
-    //TODO: we should also update component spec name in Elastic
-    // streamService.broadcastProjectUpdate(data.projectId);
     return true;
   } catch (e) {
     console.error(e);

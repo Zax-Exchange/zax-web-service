@@ -1,4 +1,10 @@
 input UpdateProjectInput {
+  projectData: UpdateProjectData!
+  componentsData: [UpdateProjectComponentData!]!
+  componentIdsToDelete: [String!]!
+}
+
+input UpdateProjectData {
   projectId: String!
   name: String!
   category: String!
@@ -10,14 +16,14 @@ input UpdateProjectInput {
   comments: String
 }
 
-input UpdateProjectComponentInput {
+input UpdateProjectComponentData {
   componentId: String!
   name: String!
   designIds: [String!]
-  componentSpec: UpdateProjectComponentSpecInput!
+  componentSpec: UpdateProjectComponentSpecData!
 }
 
-input UpdateProjectComponentSpecInput {
+input UpdateProjectComponentSpecData {
   componentSpecId: String!
   productName: String!
   dimension: ProductDimensionInput!
@@ -65,5 +71,5 @@ input UpdateProjectPermissionsInputData {
 type Mutation {
   updateProjectPermissions(data: UpdateProjectPermissionsInput!): Boolean!
   updateProject(data: UpdateProjectInput!): Boolean!
-  updateProjectComponents(data: [UpdateProjectComponentInput!]!): Boolean!
+  # updateProjectComponents(data: [UpdateProjectComponentInput!]!): Boolean!
 }

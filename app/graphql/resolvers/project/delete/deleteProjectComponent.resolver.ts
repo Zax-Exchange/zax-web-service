@@ -1,4 +1,5 @@
 import { UserInputError } from "apollo-server-core";
+import { Transaction } from "sequelize/types";
 import { project_components } from "../../../../models/project_components";
 import { PROJECT_UPDATE_ROUTE } from "../../../../notification/notificationRoutes";
 import NotificationService from "../../../../notification/NotificationService";
@@ -14,38 +15,31 @@ const getProjectComponent = (componentId: string) => {
 };
 
 const deleteProjectComponents = async (
-  parent: any,
-  { data }: { data: DeleteProjectComponentInput[] },
-  context: any,
-  info: any
+  componentIds: string[],
+  transaction: Transaction
 ) => {
   try {
     let projectId: string | null = null;
-    await sequelize.transaction(async (transaction) => {
-      await Promise.all(
-        data.map(async (comp) => {
-          const componentId = comp.componentId;
-          const projectComponent = await getProjectComponent(componentId);
+    await Promise.all(
+      componentIds.map(async (id) => {
+        const projectComponent = await getProjectComponent(id);
 
-          if (projectComponent === null) {
-            return Promise.reject(
-              new UserInputError(
-                `could not find project_component with id ${componentId}`
-              )
-            );
-          }
+        if (projectComponent === null) {
+          return Promise.reject(
+            new UserInputError(`could not find project_component with id ${id}`)
+          );
+        }
 
-          projectId = projectComponent.projectId;
+        projectId = projectComponent.projectId;
 
-          // delete project component
-          return sequelize.models.project_components.destroy({
-            where: { id: componentId },
-            transaction,
-            individualHooks: true,
-          });
-        })
-      );
-    });
+        // delete project component
+        return sequelize.models.project_components.destroy({
+          where: { id },
+          transaction,
+          individualHooks: true,
+        });
+      })
+    );
 
     if (projectId != null) {
       await cacheService.invalidateProjectInCache(projectId);
@@ -57,8 +51,4 @@ const deleteProjectComponents = async (
   }
 };
 
-export default {
-  Mutation: {
-    deleteProjectComponents,
-  },
-};
+export default deleteProjectComponents;
