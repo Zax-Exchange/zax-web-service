@@ -222,13 +222,20 @@ class ProjectApiUtils {
         .then(async (bids) => {
           const res = [];
           for (let bid of bids) {
-            const components = await (bid as project_bids)
-              .getProject_bid_components()
-              .then((comps) => comps.map((comp) => comp.get({ plain: true })));
-
+            const [components, remarkFile] = await Promise.all([
+              (bid as project_bids).getProject_bid_components(),
+              (bid as project_bids).getBid_remark(),
+            ]);
             res.push({
               ...bid?.get({ plain: true }),
-              components,
+              components: components.map((comp) => comp.get({ plain: true })),
+              remarkFile: remarkFile
+                ? {
+                    fileId: remarkFile.id,
+                    filename: remarkFile.fileName,
+                    url: remarkFile.url,
+                  }
+                : null,
             });
           }
           return res;
