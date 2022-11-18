@@ -19,5 +19,5 @@ type Mutation {
   deleteProject(data: DeleteProjectInput!): Boolean!
   deleteProjectPermissions(data: DeleteProjectPermissionsInput!): Boolean!
   deleteProjectDesign(data: DeleteProjectDesignInput!): Boolean!
-  deleteProjectComponent(data: DeleteProjectComponentInput!): Boolean!
+  deleteProjectComponents(data: [DeleteProjectComponentInput!]!): Boolean!
 }

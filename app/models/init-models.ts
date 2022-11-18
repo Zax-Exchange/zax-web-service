@@ -278,10 +278,12 @@ export function initModels(sequelize: Sequelize) {
     foreignKey: "projectBidId",
     onDelete: "CASCADE",
   });
+
   project_bid_components.belongsTo(project_components, {
     as: "projectComponent",
     foreignKey: "projectComponentId",
   });
+
   project_components.hasMany(project_bid_components, {
     as: "project_bid_components",
     foreignKey: "projectComponentId",

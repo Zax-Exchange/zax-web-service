@@ -128,45 +128,40 @@ export class project_components
         hooks: {
           afterDestroy: async (instance, options) => {
             try {
-              await sequelize.transaction(async (t) => {
-                // delete spec
-                await instance
-                  .getComponent_spec()
-                  .then((spec) => spec.destroy({ transaction: t }));
-
-                // delete project bids
-                const bids = await instance.getProject_bid_components();
-                const bidsDeletion: Promise<any>[] = [];
-                for (const bid of bids) {
-                  bidsDeletion.push(bid.destroy({ transaction: t }));
-                }
-                await Promise.all(bidsDeletion);
-
-                // delete changelogs
-                await sequelize.models.project_component_changelogs.destroy({
-                  where: {
-                    projectComponentId: instance.id,
-                  },
-                  transaction: t,
-                });
+              // delete spec
+              await instance
+                .getComponent_spec()
+                .then((spec) =>
+                  spec.destroy({ transaction: options.transaction })
+                );
+              // delete project bids
+              const bids = await instance.getProject_bid_components();
+              const bidsDeletion: Promise<any>[] = [];
+              for (const bid of bids) {
+                bidsDeletion.push(
+                  bid.destroy({ transaction: options.transaction })
+                );
+              }
+              await Promise.all(bidsDeletion);
+              // delete changelogs
+              await sequelize.models.project_component_changelogs.destroy({
+                where: {
+                  projectComponentId: instance.id,
+                },
+                transaction: options.transaction,
               });
 
               // delete designs last because it cannot be rolled back
               const projectDesigns = await instance.getProject_design();
               const designDeletionJobs: Promise<any>[] = [];
               for (const design of projectDesigns) {
-                if (design.projectComponentId === instance.id) {
-                  // assuming project components is doing a soft delete.
-                  // not sure if this will break if cascade deletion gets triggered causing
-                  // double deletion.
-                  designDeletionJobs.push(
-                    deleteProjectDesign(null, {
-                      data: {
-                        fileId: design.id,
-                      },
-                    })
-                  );
-                }
+                designDeletionJobs.push(
+                  deleteProjectDesign(null, {
+                    data: {
+                      fileId: design.id,
+                    },
+                  })
+                );
               }
               await Promise.all(designDeletionJobs);
             } catch (error) {

@@ -165,6 +165,7 @@ class ProjectApiUtils {
           (p as projects).getCompany(),
         ]).then(async (res) => {
           const [componentInstances, companyInstance] = res;
+
           const components = await Promise.all(
             componentInstances.map(async (comp) => {
               const componentSpec = await comp.getComponent_spec();
@@ -191,6 +192,7 @@ class ProjectApiUtils {
             companyName: companyInstance.name,
             components,
           };
+
           // store the value into cache async
           Promise.all([
             cacheService.setProjectInCache(
