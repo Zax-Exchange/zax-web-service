@@ -1,4 +1,7 @@
+import { BID_UPDATE_ROUTE } from "../../../../notification/notificationRoutes";
+import NotificationService from "../../../../notification/NotificationService";
 import sequelize from "../../../../postgres/dbconnection";
+import ProjectApiUtils from "../../../../utils/projectUtils";
 import {
   BidStatus,
   UpdateProjectBidInput,
@@ -40,6 +43,18 @@ const updateProjectBid = async (
       ]);
     });
 
+    const [projectUsers, project] = await Promise.all([
+      ProjectApiUtils.getProjectUsers(projectId),
+      ProjectApiUtils.getProjectInstance(projectId),
+    ]);
+
+    NotificationService.sendNotification(BID_UPDATE_ROUTE, {
+      data: {
+        message: `Bid update for ${project!.name}`,
+        projectId,
+      },
+      receivers: projectUsers.map((user) => user.userId),
+    });
     return Promise.resolve(true);
   } catch (e) {
     console.error(e);

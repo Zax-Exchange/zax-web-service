@@ -1,6 +1,7 @@
 import { project_bid_permissionsAttributes } from "../../../../models/project_bid_permissions";
 import sequelize from "../../../../postgres/dbconnection";
 import CompanyApiUtils from "../../../../utils/companyUtils";
+import ErrorUtils from "../../../../utils/ErrorUtils";
 import ProjectApiUtils from "../../../../utils/projectUtils";
 import {
   GetVendorProjectInput,
@@ -25,7 +26,9 @@ const getVendorProject = async (
         (p) => p?.get({ plain: true }) as project_bid_permissionsAttributes
       );
 
-    if (!permission) return null;
+    if (!permission) {
+      throw ErrorUtils.permissionDeniedError();
+    }
 
     const bid = await ProjectApiUtils.getPermissionedProjectBid(
       permission.projectBidId,
@@ -33,6 +36,9 @@ const getVendorProject = async (
     );
     const project = await ProjectApiUtils.getPermissionedProject(bid.projectId);
 
+    if (!project) {
+      throw ErrorUtils.notFoundError();
+    }
     return {
       ...project,
       bidInfo: bid,

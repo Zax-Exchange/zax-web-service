@@ -1,5 +1,6 @@
 import { project_permissionsAttributes } from "../../../../models/project_permissions";
 import sequelize from "../../../../postgres/dbconnection";
+import ErrorUtils from "../../../../utils/ErrorUtils";
 import ProjectApiUtils from "../../../../utils/projectUtils";
 import {
   CustomerProject,
@@ -24,7 +25,9 @@ const getCustomerProject = async (
       })
       .then((p) => p?.get({ plain: true }) as project_permissionsAttributes);
 
-    if (!permission) return null;
+    if (!permission) {
+      throw ErrorUtils.permissionDeniedError();
+    }
 
     const [project, bids] = await Promise.all([
       ProjectApiUtils.getPermissionedProject(
@@ -34,7 +37,9 @@ const getCustomerProject = async (
       ProjectApiUtils.getProjectBidsByProjectId(permission.projectId),
     ]);
 
-    if (!project) return null;
+    if (!project) {
+      throw ErrorUtils.notFoundError();
+    }
 
     return {
       ...project,
