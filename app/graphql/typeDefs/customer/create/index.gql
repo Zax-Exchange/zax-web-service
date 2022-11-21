@@ -13,10 +13,17 @@ input CreateCustomerInput {
   userEmail: String!
 }
 
+input CreatePurchaseOrderInput {
+  purchaseOrderId: String!
+  projectId: String!
+  projectBidId: String!
+}
+
 type Mutation {
   createCustomer(data: CreateCustomerInput!): String!
   createCustomerSubscription(
     priceId: String!
     stripeCustomerId: String!
   ): StripeSubscription!
+  createPurchaseOrder(data: CreatePurchaseOrderInput!): Boolean!
 }

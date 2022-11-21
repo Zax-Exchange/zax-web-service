@@ -1,3 +1,16 @@
+type PurchaseOrder {
+  fileId: String!
+  filename: String!
+  url: String!
+  status: PurchaseOrderStatus!
+}
+
+enum PurchaseOrderStatus {
+  OPEN
+  VOID
+  ACCEPTED
+  REJECTED
+}
 type CustomerOverview {
   id: String!
   name: String!

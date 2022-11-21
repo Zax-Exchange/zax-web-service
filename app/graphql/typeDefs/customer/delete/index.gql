@@ -1,0 +1,7 @@
+input DeletePurchaseOrderInput {
+  fileId: String!
+}
+
+type Mutation {
+  deletePurchaseOrder(data: DeletePurchaseOrderInput!): Boolean!
+}

@@ -13,6 +13,8 @@ import type { projects, projectsId } from "./projects";
 import type { users, usersId } from "./users";
 import { BidStatus } from "../graphql/resolvers-types.generated";
 import { bid_remarks } from "./bid_remarks";
+import { invoices } from "./invoices";
+import { purchase_orders } from "./purchase_orders";
 
 export interface project_bidsAttributes {
   id: string;
@@ -129,6 +131,14 @@ export class project_bids
   // project_bids hasOne bid_remarks via projectBidId
   bid_remark!: bid_remarks | null;
   getBid_remark!: Sequelize.HasOneGetAssociationMixin<bid_remarks | null>;
+
+  // project_bids hasOne invoices via projectId
+  invoice!: invoices | null;
+  getInvoice!: Sequelize.HasOneGetAssociationMixin<invoices | null>;
+
+  // project_bids hasOne purchase_orders via projectId
+  purchase_order!: purchase_orders | null;
+  getPurchase_order!: Sequelize.HasOneGetAssociationMixin<purchase_orders | null>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof project_bids {
     return sequelize.define(

@@ -23,9 +23,16 @@ input CreateVendorSubscriptionInput {
   stripeCustomerId: String!
 }
 
+input CreateInvoiceInput {
+  invoiceId: String!
+  projectId: String!
+  projectBidId: String!
+}
+
 type Mutation {
   createVendor(data: CreateVendorInput!): String!
   createVendorSubscription(
     data: CreateVendorSubscriptionInput!
   ): StripeSubscription!
+  createInvoice(data: CreateInvoiceInput!): Boolean!
 }

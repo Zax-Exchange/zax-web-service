@@ -1,0 +1,7 @@
+input DeleteInvoiceInput {
+  fileId: String!
+}
+
+type Mutation {
+  deleteInvoice(data: DeleteInvoiceInput!): Boolean!
+}

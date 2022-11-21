@@ -85,6 +85,18 @@ import type {
   bid_remarksCreationAttributes,
 } from "./bid_remarks";
 
+import { invoices as _invoices } from "./invoices";
+import type {
+  invoicesAttributes,
+  invoicesCreationAttributes,
+} from "./invoices";
+
+import { purchase_orders as _purchase_orders } from "./purchase_orders";
+import type {
+  purchase_ordersAttributes,
+  purchase_ordersCreationAttributes,
+} from "./purchase_orders";
+
 export {
   _sequelize_meta as sequelize_meta,
   _companies as companies,
@@ -106,6 +118,8 @@ export {
   _project_designs as project_designs,
   _pending_join_requests as pending_join_requests,
   _bid_remarks as bid_remarks,
+  _invoices as invoices,
+  _purchase_orders as purchase_orders,
 };
 
 export type {
@@ -145,6 +159,10 @@ export type {
   pending_join_requestsCreationAttributes,
   bid_remarksAttributes,
   bid_remarksCreationAttributes,
+  invoicesAttributes,
+  invoicesCreationAttributes,
+  purchase_ordersAttributes,
+  purchase_ordersCreationAttributes,
 };
 
 export function initModels(sequelize: Sequelize) {
@@ -171,6 +189,9 @@ export function initModels(sequelize: Sequelize) {
 
   const pending_join_requests = _pending_join_requests.initModel(sequelize);
   const bid_remarks = _bid_remarks.initModel(sequelize);
+
+  const invoices = _invoices.initModel(sequelize);
+  const purchase_orders = _purchase_orders.initModel(sequelize);
 
   company_plans.belongsTo(companies, {
     as: "company",
@@ -453,6 +474,50 @@ export function initModels(sequelize: Sequelize) {
     onDelete: "CASCADE",
   });
 
+  invoices.belongsTo(projects, {
+    as: "project",
+    foreignKey: "projectId",
+  });
+
+  invoices.belongsTo(project_bids, {
+    as: "project_bid",
+    foreignKey: "projectBidId",
+  });
+
+  projects.hasMany(invoices, {
+    as: "invoices",
+    foreignKey: "projectId",
+    onDelete: "CASCADE",
+  });
+
+  project_bids.hasOne(invoices, {
+    as: "invoice",
+    foreignKey: "projectBidId",
+    onDelete: "CASCADE",
+  });
+
+  purchase_orders.belongsTo(projects, {
+    as: "project",
+    foreignKey: "projectId",
+  });
+
+  purchase_orders.belongsTo(project_bids, {
+    as: "project_bid",
+    foreignKey: "projectBidId",
+  });
+
+  projects.hasMany(purchase_orders, {
+    as: "purchase_orders",
+    foreignKey: "projectId",
+    onDelete: "CASCADE",
+  });
+
+  project_bids.hasOne(purchase_orders, {
+    as: "purchase_order",
+    foreignKey: "projectBidId",
+    onDelete: "CASCADE",
+  });
+
   return {
     sequelize_meta,
     companies,
@@ -474,5 +539,7 @@ export function initModels(sequelize: Sequelize) {
     project_component_changelogs,
     pending_join_requests,
     bid_remarks,
+    invoices,
+    purchase_orders,
   };
 }

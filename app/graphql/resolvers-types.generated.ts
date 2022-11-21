@@ -114,6 +114,12 @@ export type CreateCustomerInput = {
   userEmail: Scalars['String'];
 };
 
+export type CreateInvoiceInput = {
+  invoiceId: Scalars['String'];
+  projectBidId: Scalars['String'];
+  projectId: Scalars['String'];
+};
+
 export type CreateProjectBidComponentInput = {
   projectBidId?: InputMaybe<Scalars['String']>;
   projectComponentId: Scalars['String'];
@@ -175,6 +181,12 @@ export type CreateProjectInput = {
   targetPrice: Scalars['String'];
   totalWeight: Scalars['String'];
   userId: Scalars['String'];
+};
+
+export type CreatePurchaseOrderInput = {
+  projectBidId: Scalars['String'];
+  projectId: Scalars['String'];
+  purchaseOrderId: Scalars['String'];
 };
 
 export type CreateStripeCustomerInput = {
@@ -285,6 +297,10 @@ export type DeleteBidRemarkInput = {
   fileId: Scalars['String'];
 };
 
+export type DeleteInvoiceInput = {
+  fileId: Scalars['String'];
+};
+
 export type DeletePendingJoinRequestInput = {
   userEmail: Scalars['String'];
 };
@@ -309,6 +325,10 @@ export type DeleteProjectInput = {
 export type DeleteProjectPermissionsInput = {
   projectId: Scalars['String'];
   userIds: Array<Scalars['String']>;
+};
+
+export type DeletePurchaseOrderInput = {
+  fileId: Scalars['String'];
 };
 
 export type GetAllPendingJoinRequestsInput = {
@@ -395,6 +415,21 @@ export type InviteUserInput = {
   userId: Scalars['String'];
 };
 
+export type Invoice = {
+  __typename?: 'Invoice';
+  fileId: Scalars['String'];
+  filename: Scalars['String'];
+  status: InvoiceStatus;
+  url: Scalars['String'];
+};
+
+export enum InvoiceStatus {
+  Accepted = 'ACCEPTED',
+  Open = 'OPEN',
+  Rejected = 'REJECTED',
+  Void = 'VOID'
+}
+
 export type LoggedInUser = {
   __typename?: 'LoggedInUser';
   chatToken: Scalars['String'];
@@ -413,21 +448,25 @@ export type Mutation = {
   cancelStripeSubscription: Scalars['Boolean'];
   createCustomer: Scalars['String'];
   createCustomerSubscription: StripeSubscription;
+  createInvoice: Scalars['Boolean'];
   createProject: Scalars['Boolean'];
   createProjectBid: Scalars['Boolean'];
   createProjectBidComponents: Scalars['Boolean'];
   createProjectComponents: Scalars['Boolean'];
+  createPurchaseOrder: Scalars['Boolean'];
   createStripeCustomer: Scalars['String'];
   createUser: LoggedInUser;
   createVendor: Scalars['String'];
   createVendorSubscription: StripeSubscription;
   deactivateUser: Scalars['Boolean'];
   deleteBidRemark: Scalars['Boolean'];
+  deleteInvoice: Scalars['Boolean'];
   deletePendingJoinRequest: Scalars['Boolean'];
   deleteProject: Scalars['Boolean'];
   deleteProjectBidPermissions: Scalars['Boolean'];
   deleteProjectDesign: Scalars['Boolean'];
   deleteProjectPermissions: Scalars['Boolean'];
+  deletePurchaseOrder: Scalars['Boolean'];
   inviteUser: Scalars['Boolean'];
   requestToJoin: Scalars['Boolean'];
   reset: Scalars['Boolean'];
@@ -446,7 +485,9 @@ export type Mutation = {
   updateUserPower: Scalars['Boolean'];
   updateVendorInfo: Scalars['Boolean'];
   uploadBidRemark: BidRemark;
+  uploadInvoice: Invoice;
   uploadProjectDesign: ProjectDesign;
+  uploadPurchaseOrder: PurchaseOrder;
 };
 
 
@@ -463,6 +504,11 @@ export type MutationCreateCustomerArgs = {
 export type MutationCreateCustomerSubscriptionArgs = {
   priceId: Scalars['String'];
   stripeCustomerId: Scalars['String'];
+};
+
+
+export type MutationCreateInvoiceArgs = {
+  data: CreateInvoiceInput;
 };
 
 
@@ -483,6 +529,11 @@ export type MutationCreateProjectBidComponentsArgs = {
 
 export type MutationCreateProjectComponentsArgs = {
   data: Array<CreateProjectComponentInput>;
+};
+
+
+export type MutationCreatePurchaseOrderArgs = {
+  data: CreatePurchaseOrderInput;
 };
 
 
@@ -516,6 +567,11 @@ export type MutationDeleteBidRemarkArgs = {
 };
 
 
+export type MutationDeleteInvoiceArgs = {
+  data: DeleteInvoiceInput;
+};
+
+
 export type MutationDeletePendingJoinRequestArgs = {
   data: DeletePendingJoinRequestInput;
 };
@@ -538,6 +594,11 @@ export type MutationDeleteProjectDesignArgs = {
 
 export type MutationDeleteProjectPermissionsArgs = {
   data: DeleteProjectPermissionsInput;
+};
+
+
+export type MutationDeletePurchaseOrderArgs = {
+  data: DeletePurchaseOrderInput;
 };
 
 
@@ -631,7 +692,17 @@ export type MutationUploadBidRemarkArgs = {
 };
 
 
+export type MutationUploadInvoiceArgs = {
+  file: Scalars['Upload'];
+};
+
+
 export type MutationUploadProjectDesignArgs = {
+  file: Scalars['Upload'];
+};
+
+
+export type MutationUploadPurchaseOrderArgs = {
   file: Scalars['Upload'];
 };
 
@@ -942,6 +1013,21 @@ export enum ProjectStatus {
   InProgress = 'IN_PROGRESS',
   Open = 'OPEN',
   Overdue = 'OVERDUE'
+}
+
+export type PurchaseOrder = {
+  __typename?: 'PurchaseOrder';
+  fileId: Scalars['String'];
+  filename: Scalars['String'];
+  status: PurchaseOrderStatus;
+  url: Scalars['String'];
+};
+
+export enum PurchaseOrderStatus {
+  Accepted = 'ACCEPTED',
+  Open = 'OPEN',
+  Rejected = 'REJECTED',
+  Void = 'VOID'
 }
 
 export type QuantityPrice = {

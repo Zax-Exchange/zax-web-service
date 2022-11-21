@@ -1,3 +1,17 @@
+type Invoice {
+  fileId: String!
+  filename: String!
+  url: String!
+  status: InvoiceStatus!
+}
+
+enum InvoiceStatus {
+  OPEN
+  VOID
+  ACCEPTED
+  REJECTED
+}
+
 type VendorOverview {
   id: String!
   name: String!
