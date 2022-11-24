@@ -1,4 +1,4 @@
-type Invoice {
+type Invoice implements FileInterface {
   fileId: String!
   filename: String!
   url: String!

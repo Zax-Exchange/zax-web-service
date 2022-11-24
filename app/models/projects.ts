@@ -17,7 +17,7 @@ import type {
   project_permissions,
   project_permissionsId,
 } from "./project_permissions";
-import { purchase_orders } from "./purchase_orders";
+import { purchase_orders, purchase_ordersId } from "./purchase_orders";
 import type { users, usersId } from "./users";
 
 export interface projectsAttributes {
@@ -190,6 +190,10 @@ export class projects
   // projects hasMany purchase_orders via projectId
   purchase_orders!: purchase_orders[];
   getPurchase_orders!: Sequelize.HasManyGetAssociationsMixin<purchase_orders[]>;
+  hasPurchase_orders!: Sequelize.HasManyHasAssociationsMixin<
+    purchase_orders,
+    purchase_ordersId
+  >;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof projects {
     return sequelize.define(

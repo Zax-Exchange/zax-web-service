@@ -12,6 +12,14 @@ const createInvoice = async (
 ) => {
   try {
     const { invoiceId, projectBidId, projectId } = data;
+    // if there is an existing invoice, we delete it first
+    await sequelize.models.invoices.destroy({
+      where: {
+        projectId,
+        projectBidId,
+      },
+    });
+
     const [_, projectInstance, projectUsers] = await Promise.all([
       sequelize.models.invoices.update(
         {

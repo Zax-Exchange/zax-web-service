@@ -7,7 +7,12 @@ input GetProjectBidInput {
   projectId: String!
 }
 
+input GetProjectBidsForPoInput {
+  projectId: String!
+}
+
 type Query {
   getProjectBidUsers(data: GetProjectBidUsersInput!): [UserProjectPermission!]!
   getProjectBid(data: GetProjectBidInput!): ProjectBid
+  getProjectBidsForPo(data: GetProjectBidsForPoInput!): [ProjectBidForPo!]!
 }

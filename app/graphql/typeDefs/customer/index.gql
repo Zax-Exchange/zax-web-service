@@ -1,4 +1,4 @@
-type PurchaseOrder {
+type PurchaseOrder implements FileInterface {
   fileId: String!
   filename: String!
   url: String!
@@ -70,4 +70,26 @@ type CustomerProject implements ProjectInterface {
   bids: [ProjectBid!]
   createdAt: Date!
   updatedAt: Date!
+}
+
+type CustomerPoProjectInfo {
+  projectId: String!
+  projectName: String!
+}
+
+type PoDetailVendorInfo {
+  companyId: String!
+  companyName: String!
+}
+
+type CustomerPoDetail {
+  projectBidId: String!
+  vendorInfo: PoDetailVendorInfo!
+  poFile: PurchaseOrder!
+  invoiceFile: Invoice
+}
+
+type CustomerPo {
+  projectInfo: CustomerPoProjectInfo!
+  poDetails: [CustomerPoDetail!]!
 }

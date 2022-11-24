@@ -18,8 +18,17 @@ const createPurchaseOrder = async (
 ) => {
   try {
     const { purchaseOrderId, projectBidId, projectId } = data;
+
+    // if there is an existing PO, we delete it first
+    await sequelize.models.purchase_orders.destroy({
+      where: {
+        projectId,
+        projectBidId,
+      },
+    });
+
     const [_, projectInstance, projectUsers] = await Promise.all([
-      sequelize.models.purchase_order.update(
+      sequelize.models.purchase_orders.update(
         {
           projectId,
           projectBidId,
@@ -33,7 +42,7 @@ const createPurchaseOrder = async (
       ProjectApiUtils.getProjectInstance(projectId),
       ProjectApiUtils.getProjectBidUsers(projectBidId),
     ]);
-
+    console.log(_);
     NotificationService.sendNotification(PO_CREATE_ROUTE, {
       data: {
         message: `A purchase order has been created for ${projectInstance?.name}`,

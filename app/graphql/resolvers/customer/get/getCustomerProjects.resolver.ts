@@ -1,4 +1,5 @@
 import { projects, projectsAttributes } from "../../../../models/projects";
+import { project_permissionsAttributes } from "../../../../models/project_permissions";
 import sequelize from "../../../../postgres/dbconnection";
 import ProjectApiUtils from "../../../../utils/projectUtils";
 import {
@@ -13,11 +14,18 @@ const getCustomerProjects = async (
   { data }: { data: GetCustomerProjectsInput },
   context: any
 ) => {
-  const { userId } = data;
+  const { userId, permissions } = data;
   try {
-    const projectPermissions = await ProjectApiUtils.getProjectPermissions(
-      userId
-    );
+    const allPermissions = await ProjectApiUtils.getProjectPermissions(userId);
+    let projectPermissions: project_permissionsAttributes[] = [];
+
+    if (permissions && permissions.length) {
+      projectPermissions = allPermissions.filter((p) =>
+        permissions.includes(p.permission as ProjectPermission)
+      );
+    } else {
+      projectPermissions = allPermissions;
+    }
 
     return await Promise.all(
       projectPermissions.map(async (permission) => {

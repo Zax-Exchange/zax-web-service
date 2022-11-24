@@ -1,5 +1,6 @@
 input GetCustomerProjectsInput {
   userId: String!
+  permissions: [ProjectPermission!]
 }
 
 input GetCustomerDetailInput {
@@ -11,10 +12,21 @@ input GetCustomerProjectInput {
   projectId: String!
 }
 
+input GetCustomerPosInput {
+  userId: String!
+}
+
+input GetPurchaseOrderInput {
+  projectId: String!
+  projectBidId: String!
+}
+
 type Query {
   getCustomerDetail(data: GetCustomerDetailInput!): CustomerDetail!
   getCustomerProject(data: GetCustomerProjectInput!): CustomerProject!
   getCustomerProjects(
     data: GetCustomerProjectsInput!
   ): [CustomerProjectOverview!]!
+  getPurchaseOrder(data: GetPurchaseOrderInput!): PurchaseOrder
+  getCustomerPos(data: GetCustomerPosInput!): [CustomerPo!]!
 }

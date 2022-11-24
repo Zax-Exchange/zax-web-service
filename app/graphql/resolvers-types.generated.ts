@@ -16,7 +16,7 @@ export type Scalars = {
   Upload: any;
 };
 
-export type BidRemark = {
+export type BidRemark = FileInterface & {
   __typename?: 'BidRemark';
   fileId: Scalars['String'];
   filename: Scalars['String'];
@@ -249,6 +249,26 @@ export type CustomerOverview = {
   name: Scalars['String'];
 };
 
+export type CustomerPo = {
+  __typename?: 'CustomerPo';
+  poDetails: Array<CustomerPoDetail>;
+  projectInfo: CustomerPoProjectInfo;
+};
+
+export type CustomerPoDetail = {
+  __typename?: 'CustomerPoDetail';
+  invoiceFile?: Maybe<Invoice>;
+  poFile: PurchaseOrder;
+  projectBidId: Scalars['String'];
+  vendorInfo: PoDetailVendorInfo;
+};
+
+export type CustomerPoProjectInfo = {
+  __typename?: 'CustomerPoProjectInfo';
+  projectId: Scalars['String'];
+  projectName: Scalars['String'];
+};
+
 export type CustomerProject = ProjectInterface & {
   __typename?: 'CustomerProject';
   bids?: Maybe<Array<ProjectBid>>;
@@ -331,6 +351,12 @@ export type DeletePurchaseOrderInput = {
   fileId: Scalars['String'];
 };
 
+export type FileInterface = {
+  fileId: Scalars['String'];
+  filename: Scalars['String'];
+  url: Scalars['String'];
+};
+
 export type GetAllPendingJoinRequestsInput = {
   companyId: Scalars['String'];
 };
@@ -355,12 +381,17 @@ export type GetCustomerDetailInput = {
   companyId: Scalars['String'];
 };
 
+export type GetCustomerPosInput = {
+  userId: Scalars['String'];
+};
+
 export type GetCustomerProjectInput = {
   projectId: Scalars['String'];
   userId: Scalars['String'];
 };
 
 export type GetCustomerProjectsInput = {
+  permissions?: InputMaybe<Array<ProjectPermission>>;
   userId: Scalars['String'];
 };
 
@@ -377,6 +408,10 @@ export type GetProjectBidUsersInput = {
   projectBidId: Scalars['String'];
 };
 
+export type GetProjectBidsForPoInput = {
+  projectId: Scalars['String'];
+};
+
 export type GetProjectChangelogInput = {
   projectId: Scalars['String'];
 };
@@ -390,6 +425,11 @@ export type GetProjectDetailInput = {
 };
 
 export type GetProjectUsersInput = {
+  projectId: Scalars['String'];
+};
+
+export type GetPurchaseOrderInput = {
+  projectBidId: Scalars['String'];
   projectId: Scalars['String'];
 };
 
@@ -415,7 +455,7 @@ export type InviteUserInput = {
   userId: Scalars['String'];
 };
 
-export type Invoice = {
+export type Invoice = FileInterface & {
   __typename?: 'Invoice';
   fileId: Scalars['String'];
   filename: Scalars['String'];
@@ -778,6 +818,12 @@ export enum PlanTier {
   Premium = 'PREMIUM'
 }
 
+export type PoDetailVendorInfo = {
+  __typename?: 'PoDetailVendorInfo';
+  companyId: Scalars['String'];
+  companyName: Scalars['String'];
+};
+
 export type PostProcessDetail = {
   __typename?: 'PostProcessDetail';
   color?: Maybe<Scalars['String']>;
@@ -879,6 +925,13 @@ export type ProjectBidComponent = {
   toolingFee?: Maybe<Scalars['Int']>;
 };
 
+export type ProjectBidForPo = {
+  __typename?: 'ProjectBidForPo';
+  companyId: Scalars['String'];
+  companyName: Scalars['String'];
+  projectBidId: Scalars['String'];
+};
+
 export type ProjectBidInterface = {
   companyId: Scalars['String'];
   createdAt: Scalars['Date'];
@@ -954,7 +1007,7 @@ export enum ProjectCreationMode {
   Guided = 'GUIDED'
 }
 
-export type ProjectDesign = {
+export type ProjectDesign = FileInterface & {
   __typename?: 'ProjectDesign';
   fileId: Scalars['String'];
   filename: Scalars['String'];
@@ -1015,7 +1068,7 @@ export enum ProjectStatus {
   Overdue = 'OVERDUE'
 }
 
-export type PurchaseOrder = {
+export type PurchaseOrder = FileInterface & {
   __typename?: 'PurchaseOrder';
   fileId: Scalars['String'];
   filename: Scalars['String'];
@@ -1051,15 +1104,18 @@ export type Query = {
   getCompanyDetail?: Maybe<CompanyDetail>;
   getCompanyPlanDetail: CompanyPlanDetail;
   getCustomerDetail: CustomerDetail;
+  getCustomerPos: Array<CustomerPo>;
   getCustomerProject: CustomerProject;
   getCustomerProjects: Array<CustomerProjectOverview>;
   getPlan: Plan;
   getProjectBid?: Maybe<ProjectBid>;
   getProjectBidUsers: Array<UserProjectPermission>;
+  getProjectBidsForPo: Array<ProjectBidForPo>;
   getProjectChangelog: Array<ProjectChangelog>;
   getProjectComponentChangelog: Array<ProjectComponentChangelog>;
   getProjectDetail?: Maybe<Project>;
   getProjectUsers: Array<UserProjectPermission>;
+  getPurchaseOrder?: Maybe<PurchaseOrder>;
   getUser: User;
   getVendorDetail?: Maybe<VendorDetail>;
   getVendorProject?: Maybe<VendorProject>;
@@ -1110,6 +1166,11 @@ export type QueryGetCustomerDetailArgs = {
 };
 
 
+export type QueryGetCustomerPosArgs = {
+  data: GetCustomerPosInput;
+};
+
+
 export type QueryGetCustomerProjectArgs = {
   data: GetCustomerProjectInput;
 };
@@ -1135,6 +1196,11 @@ export type QueryGetProjectBidUsersArgs = {
 };
 
 
+export type QueryGetProjectBidsForPoArgs = {
+  data: GetProjectBidsForPoInput;
+};
+
+
 export type QueryGetProjectChangelogArgs = {
   data: GetProjectChangelogInput;
 };
@@ -1152,6 +1218,11 @@ export type QueryGetProjectDetailArgs = {
 
 export type QueryGetProjectUsersArgs = {
   data: GetProjectUsersInput;
+};
+
+
+export type QueryGetPurchaseOrderArgs = {
+  data: GetPurchaseOrderInput;
 };
 
 

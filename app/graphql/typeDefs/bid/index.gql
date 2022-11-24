@@ -21,7 +21,7 @@ type PermissionedProjectBid implements ProjectBidInterface {
   updatedAt: Date!
 }
 
-type BidRemark {
+type BidRemark implements FileInterface {
   fileId: String!
   filename: String!
   url: String!
@@ -37,6 +37,12 @@ type ProjectBid implements ProjectBidInterface {
   remarkFile: BidRemark
   createdAt: Date!
   updatedAt: Date!
+}
+
+type ProjectBidForPo {
+  projectBidId: String!
+  companyId: String!
+  companyName: String!
 }
 
 type ProjectBidComponent {

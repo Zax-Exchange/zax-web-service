@@ -12,7 +12,7 @@ type ProjectOverview {
   createdAt: Date!
 }
 
-type ProjectDesign {
+type ProjectDesign implements FileInterface {
   fileId: String!
   filename: String!
   url: String!

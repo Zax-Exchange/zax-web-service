@@ -3,3 +3,9 @@ scalar JSON
 scalar Date
 
 scalar Upload
+
+interface FileInterface {
+  fileId: String!
+  filename: String!
+  url: String!
+}
