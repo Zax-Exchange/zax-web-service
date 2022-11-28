@@ -11,8 +11,19 @@ input GetVendorProjectInput {
   userId: String!
 }
 
+input GetVendorPosInput {
+  userId: String!
+}
+
+input GetInvoiceInput {
+  projectId: String!
+  projectBidId: String!
+}
+
 type Query {
   getVendorDetail(data: GetVendorDetailInput): VendorDetail
   getVendorProject(data: GetVendorProjectInput!): VendorProject
   getVendorProjects(data: GetVendorProjectsInput!): [VendorProjectOverview!]!
+  getVendorPos(data: GetVendorPosInput!): [VendorPo!]!
+  getInvoice(data: GetInvoiceInput!): Invoice
 }

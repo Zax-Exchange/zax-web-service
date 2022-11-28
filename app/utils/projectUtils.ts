@@ -88,7 +88,7 @@ class ProjectApiUtils {
   }
 
   /**
-   * Returns project attributes without nested fields
+   * Returns project attributes as stored in db
    * @param projectId
    */
   static async getProjectInstance(

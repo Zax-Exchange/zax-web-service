@@ -81,3 +81,26 @@ type VendorProject implements ProjectInterface {
   createdAt: Date!
   updatedAt: Date!
 }
+
+type VendorPoProjectInfo {
+  projectId: String!
+  projectName: String!
+}
+
+type PoDetailCustomerInfo {
+  companyId: String!
+  companyName: String!
+}
+
+type VendorPoDetail {
+  projectBidId: String!
+  customerInfo: PoDetailCustomerInfo!
+  poFile: PurchaseOrder!
+  invoiceFile: Invoice
+}
+
+type VendorPo {
+  projectInfo: VendorPoProjectInfo!
+  poDetails: [VendorPoDetail!]!
+  permission: ProjectPermission!
+}

@@ -11,52 +11,57 @@ import {
   GetCustomerPosInput,
   GetCustomerProjectsInput,
   ProjectPermission,
+  VendorPo,
+  VendorPoDetail,
 } from "../../../resolvers-types.generated";
 
-const getCustomerPos = async (
+const getVendorPos = async (
   parent: any,
   { data }: { data: GetCustomerPosInput },
   context: any
-): Promise<CustomerPo[]> => {
+): Promise<VendorPo[]> => {
   const { userId } = data;
   try {
-    const projectPermissions = await ProjectApiUtils.getProjectPermissions(
-      userId
-    );
+    const bidPermissions = await ProjectApiUtils.getBidPermissions(userId);
 
-    const res: (CustomerPo | null)[] = await Promise.all(
-      projectPermissions.map(async (permission) => {
-        const project = (await sequelize.models.projects.findByPk(
-          permission.projectId
-        )) as projects;
-        const bids = await project.getProject_bids();
+    const projects = (await Promise.all(
+      bidPermissions.map((p) => ProjectApiUtils.getProjectInstance(p.projectId))
+    )) as projectsAttributes[];
 
-        const poDetails: (CustomerPoDetail | null)[] = await Promise.all(
-          bids.map(async (bid) => {
-            const vendorDetail = await CompanyApiUtils.getCompanyWithCompanyId(
-              bid.companyId
-            );
+    const projectsWithBidPermission = projects.map((p, i) => {
+      return {
+        ...p,
+        permission: bidPermissions[i].permission,
+      };
+    });
+
+    const res: (VendorPo | null)[] = await Promise.all(
+      projectsWithBidPermission.map(async (project) => {
+        const poDetails: (VendorPoDetail | null)[] = await Promise.all(
+          bidPermissions.map(async (permission) => {
+            const customerDetail =
+              await CompanyApiUtils.getCompanyWithCompanyId(project.companyId);
             const [poFile, invoiceFile] = await Promise.all([
               sequelize.models.purchase_orders.findOne({
                 where: {
                   projectId: project.id,
-                  projectBidId: bid.id,
+                  projectBidId: permission.projectBidId,
                 },
               }),
               sequelize.models.invoices.findOne({
                 where: {
                   projectId: project.id,
-                  projectBidId: bid.id,
+                  projectBidId: permission.projectBidId,
                 },
               }),
             ]);
             if (!poFile) return null;
 
             return {
-              projectBidId: bid.id,
-              vendorInfo: {
-                companyId: vendorDetail.id,
-                companyName: vendorDetail.name,
+              projectBidId: permission.projectBidId,
+              customerInfo: {
+                companyId: customerDetail.id,
+                companyName: customerDetail.name,
               },
               poFile: {
                 fileId: poFile.get("id"),
@@ -72,7 +77,7 @@ const getCustomerPos = async (
                     url: invoiceFile.get("url"),
                   }
                 : null,
-            } as CustomerPoDetail;
+            } as VendorPoDetail;
           })
         );
 
@@ -82,12 +87,12 @@ const getCustomerPos = async (
             projectName: project.name,
           },
           poDetails: poDetails.filter((detail) => !!detail),
-          permission: permission.permission,
-        } as CustomerPo;
+          permission: project.permission,
+        } as VendorPo;
       })
     );
 
-    return res.filter((p) => !!p?.poDetails.length) as CustomerPo[];
+    return res.filter((p) => !!p?.poDetails.length) as VendorPo[];
   } catch (e) {
     return Promise.reject(e);
   }
@@ -95,6 +100,6 @@ const getCustomerPos = async (
 
 export default {
   Query: {
-    getCustomerPos,
+    getVendorPos,
   },
 };

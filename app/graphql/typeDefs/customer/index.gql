@@ -92,4 +92,5 @@ type CustomerPoDetail {
 type CustomerPo {
   projectInfo: CustomerPoProjectInfo!
   poDetails: [CustomerPoDetail!]!
+  permission: ProjectPermission!
 }

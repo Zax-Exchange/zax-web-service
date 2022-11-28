@@ -15,12 +15,12 @@ const uploadInvoice = async (_parent: any, { file }: any) => {
         Body: stream,
         Key: fileId,
         ContentType: mimetype,
-        Bucket: `${process.env.AWS_S3_CUSTOMER_FILES_BUCKET!}/${
+        Bucket: `${process.env.AWS_S3_VENDOR_FILES_BUCKET!}/${
           process.env.AWS_S3_INVOICES_FOLDER
         }`,
       })
       .promise();
-    await sequelize.models.project_designs.create({
+    await sequelize.models.invoices.create({
       id: fileId,
       fileName: filename,
       url: `${process.env.AWS_CDN_URL}/${process.env.AWS_S3_INVOICES_FOLDER}/${fileId}`,

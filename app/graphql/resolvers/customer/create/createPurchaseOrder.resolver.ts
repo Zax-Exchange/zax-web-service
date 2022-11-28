@@ -42,7 +42,7 @@ const createPurchaseOrder = async (
       ProjectApiUtils.getProjectInstance(projectId),
       ProjectApiUtils.getProjectBidUsers(projectBidId),
     ]);
-    console.log(_);
+
     NotificationService.sendNotification(PO_CREATE_ROUTE, {
       data: {
         message: `A purchase order has been created for ${projectInstance?.name}`,

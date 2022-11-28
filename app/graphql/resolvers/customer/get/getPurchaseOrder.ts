@@ -1,17 +1,8 @@
-import { projects, projectsAttributes } from "../../../../models/projects";
-import { project_bids } from "../../../../models/project_bids";
 import { purchase_orders } from "../../../../models/purchase_orders";
 import sequelize from "../../../../postgres/dbconnection";
-import CompanyApiUtils from "../../../../utils/companyUtils";
-import ProjectApiUtils from "../../../../utils/projectUtils";
+
 import {
-  CustomerPo,
-  CustomerPoDetail,
-  CustomerProject,
-  CustomerProjectOverview,
-  GetCustomerProjectsInput,
   GetPurchaseOrderInput,
-  ProjectPermission,
   PurchaseOrder,
 } from "../../../resolvers-types.generated";
 
@@ -21,11 +12,12 @@ const getPurchaseOrder = async (
   context: any
 ): Promise<PurchaseOrder | null> => {
   const { projectId, projectBidId } = data;
+  console.log(data);
   try {
     const poFile = (await sequelize.models.purchase_orders.findOne({
       where: {
-        projectId: projectId,
-        projectBidId: projectBidId,
+        projectId,
+        projectBidId,
       },
     })) as purchase_orders;
 

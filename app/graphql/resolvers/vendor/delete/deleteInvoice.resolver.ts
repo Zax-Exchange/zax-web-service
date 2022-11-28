@@ -29,9 +29,6 @@ export const deleteInvoice = async (
       })
       .promise();
 
-    if (valueToDelete !== null && valueToDelete.projectId !== null) {
-      await cacheService.invalidateProjectInCache(valueToDelete.projectId!);
-    }
     return true;
   } catch (error: any) {
     throw error;
