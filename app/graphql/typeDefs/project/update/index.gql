@@ -19,7 +19,7 @@ input UpdateProjectData {
 input UpdateProjectComponentData {
   componentId: String!
   name: String!
-  designIds: [String!]
+  designIds: [String!]!
   componentSpec: UpdateProjectComponentSpecData!
 }
 

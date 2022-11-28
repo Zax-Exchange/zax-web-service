@@ -333,7 +333,7 @@ export function initModels(sequelize: Sequelize) {
   });
 
   project_components.hasMany(project_designs, {
-    as: "project_design",
+    as: "project_designs",
     foreignKey: "projectComponentId",
     onDelete: "CASCADE",
   });

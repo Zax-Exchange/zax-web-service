@@ -18,6 +18,7 @@ import {
   UpdateProjectComponentData,
   UpdateProjectComponentSpecData,
 } from "../../../resolvers-types.generated";
+import { deleteProjectDesign } from "../delete/deleteProjectDesign.resolver";
 
 const processComponentSpecChanges = (spec: UpdateProjectComponentSpecData) => {
   const res = {} as any;
@@ -87,37 +88,54 @@ const updateProjectComponents = async (
 ) => {
   try {
     let projectId: string | null = null;
-    for (let input of data) {
-      const {
-        componentId,
-        componentSpec: componentSpecChanges,
-        name,
-        designIds,
-      } = input;
 
-      const projectComponent: project_components =
-        (await sequelize.models.project_components.findByPk(
-          componentId
-        )) as project_components;
-      projectId = projectComponent.projectId;
+    await Promise.all(
+      data.map(async (input) => {
+        const {
+          componentId,
+          componentSpec: componentSpecChanges,
+          name,
+          designIds,
+        } = input;
 
-      if (projectComponent === null) {
-        return Promise.reject(
-          new UserInputError(
-            `could not find project_component with id ${componentId}`
-          )
-        );
-      }
-      const componentSpec = await projectComponent.getComponent_spec();
-      if (componentSpec === null) {
-        return Promise.reject(
-          new UserInputError(
-            `project component with id ${componentId} does not have a componentSpec`
-          )
-        );
-      }
-      const updateDesignsPromises: Promise<any>[] = [];
-      if (designIds) {
+        const projectComponent: project_components =
+          (await sequelize.models.project_components.findByPk(
+            componentId
+          )) as project_components;
+        projectId = projectComponent.projectId;
+
+        if (projectComponent === null) {
+          return Promise.reject(
+            new UserInputError(
+              `could not find project_component with id ${componentId}`
+            )
+          );
+        }
+
+        const [existingDesigns, componentSpec] = await Promise.all([
+          projectComponent.getProject_designs(),
+          projectComponent.getComponent_spec(),
+        ]);
+
+        if (componentSpec === null) {
+          return Promise.reject(
+            new UserInputError(
+              `project component with id ${componentId} does not have a componentSpec`
+            )
+          );
+        }
+
+        const updateDesignsPromises: Promise<any>[] = [];
+        const deleteDesignsPromises: Promise<any>[] = [];
+
+        existingDesigns.forEach((design) => {
+          if (!designIds.length || !designIds.includes(design.id)) {
+            deleteDesignsPromises.push(
+              deleteProjectDesign(null, { data: { fileId: design.id } })
+            );
+          }
+        });
+
         designIds.forEach((id) => {
           updateDesignsPromises.push(
             sequelize.models.project_designs.update(
@@ -134,48 +152,51 @@ const updateProjectComponents = async (
             )
           );
         });
-      }
-      const componentSpecId = componentSpec.id;
 
-      const changes: project_component_changelogs[] = getProjectDiffs(
-        projectComponent,
-        componentSpec,
-        input
-      );
+        const componentSpecId = componentSpec.id;
 
-      await Promise.all([
-        ...updateDesignsPromises,
-        ...changes.map((change) => {
-          return sequelize.models.project_component_changelogs.create(
-            { ...change },
-            { transaction }
-          );
-        }),
-        sequelize.models.project_components.update(
-          {
-            name,
-          },
-          {
-            where: {
-              id: componentId,
+        const changes: project_component_changelogs[] = getProjectDiffs(
+          projectComponent,
+          componentSpec,
+          input
+        );
+
+        return Promise.all([
+          ...updateDesignsPromises,
+          ...deleteDesignsPromises,
+          ...changes.map((change) => {
+            return sequelize.models.project_component_changelogs.create(
+              { ...change },
+              { transaction }
+            );
+          }),
+          sequelize.models.project_components.update(
+            {
+              name,
             },
-            transaction,
-          }
-        ),
-        sequelize.models.component_specs.update(
-          {
-            ...processComponentSpecChanges(componentSpecChanges),
-          },
-          {
-            where: {
-              id: componentSpecId,
+            {
+              where: {
+                id: componentId,
+              },
+              transaction,
+            }
+          ),
+          sequelize.models.component_specs.update(
+            {
+              ...processComponentSpecChanges(componentSpecChanges),
             },
-            transaction,
-          }
-        ),
-      ]);
-      return true;
-    }
+            {
+              where: {
+                id: componentSpecId,
+              },
+              transaction,
+            }
+          ),
+        ]);
+      })
+    );
+
+    return true;
   } catch (e) {
     console.error(e);
     return Promise.reject(e);

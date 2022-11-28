@@ -169,7 +169,7 @@ class ProjectApiUtils {
           const components = await Promise.all(
             componentInstances.map(async (comp) => {
               const componentSpec = await comp.getComponent_spec();
-              const designs = await comp.getProject_design();
+              const designs = await comp.getProject_designs();
 
               return {
                 ...comp.get({ plain: true }),

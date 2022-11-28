@@ -28,18 +28,20 @@ const updateProjectBid = async (
             transaction,
           }
         ),
-        sequelize.models.bid_remarks.update(
-          {
-            projectId,
-            projectBidId,
-          },
-          {
-            where: {
-              id: bidRemarkFileId,
-            },
-            transaction,
-          }
-        ),
+        bidRemarkFileId
+          ? sequelize.models.bid_remarks.update(
+              {
+                projectId,
+                projectBidId,
+              },
+              {
+                where: {
+                  id: bidRemarkFileId,
+                },
+                transaction,
+              }
+            )
+          : null,
       ]);
     });
 

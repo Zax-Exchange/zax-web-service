@@ -85,8 +85,8 @@ export class project_components
   >;
 
   // project_components hasMany project_designs via projectId
-  project_design!: project_designs[];
-  getProject_design!: Sequelize.HasManyGetAssociationsMixin<project_designs>;
+  project_designs!: project_designs[];
+  getProject_designs!: Sequelize.HasManyGetAssociationsMixin<project_designs>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof project_components {
     return sequelize.define(
@@ -152,7 +152,7 @@ export class project_components
               });
 
               // delete designs last because it cannot be rolled back
-              const projectDesigns = await instance.getProject_design();
+              const projectDesigns = await instance.getProject_designs();
               const designDeletionJobs: Promise<any>[] = [];
               for (const design of projectDesigns) {
                 designDeletionJobs.push(

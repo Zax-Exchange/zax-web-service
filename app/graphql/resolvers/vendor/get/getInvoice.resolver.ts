@@ -10,6 +10,7 @@ const getInvoice = async (
   context: any
 ): Promise<Invoice | null> => {
   const { projectId, projectBidId } = data;
+
   try {
     const invoiceFile = (await sequelize.models.invoices.findOne({
       where: {
