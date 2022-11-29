@@ -521,6 +521,7 @@ export type Mutation = {
   inviteUser: Scalars['Boolean'];
   requestToJoin: Scalars['Boolean'];
   reset: Scalars['Boolean'];
+  resubmitProjectBid: Scalars['Boolean'];
   updateCompanyPlan: Scalars['Boolean'];
   updateCompanyPlanSubscriptionInfo: Scalars['Boolean'];
   updateCompanyStatus: Scalars['Boolean'];
@@ -665,6 +666,11 @@ export type MutationRequestToJoinArgs = {
 
 export type MutationResetArgs = {
   t?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type MutationResubmitProjectBidArgs = {
+  data: ResubmitProjectBidInput;
 };
 
 
@@ -1293,6 +1299,10 @@ export type QuerySearchVendorCompaniesArgs = {
 export type RequestToJoinInput = {
   companyName: Scalars['String'];
   email: Scalars['String'];
+};
+
+export type ResubmitProjectBidInput = {
+  projectBidId: Scalars['String'];
 };
 
 export type SearchCustomerProjectInput = {

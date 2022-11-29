@@ -23,8 +23,13 @@ input UpdateProjectBidPermissionsInputData {
   permission: ProjectPermission!
 }
 
+input ResubmitProjectBidInput {
+  projectBidId: String!
+}
+
 type Mutation {
   updateProjectBidPermissions(data: UpdateProjectBidPermissionsInput!): Boolean!
   updateProjectBid(data: UpdateProjectBidInput!): Boolean!
   updateProjectBidComponents(data: [UpdateProjectBidComponentInput!]!): Boolean!
+  resubmitProjectBid(data: ResubmitProjectBidInput!): Boolean!
 }
