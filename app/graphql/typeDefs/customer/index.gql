@@ -7,6 +7,7 @@ type PurchaseOrder implements FileInterface {
 
 enum PurchaseOrderStatus {
   OPEN
+  OUTDATED
   VOID
   ACCEPTED
   REJECTED

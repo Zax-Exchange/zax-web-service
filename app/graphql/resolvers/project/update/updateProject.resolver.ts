@@ -8,6 +8,8 @@ import sequelize from "../../../../postgres/dbconnection";
 import streamService from "../../../../stream/StreamService";
 import {
   BidStatus,
+  InvoiceStatus,
+  PurchaseOrderStatus,
   QuantityPrice,
   UpdateProjectBidComponentInput,
   UpdateProjectData,
@@ -115,8 +117,12 @@ const updateProject = async (
         );
       }
 
-      const bids = await originalModel.getProject_bids();
-
+      const [bids, pos, invoices] = await Promise.all([
+        originalModel.getProject_bids(),
+        originalModel.getPurchase_orders(),
+        originalModel.getInvoices(),
+      ]);
+      originalModel.getBid_remarks();
       const allBidComponents = await Promise.all(
         bids.map((bid) => {
           return sequelize.models.project_bid_components.findAll({
@@ -161,6 +167,16 @@ const updateProject = async (
             transaction,
           }
         ),
+        ...pos.map((po) =>
+          po.update({
+            status: PurchaseOrderStatus.Outdated,
+          })
+        ),
+        ...invoices.map((invoice) =>
+          invoice.update({
+            status: InvoiceStatus.Outdated,
+          })
+        ),
         updateProjectBidComponentsQuantities(
           allBidComponents,
           new Set(orderQuantities),
@@ -181,6 +197,7 @@ const updateProject = async (
 
       await Promise.all(updates);
     });
+
     ElasticProjectService.updateProjectDocumentWithProjectSpec(
       data.projectData as updateProjectDocumentWithProjectSpecInput
     );

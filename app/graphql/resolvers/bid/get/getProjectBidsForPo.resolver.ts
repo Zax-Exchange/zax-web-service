@@ -25,7 +25,7 @@ const getProjectBidsForPo = async (
       where: {
         projectId,
         status: {
-          [Op.or]: [BidStatus.Open, BidStatus.Accepted],
+          [Op.or]: [BidStatus.Open, BidStatus.Accepted, BidStatus.Outdated],
         },
       },
     })) as project_bids[];

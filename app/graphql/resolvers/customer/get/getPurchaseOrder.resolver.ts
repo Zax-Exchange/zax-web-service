@@ -12,7 +12,7 @@ const getPurchaseOrder = async (
   context: any
 ): Promise<PurchaseOrder | null> => {
   const { projectId, projectBidId } = data;
-  console.log(data);
+
   try {
     const poFile = (await sequelize.models.purchase_orders.findOne({
       where: {

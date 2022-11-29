@@ -476,6 +476,7 @@ export type Invoice = FileInterface & {
 export enum InvoiceStatus {
   Accepted = 'ACCEPTED',
   Open = 'OPEN',
+  Outdated = 'OUTDATED',
   Rejected = 'REJECTED',
   Void = 'VOID'
 }
@@ -1095,6 +1096,7 @@ export type PurchaseOrder = FileInterface & {
 export enum PurchaseOrderStatus {
   Accepted = 'ACCEPTED',
   Open = 'OPEN',
+  Outdated = 'OUTDATED',
   Rejected = 'REJECTED',
   Void = 'VOID'
 }

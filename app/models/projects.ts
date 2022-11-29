@@ -181,15 +181,15 @@ export class projects
 
   // projects hasMany bid_remarks via projectId
   bid_remarks!: bid_remarks[];
-  getBid_remarks!: Sequelize.HasManyGetAssociationsMixin<bid_remarks[]>;
+  getBid_remarks!: Sequelize.HasManyGetAssociationsMixin<bid_remarks>;
 
   // projects hasMany invoices via projectId
   invoices!: invoices[];
-  getInvoices!: Sequelize.HasManyGetAssociationsMixin<invoices[]>;
+  getInvoices!: Sequelize.HasManyGetAssociationsMixin<invoices>;
 
   // projects hasMany purchase_orders via projectId
   purchase_orders!: purchase_orders[];
-  getPurchase_orders!: Sequelize.HasManyGetAssociationsMixin<purchase_orders[]>;
+  getPurchase_orders!: Sequelize.HasManyGetAssociationsMixin<purchase_orders>;
   hasPurchase_orders!: Sequelize.HasManyHasAssociationsMixin<
     purchase_orders,
     purchase_ordersId

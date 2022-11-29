@@ -8,6 +8,7 @@ import ProjectApiUtils from "../../../../utils/projectUtils";
 import {
   CreateInvoiceInput,
   CreatePurchaseOrderInput,
+  InvoiceStatus,
 } from "../../../resolvers-types.generated";
 
 const createPurchaseOrder = async (
@@ -27,7 +28,7 @@ const createPurchaseOrder = async (
       },
     });
 
-    const [_, projectInstance, projectUsers] = await Promise.all([
+    const [_, _1, projectInstance, projectUsers] = await Promise.all([
       sequelize.models.purchase_orders.update(
         {
           projectId,
@@ -36,6 +37,17 @@ const createPurchaseOrder = async (
         {
           where: {
             id: purchaseOrderId,
+          },
+        }
+      ),
+      sequelize.models.invoices.update(
+        {
+          status: InvoiceStatus.Void,
+        },
+        {
+          where: {
+            projectId,
+            projectBidId,
           },
         }
       ),
