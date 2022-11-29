@@ -3,15 +3,17 @@ import { v4 as uuidv4 } from "uuid";
 import { projects, projectsAttributes } from "../../../../models/projects";
 import { project_changelogs } from "../../../../models/project_changelogs";
 import ElasticProjectService from "../../../../elastic/project/ElasticProjectService";
-import { updateProjectDocumentWithProjectSpecInput } from "../../../../elastic/types/project";
+import { UpdateProjectDocumentWithProjectSpecInput } from "../../../../elastic/types/project";
 import sequelize from "../../../../postgres/dbconnection";
 import streamService from "../../../../stream/StreamService";
 import {
   BidStatus,
+  CreateProjectComponentInput,
   InvoiceStatus,
   PurchaseOrderStatus,
   QuantityPrice,
   UpdateProjectBidComponentInput,
+  UpdateProjectComponentData,
   UpdateProjectData,
   UpdateProjectInput,
 } from "../../../resolvers-types.generated";
@@ -28,6 +30,7 @@ import {
 } from "../../../../models/project_bid_components";
 import updateProjectComponents from "./updateProjectComponents";
 import deleteProjectComponents from "../delete/deleteProjectComponent.resolver";
+import { createProjectComponents } from "../create/createProject.resolver";
 
 const updateProjectBidComponentsQuantities = async (
   bidsComponents: Model<
@@ -86,13 +89,31 @@ const getProjectDiffs = (
   return output;
 };
 
+const getProjectComponentProducts = (
+  compsForUpdate: UpdateProjectComponentData[],
+  compsForCreate: CreateProjectComponentInput[]
+) => {
+  const products = new Set<string>();
+  compsForUpdate.forEach((comp) =>
+    products.add(comp.componentSpec.productName)
+  );
+  compsForCreate.forEach((comp) =>
+    products.add(comp.componentSpec.productName)
+  );
+  return Array.from(products);
+};
 const updateProject = async (
   parent: any,
   { data }: { data: UpdateProjectInput },
   context: any,
   info: any
 ) => {
-  const { projectData, componentsData, componentIdsToDelete } = data;
+  const {
+    projectData,
+    componentsForCreate,
+    componentsForUpdate,
+    componentIdsToDelete,
+  } = data;
 
   try {
     const {
@@ -177,12 +198,13 @@ const updateProject = async (
             status: InvoiceStatus.Outdated,
           })
         ),
+        createProjectComponents(projectId, componentsForCreate, transaction),
         updateProjectBidComponentsQuantities(
           allBidComponents,
           new Set(orderQuantities),
           transaction
         ),
-        updateProjectComponents(componentsData, transaction),
+        updateProjectComponents(componentsForUpdate, transaction),
         deleteProjectComponents(componentIdsToDelete, transaction),
       ];
 
@@ -199,8 +221,16 @@ const updateProject = async (
     });
 
     ElasticProjectService.updateProjectDocumentWithProjectSpec(
-      data.projectData as updateProjectDocumentWithProjectSpecInput
+      data.projectData as UpdateProjectDocumentWithProjectSpecInput
     );
+
+    ElasticProjectService.updateProjectDocumentProducts({
+      projectId,
+      products: getProjectComponentProducts(
+        componentsForUpdate,
+        componentsForCreate
+      ),
+    });
 
     await cacheService.invalidateProjectInCache(projectId);
 

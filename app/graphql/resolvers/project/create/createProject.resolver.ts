@@ -1,6 +1,7 @@
 import sequelize from "../../../../postgres/dbconnection";
 import {
   CreateProjectComponentInput,
+  CreateProjectComponentSpecInput,
   CreateProjectInput,
   ProjectPermission,
   ProjectStatus,
@@ -10,17 +11,30 @@ import createOrUpdateProjectPermission from "./createOrUpdateProjectPermission";
 import ElasticProjectService from "../../../../elastic/project/ElasticProjectService";
 import { Transaction } from "sequelize/types";
 import cacheService from "../../../../redis/CacheService";
-import { processComponentSpec } from "./createProjectComponents.resolver";
+import { component_specs } from "../../../../models/component_specs";
+
+const processComponentSpec = (
+  componentSpec: CreateProjectComponentSpecInput
+): Partial<component_specs> => {
+  const res = {} as any;
+  for (let attr in componentSpec) {
+    const key = attr as keyof CreateProjectComponentSpecInput;
+    if (typeof componentSpec[key] === "object") {
+      res[key] = JSON.stringify(componentSpec[key]);
+    } else {
+      res[key] = componentSpec[key];
+    }
+  }
+  return res;
+};
 
 /**
  * Creates a list of project components associated with projectId
- * This behaves exactly like the createProjectComponents resolver.
- * Separating them so that createProjectComponents can be a standalone resolver.
  * @param components
  * @param transaction
  * @returns boolean
  */
-const createComponents = async (
+export const createProjectComponents = async (
   projectId: string,
   components: CreateProjectComponentInput[],
   transaction: Transaction
@@ -130,7 +144,7 @@ const createProject = async (
       }
 
       await Promise.all([
-        createComponents(projectId, components, transaction),
+        createProjectComponents(projectId, components, transaction),
         createOrUpdateProjectPermission(
           { userIds: [userId], projectId, permission: ProjectPermission.Owner },
           transaction

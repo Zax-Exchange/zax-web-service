@@ -64,7 +64,7 @@ export default class ElasticProjectService {
 
   // Updates project spec, without updating components (products)
   static async updateProjectDocumentWithProjectSpec(
-    data: projectTypes.updateProjectDocumentWithProjectSpecInput
+    data: projectTypes.UpdateProjectDocumentWithProjectSpecInput
   ) {
     const { projectId, deliveryAddress, deliveryDate, targetPrice, category } =
       data;
@@ -84,7 +84,7 @@ export default class ElasticProjectService {
 
   // Updates project document with updated products list
   static async updateProjectDocumentProducts(
-    data: projectTypes.updateProjectDocumentProductsInput
+    data: projectTypes.UpdateProjectDocumentProductsInput
   ) {
     const { products, projectId } = data;
 

@@ -9,7 +9,7 @@ export interface CreateProjectDocumentInput {
   products: string[];
 }
 
-export interface updateProjectDocumentWithProjectSpecInput {
+export interface UpdateProjectDocumentWithProjectSpecInput {
   projectId: string;
   category: string;
   deliveryAddress: string;
@@ -18,7 +18,7 @@ export interface updateProjectDocumentWithProjectSpecInput {
   orderQuantities: number[];
 }
 
-export interface updateProjectDocumentProductsInput {
+export interface UpdateProjectDocumentProductsInput {
   projectId: string;
   products: string[];
 }

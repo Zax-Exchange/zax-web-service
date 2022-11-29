@@ -1,6 +1,7 @@
 input UpdateProjectInput {
   projectData: UpdateProjectData!
-  componentsData: [UpdateProjectComponentData!]!
+  componentsForUpdate: [UpdateProjectComponentData!]!
+  componentsForCreate: [CreateProjectComponentInput!]!
   componentIdsToDelete: [String!]!
 }
 
