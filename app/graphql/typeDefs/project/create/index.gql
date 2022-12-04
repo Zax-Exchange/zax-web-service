@@ -77,7 +77,6 @@ input CreateProjectInput {
   deliveryAddress: String!
   targetPrice: String!
   orderQuantities: [Int!]!
-  comments: String!
   components: [CreateProjectComponentInput!]!
 }
 

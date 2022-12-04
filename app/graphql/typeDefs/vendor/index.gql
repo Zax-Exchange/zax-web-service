@@ -74,7 +74,6 @@ type VendorProject implements ProjectInterface {
   deliveryAddress: String!
   targetPrice: String!
   orderQuantities: [Int!]!
-  comments: String!
   status: ProjectStatus!
   permission: ProjectPermission!
   components: [ProjectComponent!]!

@@ -109,7 +109,6 @@ const createProject = async (
     targetPrice,
     orderQuantities,
     components,
-    comments,
   } = data;
   try {
     const projectId = uuidv4();
@@ -133,7 +132,6 @@ const createProject = async (
           targetPrice,
           orderQuantities,
           companyId,
-          comments,
           status: ProjectStatus.Open,
         },
         { transaction }

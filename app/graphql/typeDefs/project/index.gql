@@ -31,7 +31,6 @@ interface ProjectInterface {
   targetPrice: String!
   orderQuantities: [Int!]!
   status: ProjectStatus!
-  comments: String!
   createdAt: Date!
   updatedAt: Date!
 }
@@ -49,7 +48,6 @@ type Project implements ProjectInterface {
   targetPrice: String!
   orderQuantities: [Int!]!
   status: ProjectStatus!
-  comments: String!
   components: [ProjectComponent!]!
   createdAt: Date!
   updatedAt: Date!
@@ -68,7 +66,6 @@ type PermissionedProject implements ProjectInterface {
   targetPrice: String!
   orderQuantities: [Int!]!
   status: ProjectStatus!
-  comments: String!
   components: [ProjectComponent!]!
   permission: ProjectPermission!
   createdAt: Date!
