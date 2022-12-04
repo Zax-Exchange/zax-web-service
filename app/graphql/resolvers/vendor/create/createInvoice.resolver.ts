@@ -38,7 +38,7 @@ const createInvoice = async (
 
     NotificationService.sendNotification(INVOICE_CREATE_ROUTE, {
       data: {
-        message: `An invoice has been created for ${projectInstance!.name}`,
+        message: `Invoice created for ${projectInstance!.name}`,
         projectId,
       },
       receivers: projectUsers.map((u) => u.userId),

@@ -94,7 +94,7 @@ const createProjectBid = async (
       NotificationService.sendNotification(BID_CREATE_ROUTE, {
         receivers: users.map((u) => u.userId),
         data: {
-          message: `There is a new bid for ${project?.name}`,
+          message: `New bid for ${project?.name}`,
           projectId: project?.id,
         },
       });

@@ -248,7 +248,7 @@ const updateProject = async (
           NotificationService.sendNotification(PROJECT_UPDATE_ROUTE, {
             receivers: bidUsers.map((u) => u.userId),
             data: {
-              message: `There is an update on ${name}`,
+              message: `Project update on ${name}`,
               projectId,
             },
           });
