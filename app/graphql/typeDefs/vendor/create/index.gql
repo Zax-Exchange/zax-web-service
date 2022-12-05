@@ -29,10 +29,16 @@ input CreateInvoiceInput {
   projectBidId: String!
 }
 
+input CreateGuestProjectLinkInput {
+  guestEmail: String!
+  userId: String!
+}
+
 type Mutation {
   createVendor(data: CreateVendorInput!): String!
   createVendorSubscription(
     data: CreateVendorSubscriptionInput!
   ): StripeSubscription!
   createInvoice(data: CreateInvoiceInput!): Boolean!
+  createGuestProjectLink(data: CreateGuestProjectLinkInput!): Boolean!
 }

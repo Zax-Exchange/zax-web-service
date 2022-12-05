@@ -29,7 +29,7 @@ import {
   project_bid_componentsCreationAttributes,
 } from "../../../../models/project_bid_components";
 import updateProjectComponents from "./updateProjectComponents";
-import deleteProjectComponents from "../delete/deleteProjectComponent.resolver";
+import deleteProjectComponents from "../delete/deleteProjectComponent";
 import { createProjectComponents } from "../create/createProject.resolver";
 
 const updateProjectBidComponentsQuantities = async (

@@ -80,7 +80,21 @@ input CreateProjectInput {
   components: [CreateProjectComponentInput!]!
 }
 
+input CreateGuestProjectInput {
+  projectId: String!
+  creationMode: ProjectCreationMode!
+  name: String!
+  category: String!
+  totalWeight: String!
+  deliveryDate: String!
+  deliveryAddress: String!
+  targetPrice: String!
+  orderQuantities: [Int!]!
+  components: [CreateProjectComponentInput!]!
+}
+
 type Mutation {
   createProject(data: CreateProjectInput!): Boolean!
-  createProjectComponents(data: [CreateProjectComponentInput!]!): Boolean!
+  # createProjectComponents(data: [CreateProjectComponentInput!]!): Boolean!
+  createGuestProject(data: CreateGuestProjectInput!): Boolean!
 }

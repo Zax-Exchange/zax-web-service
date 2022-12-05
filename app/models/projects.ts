@@ -33,13 +33,17 @@ export interface projectsAttributes {
   targetPrice: string;
   orderQuantities: number[];
   status: ProjectStatus;
+  guestEmail: string | null;
   updatedAt: Date;
   createdAt: Date;
 }
 
 export type projectsPk = "id";
 export type projectsId = projects[projectsPk];
-export type projectsOptionalAttributes = "createdAt" | "updatedAt";
+export type projectsOptionalAttributes =
+  | "createdAt"
+  | "updatedAt"
+  | "guestEmail";
 export type projectsCreationAttributes = Optional<
   projectsAttributes,
   projectsOptionalAttributes
@@ -61,6 +65,7 @@ export class projects
   targetPrice!: string;
   orderQuantities!: number[];
   status!: ProjectStatus;
+  guestEmail!: string | null;
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -253,6 +258,10 @@ export class projects
         status: {
           type: DataTypes.STRING(20),
           allowNull: false,
+        },
+        guestEmail: {
+          type: DataTypes.TEXT,
+          allowNull: true,
         },
       },
       {

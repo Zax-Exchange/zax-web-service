@@ -2,6 +2,9 @@ input GetVendorProjectsInput {
   userId: String!
 }
 
+input GetVendorGuestProjectsInput {
+  userId: String
+}
 input GetVendorDetailInput {
   companyId: String!
 }
@@ -20,10 +23,23 @@ input GetInvoiceInput {
   projectBidId: String!
 }
 
+input GetVendorGuestProjectsInput {
+  userId: String!
+}
+
+input GetVendorGuestProjectInput {
+  userId: String!
+  projectId: String!
+}
+
 type Query {
   getVendorDetail(data: GetVendorDetailInput): VendorDetail
   getVendorProject(data: GetVendorProjectInput!): VendorProject
   getVendorProjects(data: GetVendorProjectsInput!): [VendorProjectOverview!]!
+  getVendorGuestProjects(
+    data: GetVendorGuestProjectsInput!
+  ): [VendorGuestProjectOverview!]!
+  getVendorGuestProject(data: GetVendorGuestProjectInput!): VendorGuestProject
   getVendorPos(data: GetVendorPosInput!): [VendorPo!]!
   getInvoice(data: GetInvoiceInput!): Invoice
 }

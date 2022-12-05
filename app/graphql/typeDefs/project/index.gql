@@ -49,6 +49,7 @@ type Project implements ProjectInterface {
   orderQuantities: [Int!]!
   status: ProjectStatus!
   components: [ProjectComponent!]!
+  guestEmail: String
   createdAt: Date!
   updatedAt: Date!
 }
@@ -68,6 +69,7 @@ type PermissionedProject implements ProjectInterface {
   status: ProjectStatus!
   components: [ProjectComponent!]!
   permission: ProjectPermission!
+  guestEmail: String
   createdAt: Date!
   updatedAt: Date!
 }
@@ -178,6 +180,7 @@ enum ProjectStatus {
   CLOSED
   COMPLETED
   OVERDUE
+  INCOMPLETE
 }
 
 enum ProjectCreationMode {

@@ -43,6 +43,22 @@ type VendorDetail {
   leadTime: Int!
 }
 
+type VendorGuestProjectOverview {
+  id: String!
+  name: String!
+  category: String!
+  totalWeight: String!
+  deliveryDate: String!
+  deliveryAddress: String!
+  targetPrice: String!
+  orderQuantities: [Int!]!
+  status: String!
+  permission: ProjectPermission!
+  guestEmail: String!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
 type VendorProjectOverview {
   id: String!
   userId: String!
@@ -78,6 +94,26 @@ type VendorProject implements ProjectInterface {
   permission: ProjectPermission!
   components: [ProjectComponent!]!
   bidInfo: PermissionedProjectBid!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type VendorGuestProject implements ProjectInterface {
+  id: String!
+  userId: String!
+  companyName: String!
+  companyId: String!
+  name: String!
+  category: String!
+  totalWeight: String!
+  deliveryDate: String!
+  deliveryAddress: String!
+  targetPrice: String!
+  orderQuantities: [Int!]!
+  status: ProjectStatus!
+  permission: ProjectPermission!
+  components: [ProjectComponent!]!
+  guestEmail: String!
   createdAt: Date!
   updatedAt: Date!
 }

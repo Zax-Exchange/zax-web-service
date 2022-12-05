@@ -8,10 +8,12 @@ import cacheService from "../../../../redis/CacheService";
 import ProjectApiUtils from "../../../../utils/projectUtils";
 import { DeleteProjectComponentInput } from "../../../resolvers-types.generated";
 
-const getProjectComponent = (componentId: string) => {
-  return sequelize.models.project_components
-    .findByPk(componentId)
-    .then((value) => value as project_components);
+const getProjectComponent = async (componentId: string) => {
+  const value = await sequelize.models.project_components.findByPk(componentId);
+  if (value) {
+    return value as project_components;
+  }
+  return null;
 };
 
 const deleteProjectComponents = async (

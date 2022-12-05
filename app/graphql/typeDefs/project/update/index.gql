@@ -68,8 +68,16 @@ input UpdateProjectPermissionsInputData {
   permission: ProjectPermission!
 }
 
+input UpdateGuestProjectInput {
+  projectData: UpdateProjectData!
+  componentsForUpdate: [UpdateProjectComponentData!]!
+  componentsForCreate: [CreateProjectComponentInput!]!
+  componentIdsToDelete: [String!]!
+}
+
 type Mutation {
   updateProjectPermissions(data: UpdateProjectPermissionsInput!): Boolean!
   updateProject(data: UpdateProjectInput!): Boolean!
+  updateGuestProject(data: UpdateGuestProjectInput!): Boolean!
   # updateProjectComponents(data: [UpdateProjectComponentInput!]!): Boolean!
 }

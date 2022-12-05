@@ -1,13 +1,14 @@
-import * as Sequelize from 'sequelize';
-import { DataTypes, Model, Optional } from 'sequelize';
-import type { projects, projectsId } from './projects';
-import type { users, usersId } from './users';
+import * as Sequelize from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
+import { ProjectPermission } from "../graphql/resolvers-types.generated";
+import type { projects, projectsId } from "./projects";
+import type { users, usersId } from "./users";
 
 export interface project_permissionsAttributes {
   id: string;
   userId: string;
   projectId: string;
-  permission: string;
+  permission: ProjectPermission;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,13 +16,22 @@ export interface project_permissionsAttributes {
 export type project_permissionsPk = "id";
 export type project_permissionsId = project_permissions[project_permissionsPk];
 export type project_permissionsOptionalAttributes = "createdAt" | "updatedAt";
-export type project_permissionsCreationAttributes = Optional<project_permissionsAttributes, project_permissionsOptionalAttributes>;
+export type project_permissionsCreationAttributes = Optional<
+  project_permissionsAttributes,
+  project_permissionsOptionalAttributes
+>;
 
-export class project_permissions extends Model<project_permissionsAttributes, project_permissionsCreationAttributes> implements project_permissionsAttributes {
+export class project_permissions
+  extends Model<
+    project_permissionsAttributes,
+    project_permissionsCreationAttributes
+  >
+  implements project_permissionsAttributes
+{
   id!: string;
   userId!: string;
   projectId!: string;
-  permission!: string;
+  permission!: ProjectPermission;
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -37,58 +47,57 @@ export class project_permissions extends Model<project_permissionsAttributes, pr
   createUser!: Sequelize.BelongsToCreateAssociationMixin<users>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof project_permissions {
-    return sequelize.define('project_permissions', {
-    id: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      primaryKey: true
-    },
-    userId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'users',
-        key: 'id'
-      },
-      unique: "project_viewers_userId_projectId_key",
-      onDelete: 'cascade'
-    },
-    projectId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'projects',
-        key: 'id'
-      },
-      unique: "project_viewers_userId_projectId_key",
-      onDelete: 'cascade'
-    },
-    permission: {
-      type: DataTypes.STRING(10),
-      allowNull: false
-    }
-  }, {
-    tableName: 'project_permissions',
-    schema: 'public',
-    hasTrigger: true,
-    timestamps: true,
-    indexes: [
+    return sequelize.define(
+      "project_permissions",
       {
-        name: "project_viewers_pkey",
-        unique: true,
-        fields: [
-          { name: "id" },
-        ]
+        id: {
+          type: DataTypes.UUID,
+          allowNull: false,
+          primaryKey: true,
+        },
+        userId: {
+          type: DataTypes.UUID,
+          allowNull: false,
+          references: {
+            model: "users",
+            key: "id",
+          },
+          unique: "project_viewers_userId_projectId_key",
+          onDelete: "cascade",
+        },
+        projectId: {
+          type: DataTypes.UUID,
+          allowNull: false,
+          references: {
+            model: "projects",
+            key: "id",
+          },
+          unique: "project_viewers_userId_projectId_key",
+          onDelete: "cascade",
+        },
+        permission: {
+          type: DataTypes.STRING(10),
+          allowNull: false,
+        },
       },
       {
-        name: "project_viewers_userId_projectId_key",
-        unique: true,
-        fields: [
-          { name: "userId" },
-          { name: "projectId" },
-        ]
-      },
-    ]
-  }) as typeof project_permissions;
+        tableName: "project_permissions",
+        schema: "public",
+        hasTrigger: true,
+        timestamps: true,
+        indexes: [
+          {
+            name: "project_viewers_pkey",
+            unique: true,
+            fields: [{ name: "id" }],
+          },
+          {
+            name: "project_viewers_userId_projectId_key",
+            unique: true,
+            fields: [{ name: "userId" }, { name: "projectId" }],
+          },
+        ],
+      }
+    ) as typeof project_permissions;
   }
 }
