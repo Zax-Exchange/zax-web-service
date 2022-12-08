@@ -2,7 +2,7 @@ import * as Sequelize from "sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
 import type { companies, companiesId } from "./companies";
 import type { plans, plansId } from "./plans";
-import type { stripe_customers, stripe_customersId } from "./stripe_customers";
+import { stripe_customers, stripe_customersId } from "./stripe_customers";
 
 export interface company_plansAttributes {
   id: string;
@@ -44,12 +44,12 @@ export class company_plans
   createPlan!: Sequelize.BelongsToCreateAssociationMixin<plans>;
   // company_plans belongsTo stripe_customers via stripeCustomerId
   stripe_customer!: stripe_customers;
-  getStripeCustomer!: Sequelize.BelongsToGetAssociationMixin<stripe_customers>;
-  setStripeCusomter!: Sequelize.BelongsToSetAssociationMixin<
+  getStripe_customer!: Sequelize.BelongsToGetAssociationMixin<stripe_customers>;
+  setStripe_cusomter!: Sequelize.BelongsToSetAssociationMixin<
     stripe_customers,
     stripe_customersId
   >;
-  createStripeCustomer!: Sequelize.BelongsToCreateAssociationMixin<stripe_customers>;
+  createStripe_customer!: Sequelize.BelongsToCreateAssociationMixin<stripe_customers>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof company_plans {
     return sequelize.define(
@@ -79,7 +79,7 @@ export class company_plans
         },
         stripeCustomerId: {
           type: DataTypes.UUID,
-          allowNull: true,
+          allowNull: false,
           references: {
             model: "stripe_customers",
             key: "id",

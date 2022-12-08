@@ -1,4 +1,13 @@
-type User {
+interface UserInterface {
+  id: String!
+  name: String!
+  email: String!
+  companyId: String!
+  isVendor: Boolean!
+  power: UserPower!
+}
+
+type GenericUser implements UserInterface {
   id: String!
   name: String!
   email: String!
@@ -16,7 +25,7 @@ type UserProjectPermission {
   permission: ProjectPermission!
 }
 
-type LoggedInUser {
+type LoggedInUser implements UserInterface {
   id: String!
   name: String!
   email: String!
@@ -24,7 +33,6 @@ type LoggedInUser {
   isVendor: Boolean!
   power: UserPower!
   token: String!
-  notificationToken: String!
   chatToken: String!
 }
 

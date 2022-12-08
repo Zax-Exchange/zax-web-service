@@ -4,6 +4,7 @@ import type {
   project_bid_components,
   project_bid_componentsId,
 } from "./project_bid_components";
+import { project_components, project_componentsId } from "./project_components";
 
 export interface component_specsAttributes {
   id: string;
@@ -120,13 +121,13 @@ export class component_specs
   updatedAt!: Date;
 
   // component_specs belongsTo project_bid_components via projectComponentId
-  projectComponent!: project_bid_components;
-  getProjectComponent!: Sequelize.BelongsToGetAssociationMixin<project_bid_components>;
-  setProjectComponent!: Sequelize.BelongsToSetAssociationMixin<
-    project_bid_components,
-    project_bid_componentsId
+  project_component!: project_components;
+  getProject_component!: Sequelize.BelongsToGetAssociationMixin<project_components>;
+  setProject_component!: Sequelize.BelongsToSetAssociationMixin<
+    project_components,
+    project_componentsId
   >;
-  createProjectComponent!: Sequelize.BelongsToCreateAssociationMixin<project_bid_components>;
+  createProjectComponent!: Sequelize.BelongsToCreateAssociationMixin<project_components>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof component_specs {
     return sequelize.define(

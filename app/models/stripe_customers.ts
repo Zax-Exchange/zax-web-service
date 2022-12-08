@@ -1,11 +1,13 @@
-import * as Sequelize from 'sequelize';
-import { DataTypes, Model, Optional } from 'sequelize';
-
+import * as Sequelize from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
+import { companies } from "./companies";
+import { company_plans, company_plansId } from "./company_plans";
 
 export interface stripe_customersAttributes {
   id: string;
-  customerId?: string;
-  subscriptionId?: string;
+  companyId: string;
+  customerId: string;
+  subscriptionId: string;
   email: string;
   createdAt: Date;
   updatedAt: Date;
@@ -14,50 +16,82 @@ export interface stripe_customersAttributes {
 export type stripe_customersPk = "id";
 export type stripe_customersId = stripe_customers[stripe_customersPk];
 export type stripe_customersOptionalAttributes = "createdAt" | "updatedAt";
-export type stripe_customersCreationAttributes = Optional<stripe_customersAttributes, stripe_customersOptionalAttributes>;
+export type stripe_customersCreationAttributes = Optional<
+  stripe_customersAttributes,
+  stripe_customersOptionalAttributes
+>;
 
-
-export class stripe_customers extends Model<stripe_customersAttributes, stripe_customersCreationAttributes> implements stripe_customersAttributes {
+export class stripe_customers
+  extends Model<stripe_customersAttributes, stripe_customersCreationAttributes>
+  implements stripe_customersAttributes
+{
   id!: string;
-  customerId?: string;
-  subscriptionId?: string;
+  companyId!: string;
+  customerId!: string;
+  subscriptionId!: string;
   email!: string;
   createdAt!: Date;
   updatedAt!: Date;
 
+  company_plan!: company_plans;
+  getCompany_plan!: Sequelize.HasOneGetAssociationMixin<company_plans>;
+  setCompany_plan!: Sequelize.HasOneSetAssociationMixin<
+    company_plans,
+    company_plansId
+  >;
+
+  company!: companies;
+  getCompany!: Sequelize.BelongsToGetAssociationMixin<companies>;
+
   static initModel(sequelize: Sequelize.Sequelize): typeof stripe_customers {
-    return sequelize.define('stripe_customers', {
-      id: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        primaryKey: true
+    return sequelize.define(
+      "stripe_customers",
+      {
+        id: {
+          type: DataTypes.UUID,
+          allowNull: false,
+          primaryKey: true,
+        },
+        companyId: {
+          type: DataTypes.UUID,
+          allowNull: false,
+          references: {
+            model: "companies",
+            key: "id",
+          },
+          unique: "stripe_customer_companyId_key",
+        },
+        customerId: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        subscriptionId: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        email: {
+          type: DataTypes.STRING(255),
+          allowNull: false,
+        },
       },
-      customerId: {
-        type: DataTypes.STRING,
-        allowNull: true
-      },
-      subscriptionId: {
-        type: DataTypes.STRING,
-        allowNull: true
-      },
-      email: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
+      {
+        tableName: "stripe_customers",
+        schema: "public",
+        hasTrigger: true,
+        timestamps: true,
+        indexes: [
+          {
+            name: "stripe_customers_pkey",
+            unique: true,
+            fields: [{ name: "id" }],
+          },
+          {
+            name: "stripe_customer_companyId_key",
+            unique: true,
+            fields: [{ name: "companyId" }],
+          },
+        ],
       }
-    }, {
-      tableName: 'stripe_customers',
-      schema: 'public',
-      hasTrigger: true,
-      timestamps: true,
-      indexes: [
-        {
-          name: "stripe_customers_pkey",
-          unique: true,
-          fields: [
-            { name: "id" }
-          ]
-        }
-      ]
-    }) as typeof stripe_customers;
+    ) as typeof stripe_customers;
   }
 }

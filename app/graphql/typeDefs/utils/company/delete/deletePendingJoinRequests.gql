@@ -3,5 +3,5 @@ input DeletePendingJoinRequestInput {
 }
 
 type Mutation {
-  deletePendingJoinRequest(data: DeletePendingJoinRequestInput!): Boolean!
+  deletePendingJoinRequests(data: [DeletePendingJoinRequestInput!]!): Boolean!
 }

@@ -26,10 +26,9 @@ const login = async (
       throw new Error("Account is not active.");
     }
 
-    const notificationToken = streamService.createToken(user.id);
     const chatToken = streamService.createToken(user.companyId);
 
-    if (!notificationToken || !chatToken) {
+    if (!chatToken) {
       throw new Error("Unable to generate stream token");
     }
 
@@ -43,7 +42,6 @@ const login = async (
         email: user.email,
         power: user.power,
         isVendor: user.isVendor,
-        notificationToken,
         chatToken,
       };
       const token = jwt.sign(

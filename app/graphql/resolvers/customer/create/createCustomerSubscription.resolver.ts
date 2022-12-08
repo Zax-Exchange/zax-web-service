@@ -2,6 +2,7 @@ import Stripe from "stripe";
 import sequelize from "../../../../postgres/dbconnection";
 import { stripe } from "../../../../stripe/StripeService";
 
+// not used
 const createCustomerSubscription = async (
   parent: any,
   { priceId, stripeCustomerId }: { priceId: string; stripeCustomerId: string },

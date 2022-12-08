@@ -1,6 +1,7 @@
+import { users } from "../../../../models/users";
 import sequelize from "../../../../postgres/dbconnection";
 import cacheService from "../../../../redis/CacheService";
-import { GetUserInput, User } from "../../../resolvers-types.generated";
+import { GetUserInput } from "../../../resolvers-types.generated";
 
 const getUser = async (
   parent: any,
@@ -19,10 +20,10 @@ const getUser = async (
     // since value not in cache retrieve the value from DB
     const userInDb = await users
       .findByPk(userId)
-      .then((u) => u?.get({ plain: true }) as User);
-    
+      .then((u) => u?.get({ plain: true }) as users);
+
     // store the value into cache and then return it
-    cacheService.setUserInCache(userInDb);  // do this async, its OK if it fails
+    cacheService.setUserInCache(userInDb); // do this async, its OK if it fails
     return userInDb;
   } catch (e) {
     console.error(e);

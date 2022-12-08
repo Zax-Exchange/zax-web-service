@@ -2,10 +2,6 @@ input GetCompanyDetailInput {
   companyId: String!
 }
 
-input GetAllUsersWithinCompanyInput {
-  companyId: String!
-}
-
 input GetCompanyPlanDetailInput {
   companyId: String!
 }

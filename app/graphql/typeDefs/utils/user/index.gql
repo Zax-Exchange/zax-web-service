@@ -29,7 +29,7 @@ input ResetPasswordInput {
 
 type Mutation {
   requestToJoin(data: RequestToJoinInput!): Boolean!
-  inviteUser(data: InviteUserInput!): Boolean!
+  inviteUsers(data: [InviteUserInput!]!): Boolean!
   sendPasswordResetLink(data: SendPasswordResetLinkInput!): Boolean!
   resetPassword(data: ResetPasswordInput!): Boolean
 }

@@ -214,6 +214,18 @@ export function initModels(sequelize: Sequelize) {
     onDelete: "CASCADE",
   });
 
+  companies.hasOne(stripe_customers, {
+    as: "stripe_customer",
+    foreignKey: "companyId",
+    onDelete: "CASCADE",
+  });
+
+  stripe_customers.belongsTo(companies, {
+    as: "company",
+    foreignKey: "companyId",
+    onDelete: "CASCADE",
+  });
+
   customers.belongsTo(companies, {
     as: "company",
     foreignKey: "companyId",
@@ -275,7 +287,7 @@ export function initModels(sequelize: Sequelize) {
     onDelete: "CASCADE",
   });
   project_bid_components.belongsTo(project_bids, {
-    as: "projectBid",
+    as: "project_bid",
     foreignKey: "projectBidId",
     onDelete: "CASCADE",
   });
@@ -301,7 +313,7 @@ export function initModels(sequelize: Sequelize) {
   });
 
   project_bid_components.belongsTo(project_components, {
-    as: "projectComponent",
+    as: "project_component",
     foreignKey: "projectComponentId",
   });
 
@@ -343,8 +355,8 @@ export function initModels(sequelize: Sequelize) {
     onDelete: "CASCADE",
   });
 
-  component_specs.belongsTo(project_bid_components, {
-    as: "projectComponent",
+  component_specs.belongsTo(project_components, {
+    as: "project_component",
     foreignKey: "projectComponentId",
     onDelete: "CASCADE",
   });

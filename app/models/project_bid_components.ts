@@ -44,21 +44,21 @@ export class project_bid_components
   updatedAt!: Date;
 
   // project_bid_components belongsTo project_bids via projectBidId
-  projectBid!: project_bids;
-  getProjectBid!: Sequelize.BelongsToGetAssociationMixin<project_bids>;
-  setProjectBid!: Sequelize.BelongsToSetAssociationMixin<
+  project_bid!: project_bids;
+  getProject_bid!: Sequelize.BelongsToGetAssociationMixin<project_bids>;
+  setProject_bid!: Sequelize.BelongsToSetAssociationMixin<
     project_bids,
     project_bidsId
   >;
-  createProjectBid!: Sequelize.BelongsToCreateAssociationMixin<project_bids>;
+  createProject_bid!: Sequelize.BelongsToCreateAssociationMixin<project_bids>;
   // project_bid_components belongsTo project_components via projectComponentId
-  projectComponent!: project_components;
-  getProjectComponent!: Sequelize.BelongsToGetAssociationMixin<project_components>;
-  setProjectComponent!: Sequelize.BelongsToSetAssociationMixin<
+  project_component!: project_components;
+  getProject_component!: Sequelize.BelongsToGetAssociationMixin<project_components>;
+  setProject_component!: Sequelize.BelongsToSetAssociationMixin<
     project_components,
     project_componentsId
   >;
-  createProjectComponent!: Sequelize.BelongsToCreateAssociationMixin<project_components>;
+  createProject_component!: Sequelize.BelongsToCreateAssociationMixin<project_components>;
 
   static initModel(
     sequelize: Sequelize.Sequelize

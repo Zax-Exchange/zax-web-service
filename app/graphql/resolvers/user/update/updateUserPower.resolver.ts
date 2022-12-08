@@ -4,22 +4,33 @@ import { UpdateUserPowerInput } from "../../../resolvers-types.generated";
 
 const updateUserPower = async (
   parent: any,
-  { data }: { data: UpdateUserPowerInput },
+  { data }: { data: UpdateUserPowerInput[] },
   context: any
 ) => {
-  const { userId, power } = data;
   try {
-    await sequelize.models.users.update(
-      {
-        power,
-      },
-      {
-        where: {
-          id: userId,
-        },
-      }
-    );
-    await cacheService.invalidateUserInCache(userId);
+    await sequelize.transaction(async (transaction) => {
+      await Promise.all(
+        data.map(async (input) => {
+          const { userId, power } = input;
+          return sequelize.models.users.update(
+            {
+              power,
+            },
+            {
+              where: {
+                id: userId,
+              },
+            }
+          );
+        })
+      );
+      await Promise.all(
+        data.map(async (input) => {
+          const { userId } = input;
+          return cacheService.invalidateUserInCache(userId);
+        })
+      );
+    });
     return true;
   } catch (e) {
     return Promise.reject(e);

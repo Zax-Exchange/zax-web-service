@@ -71,9 +71,9 @@ export class pending_join_requests
             fields: [{ name: "id" }],
           },
           {
-            name: "pending_join_requests_email_key",
+            name: "pending_join_requests_companyId_email_key",
             unique: true,
-            fields: [{ name: "email" }],
+            fields: [{ name: "companyId" }, { name: "email" }],
           },
         ],
       }

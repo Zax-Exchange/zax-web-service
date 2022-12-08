@@ -1,7 +1,10 @@
-input CreateStripeCustomerInput {
+input CreateStripeCustomerInStripeInput {
   email: String!
+  priceId: String!
 }
 
 type Mutation {
-  createStripeCustomer(data: CreateStripeCustomerInput!): String!
+  createStripeCustomerInStripe(
+    data: CreateStripeCustomerInStripeInput!
+  ): StripePaymentIntent!
 }

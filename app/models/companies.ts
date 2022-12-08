@@ -14,6 +14,7 @@ import {
   pending_join_requests,
   pending_join_requestsId,
 } from "./pending_join_requests";
+import { stripe_customers } from "./stripe_customers";
 
 export interface companiesAttributes {
   id: string;
@@ -148,6 +149,9 @@ export class companies
     pending_join_requests,
     pending_join_requestsId
   >;
+
+  stripe_customer!: stripe_customers;
+  getStripe_customer!: Sequelize.HasOneGetAssociationMixin<stripe_customers>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof companies {
     return sequelize.define(

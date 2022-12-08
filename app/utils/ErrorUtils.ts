@@ -6,4 +6,8 @@ export default class ErrorUtils {
   static notFoundError() {
     return new Error("not found");
   }
+
+  static duplicateEmailError() {
+    return new Error("duplicate email");
+  }
 }

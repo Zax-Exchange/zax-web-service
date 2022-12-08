@@ -1,6 +1,7 @@
 import { CreateCustomerInput } from "../../../resolvers-types.generated";
 import { v4 as uuidv4 } from "uuid";
 import sequelize from "../../../../postgres/dbconnection";
+import stripeService from "../../../../stripe/StripeService";
 
 const createCustomer = async (
   parents: any,
@@ -20,6 +21,7 @@ const createCustomer = async (
     companyUrl,
     planId,
     userEmail,
+    stripeCustomerInfo,
   } = data;
 
   const companies = sequelize.models.companies;
@@ -28,41 +30,50 @@ const createCustomer = async (
   const stripe_customers = sequelize.models.stripe_customers;
 
   try {
-    return await sequelize.transaction(async (transaction) => {
-      const stripeCustomerId = await stripe_customers
-        .findOne({
-          where: {
-            email: userEmail,
-          },
-        })
-        .then((customer) => customer?.get("id"));
+    const subscription = await stripeService.getSubscription(
+      stripeCustomerInfo.subscriptionId
+    );
 
-      const companyId = await companies
-        .create(
-          {
-            id: uuidv4(),
-            name,
-            contactEmail,
-            logo,
-            phone,
-            fax,
-            country,
-            isActive,
-            isVendor,
-            isVerified,
-            companyUrl,
-          },
-          { transaction }
-        )
-        .then((c) => c.getDataValue("id"));
-
-      await customers.create(
+    await sequelize.transaction(async (transaction) => {
+      const companyId = uuidv4();
+      const stripeCustomerId = uuidv4();
+      await companies.create(
         {
-          id: uuidv4(),
-          companyId,
+          id: companyId,
+          name,
+          contactEmail,
+          logo,
+          phone,
+          fax,
+          country,
+          isActive: true,
+          isVendor,
+          isVerified: false,
+          companyUrl,
         },
         { transaction }
       );
+
+      // the stripeCustomerId here is the uuid of stripe_customers instance in zax
+      await Promise.all([
+        customers.create(
+          {
+            id: uuidv4(),
+            companyId,
+          },
+          { transaction }
+        ),
+        stripe_customers.create(
+          {
+            id: stripeCustomerId,
+            customerId: stripeCustomerInfo.customerId,
+            subscriptionId: stripeCustomerInfo.subscriptionId,
+            email: userEmail,
+            companyId,
+          },
+          { transaction }
+        ),
+      ]);
 
       await company_plans.create(
         {
@@ -73,9 +84,8 @@ const createCustomer = async (
         },
         { transaction }
       );
-
-      return companyId;
     });
+    return true;
   } catch (e) {
     console.error(e);
     return Promise.reject(e);

@@ -1,3 +1,8 @@
+input StripeCustomerInfo {
+  subscriptionId: String!
+  customerId: String!
+}
+
 input CreateCustomerInput {
   name: String!
   contactEmail: String!
@@ -11,6 +16,7 @@ input CreateCustomerInput {
   isVerified: Boolean!
   companyUrl: String
   userEmail: String!
+  stripeCustomerInfo: StripeCustomerInfo!
 }
 
 input CreatePurchaseOrderInput {
@@ -20,7 +26,7 @@ input CreatePurchaseOrderInput {
 }
 
 type Mutation {
-  createCustomer(data: CreateCustomerInput!): String!
+  createCustomer(data: CreateCustomerInput!): Boolean!
   createCustomerSubscription(
     priceId: String!
     stripeCustomerId: String!

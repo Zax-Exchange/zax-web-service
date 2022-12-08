@@ -6,6 +6,8 @@ input GetUserInput {
   userId: String!
 }
 type Query {
-  getAllUsersWithinCompany(data: GetAllUsersWithinCompanyInput!): [User!]!
-  getUser(data: GetUserInput!): User!
+  getAllUsersWithinCompany(
+    data: GetAllUsersWithinCompanyInput!
+  ): [GenericUser!]!
+  getUser(data: GetUserInput!): GenericUser!
 }

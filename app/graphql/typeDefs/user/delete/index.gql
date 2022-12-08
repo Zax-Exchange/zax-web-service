@@ -1,5 +1,6 @@
 input DeactivateUserInput {
-  email: String!
+  userIds: [String!]!
+  companyId: String!
 }
 type Mutation {
   deactivateUser(data: DeactivateUserInput!): Boolean!

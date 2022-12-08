@@ -1,9 +1,10 @@
 import emailService from "../../../../gcp/EmailService";
+import { stripe_customers } from "../../../../models/stripe_customers";
 import sequelize from "../../../../postgres/dbconnection";
 import stripeService from "../../../../stripe/StripeService";
 import { UpdateCompanyPlanSubscriptionInfoInput } from "../../../resolvers-types.generated";
 
-/** Updates company_plans subscription start/end date. Should happen after company credit card accepted. */
+/** Updates company_plans subscription start/end date. Should happen after company instance is created in zax db */
 const updateCompanyPlanSubscriptionInfo = async (
   parent: any,
   { data }: { data: UpdateCompanyPlanSubscriptionInfoInput },
@@ -12,15 +13,18 @@ const updateCompanyPlanSubscriptionInfo = async (
   const { subscriptionId } = data;
   try {
     const subscription = await stripeService.getSubscription(subscriptionId);
-    const stripeCustomer = await sequelize.models.stripe_customers.findOne({
+
+    const stripeCustomer = (await sequelize.models.stripe_customers.findOne({
       where: {
         subscriptionId,
       },
-    });
+    })) as stripe_customers;
+
     // TODO: finish implementation
+    // the stripeCustomerId here is the uuid of stripe_customers instance in zax
     const companyPlan = await sequelize.models.company_plans.findOne({
       where: {
-        stripeCustomerId: stripeCustomer?.get("id"),
+        stripeCustomerId: stripeCustomer.id,
       },
     });
 
