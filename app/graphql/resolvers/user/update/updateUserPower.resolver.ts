@@ -20,17 +20,18 @@ const updateUserPower = async (
               where: {
                 id: userId,
               },
+              transaction,
             }
           );
         })
       );
-      await Promise.all(
-        data.map(async (input) => {
-          const { userId } = input;
-          return cacheService.invalidateUserInCache(userId);
-        })
-      );
     });
+    await Promise.all(
+      data.map(async (input) => {
+        const { userId } = input;
+        return cacheService.invalidateUserInCache(userId);
+      })
+    );
     return true;
   } catch (e) {
     return Promise.reject(e);

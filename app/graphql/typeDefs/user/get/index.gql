@@ -1,5 +1,6 @@
 input GetAllUsersWithinCompanyInput {
   companyId: String!
+  userStatus: [UserStatus!]!
 }
 
 input GetUserInput {

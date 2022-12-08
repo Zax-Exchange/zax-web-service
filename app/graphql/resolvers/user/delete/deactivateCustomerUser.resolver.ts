@@ -1,5 +1,7 @@
 import { stripe_customers } from "../../../../models/stripe_customers";
 import { users } from "../../../../models/users";
+import { USER_LOGOUT_ROUTE } from "../../../../notification/notificationRoutes";
+import NotificationService from "../../../../notification/NotificationService";
 import sequelize from "../../../../postgres/dbconnection";
 import cacheService from "../../../../redis/CacheService";
 import stripeService, { stripe } from "../../../../stripe/StripeService";
@@ -9,7 +11,7 @@ import {
 } from "../../../resolvers-types.generated";
 
 // TODO: should update company stripe subscription to decrease user count/charge
-const deactivateUser = async (
+const deactivateCustomerUser = async (
   parent: any,
   { data }: { data: DeactivateUserInput },
   context: any
@@ -46,6 +48,7 @@ const deactivateUser = async (
       const cacheUpdates = userIds.map((id) => {
         return cacheService.invalidateUserInCache(id);
       });
+
       await Promise.all([
         ...userUpdates,
         ...cacheUpdates,
@@ -60,7 +63,12 @@ const deactivateUser = async (
         }),
       ]);
     });
-
+    NotificationService.sendNotification(USER_LOGOUT_ROUTE, {
+      data: {
+        message: "",
+      },
+      receivers: userIds,
+    });
     return true;
   } catch (e) {
     return Promise.reject(e);
@@ -69,6 +77,6 @@ const deactivateUser = async (
 
 export default {
   Mutation: {
-    deactivateUser,
+    deactivateCustomerUser,
   },
 };

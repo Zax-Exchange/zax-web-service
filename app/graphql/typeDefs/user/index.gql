@@ -14,7 +14,7 @@ type GenericUser implements UserInterface {
   companyId: String!
   isVendor: Boolean!
   power: UserPower!
-  status: UserStatus
+  status: UserStatus!
 }
 
 # for project/projectBid user info, mainly used when sharing projects/bids

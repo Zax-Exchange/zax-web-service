@@ -48,7 +48,7 @@ const createUser = async (
     ]);
 
     // If user is not the first one, we need to update in stripe to add one more user monthly charge
-    if (!isFirst) {
+    if (!isFirst && !isVendor) {
       const stripeCustomer = await (
         companyPlan as company_plans
       ).getStripe_customer();

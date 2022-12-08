@@ -11,7 +11,7 @@ const getAllUsersWithinCompany = async (
   { data }: { data: GetAllUsersWithinCompanyInput },
   context: any
 ) => {
-  const { companyId } = data;
+  const { companyId, userStatus } = data;
   const companies = sequelize.models.companies;
   try {
     const userList: GenericUser[] = await companies
@@ -24,7 +24,7 @@ const getAllUsersWithinCompany = async (
         );
       });
 
-    return userList.filter((user) => user.status === UserStatus.Active);
+    return userList.filter((user) => userStatus.includes(user.status));
   } catch (e) {
     console.error(e);
     return Promise.reject(e);

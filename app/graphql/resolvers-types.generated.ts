@@ -385,7 +385,7 @@ export type GenericUser = UserInterface & {
   isVendor: Scalars['Boolean'];
   name: Scalars['String'];
   power: UserPower;
-  status?: Maybe<UserStatus>;
+  status: UserStatus;
 };
 
 export type GetAllPendingJoinRequestsInput = {
@@ -398,6 +398,7 @@ export type GetAllPlansInput = {
 
 export type GetAllUsersWithinCompanyInput = {
   companyId: Scalars['String'];
+  userStatus: Array<UserStatus>;
 };
 
 export type GetCompanyDetailInput = {
@@ -552,7 +553,7 @@ export type Mutation = {
   createUser: LoggedInUser;
   createVendor: Scalars['String'];
   createVendorSubscription: StripeSubscription;
-  deactivateUser: Scalars['Boolean'];
+  deactivateCustomerUser: Scalars['Boolean'];
   deleteBidRemark: Scalars['Boolean'];
   deleteInvoice: Scalars['Boolean'];
   deletePendingJoinRequests: Scalars['Boolean'];
@@ -660,7 +661,7 @@ export type MutationCreateVendorSubscriptionArgs = {
 };
 
 
-export type MutationDeactivateUserArgs = {
+export type MutationDeactivateCustomerUserArgs = {
   data: DeactivateUserInput;
 };
 
