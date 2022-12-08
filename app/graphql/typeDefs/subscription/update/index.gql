@@ -2,6 +2,13 @@ input UpdateStripeSubscriptionInput {
   subscriptionId: String!
 }
 
+input UpdateBillingEmailInput {
+  companyId: String!
+  email: String!
+}
+
 type Mutation {
+  # this is not used
   updateStripeSubscription(data: UpdateStripeSubscriptionInput!): Boolean!
+  updateBillingEmail(data: UpdateBillingEmailInput!): Boolean
 }

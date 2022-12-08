@@ -17,6 +17,8 @@ import stripeService, { stripe } from "../../../../stripe/StripeService";
 import { company_plans } from "../../../../models/company_plans";
 import { stripe_customers } from "../../../../models/stripe_customers";
 import { companies } from "../../../../models/companies";
+import NotificationService from "../../../../notification/NotificationService";
+import { USER_SIGNUP_ROUTE } from "../../../../notification/notificationRoutes";
 
 const createUser = async (
   parent: any,
@@ -36,9 +38,10 @@ const createUser = async (
       throw ErrorUtils.duplicateEmailError();
     }
 
-    const [isFirst, isVendor, companyPlan, _] = await Promise.all([
+    const [isFirst, isVendor, adminIds, companyPlan, _] = await Promise.all([
       UserApiUtils.isUserFirstInCompany(companyId),
       CompanyApiUtils.isVendorWithCompanyId(companyId),
+      CompanyApiUtils.getAllCompanyAdmins(companyId),
       sequelize.models.company_plans.findOne({ where: { companyId } }),
       sequelize.models.pending_join_requests.destroy({
         where: {
@@ -103,6 +106,12 @@ const createUser = async (
       }
     );
 
+    NotificationService.sendNotification(USER_SIGNUP_ROUTE, {
+      data: {
+        message: "New user signup!",
+      },
+      receivers: adminIds,
+    });
     return {
       ...loggedInUser,
       token,

@@ -1,3 +1,5 @@
+import { USER_LOGOUT_ROUTE } from "../../../../notification/notificationRoutes";
+import NotificationService from "../../../../notification/NotificationService";
 import sequelize from "../../../../postgres/dbconnection";
 import cacheService from "../../../../redis/CacheService";
 import { UpdateUserPowerInput } from "../../../resolvers-types.generated";
@@ -32,6 +34,12 @@ const updateUserPower = async (
         return cacheService.invalidateUserInCache(userId);
       })
     );
+    NotificationService.sendNotification(USER_LOGOUT_ROUTE, {
+      data: {
+        message: "",
+      },
+      receivers: data.map((user) => user.userId),
+    });
     return true;
   } catch (e) {
     return Promise.reject(e);

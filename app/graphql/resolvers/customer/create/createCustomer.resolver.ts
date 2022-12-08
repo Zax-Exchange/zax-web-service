@@ -2,6 +2,7 @@ import { CreateCustomerInput } from "../../../resolvers-types.generated";
 import { v4 as uuidv4 } from "uuid";
 import sequelize from "../../../../postgres/dbconnection";
 import stripeService from "../../../../stripe/StripeService";
+import emailService from "../../../../gcp/EmailService";
 
 const createCustomer = async (
   parents: any,
@@ -33,10 +34,10 @@ const createCustomer = async (
     const subscription = await stripeService.getSubscription(
       stripeCustomerInfo.subscriptionId
     );
+    const companyId = uuidv4();
+    const stripeCustomerId = uuidv4();
 
     await sequelize.transaction(async (transaction) => {
-      const companyId = uuidv4();
-      const stripeCustomerId = uuidv4();
       await companies.create(
         {
           id: companyId,
@@ -85,6 +86,18 @@ const createCustomer = async (
         { transaction }
       );
     });
+
+    const options = {
+      from: `Zax Exchange <${process.env.NODE_MAILER_USERNAME}>`,
+      to: userEmail,
+      subject: "Zax Exchange Account Signup",
+      html: `
+          <p>Please follow the link below to complete sign up for your account.</p>
+          <a href="http://localhost:3000/user-signup/${companyId}">Click here</a>
+        `,
+    };
+
+    await emailService.sendMail(options);
     return true;
   } catch (e) {
     console.error(e);

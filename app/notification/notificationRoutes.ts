@@ -11,3 +11,4 @@ export const INVOICE_CREATE_ROUTE = "/api/invoice/create";
 export const REQUEST_TO_JOIN_ROUTE = "/api/company/join";
 
 export const USER_LOGOUT_ROUTE = "/api/user/logout";
+export const USER_SIGNUP_ROUTE = "/api/user/signup";
