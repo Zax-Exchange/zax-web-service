@@ -8,7 +8,6 @@ export interface stripe_customersAttributes {
   companyId: string;
   customerId: string;
   subscriptionId: string;
-  email: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -29,7 +28,6 @@ export class stripe_customers
   companyId!: string;
   customerId!: string;
   subscriptionId!: string;
-  email!: string;
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -67,10 +65,6 @@ export class stripe_customers
         },
         subscriptionId: {
           type: DataTypes.STRING,
-          allowNull: false,
-        },
-        email: {
-          type: DataTypes.STRING(255),
           allowNull: false,
         },
       },

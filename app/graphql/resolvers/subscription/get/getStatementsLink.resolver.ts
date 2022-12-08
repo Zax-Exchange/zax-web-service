@@ -2,11 +2,11 @@ import { stripe_customers } from "../../../../models/stripe_customers";
 import sequelize from "../../../../postgres/dbconnection";
 import stripeService, { stripe } from "../../../../stripe/StripeService";
 import ErrorUtils from "../../../../utils/ErrorUtils";
-import { GetStatementsInput } from "../../../resolvers-types.generated";
+import { GetStatementsLinkInput } from "../../../resolvers-types.generated";
 
-const getStatements = async (
+const getStatementsLink = async (
   parent: any,
-  { data }: { data: GetStatementsInput },
+  { data }: { data: GetStatementsLinkInput },
   context: any
 ) => {
   const { companyId } = data;
@@ -26,12 +26,21 @@ const getStatements = async (
       business_profile: {
         headline: "Zax Exchange partners with Stripe for simplified billing.",
       },
-      features: { invoice_history: { enabled: true } },
+      features: {
+        invoice_history: { enabled: true },
+        payment_method_update: {
+          enabled: true,
+        },
+        customer_update: {
+          allowed_updates: ["email", "address"],
+          enabled: true,
+        },
+      },
     });
 
     const session = await stripe.billingPortal.sessions.create({
       customer: stripeCustomerInstance.customerId,
-      return_url: "http://localhost:3000",
+      configuration: configuration.id,
     });
 
     return session.url;
@@ -42,6 +51,6 @@ const getStatements = async (
 
 export default {
   Query: {
-    getStatements,
+    getStatementsLink,
   },
 };

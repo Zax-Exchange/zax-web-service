@@ -1,11 +1,6 @@
-input GetBillingEmailInput {
-  companyId: String!
-}
-
-input GetStatementsInput {
+input GetStatementsLinkInput {
   companyId: String!
 }
 type Query {
-  getBillingEmail(data: GetBillingEmailInput!): String!
-  getStatements(data: GetStatementsInput!): String!
+  getStatementsLink(data: GetStatementsLinkInput!): String!
 }

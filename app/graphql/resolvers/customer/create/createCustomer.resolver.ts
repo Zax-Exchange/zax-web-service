@@ -69,7 +69,6 @@ const createCustomer = async (
             id: stripeCustomerId,
             customerId: stripeCustomerInfo.customerId,
             subscriptionId: stripeCustomerInfo.subscriptionId,
-            email: userEmail,
             companyId,
           },
           { transaction }
