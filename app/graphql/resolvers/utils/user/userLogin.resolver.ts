@@ -22,6 +22,10 @@ const login = async (
         },
       })
       .then((u) => u?.get({ plain: true }) as usersAttributes);
+
+    if (!user) {
+      throw new Error("Incorrect email/password.");
+    }
     if (user.status !== UserStatus.Active) {
       throw new Error("Account is not active.");
     }

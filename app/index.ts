@@ -10,12 +10,11 @@ import {
   ApolloServerPluginDrainHttpServer,
   AuthenticationError,
 } from "apollo-server-core";
-import { handleStripeWebhook } from "./rest/stripeWebhook";
 import { graphqlUploadExpress } from "graphql-upload";
 import bodyParser from "body-parser";
 import getTypeDefs from "./graphql/typeDefs";
 import jwt from "jsonwebtoken";
-
+import apiRouters from "./rest";
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
 }
@@ -59,9 +58,11 @@ const startServer = async () => {
 
   await server.start();
 
+  // Note: though works, figure out why we can't define this on the router itself
+  app.use("/api/webhooks/stripe", express.raw({ type: "*/*" }));
   app.use(express.json());
   app.use(graphqlUploadExpress());
-  app.use(bodyParser.json());
+  // app.use(bodyParser.json());
 
   server.applyMiddleware({
     app,
@@ -74,8 +75,7 @@ const startServer = async () => {
     },
   });
 
-  // TODO: refactor this
-  app.post("/webhook", handleStripeWebhook);
+  app.use("/api", apiRouters);
 
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: 4000 }, resolve)

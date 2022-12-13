@@ -1,8 +1,3 @@
-input StripeCustomerInfo {
-  subscriptionId: String!
-  customerId: String!
-}
-
 input CreateCustomerInput {
   name: String!
   contactEmail: String!

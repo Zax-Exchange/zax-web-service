@@ -1,3 +1,4 @@
+import Stripe from "stripe";
 import { stripe_customers } from "../../../../models/stripe_customers";
 import sequelize from "../../../../postgres/dbconnection";
 import stripeService, { stripe } from "../../../../stripe/StripeService";
@@ -40,7 +41,7 @@ const getStatementsLink = async (
 
     const session = await stripe.billingPortal.sessions.create({
       customer: stripeCustomerInstance.customerId,
-      configuration: configuration.id,
+      // configuration: configuration.id,
     });
 
     return session.url;

@@ -3,3 +3,8 @@ type StripePaymentIntent {
   clientSecret: String!
   customerId: String!
 }
+
+input StripeCustomerInfo {
+  subscriptionId: String!
+  customerId: String!
+}

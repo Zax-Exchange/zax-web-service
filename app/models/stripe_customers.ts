@@ -58,6 +58,7 @@ export class stripe_customers
             key: "id",
           },
           unique: "stripe_customer_companyId_key",
+          onDelete: "CASCADE",
         },
         customerId: {
           type: DataTypes.STRING,

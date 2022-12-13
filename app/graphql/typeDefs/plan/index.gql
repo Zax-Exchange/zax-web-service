@@ -25,4 +25,5 @@ type StripeSubscription {
 enum PlanTier {
   PREMIUM
   BUSINESS
+  TEST
 }

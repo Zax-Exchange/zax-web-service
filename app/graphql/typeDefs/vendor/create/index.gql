@@ -15,6 +15,7 @@ input CreateVendorInput {
   products: [String!]!
   companyUrl: String
   userEmail: String!
+  stripeCustomerInfo: StripeCustomerInfo!
 }
 
 input CreateVendorSubscriptionInput {

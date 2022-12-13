@@ -1,26 +1,28 @@
+import Stripe from "stripe";
 import sequelize from "../../../../postgres/dbconnection";
-import { v4 as uuidv4 } from "uuid";
 import stripeService, { stripe } from "../../../../stripe/StripeService";
 import {
-  CreateStripeCustomerInStripeInput,
+  CreateStripeCustomerInStripeForVendorInput,
   StripePaymentIntent,
 } from "../../../resolvers-types.generated";
-import Stripe from "stripe";
 
-/** Creates/Finds a stripe_customer and creates a customer instance in stripe and returns its id */
-const createStripeCustomerInStripe = async (
+const createStripeCustomerInStripeForVendor = async (
   parent: any,
-  { data }: { data: CreateStripeCustomerInStripeInput },
+  { data }: { data: CreateStripeCustomerInStripeForVendorInput },
   context: any
 ) => {
-  const { email, priceId } = data;
+  const { email, subscriptionPriceId, perUserPriceId } = data;
   try {
     const customer = await stripeService.createCustomer(email);
     const subscription = await stripe.subscriptions.create({
       customer: customer.id,
       items: [
         {
-          price: priceId,
+          price: subscriptionPriceId,
+          quantity: 1,
+        },
+        {
+          price: perUserPriceId,
           quantity: 1,
         },
       ],
@@ -41,9 +43,8 @@ const createStripeCustomerInStripe = async (
     return Promise.reject(error);
   }
 };
-
 export default {
   Mutation: {
-    createStripeCustomerInStripe,
+    createStripeCustomerInStripeForVendor,
   },
 };

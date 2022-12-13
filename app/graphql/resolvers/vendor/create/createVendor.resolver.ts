@@ -2,6 +2,7 @@ import sequelize from "../../../../postgres/dbconnection";
 import { CreateVendorInput } from "../../../resolvers-types.generated";
 import { v4 as uuidv4 } from "uuid";
 import ElasticCompanyService from "../../../../elastic/company/ElasticCompanyService";
+import emailService from "../../../../gcp/EmailService";
 
 const createVendor = async (
   parents: any,
@@ -25,6 +26,7 @@ const createVendor = async (
     moq,
     products,
     userEmail,
+    stripeCustomerInfo,
   } = data;
 
   const companies = sequelize.models.companies;
@@ -33,45 +35,49 @@ const createVendor = async (
   const stripe_customers = sequelize.models.stripe_customers;
 
   try {
-    return await sequelize.transaction(async (transaction) => {
-      const companyId = await companies
-        .create(
-          {
-            id: uuidv4(),
-            name,
-            contactEmail,
-            logo,
-            phone,
-            fax,
-            country,
-            isActive,
-            isVendor,
-            isVerified,
-            companyUrl,
-          },
-          { transaction }
-        )
-        .then((c) => c.getDataValue("id"));
+    const companyId = uuidv4();
+    const stripeCustomerId = uuidv4();
 
-      const stripeCustomerId = await stripe_customers
-        .findOne({
-          where: {
-            email: userEmail,
-          },
-        })
-        .then((customer) => customer?.get("id"));
-
-      await vendors.create(
+    await sequelize.transaction(async (transaction) => {
+      await companies.create(
         {
-          id: uuidv4(),
-          companyId,
-          leadTime,
-          locations,
-          moq,
-          products,
+          id: companyId,
+          name,
+          contactEmail,
+          logo,
+          phone,
+          fax,
+          country,
+          isActive,
+          isVendor,
+          isVerified,
+          companyUrl,
         },
         { transaction }
       );
+
+      await Promise.all([
+        vendors.create(
+          {
+            id: uuidv4(),
+            companyId,
+            leadTime,
+            locations,
+            moq,
+            products,
+          },
+          { transaction }
+        ),
+        stripe_customers.create(
+          {
+            id: stripeCustomerId,
+            customerId: stripeCustomerInfo.customerId,
+            subscriptionId: stripeCustomerInfo.subscriptionId,
+            companyId,
+          },
+          { transaction }
+        ),
+      ]);
 
       await company_plans.create(
         {
@@ -91,9 +97,20 @@ const createVendor = async (
         moq: moq,
         products: products,
       });
-
-      return companyId;
     });
+
+    const options = {
+      from: `Zax Exchange <${process.env.NODE_MAILER_USERNAME}>`,
+      to: userEmail,
+      subject: "Zax Exchange Account Signup",
+      html: `
+          <p>Please follow the link below to complete sign up for your account.</p>
+          <a href="http://localhost:3000/user-signup/${companyId}">Click here</a>
+        `,
+    };
+
+    await emailService.sendMail(options);
+    return true;
   } catch (e) {
     console.error(e);
     return Promise.reject(e);
