@@ -33,11 +33,11 @@ export default class ElasticProjectService {
             properties: {
               id: { type: "text" },
               companyName: { type: "text" },
-              category: { type: "text" },
+              category: { type: "search_as_you_type" },
               deliveryDate: { type: "date" },
               deliveryAddress: { type: "text" },
               targetPrice: { type: "float" },
-              products: { type: "text" },
+              products: { type: "search_as_you_type" },
               deleted: { type: "boolean" },
             },
           },

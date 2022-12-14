@@ -47,22 +47,59 @@ export default class QueryBuilder {
             bool: {
               should: [
                 {
-                  match: {
-                    products: userInput,
-                  },
+                  multi_match: {
+                    query: userInput,
+                    type: "bool_prefix",
+                    fields: [
+                      "products",
+                      "products._2gram",
+                      "products._3gram",
+                      "products._index_prefix"
+                    ]
+                  }
                 },
                 {
-                  match: {
-                    category: userInput,
-                  },
+                  multi_match: {
+                    query: userInput,
+                    fuzziness: 2,
+                    fields: [
+                      "products",
+                      "products._2gram",
+                      "products._3gram",
+                      "products._index_prefix"
+                    ]
+                  }
+                },
+                {
+                  multi_match: {
+                    query: userInput,
+                    type: "bool_prefix",
+                    fields: [
+                      "category",
+                      "category._2gram",
+                      "category._3gram",
+                      "category._index_prefix"
+                    ]
+                  }
+                },
+                {
+                  multi_match: {
+                    query: userInput,
+                    fuzziness: 2,
+                    fields: [
+                      "category",
+                      "category._2gram",
+                      "category._3gram",
+                      "category._index_prefix"
+                    ]
+                  }
                 },
               ],
             },
           },
         ],
-
         filter,
-      },
+      }
     };
 
     return query;
@@ -127,7 +164,7 @@ export default class QueryBuilder {
       bool: {
         must: [
           {
-            match: {
+            fuzzy: {
               products: userInput,
             },
           },

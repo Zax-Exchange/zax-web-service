@@ -5,6 +5,16 @@ input SearchCustomerProjectInput {
   deliveryDate: String
 }
 
+input SearchProductsInput {
+  searchText: String!
+}
+
+input SearchCategoriesInput {
+  searchText: String!
+}
+
 type Query {
   searchCustomerProjects(data: SearchCustomerProjectInput!): [ProjectOverview!]!
+  searchProducts(data: SearchProductsInput): [String!]!
+  searchCategories(data: SearchCategoriesInput): [Category!]!
 }

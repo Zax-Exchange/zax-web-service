@@ -39,6 +39,13 @@ export type CancelStripeSubscriptionInput = {
   email: Scalars['String'];
 };
 
+export type Category = {
+  __typename?: 'Category';
+  children: Array<Scalars['String']>;
+  name: Scalars['String'];
+  parent: Scalars['String'];
+};
+
 export type CheckCompanyNameInput = {
   companyName: Scalars['String'];
 };
@@ -406,6 +413,10 @@ export type GetAllPlansInput = {
 export type GetAllUsersWithinCompanyInput = {
   companyId: Scalars['String'];
   userStatus: Array<UserStatus>;
+};
+
+export type GetCategoryInput = {
+  id: Scalars['String'];
 };
 
 export type GetCompanyDetailInput = {
@@ -1205,11 +1216,14 @@ export type QuantityPriceInput = {
 
 export type Query = {
   __typename?: 'Query';
+  allProducts: Array<Scalars['String']>;
   checkCompanyName: Scalars['Boolean'];
   checkUserEmail: Scalars['Boolean'];
+  getAllCategories: Array<Category>;
   getAllPendingJoinRequests: Array<Scalars['String']>;
   getAllPlans: Array<Plan>;
   getAllUsersWithinCompany: Array<GenericUser>;
+  getCategory?: Maybe<Category>;
   getCompanyDetail?: Maybe<CompanyDetail>;
   getCompanyPlanDetail: CompanyPlanDetail;
   getCustomerDetail: CustomerDetail;
@@ -1236,7 +1250,9 @@ export type Query = {
   getVendorProject?: Maybe<VendorProject>;
   getVendorProjects: Array<VendorProjectOverview>;
   login: LoggedInUser;
+  searchCategories: Array<Category>;
   searchCustomerProjects: Array<ProjectOverview>;
+  searchProducts: Array<Scalars['String']>;
   searchVendorCompanies: Array<VendorOverview>;
 };
 
@@ -1263,6 +1279,11 @@ export type QueryGetAllPlansArgs = {
 
 export type QueryGetAllUsersWithinCompanyArgs = {
   data: GetAllUsersWithinCompanyInput;
+};
+
+
+export type QueryGetCategoryArgs = {
+  data: GetCategoryInput;
 };
 
 
@@ -1396,8 +1417,18 @@ export type QueryLoginArgs = {
 };
 
 
+export type QuerySearchCategoriesArgs = {
+  data?: InputMaybe<SearchCategoriesInput>;
+};
+
+
 export type QuerySearchCustomerProjectsArgs = {
   data: SearchCustomerProjectInput;
+};
+
+
+export type QuerySearchProductsArgs = {
+  data?: InputMaybe<SearchProductsInput>;
 };
 
 
@@ -1420,11 +1451,19 @@ export type ResubmitProjectBidInput = {
   projectBidId: Scalars['String'];
 };
 
+export type SearchCategoriesInput = {
+  searchText: Scalars['String'];
+};
+
 export type SearchCustomerProjectInput = {
   deliveryDate?: InputMaybe<Scalars['String']>;
   orderQuantities?: InputMaybe<Array<Scalars['String']>>;
   targetPrice?: InputMaybe<Scalars['String']>;
   userInput: Scalars['String'];
+};
+
+export type SearchProductsInput = {
+  searchText: Scalars['String'];
 };
 
 export type SearchVendorCompanyInput = {
