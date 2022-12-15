@@ -21,25 +21,49 @@ router.post("", async (request, response) => {
     return;
   }
 
-  switch (event.type) {
-    case "customer.subscription.deleted":
-      // when subscription ends, refund the customer balance
-      const subscription = event.data.object as Stripe.Subscription;
-      const customerId = subscription.customer as string;
-      const customer = (await stripe.customers.retrieve(
-        customerId
-      )) as Stripe.Customer;
-      console.log(customer);
-      const stripeCustomerInstance =
-        (await sequelize.models.stripe_customers.findOne({
-          where: {
-            customerId: subscription.customer,
-          },
-        })) as stripe_customers;
+  try {
+    switch (event.type) {
+      case "customer.subscription.deleted":
+        // when subscription ends, refund the customer balance
+        const subscription = event.data.object as Stripe.Subscription;
+        const customerId = subscription.customer as string;
+        const customer = (await stripe.customers.retrieve(
+          customerId
+        )) as Stripe.Customer;
+        const payedInvoicesList = await stripe.invoices.list({
+          customer: customerId,
+        });
 
-      // Then define and call a function to handle the event customer.subscription.deleted
-      break;
-  }
+        const stripeCustomerInstance =
+          (await sequelize.models.stripe_customers.findOne({
+            where: {
+              customerId: subscription.customer,
+            },
+          })) as stripe_customers;
+
+        await Promise.all([
+          sequelize.models.companies.update(
+            {
+              isActive: false,
+            },
+            {
+              where: {
+                id: stripeCustomerInstance.companyId,
+              },
+            }
+          ),
+          stripe.refunds.create({
+            charge: payedInvoicesList.data[0].charge as string,
+            amount: customer.balance,
+          }),
+          stripe.customers.update(customerId, {
+            balance: 0,
+          }),
+        ]);
+        // Then define and call a function to handle the event customer.subscription.deleted
+        break;
+    }
+  } catch (error) {}
 });
 
 export default router;

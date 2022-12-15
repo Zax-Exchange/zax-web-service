@@ -8,6 +8,7 @@ import {
 } from "../../../resolvers-types.generated";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import CompanyApiUtils from "../../../../utils/companyUtils";
 
 const login = async (
   parent: any,
@@ -26,8 +27,15 @@ const login = async (
     if (!user) {
       throw new Error("Incorrect email/password.");
     }
+
+    const company = await CompanyApiUtils.getCompanyWithCompanyId(
+      user.companyId
+    );
+
     if (user.status !== UserStatus.Active) {
       throw new Error("Account is not active.");
+    } else if (!company.isActive) {
+      throw new Error("Company is not active.");
     }
 
     const chatToken = streamService.createToken(user.companyId);

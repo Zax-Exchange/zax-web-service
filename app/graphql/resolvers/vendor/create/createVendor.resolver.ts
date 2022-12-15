@@ -48,9 +48,9 @@ const createVendor = async (
           phone,
           fax,
           country,
-          isActive,
+          isActive: true,
           isVendor,
-          isVerified,
+          isVerified: false,
           companyUrl,
         },
         { transaction }
