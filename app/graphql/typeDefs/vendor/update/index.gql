@@ -8,9 +8,8 @@ input UpdateVendorInfoInput {
   country: String!
   companyUrl: String
   leadTime: Int!
-  moq: String!
   locations: [String!]!
-  products: [String!]!
+  productsAndMoq: [ProductAndMoqInput!]!
 }
 
 type Mutation {

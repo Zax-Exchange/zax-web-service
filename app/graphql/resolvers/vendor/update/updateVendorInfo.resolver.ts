@@ -21,9 +21,8 @@ const updateVendorInfo = async (
       companyUrl,
       country,
       leadTime,
-      moq,
       locations,
-      products,
+      productsAndMoq,
     } = data;
 
     await sequelize.transaction(async (transaction) => {
@@ -48,9 +47,8 @@ const updateVendorInfo = async (
       await vendors.update(
         {
           leadTime,
-          moq,
           locations,
-          products,
+          productsAndMoq: JSON.stringify(productsAndMoq),
         },
         {
           where: {
@@ -61,13 +59,13 @@ const updateVendorInfo = async (
       );
     });
 
-    if (leadTime && locations && products && country) {
+    if (leadTime && locations && country) {
       ElasticCompanyService.updateVendorDocument({
         id: companyId,
         country,
         leadTime,
         locations,
-        products,
+        products: productsAndMoq.map((productAndMoq) => productAndMoq.product),
       });
     }
     return Promise.resolve(true);
