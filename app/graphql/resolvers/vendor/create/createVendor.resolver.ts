@@ -23,8 +23,7 @@ const createVendor = async (
     companyUrl,
     planId,
     locations,
-    moq,
-    products,
+    productsAndMoq,
     userEmail,
     stripeCustomerInfo,
   } = data;
@@ -63,8 +62,7 @@ const createVendor = async (
             companyId,
             leadTime,
             locations,
-            moq,
-            products,
+            productsAndMoq: JSON.stringify(productsAndMoq),
           },
           { transaction }
         ),
@@ -94,8 +92,7 @@ const createVendor = async (
         country: country,
         leadTime: leadTime,
         locations: locations,
-        moq: moq,
-        products: products,
+        products: Object.keys(productsAndMoq),
       });
     });
 

@@ -13,8 +13,6 @@ export default class ElasticCompanyService {
           mappings: {
             properties: {
               id: { type: "text" },
-              moqMin: { type: "integer" },
-              moqMax: { type: "integer" },
               country: { type: "text" },
               locations: { type: "text" },
               leadTime: { type: "integer" },
@@ -24,15 +22,12 @@ export default class ElasticCompanyService {
         });
       }
 
-      const { id, moq, locations, leadTime, products, country } = data;
-      const moqMin = moq.split("-")[0];
-      const moqMax = moq.split("-")[1];
+      const { id, locations, leadTime, products, country } = data;
+
       await elasticClient.index({
         index: "vendor",
         id,
         document: {
-          moqMin,
-          moqMax,
           country,
           locations,
           leadTime,
@@ -46,15 +41,12 @@ export default class ElasticCompanyService {
 
   static async updateVendorDocument(data: companyTypes.VendorDocument) {
     try {
-      const { id, moq, locations, leadTime, products } = data;
-      const moqMin = moq.split("-")[0];
-      const moqMax = moq.split("-")[1];
+      const { id, locations, leadTime, products } = data;
+
       await elasticClient.update({
         index: "vendor",
         id,
         doc: {
-          moqMin,
-          moqMax,
           locations,
           leadTime,
           products,

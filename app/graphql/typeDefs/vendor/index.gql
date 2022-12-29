@@ -13,6 +13,11 @@ enum InvoiceStatus {
   REJECTED
 }
 
+type ProductAndMoq {
+  product: String!
+  moq: String!
+}
+
 type VendorOverview {
   id: String!
   name: String!
@@ -22,7 +27,6 @@ type VendorOverview {
   isVerified: Boolean!
   locations: [String!]!
   products: [String!]!
-  moq: String!
   leadTime: Int!
 }
 type VendorDetail {
@@ -38,8 +42,7 @@ type VendorDetail {
   isVerified: Boolean!
 
   locations: [String!]!
-  products: [String!]!
-  moq: String!
+  productsAndMoq: [ProductAndMoq!]!
   leadTime: Int!
 }
 

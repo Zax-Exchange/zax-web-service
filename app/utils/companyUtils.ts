@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { CompanyPlan, UserPower } from "../graphql/resolvers-types.generated";
 import { vendorsAttributes } from "../models/vendors";
 import { customersAttributes } from "../models/customers";
+import ErrorUtils from "./ErrorUtils";
 
 class CompanyApiUtils {
   static async getAllCompanyAdmins(companyId: string) {
@@ -104,13 +105,16 @@ class CompanyApiUtils {
   ): Promise<vendorsAttributes> {
     const vendors = sequelize.models.vendors;
     try {
-      return await vendors
-        .findOne({
-          where: {
-            companyId,
-          },
-        })
-        .then((v) => v?.get({ plain: true }));
+      const res = await vendors.findOne({
+        where: {
+          companyId,
+        },
+      });
+
+      if (!res) {
+        throw ErrorUtils.notFoundError();
+      }
+      return res.get({ plain: true });
     } catch (e) {
       return Promise.reject(e);
     }

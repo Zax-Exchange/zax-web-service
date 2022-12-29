@@ -1,13 +1,13 @@
 import * as Sequelize from "sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
+import { ProductAndMoq } from "../graphql/resolvers-types.generated";
 import type { companies, companiesId } from "./companies";
 
 export interface vendorsAttributes {
   id: string;
   companyId: string;
-  moq: string;
   leadTime: number;
-  products: string[];
+  productsAndMoq: string;
   locations: string[];
   createdAt: Date;
   updatedAt: Date;
@@ -27,9 +27,8 @@ export class vendors
 {
   id!: string;
   companyId!: string;
-  moq!: string;
   leadTime!: number;
-  products!: string[];
+  productsAndMoq!: string;
   locations!: string[];
   createdAt!: Date;
   updatedAt!: Date;
@@ -58,16 +57,12 @@ export class vendors
           },
           unique: "vendors_companyId_id_key",
         },
-        moq: {
-          type: DataTypes.STRING,
-          allowNull: false,
-        },
         leadTime: {
           type: DataTypes.INTEGER,
           allowNull: false,
         },
-        products: {
-          type: DataTypes.ARRAY(DataTypes.STRING),
+        productsAndMoq: {
+          type: DataTypes.JSON,
           allowNull: false,
         },
         locations: {

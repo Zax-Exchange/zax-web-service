@@ -61,12 +61,11 @@ const updateVendorInfo = async (
       );
     });
 
-    if (leadTime && moq && locations && products && country) {
+    if (leadTime && locations && products && country) {
       ElasticCompanyService.updateVendorDocument({
         id: companyId,
         country,
         leadTime,
-        moq,
         locations,
         products,
       });

@@ -34,9 +34,8 @@ const searchVendorCompanies = async (
         country: company.country,
         isVerified: company.isVerified,
         locations: vendor.locations,
-        products: vendor.products,
+        products: Object.keys(JSON.parse(vendor.productsAndMoq)),
         leadTime: vendor.leadTime,
-        moq: vendor.moq,
       });
     }
     return res;

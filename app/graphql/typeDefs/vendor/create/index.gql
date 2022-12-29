@@ -1,3 +1,8 @@
+input ProductAndMoqInput {
+  product: String!
+  moq: String!
+}
+
 input CreateVendorInput {
   name: String!
   contactEmail: String!
@@ -11,8 +16,7 @@ input CreateVendorInput {
   isVerified: Boolean!
   leadTime: Int!
   locations: [String!]!
-  moq: String!
-  products: [String!]!
+  productsAndMoq: [ProductAndMoqInput!]!
   companyUrl: String
   userEmail: String!
   stripeCustomerInfo: StripeCustomerInfo!

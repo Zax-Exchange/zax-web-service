@@ -19,6 +19,7 @@ const getCompanyDetail = async (
       return {
         ...company,
         ...vendor,
+        productsAndMoq: JSON.parse(vendor.productsAndMoq),
       } as VendorDetail;
     } else {
       const customer = await CompanyApiUtils.getCustomerWithCompanyId(

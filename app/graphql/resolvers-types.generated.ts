@@ -236,11 +236,10 @@ export type CreateVendorInput = {
   leadTime: Scalars['Int'];
   locations: Array<Scalars['String']>;
   logo?: InputMaybe<Scalars['String']>;
-  moq: Scalars['String'];
   name: Scalars['String'];
   phone: Scalars['String'];
   planId: Scalars['String'];
-  products: Array<Scalars['String']>;
+  productsAndMoq: Array<ProductAndMoqInput>;
   stripeCustomerInfo: StripeCustomerInfo;
   userEmail: Scalars['String'];
 };
@@ -977,6 +976,17 @@ export type Pricings = {
   perUser: PricingDetail;
 };
 
+export type ProductAndMoq = {
+  __typename?: 'ProductAndMoq';
+  moq: Scalars['String'];
+  product: Scalars['String'];
+};
+
+export type ProductAndMoqInput = {
+  moq: Scalars['String'];
+  product: Scalars['String'];
+};
+
 export type ProductDimension = {
   __typename?: 'ProductDimension';
   x: Scalars['String'];
@@ -1658,10 +1668,9 @@ export type VendorDetail = {
   leadTime: Scalars['Int'];
   locations: Array<Scalars['String']>;
   logo?: Maybe<Scalars['String']>;
-  moq: Scalars['String'];
   name: Scalars['String'];
   phone: Scalars['String'];
-  products: Array<Scalars['String']>;
+  productsAndMoq: Array<ProductAndMoq>;
 };
 
 export type VendorGuestProject = ProjectInterface & {
@@ -1711,7 +1720,6 @@ export type VendorOverview = {
   leadTime: Scalars['Int'];
   locations: Array<Scalars['String']>;
   logo?: Maybe<Scalars['String']>;
-  moq: Scalars['String'];
   name: Scalars['String'];
   products: Array<Scalars['String']>;
 };
