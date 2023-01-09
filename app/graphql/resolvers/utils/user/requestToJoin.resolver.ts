@@ -4,6 +4,7 @@ import sequelize from "../../../../postgres/dbconnection";
 import CompanyApiUtils from "../../../../utils/companyUtils";
 import { RequestToJoinInput } from "../../../resolvers-types.generated";
 import { v4 as uuidv4 } from "uuid";
+import ErrorUtils from "../../../../utils/ErrorUtils";
 
 const requestToJoin = async (
   parent: any,
@@ -22,11 +23,11 @@ const requestToJoin = async (
     ]);
 
     if (user) {
-      throw new Error("Existing user");
+      throw ErrorUtils.duplicateEmailError();
     }
 
     if (!company) {
-      throw new Error("Could not find company");
+      throw ErrorUtils.notFoundError();
     }
 
     const companyId = company.get("id") as string;
@@ -40,7 +41,7 @@ const requestToJoin = async (
 
     // user has already requested to join.
     if (found) {
-      throw new Error("Duplicate requests");
+      throw ErrorUtils.duplicateEmailError();
     }
 
     await sequelize.models.pending_join_requests.create({
@@ -52,8 +53,7 @@ const requestToJoin = async (
     const allAdmins = await CompanyApiUtils.getAllCompanyAdmins(companyId);
     NotificationService.sendNotification(REQUEST_TO_JOIN_ROUTE, {
       data: {
-        message:
-          "There's a new request to join your company. Click here to view.",
+        message: "app.notification.company.newJoinRequest",
       },
       receivers: allAdmins,
     });

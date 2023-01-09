@@ -77,7 +77,7 @@ const createGuestProject = async (
         (user) => user.userId
       ),
       data: {
-        message: "Guest project created.",
+        message: "app.notification.guestProject.create",
         projectId,
       },
     });

@@ -52,8 +52,9 @@ const updateProjectBid = async (
 
     NotificationService.sendNotification(BID_UPDATE_ROUTE, {
       data: {
-        message: `Bid update for ${project!.name}`,
-        projectId,
+        message: `app.notification.bid.bidUpdate`,
+        projectName: project!.name,
+        projectId: project!.id,
       },
       receivers: projectUsers.map((user) => user.userId),
     });

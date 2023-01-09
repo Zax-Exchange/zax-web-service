@@ -96,7 +96,8 @@ const updateGuestProject = async (
         NotificationService.sendNotification(GUEST_PROJECT_UPDATE_ROUTE, {
           receivers: users.map((u) => u.userId),
           data: {
-            message: `Guest project update on ${name}`,
+            message: `app.notification.guestProject.update`,
+            projectName: name,
             projectId,
           },
         });

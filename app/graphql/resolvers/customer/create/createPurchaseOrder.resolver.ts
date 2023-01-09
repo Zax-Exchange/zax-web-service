@@ -57,7 +57,9 @@ const createPurchaseOrder = async (
 
     NotificationService.sendNotification(PO_CREATE_ROUTE, {
       data: {
-        message: `Purchase Order created for ${projectInstance?.name}`,
+        message: `app.notification.poInvoice.poCreate`,
+        projectName: projectInstance!.name,
+        projectId: projectInstance!.id,
       },
       receivers: projectUsers.map((u) => u.userId),
     });

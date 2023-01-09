@@ -9,6 +9,7 @@ import {
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import CompanyApiUtils from "../../../../utils/companyUtils";
+import ErrorUtils from "../../../../utils/ErrorUtils";
 
 const login = async (
   parent: any,
@@ -25,7 +26,7 @@ const login = async (
       .then((u) => u?.get({ plain: true }) as usersAttributes);
 
     if (!user) {
-      throw new Error("Incorrect email/password.");
+      throw ErrorUtils.credentialsError();
     }
 
     const company = await CompanyApiUtils.getCompanyWithCompanyId(
@@ -33,9 +34,9 @@ const login = async (
     );
 
     if (user.status !== UserStatus.Active) {
-      throw new Error("Account is not active.");
+      throw ErrorUtils.userAccountInactiveError();
     } else if (!company.isActive) {
-      throw new Error("Company is not active.");
+      throw ErrorUtils.companyInactiveError();
     }
 
     const chatToken = streamService.createToken(user.companyId);
@@ -69,7 +70,7 @@ const login = async (
         token,
       } as LoggedInUser;
     } else {
-      throw new Error("Incorrect email/password.");
+      throw ErrorUtils.credentialsError();
     }
   } catch (e) {
     return Promise.reject(e);

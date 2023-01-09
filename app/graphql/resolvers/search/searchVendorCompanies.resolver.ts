@@ -1,6 +1,7 @@
 import ElasticCompanyService from "../../../elastic/company/ElasticCompanyService";
 import CompanyApiUtils from "../../../utils/companyUtils";
 import {
+  ProductAndMoq,
   SearchVendorCompanyInput,
   VendorOverview,
 } from "../../resolvers-types.generated";
@@ -34,7 +35,9 @@ const searchVendorCompanies = async (
         country: company.country,
         isVerified: company.isVerified,
         locations: vendor.locations,
-        products: Object.keys(JSON.parse(vendor.productsAndMoq)),
+        products: (JSON.parse(vendor.productsAndMoq) as ProductAndMoq[]).map(
+          (productAndMoq) => productAndMoq.product
+        ),
         leadTime: vendor.leadTime,
       });
     }

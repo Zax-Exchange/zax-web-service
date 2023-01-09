@@ -10,4 +10,16 @@ export default class ErrorUtils {
   static duplicateEmailError() {
     return new Error("duplicate email");
   }
+
+  static userAccountInactiveError() {
+    return new Error("inactive account");
+  }
+
+  static companyInactiveError() {
+    return new Error("inactive company");
+  }
+
+  static credentialsError() {
+    return new Error("incorrect credentials");
+  }
 }

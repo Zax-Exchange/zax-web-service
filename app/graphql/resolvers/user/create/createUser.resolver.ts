@@ -123,7 +123,8 @@ const createUser = async (
 
     NotificationService.sendNotification(USER_SIGNUP_ROUTE, {
       data: {
-        message: `${name} has joined your company!`,
+        message: `app.notification.company.newUser`,
+        userName: user.name,
       },
       receivers: adminIds,
     });

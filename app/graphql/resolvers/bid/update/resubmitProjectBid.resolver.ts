@@ -32,7 +32,8 @@ const resubmitProjectBid = async (
 
     NotificationService.sendNotification(BID_UPDATE_ROUTE, {
       data: {
-        message: `Bid update for ${project!.name}`,
+        message: `app.notification.bid.bidUpdate`,
+        projectName: project.name,
         projectId: project.id,
       },
       receivers: projectUsers.map((user) => user.userId),
