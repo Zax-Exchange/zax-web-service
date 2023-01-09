@@ -23,7 +23,7 @@ const requestToJoin = async (
     ]);
 
     if (user) {
-      throw ErrorUtils.duplicateEmailError();
+      throw ErrorUtils.existingUserError();
     }
 
     if (!company) {

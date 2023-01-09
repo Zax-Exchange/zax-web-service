@@ -7,6 +7,10 @@ export default class ErrorUtils {
     return new Error("not found");
   }
 
+  static existingUserError() {
+    return new Error("existing user");
+  }
+
   static duplicateEmailError() {
     return new Error("duplicate email");
   }
