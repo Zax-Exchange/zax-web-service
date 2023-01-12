@@ -62,6 +62,7 @@ type CustomerProject implements ProjectInterface {
   totalWeight: String!
   deliveryDate: String!
   deliveryAddress: String!
+  country: String!
   targetPrice: String!
   orderQuantities: [Int!]!
   status: ProjectStatus!

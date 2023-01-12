@@ -108,6 +108,7 @@ const createProject = async (
     deliveryAddress,
     targetPrice,
     orderQuantities,
+    country,
     components,
   } = data;
   try {
@@ -127,6 +128,7 @@ const createProject = async (
           name,
           deliveryDate,
           deliveryAddress,
+          country,
           category,
           totalWeight,
           targetPrice,

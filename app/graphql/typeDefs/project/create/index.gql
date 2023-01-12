@@ -75,6 +75,7 @@ input CreateProjectInput {
   totalWeight: String!
   deliveryDate: String!
   deliveryAddress: String!
+  country: String!
   targetPrice: String!
   orderQuantities: [Int!]!
   components: [CreateProjectComponentInput!]!
@@ -88,6 +89,7 @@ input CreateGuestProjectInput {
   totalWeight: String!
   deliveryDate: String!
   deliveryAddress: String!
+  country: String!
   targetPrice: String!
   orderQuantities: [Int!]!
   components: [CreateProjectComponentInput!]!

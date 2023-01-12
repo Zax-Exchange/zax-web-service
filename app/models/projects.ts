@@ -34,6 +34,7 @@ export interface projectsAttributes {
   orderQuantities: number[];
   status: ProjectStatus;
   guestEmail: string | null;
+  country: string;
   updatedAt: Date;
   createdAt: Date;
 }
@@ -66,6 +67,7 @@ export class projects
   orderQuantities!: number[];
   status!: ProjectStatus;
   guestEmail!: string | null;
+  country!: string;
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -262,6 +264,10 @@ export class projects
         guestEmail: {
           type: DataTypes.TEXT,
           allowNull: true,
+        },
+        country: {
+          type: DataTypes.STRING,
+          allowNull: false,
         },
       },
       {

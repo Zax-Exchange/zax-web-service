@@ -39,6 +39,7 @@ const createGuestProjectLink = async (
             totalWeight: "",
             deliveryDate: new Date().toISOString().split("T")[0],
             deliveryAddress: "",
+            country: "",
             targetPrice: "",
             orderQuantities: [],
             status: ProjectStatus.Incomplete,
