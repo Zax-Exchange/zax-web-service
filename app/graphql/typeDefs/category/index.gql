@@ -1,0 +1,14 @@
+input GetCategoryInput {
+  id: String!
+}
+
+type Category {
+  name: String!
+  parent: String!
+  children: [String!]!
+}
+
+type Query {
+  getAllCategories: [Category!]!
+  getCategory(data: GetCategoryInput!): Category
+}

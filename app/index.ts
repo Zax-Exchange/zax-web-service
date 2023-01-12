@@ -15,12 +15,29 @@ import bodyParser from "body-parser";
 import getTypeDefs from "./graphql/typeDefs";
 import jwt from "jsonwebtoken";
 import apiRouters from "./rest";
+import ElasticProductService from "./elastic/product/ElasticProductService";
+import ElasticCategoryService from "./elastic/category/ElasticCategoryService";
+
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
 }
 
 const startServer = async () => {
   initModels(sequelize);
+
+  // try {
+  //   await ElasticProductService.syncProductsWithES();
+  //   console.log("product names synced with ES");
+  // } catch (error) {
+  //   console.error("Unable to sync products with ES:", error)
+  // }
+
+  // try {
+  //   await ElasticCategoryService.syncCategoriesWithES();
+  //   console.log("categories synced with ES");
+  // } catch (error) {
+  //   console.error("Unable to sync categories with ES:", error)
+  // }
 
   // try {
   //   await sequelize.sync({ alter: true }).then(() => console.log("db synced"));

@@ -1,0 +1,23 @@
+export const PRODUCT_NAME_RIGID_BOX = "Rigid Box"
+export const PRODUCT_NAME_FOLDING_CARTON = "Folding Carton"
+export const PRODUCT_NAME_SLEEVE = "Sleeve"
+export const PRODUCT_NAME_CORRUGATE_BOX = "Corrugate Box"
+export const PRODUCT_NAME_PAPER_TUBE = "Paper Tube"
+export const PRODUCT_NAME_STICKER = "Sticker"
+export const PRODUCT_NAME_MOLDED_FIBER_TRAY = "Molded Fiber Tray"
+export const PRODUCT_NAME_PAPER_TRAY = "Paper Tray"
+export const PRODUCT_NAME_CORRUGATE_TRAY = "Corrugate Tray"
+export const PRODUCT_NAME_BOOKLET = "Booklet"
+
+export const ALL_PRODUCTS = [
+    PRODUCT_NAME_RIGID_BOX,
+    PRODUCT_NAME_FOLDING_CARTON,
+    PRODUCT_NAME_SLEEVE,
+    PRODUCT_NAME_CORRUGATE_BOX,
+    PRODUCT_NAME_PAPER_TUBE,
+    PRODUCT_NAME_STICKER,
+    PRODUCT_NAME_MOLDED_FIBER_TRAY,
+    PRODUCT_NAME_PAPER_TRAY,
+    PRODUCT_NAME_CORRUGATE_TRAY,
+    PRODUCT_NAME_BOOKLET,
+]
