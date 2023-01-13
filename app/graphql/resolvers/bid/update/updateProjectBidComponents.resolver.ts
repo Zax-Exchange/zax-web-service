@@ -1,5 +1,13 @@
 import sequelize from "../../../../postgres/dbconnection";
-import { UpdateProjectBidComponentInput } from "../../../resolvers-types.generated";
+import {
+  QuantityPriceInput,
+  UpdateProjectBidComponentInput,
+} from "../../../resolvers-types.generated";
+
+const isEmptyQuantityPrices = (quantityPrices: QuantityPriceInput[]) => {
+  if (quantityPrices.some((qp) => !qp.price)) return true;
+  return false;
+};
 
 const updateProjectBidComponents = async (
   parent: any,
@@ -14,6 +22,19 @@ const updateProjectBidComponents = async (
           const { bidComponentId, quantityPrices, samplingFee, toolingFee } =
             input;
 
+          // if everything is empty, then we assume vendor wants to delete the bid
+          if (
+            isEmptyQuantityPrices(quantityPrices) &&
+            !samplingFee &&
+            !toolingFee
+          ) {
+            return sequelize.models.project_bid_components.destroy({
+              where: {
+                id: bidComponentId,
+              },
+              transaction,
+            });
+          }
           return sequelize.models.project_bid_components.update(
             {
               quantityPrices,
