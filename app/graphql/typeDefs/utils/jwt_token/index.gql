@@ -1,0 +1,7 @@
+input CheckSignupJwtTokenInput {
+  token: String!
+}
+
+type Query {
+  checkSignupJwtToken(data: CheckSignupJwtTokenInput!): Boolean!
+}

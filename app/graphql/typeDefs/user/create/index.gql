@@ -2,7 +2,7 @@ input CreateUserInput {
   name: String!
   email: String!
   password: String!
-  companyId: String!
+  token: String!
 }
 
 type Mutation {

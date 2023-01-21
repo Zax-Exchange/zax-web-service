@@ -20,13 +20,17 @@ const createPurchaseOrder = async (
   try {
     const { purchaseOrderId, projectBidId, projectId } = data;
 
+    let hasExisting = false;
+
     // if there is an existing PO, we delete it first
-    await sequelize.models.purchase_orders.destroy({
+    const numDeleted = await sequelize.models.purchase_orders.destroy({
       where: {
         projectId,
         projectBidId,
       },
     });
+
+    if (numDeleted) hasExisting = true;
 
     const [_, _1, projectInstance, projectUsers] = await Promise.all([
       sequelize.models.purchase_orders.update(
@@ -57,7 +61,9 @@ const createPurchaseOrder = async (
 
     NotificationService.sendNotification(PO_CREATE_ROUTE, {
       data: {
-        message: `app.notification.poInvoice.poCreate`,
+        message: hasExisting
+          ? "app.notification.poInvoice.poUpdate"
+          : "app.notification.poInvoice.poCreate",
         projectName: projectInstance!.name,
         projectId: projectInstance!.id,
       },

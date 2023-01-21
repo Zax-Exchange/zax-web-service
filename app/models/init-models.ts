@@ -97,6 +97,12 @@ import type {
   purchase_ordersCreationAttributes,
 } from "./purchase_orders";
 
+import { expiring_jwt_tokens as _expiring_jwt_tokens } from "./expiring_jwt_tokens";
+import type {
+  expiring_jwt_tokensAttributes,
+  expiring_jwt_tokensCreationAttributes,
+} from "./expiring_jwt_tokens";
+
 export {
   _sequelize_meta as sequelize_meta,
   _companies as companies,
@@ -120,6 +126,7 @@ export {
   _bid_remarks as bid_remarks,
   _invoices as invoices,
   _purchase_orders as purchase_orders,
+  _expiring_jwt_tokens as expiring_jwt_tokens,
 };
 
 export type {
@@ -163,6 +170,8 @@ export type {
   invoicesCreationAttributes,
   purchase_ordersAttributes,
   purchase_ordersCreationAttributes,
+  expiring_jwt_tokensAttributes,
+  expiring_jwt_tokensCreationAttributes,
 };
 
 export function initModels(sequelize: Sequelize) {
@@ -192,6 +201,8 @@ export function initModels(sequelize: Sequelize) {
 
   const invoices = _invoices.initModel(sequelize);
   const purchase_orders = _purchase_orders.initModel(sequelize);
+
+  const expiring_jtw_tokens = _expiring_jwt_tokens.initModel(sequelize);
 
   company_plans.belongsTo(companies, {
     as: "company",
@@ -553,5 +564,6 @@ export function initModels(sequelize: Sequelize) {
     bid_remarks,
     invoices,
     purchase_orders,
+    expiring_jtw_tokens,
   };
 }
