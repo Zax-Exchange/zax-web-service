@@ -1,8 +1,9 @@
 input SearchCustomerProjectInput {
   userInput: String!
-  targetPrice: String
+  targetPriceRange: [String!]
   orderQuantities: [String!]
   deliveryDate: String
+  countries: [String!]
 }
 
 input SearchProductsInput {

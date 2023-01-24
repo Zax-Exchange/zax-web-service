@@ -1,7 +1,5 @@
 import elasticClient from "../elasticConnection";
 import * as projectTypes from "../types/project";
-import * as companyTypes from "../types/company";
-import sequelize from "../../postgres/dbconnection";
 import UserApiUtils from "../../utils/userUtils";
 import CompanyApiUtils from "../../utils/companyUtils";
 
@@ -14,8 +12,10 @@ export default class ElasticProjectService {
       projectId,
       category,
       deliveryAddress,
+      country,
       deliveryDate,
       targetPrice,
+      orderQuantities,
       products,
     } = data;
 
@@ -36,7 +36,9 @@ export default class ElasticProjectService {
               category: { type: "search_as_you_type" },
               deliveryDate: { type: "date" },
               deliveryAddress: { type: "text" },
+              country: { type: "text" },
               targetPrice: { type: "float" },
+              orderQuantities: { type: "integer" },
               products: { type: "search_as_you_type" },
               deleted: { type: "boolean" },
             },
@@ -50,8 +52,10 @@ export default class ElasticProjectService {
           companyName: company.name,
           category,
           deliveryAddress,
+          country,
           deliveryDate,
           targetPrice,
+          orderQuantities,
           products,
           deleted: false,
         },
@@ -66,7 +70,7 @@ export default class ElasticProjectService {
   static async updateProjectDocumentWithProjectSpec(
     data: projectTypes.UpdateProjectDocumentWithProjectSpecInput
   ) {
-    const { projectId, deliveryAddress, deliveryDate, targetPrice, category } =
+    const { projectId, deliveryAddress, country, deliveryDate, targetPrice, orderQuantities, category } =
       data;
     await elasticClient
       .update({
@@ -75,11 +79,15 @@ export default class ElasticProjectService {
         doc: {
           category,
           deliveryAddress,
+          country,
           deliveryDate,
           targetPrice,
+          orderQuantities
         },
       })
-      .catch((e) => console.error(e));
+      .catch((e) => {
+        console.error(e)
+      });
   }
 
   // Updates project document with updated products list
