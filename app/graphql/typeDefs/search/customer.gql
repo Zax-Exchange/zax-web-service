@@ -7,6 +7,16 @@ input SearchVendorCompanyInput {
   leadTime: String
 }
 
+type VendorSearchHighlight {
+  products: [String]
+  name: [String]
+}
+
+type VendorSearchItem {
+  vendor: VendorOverview!
+  highlight: VendorSearchHighlight!
+}
+
 type Query {
-  searchVendorCompanies(data: SearchVendorCompanyInput!): [VendorOverview!]!
+  searchVendorCompanies(data: SearchVendorCompanyInput!): [VendorSearchItem!]!
 }

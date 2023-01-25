@@ -60,6 +60,7 @@ export default class QueryBuilder {
       })
     }
 
+    const decodedInput = decodeURIComponent(userInput);
     const query = {
       bool: {
         must: [
@@ -73,7 +74,7 @@ export default class QueryBuilder {
               should: [
                 {
                   multi_match: {
-                    query: userInput,
+                    query: decodedInput,
                     type: "bool_prefix",
                     fields: [
                       "products",
@@ -85,7 +86,7 @@ export default class QueryBuilder {
                 },
                 {
                   multi_match: {
-                    query: userInput,
+                    query: decodedInput,
                     fuzziness: 2,
                     fields: [
                       "products",
@@ -97,7 +98,7 @@ export default class QueryBuilder {
                 },
                 {
                   multi_match: {
-                    query: userInput,
+                    query: decodedInput,
                     type: "bool_prefix",
                     fields: [
                       "category",
@@ -109,7 +110,7 @@ export default class QueryBuilder {
                 },
                 {
                   multi_match: {
-                    query: userInput,
+                    query: decodedInput,
                     fuzziness: 2,
                     fields: [
                       "category",
@@ -191,6 +192,8 @@ export default class QueryBuilder {
         },
       });
     }
+
+    const decodedInput = decodeURIComponent(userInput);
     const query = {
       bool: {
         must: {
@@ -198,7 +201,7 @@ export default class QueryBuilder {
             should: [
               {
                 multi_match: {
-                  query: userInput,
+                  query: decodedInput,
                   type: "bool_prefix",
                   fields: [
                     "products",
@@ -210,7 +213,7 @@ export default class QueryBuilder {
               },
               {
                 multi_match: {
-                  query: userInput,
+                  query: decodedInput,
                   fuzziness: 2,
                   fields: [
                     "products",
@@ -219,14 +222,37 @@ export default class QueryBuilder {
                     "products._index_prefix"
                   ]
                 }
-              }
+              },
+              {
+                multi_match: {
+                  query: decodedInput,
+                  type: "bool_prefix",
+                  fields: [
+                    "name",
+                    "name._2gram",
+                    "name._3gram",
+                    "name._index_prefix"
+                  ]
+                }
+              },
+              {
+                multi_match: {
+                  query: decodedInput,
+                  fuzziness: 2,
+                  fields: [
+                    "name",
+                    "name._2gram",
+                    "name._3gram",
+                    "name._index_prefix"
+                  ]
+                }
+              },
             ]
           }
         },
         filter,
       },
     };
-
     return query;
   }
 }
