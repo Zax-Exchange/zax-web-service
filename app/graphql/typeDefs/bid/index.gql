@@ -50,8 +50,8 @@ type ProjectBidComponent {
   projectBidId: String!
   projectComponentId: String!
   quantityPrices: [QuantityPrice!]!
-  samplingFee: Int!
-  toolingFee: Int
+  samplingFee: String!
+  toolingFee: String
 }
 
 type QuantityPrice {

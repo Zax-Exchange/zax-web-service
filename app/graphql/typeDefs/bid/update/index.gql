@@ -7,8 +7,8 @@ input UpdateProjectBidInput {
 input UpdateProjectBidComponentInput {
   bidComponentId: String!
   quantityPrices: [QuantityPriceInput!]!
-  samplingFee: Int!
-  toolingFee: Int
+  samplingFee: String!
+  toolingFee: String
 }
 
 input UpdateProjectBidPermissionsInput {

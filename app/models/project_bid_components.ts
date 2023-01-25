@@ -12,7 +12,8 @@ export interface project_bid_componentsAttributes {
   projectBidId: string;
   projectComponentId: string;
   quantityPrices: QuantityPrice[];
-  samplingFee: number;
+  samplingFee: string;
+  toolingFee: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -39,7 +40,8 @@ export class project_bid_components
   projectBidId!: string;
   projectComponentId!: string;
   quantityPrices!: QuantityPrice[];
-  samplingFee!: number;
+  samplingFee!: string;
+  toolingFee!: string | null;
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -94,11 +96,11 @@ export class project_bid_components
           allowNull: false,
         },
         samplingFee: {
-          type: DataTypes.INTEGER,
+          type: DataTypes.STRING,
           allowNull: false,
         },
         toolingFee: {
-          type: DataTypes.INTEGER,
+          type: DataTypes.STRING,
           allowNull: true,
         },
       },

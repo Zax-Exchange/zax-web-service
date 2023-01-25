@@ -1,4 +1,7 @@
-import { BID_UPDATE_ROUTE } from "../../../../notification/notificationRoutes";
+import {
+  BID_UPDATE_ROUTE,
+  USER_RELOAD_ROUTE,
+} from "../../../../notification/notificationRoutes";
 import NotificationService from "../../../../notification/NotificationService";
 import sequelize from "../../../../postgres/dbconnection";
 import ProjectApiUtils from "../../../../utils/projectUtils";
@@ -7,6 +10,8 @@ import {
   UpdateProjectBidInput,
 } from "../../../resolvers-types.generated";
 
+// TODO: add validation for quantity prices before updating
+// customer can update project right before vendor re-submits the bid (when reload event not sent yet)
 const updateProjectBid = async (
   parent: any,
   { data }: { data: UpdateProjectBidInput },
@@ -58,6 +63,7 @@ const updateProjectBid = async (
       },
       receivers: projectUsers.map((user) => user.userId),
     });
+
     return Promise.resolve(true);
   } catch (e) {
     console.error(e);
