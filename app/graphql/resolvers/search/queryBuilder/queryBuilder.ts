@@ -12,18 +12,34 @@ export default class QueryBuilder {
   static buildProjectSearchQuery(data: SearchCustomerProjectInput) {
     // TODO: finish filters implementation
 
-    const { userInput, targetPrice, deliveryDate } = data;
+    const { userInput, targetPriceRange, orderQuantities, deliveryDate, countries } = data;
 
     const filter = [];
 
-    if (targetPrice) {
+    if (targetPriceRange) {
+      let lowerBound = parseFloat(targetPriceRange[0]);
+      let upperBound = parseFloat(targetPriceRange[1]);
       filter.push({
         range: {
           targetPrice: {
-            gte: parseInt(targetPrice, 10),
+            gte: lowerBound,
+            lte: upperBound,
           },
         },
       });
+    }
+
+    if (orderQuantities) {
+      let lowerBound = parseInt(orderQuantities[0], 10);
+      let upperBound = parseInt(orderQuantities[1], 10);
+      filter.push({
+        range: {
+          orderQuantities: {
+            gte: lowerBound,
+            lte: upperBound,
+          }
+        }
+      })
     }
 
     if (deliveryDate) {
@@ -35,6 +51,15 @@ export default class QueryBuilder {
         },
       });
     }
+
+    if (countries) {
+      filter.push({
+        match: {
+          country: countries.join(" "),
+        }
+      })
+    }
+
     const query = {
       bool: {
         must: [
@@ -119,17 +144,23 @@ export default class QueryBuilder {
 
     if (countries) {
       filter.push({
-        match: {
-          country: countries.join(" "),
+        terms: {
+          country: countries.map((val, _) => val.toLowerCase()),
         },
       });
     }
     if (factoryLocations) {
-      filter.push({
-        match: {
-          locations: factoryLocations.join(" "),
-        },
+      const terms = factoryLocations.map(location => {
+        term: {
+          locations: location
+        }
       });
+      const locationsFilter = {
+        bool: {
+          must: terms
+        }
+      }
+      filter.push(locationsFilter);
     }
 
     if (moqMin) {
@@ -162,13 +193,36 @@ export default class QueryBuilder {
     }
     const query = {
       bool: {
-        must: [
-          {
-            fuzzy: {
-              products: userInput,
-            },
-          },
-        ],
+        must: {
+          bool: {
+            should: [
+              {
+                multi_match: {
+                  query: userInput,
+                  type: "bool_prefix",
+                  fields: [
+                    "products",
+                    "products._2gram",
+                    "products._3gram",
+                    "products._index_prefix"
+                  ]
+                }
+              },
+              {
+                multi_match: {
+                  query: userInput,
+                  fuzziness: 2,
+                  fields: [
+                    "products",
+                    "products._2gram",
+                    "products._3gram",
+                    "products._index_prefix"
+                  ]
+                }
+              }
+            ]
+          }
+        },
         filter,
       },
     };

@@ -19,7 +19,7 @@ const processComponentSpec = (
   const res = {} as any;
   for (let attr in componentSpec) {
     const key = attr as keyof CreateProjectComponentSpecInput;
-    if (typeof componentSpec[key] === "object") {
+    if (typeof componentSpec[key] === "object" && componentSpec[key] !== null) {
       res[key] = JSON.stringify(componentSpec[key]);
     } else {
       res[key] = componentSpec[key];
@@ -158,6 +158,7 @@ const createProject = async (
       category,
       deliveryDate,
       deliveryAddress,
+      country,
       targetPrice,
       orderQuantities,
       products,

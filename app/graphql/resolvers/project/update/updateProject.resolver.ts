@@ -21,7 +21,10 @@ import cacheService from "../../../../redis/CacheService";
 import http from "http";
 import NotificationService from "../../../../notification/NotificationService";
 import ProjectApiUtils from "../../../../utils/projectUtils";
-import { PROJECT_UPDATE_ROUTE } from "../../../../notification/notificationRoutes";
+import {
+  PROJECT_UPDATE_ROUTE,
+  USER_RELOAD_ROUTE,
+} from "../../../../notification/notificationRoutes";
 import { Model, Transaction } from "sequelize/types";
 import {
   project_bid_components,

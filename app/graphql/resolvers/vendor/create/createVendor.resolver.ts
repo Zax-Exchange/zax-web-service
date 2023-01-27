@@ -3,6 +3,7 @@ import { CreateVendorInput } from "../../../resolvers-types.generated";
 import { v4 as uuidv4 } from "uuid";
 import ElasticCompanyService from "../../../../elastic/company/ElasticCompanyService";
 import emailService from "../../../../gcp/EmailService";
+import TokenUtils from "../../../../utils/tokenUtils";
 
 const createVendor = async (
   parents: any,
@@ -86,6 +87,38 @@ const createVendor = async (
         },
         { transaction }
       );
+      const tokenId = uuidv4();
+      const expiringToken = TokenUtils.generateJwtToken(
+        {
+          id: tokenId,
+          companyId,
+        },
+        process.env.USER_SIGNUP_TOKEN_SECRET!,
+        {
+          expiresIn: "24h",
+        }
+      );
+      await sequelize.models.expiring_jwt_tokens.create(
+        {
+          id: tokenId,
+          token: expiringToken,
+        },
+        {
+          transaction,
+        }
+      );
+
+      const options = {
+        from: `Zax Exchange <${process.env.NODE_MAILER_USERNAME}>`,
+        to: userEmail,
+        subject: "Zax Exchange Account Signup",
+        html: `
+            <p>Please follow the link below to complete sign up for your account. The link will expire in 24 hours.</p>
+            <a href="http://localhost:3000/user-signup/${expiringToken}">Click here</a>
+          `,
+      };
+
+      await emailService.sendMail(options);
 
       ElasticCompanyService.createVendorDocument({
         id: companyId,
@@ -96,17 +129,6 @@ const createVendor = async (
       });
     });
 
-    const options = {
-      from: `Zax Exchange <${process.env.NODE_MAILER_USERNAME}>`,
-      to: userEmail,
-      subject: "Zax Exchange Account Signup",
-      html: `
-          <p>Please follow the link below to complete sign up for your account.</p>
-          <a href="http://localhost:3000/user-signup/${companyId}">Click here</a>
-        `,
-    };
-
-    await emailService.sendMail(options);
     return true;
   } catch (e) {
     console.error(e);

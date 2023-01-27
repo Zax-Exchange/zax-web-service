@@ -12,13 +12,16 @@ const createInvoice = async (
 ) => {
   try {
     const { invoiceId, projectBidId, projectId } = data;
+    let hasExisting = false;
+
     // if there is an existing invoice, we delete it first
-    await sequelize.models.invoices.destroy({
+    const numDeleted = await sequelize.models.invoices.destroy({
       where: {
         projectId,
         projectBidId,
       },
     });
+    if (numDeleted) hasExisting = true;
 
     const [_, projectInstance, projectUsers] = await Promise.all([
       sequelize.models.invoices.update(
@@ -38,7 +41,9 @@ const createInvoice = async (
 
     NotificationService.sendNotification(INVOICE_CREATE_ROUTE, {
       data: {
-        message: `app.notification.poInvoice.invoiceCreate`,
+        message: hasExisting
+          ? "app.notification.poInvoice.invoiceUpdate"
+          : "app.notification.poInvoice.invoiceCreate",
         projectName: projectInstance!.name,
         projectId: projectInstance!.id,
       },

@@ -1,4 +1,5 @@
 import { project_bid_permissionsAttributes } from "../../../../models/project_bid_permissions";
+import { project_permissionsAttributes } from "../../../../models/project_permissions";
 import sequelize from "../../../../postgres/dbconnection";
 import CompanyApiUtils from "../../../../utils/companyUtils";
 import ErrorUtils from "../../../../utils/ErrorUtils";
@@ -15,16 +16,23 @@ const getVendorProject = async (
 ) => {
   try {
     const { projectId, userId } = data;
-    const permission = await sequelize.models.project_bid_permissions
-      .findOne({
-        where: {
-          userId,
-          projectId,
-        },
-      })
-      .then(
-        (p) => p?.get({ plain: true }) as project_bid_permissionsAttributes
-      );
+    const [permission, foundProject] = await Promise.all([
+      sequelize.models.project_bid_permissions
+        .findOne({
+          where: {
+            userId,
+            projectId,
+          },
+        })
+        .then(
+          (p) => p?.get({ plain: true }) as project_bid_permissionsAttributes
+        ),
+      sequelize.models.projects.findByPk(projectId),
+    ]);
+
+    if (!foundProject) {
+      throw ErrorUtils.notFoundError();
+    }
 
     if (!permission) {
       throw ErrorUtils.permissionDeniedError();

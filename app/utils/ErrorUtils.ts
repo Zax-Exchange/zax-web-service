@@ -26,4 +26,12 @@ export default class ErrorUtils {
   static credentialsError() {
     return new Error("incorrect credentials");
   }
+
+  static expiredTokenError() {
+    return new Error("token expired");
+  }
+
+  static invalidTokenError() {
+    return new Error("invalid token");
+  }
 }

@@ -19,14 +19,21 @@ const getVendorGuestProject = async (
 ) => {
   try {
     const { projectId, userId } = data;
-    const permission = await sequelize.models.project_permissions
-      .findOne({
-        where: {
-          userId,
-          projectId,
-        },
-      })
-      .then((p) => p?.get({ plain: true }) as project_permissionsAttributes);
+    const [permission, foundProject] = await Promise.all([
+      sequelize.models.project_permissions
+        .findOne({
+          where: {
+            userId,
+            projectId,
+          },
+        })
+        .then((p) => p?.get({ plain: true }) as project_permissionsAttributes),
+      sequelize.models.projects.findByPk(projectId),
+    ]);
+
+    if (!foundProject) {
+      throw ErrorUtils.notFoundError();
+    }
 
     if (!permission) {
       throw ErrorUtils.permissionDeniedError();
