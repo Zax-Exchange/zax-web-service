@@ -3,6 +3,7 @@ export interface CreateProjectDocumentInput {
   projectId: string;
   category: string;
   deliveryAddress: string;
+  country: string;
   deliveryDate: string;
   targetPrice: string;
   orderQuantities: number[];
@@ -13,6 +14,7 @@ export interface UpdateProjectDocumentWithProjectSpecInput {
   projectId: string;
   category: string;
   deliveryAddress: string;
+  country: string;
   deliveryDate: string;
   targetPrice: string;
   orderQuantities: number[];

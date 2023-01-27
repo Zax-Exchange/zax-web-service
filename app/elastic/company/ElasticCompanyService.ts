@@ -16,7 +16,7 @@ export default class ElasticCompanyService {
               country: { type: "text" },
               locations: { type: "text" },
               leadTime: { type: "integer" },
-              products: { type: "text" },
+              products: { type: "search_as_you_type" },
             },
           },
         });
@@ -62,6 +62,11 @@ export default class ElasticCompanyService {
       .search({
         index: "vendor",
         query: query,
+        highlight: {
+          fields: {
+            products: {}
+          }
+        }
       })
       .then((res) => {
         return res.hits.hits;

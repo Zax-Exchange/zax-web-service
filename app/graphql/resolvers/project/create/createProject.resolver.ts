@@ -158,6 +158,7 @@ const createProject = async (
       category,
       deliveryDate,
       deliveryAddress,
+      country,
       targetPrice,
       orderQuantities,
       products,
