@@ -1273,7 +1273,7 @@ export type Query = {
   searchCategories: Array<Category>;
   searchCustomerProjects: Array<ProjectOverview>;
   searchProducts: Array<Scalars['String']>;
-  searchVendorCompanies: Array<VendorOverview>;
+  searchVendorCompanies: Array<VendorSearchItem>;
 };
 
 
@@ -1839,4 +1839,16 @@ export type VendorProjectOverview = {
   totalWeight: Scalars['String'];
   updatedAt: Scalars['Date'];
   userId: Scalars['String'];
+};
+
+export type VendorSearchHighlight = {
+  __typename?: 'VendorSearchHighlight';
+  name?: Maybe<Array<Maybe<Scalars['String']>>>;
+  products?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type VendorSearchItem = {
+  __typename?: 'VendorSearchItem';
+  highlight: VendorSearchHighlight;
+  vendor: VendorOverview;
 };

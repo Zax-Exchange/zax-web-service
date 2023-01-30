@@ -62,6 +62,7 @@ const updateVendorInfo = async (
     if (leadTime && locations && country) {
       ElasticCompanyService.updateVendorDocument({
         id: companyId,
+        name,
         country,
         leadTime,
         locations,
