@@ -2,8 +2,6 @@ input SearchVendorCompanyInput {
   userInput: String!
   countries: [String!]
   factoryLocations: [String!]
-  moqMin: String
-  moqMax: String
   leadTime: String
 }
 

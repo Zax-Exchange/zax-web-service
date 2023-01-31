@@ -1496,8 +1496,6 @@ export type SearchVendorCompanyInput = {
   countries?: InputMaybe<Array<Scalars['String']>>;
   factoryLocations?: InputMaybe<Array<Scalars['String']>>;
   leadTime?: InputMaybe<Scalars['String']>;
-  moqMax?: InputMaybe<Scalars['String']>;
-  moqMin?: InputMaybe<Scalars['String']>;
   userInput: Scalars['String'];
 };
 
