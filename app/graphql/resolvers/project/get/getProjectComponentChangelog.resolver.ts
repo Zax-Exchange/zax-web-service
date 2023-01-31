@@ -34,6 +34,7 @@ const getProjectComponentChangelogHelper = async (
       const changes = groupedChanges.at(-1)!.changes;
       changes.push(changelog as ProjectComponentPropertyChange);
     }
+
     return groupedChanges;
   } catch (e) {
     return Promise.reject(e);
@@ -45,9 +46,13 @@ const getProjectComponentChangelog = async (
   { data }: { data: GetProjectComponentChangelogInput },
   context: any
 ) => {
-  const { projectComponentId } = data;
+  const { projectComponentIds } = data;
   try {
-    return await getProjectComponentChangelogHelper(projectComponentId);
+    const data = await Promise.all(
+      projectComponentIds.map((id) => getProjectComponentChangelogHelper(id))
+    );
+
+    return data;
   } catch (e) {
     return Promise.reject(e);
   }

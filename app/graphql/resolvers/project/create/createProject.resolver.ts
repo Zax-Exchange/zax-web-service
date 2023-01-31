@@ -13,6 +13,7 @@ import { Transaction } from "sequelize/types";
 import cacheService from "../../../../redis/CacheService";
 import { component_specs } from "../../../../models/component_specs";
 
+// if change this, please also update the same method in updateProjectComponents.ts
 const processComponentSpec = (
   componentSpec: CreateProjectComponentSpecInput
 ): Partial<component_specs> => {

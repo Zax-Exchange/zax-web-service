@@ -15,11 +15,14 @@ import streamService from "../../../../stream/StreamService";
 import cacheService from "../../../../redis/CacheService";
 import { Model, Transaction } from "sequelize/types";
 import {
+  PostProcessDetailInput,
   UpdateProjectComponentData,
   UpdateProjectComponentSpecData,
 } from "../../../resolvers-types.generated";
 import { deleteProjectDesign } from "../delete/deleteProjectDesign.resolver";
+import { project_designs } from "../../../../models/project_designs";
 
+// if change this, please also update the same method in createProject.resolver.ts
 const processComponentSpecChanges = (spec: UpdateProjectComponentSpecData) => {
   const res = {} as any;
   for (let attr in spec) {
@@ -37,48 +40,61 @@ const processComponentSpecChanges = (spec: UpdateProjectComponentSpecData) => {
 const getProjectDiffs = (
   originalComponent: project_components,
   originalSpec: component_specs,
-  componentUpdateData: UpdateProjectComponentData
+  componentUpdateData: UpdateProjectComponentData,
+  originalDesigns: project_designs[],
+  newDesigns: project_designs[]
 ) => {
   const output: project_component_changelogs[] = [];
   const changeId = uuidv4();
-  Object.entries(componentUpdateData)
-    .filter(
-      ([k, v]) =>
-        k !== "componentId" && // componentId is not changeable
-        k !== "componentSpec"
-    ) // we want to track componentSpec as a group of changes rather than 1 change
+
+  if (componentUpdateData.name !== originalComponent.get("name")) {
+    output.push({
+      projectComponentId: originalComponent.id,
+      projectComponentSpecId: null,
+      id: changeId,
+      propertyName: "name",
+      oldValue: originalComponent.get("name"),
+      newValue: componentUpdateData.name,
+    } as project_component_changelogs);
+  }
+
+  if (JSON.stringify(originalDesigns) !== JSON.stringify(newDesigns)) {
+    output.push({
+      projectComponentId: originalComponent.id,
+      projectComponentSpecId: null,
+      id: changeId,
+      propertyName: "designs",
+      oldValue: originalDesigns.map((d) => ({
+        id: d.id,
+        filename: d.fileName,
+      })),
+      newValue: newDesigns.map((d) => ({ id: d.id, filename: d.fileName })),
+    } as project_component_changelogs);
+  }
+
+  Object.entries(componentUpdateData.componentSpec)
+    .filter(([k, v]) => k !== "componentSpecId")
     .forEach(([key, value]) => {
-      const originalValue = originalComponent.getDataValue(
-        key as keyof project_componentsAttributes
-      );
-      // perform a deep comparison
-      if (JSON.stringify(value) !== JSON.stringify(originalValue)) {
+      const attr = key as keyof component_specsAttributes;
+      let originalValue = originalSpec.getDataValue(attr);
+
+      // dimension and postProcess from db will be stringified already, so no need to stringify again when comparing with incoming data
+      if (attr !== "dimension" && attr !== "postProcess") {
+        originalValue = JSON.stringify(originalValue);
+      }
+
+      if (JSON.stringify(value) !== originalValue) {
+        // perform a deep comparison
         output.push({
           projectComponentId: originalComponent.id,
-          projectComponentSpecId: null,
+          projectComponentSpecId: originalSpec.id,
           id: changeId,
           propertyName: key,
-          oldValue: originalValue,
+          oldValue: originalSpec.getDataValue(attr),
           newValue: value,
         } as project_component_changelogs);
       }
     });
-  Object.entries(componentUpdateData.componentSpec).forEach(([key, value]) => {
-    const originalValue = originalSpec.getDataValue(
-      key as keyof component_specsAttributes
-    );
-    // perform a deep comparison
-    if (JSON.stringify(value) !== JSON.stringify(originalValue)) {
-      output.push({
-        projectComponentId: originalComponent.id,
-        projectComponentSpecId: originalSpec.id,
-        id: changeId,
-        propertyName: key,
-        oldValue: originalValue,
-        newValue: value,
-      } as project_component_changelogs);
-    }
-  });
   return output;
 };
 
@@ -102,6 +118,15 @@ const updateProjectComponents = async (
           (await sequelize.models.project_components.findByPk(
             componentId
           )) as project_components;
+
+        const componentDesignsIds = (await sequelize.models.project_designs
+          .findAll({
+            where: {
+              projectComponentId: componentId,
+            },
+          })
+          .then((designs) => designs.map((d) => d.get("id")))) as string[];
+
         projectId = projectComponent.projectId;
 
         if (projectComponent === null) {
@@ -112,10 +137,16 @@ const updateProjectComponents = async (
           );
         }
 
-        const [existingDesigns, componentSpec] = await Promise.all([
-          projectComponent.getProject_designs(),
-          projectComponent.getComponent_spec(),
-        ]);
+        const [existingDesigns, componentSpec, ...newDesigns] =
+          await Promise.all([
+            projectComponent.getProject_designs(),
+            projectComponent.getComponent_spec(),
+            ...designIds.map((id) =>
+              sequelize.models.project_designs
+                .findByPk(id)
+                .then((d) => d?.get({ plain: true }) as project_designs)
+            ),
+          ]);
 
         if (componentSpec === null) {
           return Promise.reject(
@@ -158,7 +189,9 @@ const updateProjectComponents = async (
         const changes: project_component_changelogs[] = getProjectDiffs(
           projectComponent,
           componentSpec,
-          input
+          input,
+          existingDesigns,
+          newDesigns
         );
 
         return Promise.all([

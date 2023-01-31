@@ -11,7 +11,7 @@ input GetProjectChangelogInput {
 }
 
 input GetProjectComponentChangelogInput {
-  projectComponentId: String!
+  projectComponentIds: [String!]!
 }
 
 input GetGuestProjectDetailInput {
@@ -27,7 +27,7 @@ type Query {
 
   getProjectComponentChangelog(
     data: GetProjectComponentChangelogInput!
-  ): [ProjectComponentChangelog!]!
+  ): [[ProjectComponentChangelog!]!]!
 
   getGuestProjectDetail(data: GetGuestProjectDetailInput!): Project
 }
