@@ -1,5 +1,6 @@
 export interface VendorDocument {
   id: string;
+  name: string;
   country: string;
   locations: string[];
   products: string[];
