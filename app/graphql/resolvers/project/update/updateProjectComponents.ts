@@ -16,6 +16,7 @@ import cacheService from "../../../../redis/CacheService";
 import { Model, Transaction } from "sequelize/types";
 import {
   PostProcessDetailInput,
+  ProductDimensionInput,
   UpdateProjectComponentData,
   UpdateProjectComponentSpecData,
 } from "../../../resolvers-types.generated";
@@ -28,6 +29,7 @@ const processComponentSpecChanges = (spec: UpdateProjectComponentSpecData) => {
   for (let attr in spec) {
     const key = attr as keyof UpdateProjectComponentSpecData;
     // handle null here since when client GETS a ProjectComponent, the gql query queries all the fields and many of them will be null
+    // this is mainly for dimension and postprocess
     if (typeof spec[key] === "object" && spec[key] !== null) {
       res[key] = JSON.stringify(spec[key]);
     } else {
@@ -35,6 +37,29 @@ const processComponentSpecChanges = (spec: UpdateProjectComponentSpecData) => {
     }
   }
   return res;
+};
+
+const hasSameObjectEntries = (obj1: any, obj2: any) => {
+  // loop through each obj and check if same key value pair exists
+  for (let key in obj1) {
+    if (JSON.stringify(obj1[key]) !== JSON.stringify(obj2[key])) return false;
+  }
+  for (let key in obj2) {
+    if (JSON.stringify(obj1[key]) !== JSON.stringify(obj2[key])) return false;
+  }
+  return true;
+};
+
+const isSamePostProcess = (
+  oldPostProcess: PostProcessDetailInput[],
+  newPostProcess: PostProcessDetailInput[]
+) => {
+  if (oldPostProcess.length !== newPostProcess.length) return false;
+  for (let i = 0; i < oldPostProcess.length; i++) {
+    if (!hasSameObjectEntries(oldPostProcess[i], newPostProcess[i]))
+      return false;
+  }
+  return true;
 };
 
 const getProjectDiffs = (
@@ -77,13 +102,40 @@ const getProjectDiffs = (
     .forEach(([key, value]) => {
       const attr = key as keyof component_specsAttributes;
       let originalValue = originalSpec.getDataValue(attr);
+      let shouldRecord = false;
 
       // dimension and postProcess from db will be stringified already, so no need to stringify again when comparing with incoming data
       if (attr !== "dimension" && attr !== "postProcess") {
         originalValue = JSON.stringify(originalValue);
       }
 
-      if (JSON.stringify(value) !== originalValue) {
+      if (
+        attr === "postProcess" &&
+        value !== null &&
+        originalValue !== null &&
+        !isSamePostProcess(
+          JSON.parse(originalValue as string) as PostProcessDetailInput[],
+          value as PostProcessDetailInput[]
+        )
+      ) {
+        shouldRecord = true;
+      } else if (
+        attr === "dimension" &&
+        !hasSameObjectEntries(
+          JSON.parse(originalValue as string) as ProductDimensionInput,
+          value as ProductDimensionInput
+        )
+      ) {
+        shouldRecord = true;
+      } else if (
+        JSON.stringify(value) !== originalValue &&
+        value !== null &&
+        originalValue !== null
+      ) {
+        shouldRecord = true;
+      }
+
+      if (shouldRecord) {
         // perform a deep comparison
         output.push({
           projectComponentId: originalComponent.id,

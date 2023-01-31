@@ -26,7 +26,7 @@ const checkSignupJwtToken = async (
     const tokenInstance = await sequelize.models.expiring_jwt_tokens.findByPk(
       decodedJwt.id
     );
-    console.log(tokenInstance);
+
     if (tokenInstance) return true;
 
     // if not found, that means the token has been used and deleted
