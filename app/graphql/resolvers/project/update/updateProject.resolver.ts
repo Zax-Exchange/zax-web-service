@@ -66,7 +66,7 @@ const updateProjectBidComponentsQuantities = async (
   }
 };
 
-const getProjectDiffs = (
+export const getProjectDiffs = (
   originalEntity: projects,
   projectUpdateData: UpdateProjectData
 ) => {
@@ -74,9 +74,20 @@ const getProjectDiffs = (
   const changeId = uuidv4();
   Object.entries(projectUpdateData)
     .filter(([k, v]) => {
-      // projectId is not changeable but is in UpdateProjectInput
-      // visibility change should not be recorded as a diff
-      return k !== "projectId" && k !== "visibility";
+      /**
+       * NOTE: please make sure only the keys that are same between UpdateProjectData and projectsAttributes pass through,
+       * otherwise when we use the key on UpdateProjectData below to access originalModel's attribute it will be null
+       * and diff will get recorded
+       */
+      if (k === "visibility") {
+        // visibility change should not be recorded as a diff
+        return false;
+      }
+      if (k === "projectId") {
+        // though projectId will be same, but db model does not have projectId field on it so we need to filter it out
+        return false;
+      }
+      return true;
     })
     .forEach(([key, value]) => {
       const originalValue = originalEntity.getDataValue(
@@ -110,6 +121,7 @@ const getProjectComponentProducts = (
   );
   return Array.from(products);
 };
+
 const updateProject = async (
   parent: any,
   { data }: { data: UpdateProjectInput },
@@ -137,15 +149,12 @@ const updateProject = async (
       visibility,
     } = projectData;
 
-    const originalProject = await sequelize.models.projects
-      .findByPk(projectId)
-      .then((p) => p?.get({ plain: true }) as projectsAttributes);
+    const originalModel = (await sequelize.models.projects.findByPk(
+      projectId
+    )) as projects;
+    const originalProject = originalModel.get({ plain: true });
 
     await sequelize.transaction(async (transaction) => {
-      const originalModel: projects = (await sequelize.models.projects.findByPk(
-        projectId
-      )) as projects;
-
       if (originalModel === null) {
         return Promise.reject(
           new UserInputError(`could not find project with id ${projectId}`)

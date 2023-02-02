@@ -35,6 +35,7 @@ import {
 import updateProjectComponents from "./updateProjectComponents";
 import deleteProjectComponents from "../delete/deleteProjectComponent";
 import { createProjectComponents } from "../create/createProject.resolver";
+import { getProjectDiffs } from "./updateProject.resolver";
 
 const updateGuestProject = async (
   parent: any,
@@ -61,6 +62,10 @@ const updateGuestProject = async (
       orderQuantities,
     } = projectData;
 
+    const originalModel = (await sequelize.models.projects.findByPk(
+      projectId
+    )) as projects;
+
     await sequelize.transaction(async (transaction) => {
       const updates: Promise<any>[] = [
         sequelize.models.projects.update(
@@ -83,6 +88,12 @@ const updateGuestProject = async (
         createProjectComponents(projectId, componentsForCreate, transaction),
         updateProjectComponents(componentsForUpdate, transaction),
         deleteProjectComponents(componentIdsToDelete, transaction),
+        ...getProjectDiffs(originalModel, projectData).map((change) =>
+          sequelize.models.project_changelog.create(
+            { ...change },
+            { transaction }
+          )
+        ),
       ];
 
       await Promise.all(updates);
