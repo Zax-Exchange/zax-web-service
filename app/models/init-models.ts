@@ -175,10 +175,10 @@ export type {
 };
 
 export function initModels(sequelize: Sequelize) {
+  const companies = _companies.initModel(sequelize);
   const stripe_customers = _stripe_customers.initModel(sequelize);
   const sequelize_meta = _sequelize_meta.initModel(sequelize);
   const plans = _plans.initModel(sequelize);
-  const companies = _companies.initModel(sequelize);
   const users = _users.initModel(sequelize);
   const customers = _customers.initModel(sequelize);
   const vendors = _vendors.initModel(sequelize);
