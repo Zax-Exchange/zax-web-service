@@ -8,6 +8,7 @@ import {
   ProjectCreationMode,
   ProjectPermission,
   ProjectStatus,
+  ProjectVisibility,
 } from "../../../resolvers-types.generated";
 import { v4 as uuidv4 } from "uuid";
 import emailService from "../../../../gcp/EmailService";
@@ -43,6 +44,7 @@ const createGuestProjectLink = async (
             targetPrice: "",
             orderQuantities: [],
             status: ProjectStatus.Incomplete,
+            visibility: ProjectVisibility.Private,
             guestEmail,
           },
           { transaction }

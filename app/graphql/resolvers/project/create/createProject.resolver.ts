@@ -5,6 +5,7 @@ import {
   CreateProjectInput,
   ProjectPermission,
   ProjectStatus,
+  ProjectVisibility,
 } from "../../../resolvers-types.generated";
 import { v4 as uuidv4 } from "uuid";
 import createOrUpdateProjectPermission from "./createOrUpdateProjectPermission";
@@ -111,6 +112,7 @@ const createProject = async (
     orderQuantities,
     country,
     components,
+    visibility,
   } = data;
   try {
     const projectId = uuidv4();
@@ -136,6 +138,7 @@ const createProject = async (
           orderQuantities,
           companyId,
           status: ProjectStatus.Open,
+          visibility,
         },
         { transaction }
       );
@@ -153,17 +156,19 @@ const createProject = async (
       ]);
     });
 
-    ElasticProjectService.createProjectDocument({
-      userId,
-      projectId,
-      category,
-      deliveryDate,
-      deliveryAddress,
-      country,
-      targetPrice,
-      orderQuantities,
-      products,
-    });
+    if (visibility === ProjectVisibility.Public) {
+      ElasticProjectService.createProjectDocument({
+        userId,
+        projectId,
+        category,
+        deliveryDate,
+        deliveryAddress,
+        country,
+        targetPrice,
+        orderQuantities,
+        products,
+      });
+    }
 
     return Promise.resolve(true);
   } catch (e) {

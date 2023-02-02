@@ -15,6 +15,7 @@ input UpdateProjectData {
   country: String!
   targetPrice: String!
   orderQuantities: [Int!]!
+  visibility: ProjectVisibility!
 }
 
 input UpdateProjectComponentData {

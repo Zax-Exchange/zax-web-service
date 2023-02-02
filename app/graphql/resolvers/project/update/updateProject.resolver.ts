@@ -10,6 +10,7 @@ import {
   BidStatus,
   CreateProjectComponentInput,
   InvoiceStatus,
+  ProjectVisibility,
   PurchaseOrderStatus,
   QuantityPrice,
   UpdateProjectBidComponentInput,
@@ -72,7 +73,11 @@ const getProjectDiffs = (
   const output: project_changelogs[] = [];
   const changeId = uuidv4();
   Object.entries(projectUpdateData)
-    .filter(([k, v]) => k !== "projectId") // projectId is not changeable but is in UpdateProjectInput
+    .filter(([k, v]) => {
+      // projectId is not changeable but is in UpdateProjectInput
+      // visibility change should not be recorded as a diff
+      return k !== "projectId" && k !== "visibility";
+    })
     .forEach(([key, value]) => {
       const originalValue = originalEntity.getDataValue(
         key as keyof projectsAttributes
@@ -129,7 +134,12 @@ const updateProject = async (
       deliveryDate,
       targetPrice,
       orderQuantities,
+      visibility,
     } = projectData;
+
+    const originalProject = await sequelize.models.projects
+      .findByPk(projectId)
+      .then((p) => p?.get({ plain: true }) as projectsAttributes);
 
     await sequelize.transaction(async (transaction) => {
       const originalModel: projects = (await sequelize.models.projects.findByPk(
@@ -174,6 +184,7 @@ const updateProject = async (
             deliveryDate,
             targetPrice,
             orderQuantities,
+            visibility,
           },
           {
             where: {
@@ -225,17 +236,40 @@ const updateProject = async (
       await Promise.all(updates);
     });
 
-    ElasticProjectService.updateProjectDocumentWithProjectSpec(
-      data.projectData as UpdateProjectDocumentWithProjectSpecInput
-    );
+    if (originalProject.visibility === ProjectVisibility.Public) {
+      if (visibility === ProjectVisibility.Private) {
+        ElasticProjectService.deleteProjectDocument(projectId);
+      } else {
+        ElasticProjectService.updateProjectDocumentWithProjectSpec(
+          data.projectData as UpdateProjectDocumentWithProjectSpecInput
+        );
 
-    ElasticProjectService.updateProjectDocumentProducts({
-      projectId,
-      products: getProjectComponentProducts(
-        componentsForUpdate,
-        componentsForCreate
-      ),
-    });
+        ElasticProjectService.updateProjectDocumentProducts({
+          projectId,
+          products: getProjectComponentProducts(
+            componentsForUpdate,
+            componentsForCreate
+          ),
+        });
+      }
+    } else {
+      if (visibility === ProjectVisibility.Public) {
+        ElasticProjectService.createProjectDocument({
+          userId: originalProject.userId,
+          projectId,
+          category,
+          deliveryDate,
+          deliveryAddress,
+          country,
+          targetPrice,
+          orderQuantities,
+          products: getProjectComponentProducts(
+            componentsForUpdate,
+            componentsForCreate
+          ),
+        });
+      }
+    }
 
     await cacheService.invalidateProjectInCache(projectId);
 

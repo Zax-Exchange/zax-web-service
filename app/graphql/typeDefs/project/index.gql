@@ -1,8 +1,6 @@
 type ProjectOverview {
   id: String!
-  companyId: String!
   name: String!
-  companyName: String!
   category: String!
   deliveryDate: String!
   deliveryAddress: String!
@@ -188,4 +186,9 @@ enum ProjectStatus {
 enum ProjectCreationMode {
   GUIDED
   ADVANCED
+}
+
+enum ProjectVisibility {
+  PUBLIC
+  PRIVATE
 }

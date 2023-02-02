@@ -33,6 +33,7 @@ type CustomerProjectOverview {
   orderQuantities: [Int!]!
   status: String!
   permission: ProjectPermission!
+  visibility: ProjectVisibility!
   createdAt: Date!
   updatedAt: Date!
 }
@@ -66,6 +67,7 @@ type CustomerProject implements ProjectInterface {
   targetPrice: String!
   orderQuantities: [Int!]!
   status: ProjectStatus!
+  visibility: ProjectVisibility!
   permission: ProjectPermission!
   components: [ProjectComponent!]!
   bids: [ProjectBid!]
