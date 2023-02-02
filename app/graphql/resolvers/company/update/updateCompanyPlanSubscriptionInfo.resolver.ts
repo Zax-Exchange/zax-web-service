@@ -36,7 +36,7 @@ const updateCompanyPlanSubscriptionInfo = async (
       subject: "Zax Exchange Account Signup",
       html: `
           <p>Please follow the link below to complete sign up for your account.</p>
-          <a href="http://localhost:3000/user-signup/${companyPlan?.get(
+          <a href="${process.env.FRONTEND_URL}/user-signup/${companyPlan?.get(
             "companyId"
           )}">Click here</a>
         `,

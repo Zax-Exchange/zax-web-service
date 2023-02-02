@@ -67,7 +67,7 @@ const createGuestProjectLink = async (
         html: `
           <p>You have an invitation from ${company.name} to create a project!</p>
           <p>Please follow the link below to complete the project form.</p>
-          <a href="http://localhost:3000/guest-project/${projectId}">Click here</a>
+          <a href="${process.env.FRONTEND_URL}/guest-project/${projectId}">Click here</a>
         `,
       };
 
