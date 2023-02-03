@@ -9,7 +9,7 @@ jobs:
       - name: Generate build tag
         run: |
           echo "Generating build tag pipeline on branch ${{ github.ref }}"
-          gittag=$(git rev-parse --short HEAD)
+          gittag=${{github.sha}}
           echo "  Found hash ${gittag}"
           version=$(npm pkg get version | tr -d '"')
           echo "  Found package version ${version}"
