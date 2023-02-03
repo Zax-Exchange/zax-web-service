@@ -1,0 +1,17 @@
+name: Build and Push Docker Image
+run-name: ${{ github.actor }} is Building and Pushing Docker image to ECR
+on: workflow_dispatch
+jobs:
+  CDK-Deploy-STG:
+    runs-on: ubuntu-latest
+    container: node:16.19-alpine
+    steps:
+      - name: Generate build tag
+        run: |
+          echo "Generating build tag pipeline on branch ${{ github.ref }}"
+          gittag=$(git rev-parse --short HEAD)
+          echo "  Found hash ${gittag}"
+          version=$(jp -f package.json version | tr -d '"')
+          echo "  Found package version ${version}"
+          buildtag="zax-webservice-${version}-${shortened}"
+          echo "Final buildtag ${buildtag}"
