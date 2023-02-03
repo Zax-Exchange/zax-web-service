@@ -4,6 +4,7 @@ input DeleteProjectInput {
 
 input DeleteProjectComponentInput {
   componentId: String!
+  componentName: String!
 }
 
 input DeleteProjectPermissionsInput {

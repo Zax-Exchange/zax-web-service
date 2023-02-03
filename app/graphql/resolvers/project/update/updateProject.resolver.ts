@@ -9,6 +9,7 @@ import streamService from "../../../../stream/StreamService";
 import {
   BidStatus,
   CreateProjectComponentInput,
+  DeleteProjectComponentInput,
   InvoiceStatus,
   ProjectVisibility,
   PurchaseOrderStatus,
@@ -68,10 +69,11 @@ const updateProjectBidComponentsQuantities = async (
 
 export const getProjectDiffs = (
   originalEntity: projects,
-  projectUpdateData: UpdateProjectData
+  projectUpdateData: UpdateProjectData,
+  changeId: string
 ) => {
   const output: project_changelogs[] = [];
-  const changeId = uuidv4();
+
   Object.entries(projectUpdateData)
     .filter(([k, v]) => {
       /**
@@ -122,6 +124,29 @@ const getProjectComponentProducts = (
   return Array.from(products);
 };
 
+export const getPreviousAndNewComponents = (
+  compsForCreate: CreateProjectComponentInput[],
+  compsForUpdate: UpdateProjectComponentData[],
+  compsForDelete: DeleteProjectComponentInput[]
+) => {
+  const oldComps: { id: string; name: string }[] = [];
+  const newComps: { id: string | null; name: string }[] = [];
+  compsForUpdate.forEach((comp) => {
+    oldComps.push({ id: comp.componentId, name: comp.name });
+    newComps.push({ id: comp.componentId, name: comp.name });
+  });
+  compsForDelete.forEach((comp) =>
+    oldComps.push({ id: comp.componentId, name: comp.componentName })
+  );
+  compsForCreate.forEach((comp) =>
+    newComps.push({ id: null, name: comp.name })
+  );
+  return {
+    oldComps,
+    newComps,
+  };
+};
+
 const updateProject = async (
   parent: any,
   { data }: { data: UpdateProjectInput },
@@ -132,7 +157,7 @@ const updateProject = async (
     projectData,
     componentsForCreate,
     componentsForUpdate,
-    componentIdsToDelete,
+    componentsForDelete,
   } = data;
 
   try {
@@ -153,6 +178,14 @@ const updateProject = async (
       projectId
     )) as projects;
     const originalProject = originalModel.get({ plain: true });
+
+    const componentChanges = getPreviousAndNewComponents(
+      componentsForCreate,
+      componentsForUpdate,
+      componentsForDelete
+    );
+
+    const changeId = uuidv4();
 
     await sequelize.transaction(async (transaction) => {
       if (originalModel === null) {
@@ -179,7 +212,8 @@ const updateProject = async (
 
       const changes: project_changelogs[] = getProjectDiffs(
         originalModel,
-        data.projectData
+        data.projectData,
+        changeId
       );
 
       const updates: Promise<any>[] = [
@@ -230,7 +264,20 @@ const updateProject = async (
           transaction
         ),
         updateProjectComponents(componentsForUpdate, transaction),
-        deleteProjectComponents(componentIdsToDelete, transaction),
+        deleteProjectComponents(
+          componentsForDelete.map((comp) => comp.componentId),
+          transaction
+        ),
+        sequelize.models.project_changelog.create(
+          {
+            projectId,
+            id: changeId,
+            propertyName: "components",
+            oldValue: componentChanges.oldComps,
+            newValue: componentChanges.newComps,
+          },
+          { transaction }
+        ),
       ];
 
       changes.forEach((change: project_changelogs) => {
