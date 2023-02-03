@@ -36,7 +36,7 @@ const sendPasswordResetLink = async (
       html: `
           <p>You have request a password reset.</p>
           <p>Please follow the link below to reset your password. The link will expire in 1 hour.</p>
-          <a href="http://localhost:3000/reset-password/${user.id}/${expiringToken}">Click here</a>
+          <a href="${process.env.FRONTEND_URL}/reset-password/${user.id}/${expiringToken}">Click here</a>
         `,
     };
     emailService.sendMail(options);

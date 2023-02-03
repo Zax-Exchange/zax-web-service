@@ -111,7 +111,7 @@ const createCustomer = async (
         subject: "Zax Exchange Account Signup",
         html: `
             <p>Please follow the link below to complete sign up for your account. The link will expire in 24 hours.</p>
-            <a href="http://localhost:3000/user-signup/${expiringToken}">Click here</a>
+            <a href="${process.env.FRONTEND_URL}/user-signup/${expiringToken}">Click here</a>
           `,
       };
 

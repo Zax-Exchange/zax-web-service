@@ -62,7 +62,7 @@ const inviteUsers = async (
           html: `
           <p>You have an invitation from ${user.name}</p>
           <p>Please follow the link below to complete sign up for your account.</p>
-          <a href="http://localhost:3000/user-signup/${expiringToken}">Click here</a>
+          <a href="${process.env.FRONTEND_URL}/user-signup/${expiringToken}">Click here</a>
         `,
         };
 
