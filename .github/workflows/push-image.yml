@@ -23,14 +23,15 @@ jobs:
           echo "Final buildtag ${buildtag}"
           echo "buildtag=$buildtag" >> $GITHUB_OUTPUT
       - name: Build Image
+        env: 
+          buildtag: ${{ steps.tag_step.outputs.buildtag }}
         run: |
           docker build -t ${buildtag} .
           docker tag ${buildtag} 878684683110.dkr.ecr.us-east-1.amazonaws.com/zax-exchange-webapp-repository:${buildtag}
-        with:
-          buildtag: ${{ steps.tag_step.outputs.buildtag }}
       - name: Login to ECR
         run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 878684683110.dkr.ecr.us-east-1.amazonaws.com
       - name: Push Image
-        run: docker push 878684683110.dkr.ecr.us-east-1.amazonaws.com/zax-exchange-webapp-repository:${buildtag}
-        with:
+        env:
           buildtag: ${{ steps.tag_step.outputs.buildtag }}
+        run: |
+          docker push 878684683110.dkr.ecr.us-east-1.amazonaws.com/zax-exchange-webapp-repository:${buildtag}
