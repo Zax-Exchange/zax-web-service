@@ -4,8 +4,12 @@ on: workflow_dispatch
 jobs:
   Build-Docker-Image:
     runs-on: ubuntu-latest
-    container: node:16.19-alpine
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
       - name: Generate build tag
         run: |
           echo "Generating build tag pipeline on branch ${{ github.ref }}"
@@ -15,8 +19,6 @@ jobs:
           echo "  Found package version ${version}"
           buildtag="zax-webservice-${version}-${shortened}"
           echo "Final buildtag ${buildtag}"
-      - name: Check out repository code
-        uses: actions/checkout@v3
       - name: Build Image
         run: |
           docker build -t ${buildtag} .
