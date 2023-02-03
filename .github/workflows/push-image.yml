@@ -2,7 +2,7 @@ name: Build and Push Docker Image
 run-name: ${{ github.actor }} is Building and Pushing Docker image to ECR
 on: workflow_dispatch
 jobs:
-  CDK-Deploy-STG:
+  Build-Docker-Image:
     runs-on: ubuntu-latest
     container: node:16.19-alpine
     steps:
@@ -11,7 +11,17 @@ jobs:
           echo "Generating build tag pipeline on branch ${{ github.ref }}"
           gittag=$(git rev-parse --short HEAD)
           echo "  Found hash ${gittag}"
-          version=$(jp -f package.json version | tr -d '"')
+          version=$(npm pkg get version | tr -d '"')
           echo "  Found package version ${version}"
           buildtag="zax-webservice-${version}-${shortened}"
           echo "Final buildtag ${buildtag}"
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Build Image
+        run: |
+          docker build -t ${buildtag} .
+          docker tag ${buildtag} 878684683110.dkr.ecr.us-east-1.amazonaws.com/zax-exchange-webapp-repository:${buildtag}
+      - name: Login to ECR
+        run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 878684683110.dkr.ecr.us-east-1.amazonaws.com
+      - name: Push Image
+        run: docker push 878684683110.dkr.ecr.us-east-1.amazonaws.com/zax-exchange-webapp-repository:${buildtag}
