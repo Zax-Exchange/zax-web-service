@@ -7,23 +7,30 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Install Node
+        uses: actions/setup-node@v3
         with:
           node-version: 16
       - name: Generate build tag
+        id: tag_step
         run: |
           echo "Generating build tag pipeline on branch ${{ github.ref }}"
           gittag=${{github.sha}}
           echo "  Found hash ${gittag}"
           version=$(npm pkg get version | tr -d '"')
           echo "  Found package version ${version}"
-          buildtag="zax-webservice-${version}-${shortened}"
+          buildtag="zax-webservice-${version}-${gittag}"
           echo "Final buildtag ${buildtag}"
+          echo "buildtag=$buildtag" >> $GITHUB_OUTPUT
       - name: Build Image
         run: |
           docker build -t ${buildtag} .
           docker tag ${buildtag} 878684683110.dkr.ecr.us-east-1.amazonaws.com/zax-exchange-webapp-repository:${buildtag}
+        with:
+          buildtag: ${{ steps.tag_step.outputs.buildtag }}
       - name: Login to ECR
         run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 878684683110.dkr.ecr.us-east-1.amazonaws.com
       - name: Push Image
         run: docker push 878684683110.dkr.ecr.us-east-1.amazonaws.com/zax-exchange-webapp-repository:${buildtag}
+        with:
+          buildtag: ${{ steps.tag_step.outputs.buildtag }}
