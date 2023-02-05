@@ -18,9 +18,14 @@ const searchVendorCompanies = async (
     const companyDocs = await ElasticCompanyService.searchVendorDocuments(
       query
     );
+
     const res: VendorSearchItem[] = [];
     for (let doc of companyDocs) {
       const company = await CompanyApiUtils.getCompanyWithCompanyId(doc._id);
+
+      // if somehow elastic search and db is inconsistent, we won't be able to find company in our db
+      if (!company) continue;
+
       const vendor = await CompanyApiUtils.getVendorWithCompanyId(company.id);
       res.push({
         vendor: {
@@ -46,18 +51,20 @@ const searchVendorCompanies = async (
   }
 };
 
-function buildHighlightResponse(highlightDoc: Record<string, string[]> | undefined): VendorSearchHighlight {
+function buildHighlightResponse(
+  highlightDoc: Record<string, string[]> | undefined
+): VendorSearchHighlight {
   const highlight: VendorSearchHighlight = {
     products: [],
-    name: []
-  }
+    name: [],
+  };
   if (highlightDoc?.products) {
     highlight.products = highlightDoc.products;
   }
   if (highlightDoc?.name) {
     highlight.name = highlightDoc.name;
   }
-  return highlight
+  return highlight;
 }
 
 export default {

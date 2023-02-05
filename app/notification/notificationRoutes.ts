@@ -1,4 +1,6 @@
 export const PROJECT_UPDATE_ROUTE = "/api/project/update";
+export const PROJECT_INVITATION_ROUTE = "/api/project/invite";
+
 export const GUEST_PROJECT_CREATE_ROUTE = "/api/project/guest/create";
 export const GUEST_PROJECT_UPDATE_ROUTE = "/api/project/guest/update";
 

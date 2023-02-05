@@ -18,6 +18,11 @@ input GetGuestProjectDetailInput {
   projectId: String!
 }
 
+input GetSearchProjectDetailInput {
+  projectId: String!
+  companyId: String!
+}
+
 type Query {
   getProjectUsers(data: GetProjectUsersInput!): [UserProjectPermission!]!
 
@@ -30,4 +35,6 @@ type Query {
   ): [[ProjectComponentChangelog!]!]!
 
   getGuestProjectDetail(data: GetGuestProjectDetailInput!): Project
+
+  getSearchProjectDetail(data: GetSearchProjectDetailInput!): Project
 }

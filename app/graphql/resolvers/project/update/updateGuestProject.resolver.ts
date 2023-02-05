@@ -38,6 +38,7 @@ import { createProjectComponents } from "../create/createProject.resolver";
 import {
   getPreviousAndNewComponents,
   getProjectDiffs,
+  hasNewOrDeletedComponents,
 } from "./updateProject.resolver";
 
 const updateGuestProject = async (
@@ -108,18 +109,21 @@ const updateGuestProject = async (
               { transaction }
             )
         ),
-        sequelize.models.project_changelog.create(
-          {
-            projectId,
-            id: projectChangeId,
-            propertyName: "components",
-            oldValue: componentChanges.oldComps,
-            newValue: componentChanges.newComps,
-          },
-          { transaction }
-        ),
       ];
-
+      if (hasNewOrDeletedComponents(componentsForCreate, componentsForDelete)) {
+        updates.push(
+          sequelize.models.project_changelog.create(
+            {
+              projectId,
+              id: projectChangeId,
+              propertyName: "components",
+              oldValue: componentChanges.oldComps,
+              newValue: componentChanges.newComps,
+            },
+            { transaction }
+          )
+        );
+      }
       await Promise.all(updates);
     });
 

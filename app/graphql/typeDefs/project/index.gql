@@ -29,6 +29,7 @@ interface ProjectInterface {
   targetPrice: String!
   orderQuantities: [Int!]!
   status: ProjectStatus!
+  visibility: ProjectVisibility!
   createdAt: Date!
   updatedAt: Date!
 }
@@ -47,6 +48,7 @@ type Project implements ProjectInterface {
   targetPrice: String!
   orderQuantities: [Int!]!
   status: ProjectStatus!
+  visibility: ProjectVisibility!
   components: [ProjectComponent!]!
   guestEmail: String
   createdAt: Date!
@@ -67,6 +69,7 @@ type PermissionedProject implements ProjectInterface {
   targetPrice: String!
   orderQuantities: [Int!]!
   status: ProjectStatus!
+  visibility: ProjectVisibility!
   components: [ProjectComponent!]!
   permission: ProjectPermission!
   guestEmail: String
@@ -168,10 +171,20 @@ type ProjectComponentPropertyChange {
   newValue: JSON
 }
 
+type ProjectInvitation {
+  projectId: String!
+  customerCompanyId: String!
+  vendorCompanyId: String!
+  projectName: String!
+  customerName: String!
+  vendorName: String!
+}
+
 enum ProjectPermission {
   OWNER
   VIEWER
   EDITOR
+  BIDDER
 }
 
 enum ProjectStatus {

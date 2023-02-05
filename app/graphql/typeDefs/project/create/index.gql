@@ -96,8 +96,15 @@ input CreateGuestProjectInput {
   components: [CreateProjectComponentInput!]!
 }
 
+input CreateProjectInvitationInput {
+  vendorCompanyIds: [String!]!
+  customerCompanyId: String!
+  projectId: String!
+}
+
 type Mutation {
   createProject(data: CreateProjectInput!): Boolean!
   # createProjectComponents(data: [CreateProjectComponentInput!]!): Boolean!
   createGuestProject(data: CreateGuestProjectInput!): Boolean!
+  createProjectInvitation(data: CreateProjectInvitationInput!): Boolean!
 }

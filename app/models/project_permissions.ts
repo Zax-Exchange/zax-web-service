@@ -6,8 +6,9 @@ import type { users, usersId } from "./users";
 
 export interface project_permissionsAttributes {
   id: string;
-  userId: string;
   projectId: string;
+  userId?: string;
+  companyId?: string;
   permission: ProjectPermission;
   createdAt: Date;
   updatedAt: Date;
@@ -29,7 +30,8 @@ export class project_permissions
   implements project_permissionsAttributes
 {
   id!: string;
-  userId!: string;
+  userId?: string;
+  companyId?: string;
   projectId!: string;
   permission!: ProjectPermission;
   createdAt!: Date;
@@ -47,22 +49,32 @@ export class project_permissions
   createUser!: Sequelize.BelongsToCreateAssociationMixin<users>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof project_permissions {
-    return sequelize.define(
+    const res = sequelize.define(
       "project_permissions",
       {
         id: {
           type: DataTypes.UUID,
           allowNull: false,
           primaryKey: true,
+          unique: true,
         },
         userId: {
           type: DataTypes.UUID,
-          allowNull: false,
+          allowNull: true,
           references: {
             model: "users",
             key: "id",
           },
-          unique: "project_viewers_userId_projectId_key",
+          unique: "project_permissions_userId_projectId_key",
+          onDelete: "cascade",
+        },
+        companyId: {
+          type: DataTypes.UUID,
+          allowNull: true,
+          references: {
+            model: "companies",
+            key: "id",
+          },
           onDelete: "cascade",
         },
         projectId: {
@@ -72,7 +84,7 @@ export class project_permissions
             model: "projects",
             key: "id",
           },
-          unique: "project_viewers_userId_projectId_key",
+          unique: "project_permissions_userId_projectId_key",
           onDelete: "cascade",
         },
         permission: {
@@ -92,12 +104,25 @@ export class project_permissions
             fields: [{ name: "id" }],
           },
           {
-            name: "project_viewers_userId_projectId_key",
+            name: "project_permissions_userId_projectId_key",
             unique: true,
             fields: [{ name: "userId" }, { name: "projectId" }],
           },
         ],
       }
     ) as typeof project_permissions;
+
+    // TODO: find out how to add unique constraint to companyId and projectId with sequelize
+    // db allows this, but sequelize seems not
+    // const addConstraint = async () => {
+    //   await sequelize.getQueryInterface().addConstraint("project_permissions", {
+    //     fields: ["projectId", "companyId"],
+    //     type: "unique",
+    //     name: "project_permissions_projectId_companyId_key",
+    //   });
+    // };
+    // addConstraint();
+
+    return res;
   }
 }

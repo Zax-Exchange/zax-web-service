@@ -147,6 +147,14 @@ export const getPreviousAndNewComponents = (
   };
 };
 
+export const hasNewOrDeletedComponents = (
+  compsForCreate: CreateProjectComponentInput[],
+  compsForDelete: DeleteProjectComponentInput[]
+) => {
+  if (compsForCreate.length || compsForDelete.length) return true;
+  return false;
+};
+
 const updateProject = async (
   parent: any,
   { data }: { data: UpdateProjectInput },
@@ -268,17 +276,22 @@ const updateProject = async (
           componentsForDelete.map((comp) => comp.componentId),
           transaction
         ),
-        sequelize.models.project_changelog.create(
-          {
-            projectId,
-            id: changeId,
-            propertyName: "components",
-            oldValue: componentChanges.oldComps,
-            newValue: componentChanges.newComps,
-          },
-          { transaction }
-        ),
       ];
+
+      if (hasNewOrDeletedComponents(componentsForCreate, componentsForDelete)) {
+        updates.push(
+          sequelize.models.project_changelog.create(
+            {
+              projectId,
+              id: changeId,
+              propertyName: "components",
+              oldValue: componentChanges.oldComps,
+              newValue: componentChanges.newComps,
+            },
+            { transaction }
+          )
+        );
+      }
 
       changes.forEach((change: project_changelogs) => {
         updates.push(

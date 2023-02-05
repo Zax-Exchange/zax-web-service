@@ -103,6 +103,18 @@ import type {
   expiring_jwt_tokensCreationAttributes,
 } from "./expiring_jwt_tokens";
 
+import { bid_intents as _bid_intents } from "./bid_intents";
+import type {
+  bid_intentsAttributes,
+  bid_intentsCreationAttributes,
+} from "./bid_intents";
+
+import { project_invitations as _project_invitations } from "./project_invitations";
+import type {
+  project_invitationsAttributes,
+  project_invitationsCreationAttributes,
+} from "./project_invitations";
+
 export {
   _sequelize_meta as sequelize_meta,
   _companies as companies,
@@ -127,6 +139,8 @@ export {
   _invoices as invoices,
   _purchase_orders as purchase_orders,
   _expiring_jwt_tokens as expiring_jwt_tokens,
+  _bid_intents as bid_intents,
+  _project_invitations as project_invitations,
 };
 
 export type {
@@ -172,6 +186,10 @@ export type {
   purchase_ordersCreationAttributes,
   expiring_jwt_tokensAttributes,
   expiring_jwt_tokensCreationAttributes,
+  bid_intentsAttributes,
+  bid_intentsCreationAttributes,
+  project_invitationsAttributes,
+  project_invitationsCreationAttributes,
 };
 
 export function initModels(sequelize: Sequelize) {
@@ -203,6 +221,9 @@ export function initModels(sequelize: Sequelize) {
   const purchase_orders = _purchase_orders.initModel(sequelize);
 
   const expiring_jtw_tokens = _expiring_jwt_tokens.initModel(sequelize);
+  const bid_intents = _bid_intents.initModel(sequelize);
+
+  const project_invitations = _project_invitations.initModel(sequelize);
 
   company_plans.belongsTo(companies, {
     as: "company",
@@ -541,6 +562,42 @@ export function initModels(sequelize: Sequelize) {
     onDelete: "CASCADE",
   });
 
+  companies.hasMany(bid_intents, {
+    as: "bid_intents",
+    foreignKey: "companyId",
+    onDelete: "CASCADE",
+  });
+
+  projects.hasOne(bid_intents, {
+    as: "bid_intent",
+    foreignKey: "projectId",
+    onDelete: "CASCADE",
+  });
+
+  bid_intents.belongsTo(projects, {
+    as: "project",
+    foreignKey: "projectId",
+    onDelete: "CASCADE",
+  });
+
+  bid_intents.belongsTo(companies, {
+    as: "company",
+    foreignKey: "companyId",
+    onDelete: "CASCADE",
+  });
+
+  projects.hasMany(project_invitations, {
+    as: "project_invitations",
+    foreignKey: "projectId",
+    onDelete: "CASCADE",
+  });
+
+  project_invitations.belongsTo(projects, {
+    as: "project",
+    foreignKey: "projectId",
+    onDelete: "CASCADE",
+  });
+
   return {
     sequelize_meta,
     companies,
@@ -565,5 +622,7 @@ export function initModels(sequelize: Sequelize) {
     invoices,
     purchase_orders,
     expiring_jtw_tokens,
+    bid_intents,
+    project_invitations,
   };
 }
