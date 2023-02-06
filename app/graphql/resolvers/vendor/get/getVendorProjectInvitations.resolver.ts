@@ -2,23 +2,23 @@ import sequelize from "../../../../postgres/dbconnection";
 import ErrorUtils from "../../../../utils/ErrorUtils";
 import ProjectApiUtils from "../../../../utils/projectUtils";
 import {
-  GetCustomerProjectInvitationsInput,
+  GetVendorProjectInvitationsInput,
   ProjectInvitation,
 } from "../../../resolvers-types.generated";
 import { project_invitationsAttributes } from "../../../../models/project_invitations";
 import CompanyApiUtils from "../../../../utils/companyUtils";
 
-const getCustomerProjectInvitations = async (
+const getVendorProjectInvitations = async (
   parent: any,
-  { data }: { data: GetCustomerProjectInvitationsInput },
+  { data }: { data: GetVendorProjectInvitationsInput },
   context: any
 ): Promise<ProjectInvitation[]> => {
-  const { projectId } = data;
+  const { companyId } = data;
   try {
     const invitations = await sequelize.models.project_invitations
       .findAll({
         where: {
-          projectId,
+          vendorCompanyId: companyId,
         },
       })
       .then((invs) =>
@@ -30,21 +30,17 @@ const getCustomerProjectInvitations = async (
     return Promise.all(
       invitations.map(async (invitation) => {
         const [project, customerCompany, vendorCompany] = await Promise.all([
-          ProjectApiUtils.getProject(projectId),
+          ProjectApiUtils.getProject(invitation.projectId),
           CompanyApiUtils.getCompanyWithCompanyId(invitation.customerCompanyId),
           CompanyApiUtils.getCompanyWithCompanyId(invitation.vendorCompanyId),
         ]);
 
-        if (!project) {
-          throw ErrorUtils.notFoundError();
-        }
-
         return {
-          projectId,
+          projectId: invitation.projectId,
           customerCompanyId: customerCompany.id,
           vendorCompanyId: vendorCompany.id,
           customerName: customerCompany.name,
-          projectName: project?.name,
+          projectName: project!.name,
           vendorName: vendorCompany.name,
         } as ProjectInvitation;
       })
@@ -56,6 +52,6 @@ const getCustomerProjectInvitations = async (
 
 export default {
   Query: {
-    getCustomerProjectInvitations,
+    getVendorProjectInvitations,
   },
 };

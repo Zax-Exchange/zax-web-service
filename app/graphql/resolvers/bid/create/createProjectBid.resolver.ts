@@ -84,6 +84,12 @@ const createProjectBid = async (
           ProjectStatus.InProgress,
           transaction
         ),
+        sequelize.models.project_invitations.destroy({
+          where: {
+            vendorCompanyId: companyId,
+          },
+          transaction,
+        }),
       ]);
     });
 
