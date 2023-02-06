@@ -36,5 +36,5 @@ jobs:
           buildtag: ${{ steps.tag_step.outputs.buildtag }}
         run: |
           docker build -t ${buildtag} .
-          docker tag ${buildtag} 878684683110.dkr.ecr.us-east-1.amazonaws.com/zax-exchange-webapp-repository:${buildtag}
-          docker push 878684683110.dkr.ecr.us-east-1.amazonaws.com/zax-exchange-webapp-repository:${buildtag}
+          docker tag ${buildtag} 878684683110.dkr.ecr.us-east-1.amazonaws.com/zax-exchange-webservice-repository:${buildtag}
+          docker push 878684683110.dkr.ecr.us-east-1.amazonaws.com/zax-exchange-webservice-repository:${buildtag}
