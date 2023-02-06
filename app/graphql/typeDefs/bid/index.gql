@@ -70,3 +70,9 @@ enum BidStatus {
   OUTDATED
   EXPIRED
 }
+
+enum BidIntentStatus {
+  EXPRESSED_INTENT
+  ACCEPTED
+  REJECTED
+}

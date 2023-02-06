@@ -2,6 +2,13 @@ input DeletePurchaseOrderInput {
   fileId: String!
 }
 
+input DeleteProjectInvitationInput {
+  projectId: String!
+  vendorCompanyIds: [String!]!
+  customerCompanyId: String!
+}
+
 type Mutation {
   deletePurchaseOrder(data: DeletePurchaseOrderInput!): Boolean!
+  deleteProjectInvitation(data: DeleteProjectInvitationInput!): Boolean!
 }

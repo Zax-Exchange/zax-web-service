@@ -2,7 +2,7 @@ input UpdateProjectInput {
   projectData: UpdateProjectData!
   componentsForUpdate: [UpdateProjectComponentData!]!
   componentsForCreate: [CreateProjectComponentInput!]!
-  componentIdsToDelete: [String!]!
+  componentsForDelete: [DeleteProjectComponentInput!]!
 }
 
 input UpdateProjectData {
@@ -15,6 +15,7 @@ input UpdateProjectData {
   country: String!
   targetPrice: String!
   orderQuantities: [Int!]!
+  visibility: ProjectVisibility!
 }
 
 input UpdateProjectComponentData {
@@ -73,7 +74,7 @@ input UpdateGuestProjectInput {
   projectData: UpdateProjectData!
   componentsForUpdate: [UpdateProjectComponentData!]!
   componentsForCreate: [CreateProjectComponentInput!]!
-  componentIdsToDelete: [String!]!
+  componentsForDelete: [DeleteProjectComponentInput!]!
 }
 
 type Mutation {

@@ -122,9 +122,10 @@ const createVendor = async (
 
       ElasticCompanyService.createVendorDocument({
         id: companyId,
-        country: country,
-        leadTime: leadTime,
-        locations: locations,
+        name,
+        country,
+        leadTime,
+        locations,
         products: Object.keys(productsAndMoq),
       });
     });

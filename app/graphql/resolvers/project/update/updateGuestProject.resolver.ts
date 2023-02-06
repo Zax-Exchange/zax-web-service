@@ -35,6 +35,11 @@ import {
 import updateProjectComponents from "./updateProjectComponents";
 import deleteProjectComponents from "../delete/deleteProjectComponent";
 import { createProjectComponents } from "../create/createProject.resolver";
+import {
+  getPreviousAndNewComponents,
+  getProjectDiffs,
+  hasNewOrDeletedComponents,
+} from "./updateProject.resolver";
 
 const updateGuestProject = async (
   parent: any,
@@ -46,7 +51,7 @@ const updateGuestProject = async (
     projectData,
     componentsForCreate,
     componentsForUpdate,
-    componentIdsToDelete,
+    componentsForDelete,
   } = data;
 
   try {
@@ -60,6 +65,17 @@ const updateGuestProject = async (
       targetPrice,
       orderQuantities,
     } = projectData;
+
+    const projectChangeId = uuidv4();
+    const originalModel = (await sequelize.models.projects.findByPk(
+      projectId
+    )) as projects;
+
+    const componentChanges = getPreviousAndNewComponents(
+      componentsForCreate,
+      componentsForUpdate,
+      componentsForDelete
+    );
 
     await sequelize.transaction(async (transaction) => {
       const updates: Promise<any>[] = [
@@ -82,9 +98,32 @@ const updateGuestProject = async (
         ),
         createProjectComponents(projectId, componentsForCreate, transaction),
         updateProjectComponents(componentsForUpdate, transaction),
-        deleteProjectComponents(componentIdsToDelete, transaction),
+        deleteProjectComponents(
+          componentsForDelete.map((comp) => comp.componentId),
+          transaction
+        ),
+        ...getProjectDiffs(originalModel, projectData, projectChangeId).map(
+          (change) =>
+            sequelize.models.project_changelog.create(
+              { ...change },
+              { transaction }
+            )
+        ),
       ];
-
+      if (hasNewOrDeletedComponents(componentsForCreate, componentsForDelete)) {
+        updates.push(
+          sequelize.models.project_changelog.create(
+            {
+              projectId,
+              id: projectChangeId,
+              propertyName: "components",
+              oldValue: componentChanges.oldComps,
+              newValue: componentChanges.newComps,
+            },
+            { transaction }
+          )
+        );
+      }
       await Promise.all(updates);
     });
 

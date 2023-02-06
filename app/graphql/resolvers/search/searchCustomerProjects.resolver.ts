@@ -24,8 +24,6 @@ const searchCustomerProjects = async (
 
         return {
           id: project._id,
-          companyName: (project._source as any).companyName,
-          companyId: proj.companyId,
           name: proj.name,
           category: proj.category,
           deliveryDate: proj.deliveryDate,
@@ -40,7 +38,7 @@ const searchCustomerProjects = async (
 
     const res = projectOverviews.filter((overview) => !!overview);
 
-    return res;
+    return res as ProjectOverview[];
   } catch (e) {
     console.error(e);
     return Promise.reject(e);

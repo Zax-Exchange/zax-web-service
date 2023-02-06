@@ -11,11 +11,16 @@ input GetProjectChangelogInput {
 }
 
 input GetProjectComponentChangelogInput {
-  projectComponentId: String!
+  projectComponentIds: [String!]!
 }
 
 input GetGuestProjectDetailInput {
   projectId: String!
+}
+
+input GetSearchProjectDetailInput {
+  projectId: String!
+  companyId: String!
 }
 
 type Query {
@@ -27,7 +32,9 @@ type Query {
 
   getProjectComponentChangelog(
     data: GetProjectComponentChangelogInput!
-  ): [ProjectComponentChangelog!]!
+  ): [[ProjectComponentChangelog!]!]!
 
   getGuestProjectDetail(data: GetGuestProjectDetailInput!): Project
+
+  getSearchProjectDetail(data: GetSearchProjectDetailInput!): Project
 }

@@ -94,6 +94,7 @@ type VendorProject implements ProjectInterface {
   targetPrice: String!
   orderQuantities: [Int!]!
   status: ProjectStatus!
+  visibility: ProjectVisibility!
   permission: ProjectPermission!
   components: [ProjectComponent!]!
   bidInfo: PermissionedProjectBid!
@@ -114,6 +115,7 @@ type VendorGuestProject implements ProjectInterface {
   targetPrice: String!
   orderQuantities: [Int!]!
   status: ProjectStatus!
+  visibility: ProjectVisibility!
   permission: ProjectPermission!
   components: [ProjectComponent!]!
   guestEmail: String!

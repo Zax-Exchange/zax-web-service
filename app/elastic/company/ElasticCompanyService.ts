@@ -13,6 +13,7 @@ export default class ElasticCompanyService {
           mappings: {
             properties: {
               id: { type: "text" },
+              name: { type: "search_as_you_type" },
               country: { type: "text" },
               locations: { type: "text" },
               leadTime: { type: "integer" },
@@ -22,12 +23,13 @@ export default class ElasticCompanyService {
         });
       }
 
-      const { id, locations, leadTime, products, country } = data;
+      const { id, name, locations, leadTime, products, country } = data;
 
       await elasticClient.index({
         index: "vendor",
         id,
         document: {
+          name,
           country,
           locations,
           leadTime,
@@ -41,12 +43,13 @@ export default class ElasticCompanyService {
 
   static async updateVendorDocument(data: companyTypes.VendorDocument) {
     try {
-      const { id, locations, leadTime, products } = data;
+      const { id, name, locations, leadTime, products } = data;
 
       await elasticClient.update({
         index: "vendor",
         id,
         doc: {
+          name,
           locations,
           leadTime,
           products,
@@ -64,7 +67,8 @@ export default class ElasticCompanyService {
         query: query,
         highlight: {
           fields: {
-            products: {}
+            name: {},
+            products: {},
           }
         }
       })

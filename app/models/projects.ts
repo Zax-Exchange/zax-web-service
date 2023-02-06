@@ -3,6 +3,7 @@ import { DataTypes, Model, Optional } from "sequelize";
 import {
   ProjectCreationMode,
   ProjectStatus,
+  ProjectVisibility,
 } from "../graphql/resolvers-types.generated";
 import { bid_remarks } from "./bid_remarks";
 import type { companies, companiesId } from "./companies";
@@ -35,6 +36,7 @@ export interface projectsAttributes {
   status: ProjectStatus;
   guestEmail: string | null;
   country: string;
+  visibility: ProjectVisibility;
   updatedAt: Date;
   createdAt: Date;
 }
@@ -68,6 +70,7 @@ export class projects
   status!: ProjectStatus;
   guestEmail!: string | null;
   country!: string;
+  visibility!: ProjectVisibility;
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -266,6 +269,10 @@ export class projects
           allowNull: true,
         },
         country: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        visibility: {
           type: DataTypes.STRING,
           allowNull: false,
         },

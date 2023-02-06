@@ -12,7 +12,13 @@ export default class QueryBuilder {
   static buildProjectSearchQuery(data: SearchCustomerProjectInput) {
     // TODO: finish filters implementation
 
-    const { userInput, targetPriceRange, orderQuantities, deliveryDate, countries } = data;
+    const {
+      userInput,
+      targetPriceRange,
+      orderQuantities,
+      deliveryDate,
+      countries,
+    } = data;
 
     const filter = [];
 
@@ -37,9 +43,9 @@ export default class QueryBuilder {
           orderQuantities: {
             gte: lowerBound,
             lte: upperBound,
-          }
-        }
-      })
+          },
+        },
+      });
     }
 
     if (deliveryDate) {
@@ -56,10 +62,11 @@ export default class QueryBuilder {
       filter.push({
         match: {
           country: countries.join(" "),
-        }
-      })
+        },
+      });
     }
 
+    const decodedInput = decodeURIComponent(userInput);
     const query = {
       bool: {
         must: [
@@ -73,58 +80,58 @@ export default class QueryBuilder {
               should: [
                 {
                   multi_match: {
-                    query: userInput,
+                    query: decodedInput,
                     type: "bool_prefix",
                     fields: [
                       "products",
                       "products._2gram",
                       "products._3gram",
-                      "products._index_prefix"
-                    ]
-                  }
+                      "products._index_prefix",
+                    ],
+                  },
                 },
                 {
                   multi_match: {
-                    query: userInput,
+                    query: decodedInput,
                     fuzziness: 2,
                     fields: [
                       "products",
                       "products._2gram",
                       "products._3gram",
-                      "products._index_prefix"
-                    ]
-                  }
+                      "products._index_prefix",
+                    ],
+                  },
                 },
                 {
                   multi_match: {
-                    query: userInput,
+                    query: decodedInput,
                     type: "bool_prefix",
                     fields: [
                       "category",
                       "category._2gram",
                       "category._3gram",
-                      "category._index_prefix"
-                    ]
-                  }
+                      "category._index_prefix",
+                    ],
+                  },
                 },
                 {
                   multi_match: {
-                    query: userInput,
+                    query: decodedInput,
                     fuzziness: 2,
                     fields: [
                       "category",
                       "category._2gram",
                       "category._3gram",
-                      "category._index_prefix"
-                    ]
-                  }
+                      "category._index_prefix",
+                    ],
+                  },
                 },
               ],
             },
           },
         ],
         filter,
-      }
+      },
     };
 
     return query;
@@ -137,8 +144,7 @@ export default class QueryBuilder {
    */
   static buildVendorCompanySearchQuery(data: SearchVendorCompanyInput) {
     //filters include: location, moq, leadtime, products
-    const { userInput, countries, factoryLocations, moqMin, moqMax, leadTime } =
-      data;
+    const { userInput, countries, factoryLocations, leadTime } = data;
 
     const filter = [];
 
@@ -150,38 +156,19 @@ export default class QueryBuilder {
       });
     }
     if (factoryLocations) {
-      const terms = factoryLocations.map(location => {
+      const terms = factoryLocations.map((location) => {
         term: {
-          locations: location
+          locations: location;
         }
       });
       const locationsFilter = {
         bool: {
-          must: terms
-        }
-      }
+          must: terms,
+        },
+      };
       filter.push(locationsFilter);
     }
 
-    if (moqMin) {
-      filter.push({
-        range: {
-          moqMin: {
-            gte: moqMin,
-          },
-        },
-      });
-    }
-
-    if (moqMax) {
-      filter.push({
-        range: {
-          moqMax: {
-            lte: moqMax,
-          },
-        },
-      });
-    }
     if (leadTime) {
       filter.push({
         range: {
@@ -191,6 +178,8 @@ export default class QueryBuilder {
         },
       });
     }
+
+    const decodedInput = decodeURIComponent(userInput);
     const query = {
       bool: {
         must: {
@@ -198,35 +187,58 @@ export default class QueryBuilder {
             should: [
               {
                 multi_match: {
-                  query: userInput,
+                  query: decodedInput,
                   type: "bool_prefix",
                   fields: [
                     "products",
                     "products._2gram",
                     "products._3gram",
-                    "products._index_prefix"
-                  ]
-                }
+                    "products._index_prefix",
+                  ],
+                },
               },
               {
                 multi_match: {
-                  query: userInput,
+                  query: decodedInput,
                   fuzziness: 2,
                   fields: [
                     "products",
                     "products._2gram",
                     "products._3gram",
-                    "products._index_prefix"
-                  ]
-                }
-              }
-            ]
-          }
+                    "products._index_prefix",
+                  ],
+                },
+              },
+              {
+                multi_match: {
+                  query: decodedInput,
+                  type: "bool_prefix",
+                  fields: [
+                    "name",
+                    "name._2gram",
+                    "name._3gram",
+                    "name._index_prefix",
+                  ],
+                },
+              },
+              {
+                multi_match: {
+                  query: decodedInput,
+                  fuzziness: 2,
+                  fields: [
+                    "name",
+                    "name._2gram",
+                    "name._3gram",
+                    "name._index_prefix",
+                  ],
+                },
+              },
+            ],
+          },
         },
         filter,
       },
     };
-
     return query;
   }
 }

@@ -5,6 +5,7 @@ import {
   CreateProjectInput,
   ProjectPermission,
   ProjectStatus,
+  ProjectVisibility,
 } from "../../../resolvers-types.generated";
 import { v4 as uuidv4 } from "uuid";
 import createOrUpdateProjectPermission from "./createOrUpdateProjectPermission";
@@ -13,6 +14,7 @@ import { Transaction } from "sequelize/types";
 import cacheService from "../../../../redis/CacheService";
 import { component_specs } from "../../../../models/component_specs";
 
+// if change this, please also update the same method in updateProjectComponents.ts
 const processComponentSpec = (
   componentSpec: CreateProjectComponentSpecInput
 ): Partial<component_specs> => {
@@ -110,6 +112,7 @@ const createProject = async (
     orderQuantities,
     country,
     components,
+    visibility,
   } = data;
   try {
     const projectId = uuidv4();
@@ -135,6 +138,7 @@ const createProject = async (
           orderQuantities,
           companyId,
           status: ProjectStatus.Open,
+          visibility,
         },
         { transaction }
       );
@@ -152,17 +156,19 @@ const createProject = async (
       ]);
     });
 
-    ElasticProjectService.createProjectDocument({
-      userId,
-      projectId,
-      category,
-      deliveryDate,
-      deliveryAddress,
-      country,
-      targetPrice,
-      orderQuantities,
-      products,
-    });
+    if (visibility === ProjectVisibility.Public) {
+      ElasticProjectService.createProjectDocument({
+        userId,
+        projectId,
+        category,
+        deliveryDate,
+        deliveryAddress,
+        country,
+        targetPrice,
+        orderQuantities,
+        products,
+      });
+    }
 
     return Promise.resolve(true);
   } catch (e) {

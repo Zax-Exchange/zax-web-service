@@ -9,7 +9,9 @@ import streamService from "../../../../stream/StreamService";
 import {
   BidStatus,
   CreateProjectComponentInput,
+  DeleteProjectComponentInput,
   InvoiceStatus,
+  ProjectVisibility,
   PurchaseOrderStatus,
   QuantityPrice,
   UpdateProjectBidComponentInput,
@@ -65,14 +67,30 @@ const updateProjectBidComponentsQuantities = async (
   }
 };
 
-const getProjectDiffs = (
+export const getProjectDiffs = (
   originalEntity: projects,
-  projectUpdateData: UpdateProjectData
+  projectUpdateData: UpdateProjectData,
+  changeId: string
 ) => {
   const output: project_changelogs[] = [];
-  const changeId = uuidv4();
+
   Object.entries(projectUpdateData)
-    .filter(([k, v]) => k !== "projectId") // projectId is not changeable but is in UpdateProjectInput
+    .filter(([k, v]) => {
+      /**
+       * NOTE: please make sure only the keys that are same between UpdateProjectData and projectsAttributes pass through,
+       * otherwise when we use the key on UpdateProjectData below to access originalModel's attribute it will be null
+       * and diff will get recorded
+       */
+      if (k === "visibility") {
+        // visibility change should not be recorded as a diff
+        return false;
+      }
+      if (k === "projectId") {
+        // though projectId will be same, but db model does not have projectId field on it so we need to filter it out
+        return false;
+      }
+      return true;
+    })
     .forEach(([key, value]) => {
       const originalValue = originalEntity.getDataValue(
         key as keyof projectsAttributes
@@ -105,6 +123,38 @@ const getProjectComponentProducts = (
   );
   return Array.from(products);
 };
+
+export const getPreviousAndNewComponents = (
+  compsForCreate: CreateProjectComponentInput[],
+  compsForUpdate: UpdateProjectComponentData[],
+  compsForDelete: DeleteProjectComponentInput[]
+) => {
+  const oldComps: { id: string; name: string }[] = [];
+  const newComps: { id: string | null; name: string }[] = [];
+  compsForUpdate.forEach((comp) => {
+    oldComps.push({ id: comp.componentId, name: comp.name });
+    newComps.push({ id: comp.componentId, name: comp.name });
+  });
+  compsForDelete.forEach((comp) =>
+    oldComps.push({ id: comp.componentId, name: comp.componentName })
+  );
+  compsForCreate.forEach((comp) =>
+    newComps.push({ id: null, name: comp.name })
+  );
+  return {
+    oldComps,
+    newComps,
+  };
+};
+
+export const hasNewOrDeletedComponents = (
+  compsForCreate: CreateProjectComponentInput[],
+  compsForDelete: DeleteProjectComponentInput[]
+) => {
+  if (compsForCreate.length || compsForDelete.length) return true;
+  return false;
+};
+
 const updateProject = async (
   parent: any,
   { data }: { data: UpdateProjectInput },
@@ -115,7 +165,7 @@ const updateProject = async (
     projectData,
     componentsForCreate,
     componentsForUpdate,
-    componentIdsToDelete,
+    componentsForDelete,
   } = data;
 
   try {
@@ -129,13 +179,23 @@ const updateProject = async (
       deliveryDate,
       targetPrice,
       orderQuantities,
+      visibility,
     } = projectData;
 
-    await sequelize.transaction(async (transaction) => {
-      const originalModel: projects = (await sequelize.models.projects.findByPk(
-        projectId
-      )) as projects;
+    const originalModel = (await sequelize.models.projects.findByPk(
+      projectId
+    )) as projects;
+    const originalProject = originalModel.get({ plain: true });
 
+    const componentChanges = getPreviousAndNewComponents(
+      componentsForCreate,
+      componentsForUpdate,
+      componentsForDelete
+    );
+
+    const changeId = uuidv4();
+
+    await sequelize.transaction(async (transaction) => {
       if (originalModel === null) {
         return Promise.reject(
           new UserInputError(`could not find project with id ${projectId}`)
@@ -160,7 +220,8 @@ const updateProject = async (
 
       const changes: project_changelogs[] = getProjectDiffs(
         originalModel,
-        data.projectData
+        data.projectData,
+        changeId
       );
 
       const updates: Promise<any>[] = [
@@ -174,6 +235,7 @@ const updateProject = async (
             deliveryDate,
             targetPrice,
             orderQuantities,
+            visibility,
           },
           {
             where: {
@@ -210,8 +272,26 @@ const updateProject = async (
           transaction
         ),
         updateProjectComponents(componentsForUpdate, transaction),
-        deleteProjectComponents(componentIdsToDelete, transaction),
+        deleteProjectComponents(
+          componentsForDelete.map((comp) => comp.componentId),
+          transaction
+        ),
       ];
+
+      if (hasNewOrDeletedComponents(componentsForCreate, componentsForDelete)) {
+        updates.push(
+          sequelize.models.project_changelog.create(
+            {
+              projectId,
+              id: changeId,
+              propertyName: "components",
+              oldValue: componentChanges.oldComps,
+              newValue: componentChanges.newComps,
+            },
+            { transaction }
+          )
+        );
+      }
 
       changes.forEach((change: project_changelogs) => {
         updates.push(
@@ -225,17 +305,40 @@ const updateProject = async (
       await Promise.all(updates);
     });
 
-    ElasticProjectService.updateProjectDocumentWithProjectSpec(
-      data.projectData as UpdateProjectDocumentWithProjectSpecInput
-    );
+    if (originalProject.visibility === ProjectVisibility.Public) {
+      if (visibility === ProjectVisibility.Private) {
+        ElasticProjectService.deleteProjectDocument(projectId);
+      } else {
+        ElasticProjectService.updateProjectDocumentWithProjectSpec(
+          data.projectData as UpdateProjectDocumentWithProjectSpecInput
+        );
 
-    ElasticProjectService.updateProjectDocumentProducts({
-      projectId,
-      products: getProjectComponentProducts(
-        componentsForUpdate,
-        componentsForCreate
-      ),
-    });
+        ElasticProjectService.updateProjectDocumentProducts({
+          projectId,
+          products: getProjectComponentProducts(
+            componentsForUpdate,
+            componentsForCreate
+          ),
+        });
+      }
+    } else {
+      if (visibility === ProjectVisibility.Public) {
+        ElasticProjectService.createProjectDocument({
+          userId: originalProject.userId,
+          projectId,
+          category,
+          deliveryDate,
+          deliveryAddress,
+          country,
+          targetPrice,
+          orderQuantities,
+          products: getProjectComponentProducts(
+            componentsForUpdate,
+            componentsForCreate
+          ),
+        });
+      }
+    }
 
     await cacheService.invalidateProjectInCache(projectId);
 

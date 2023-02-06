@@ -13,6 +13,8 @@ import NotificationService from "../../../../notification/NotificationService";
 import { BID_CREATE_ROUTE } from "../../../../notification/notificationRoutes";
 
 // Creates a project bid instance associated with projectId in db
+// TODO: handle race condition when project updated right before bid creation
+// things to consider: component deletion, order quantities changes, etc
 const createProjectBid = async (
   parent: any,
   { data }: { data: CreateProjectBidInput },
@@ -82,6 +84,12 @@ const createProjectBid = async (
           ProjectStatus.InProgress,
           transaction
         ),
+        sequelize.models.project_invitations.destroy({
+          where: {
+            vendorCompanyId: companyId,
+          },
+          transaction,
+        }),
       ]);
     });
 

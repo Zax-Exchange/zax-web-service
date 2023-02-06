@@ -329,6 +329,11 @@ class ProjectApiUtils {
     }
   }
 
+  /**
+   * Gets all the users (excludes company-wide permissions) that have access to the project
+   * @param projectId
+   * @returns Promise<UserProjectPermission[]>
+   */
   static async getProjectUsers(projectId: string) {
     try {
       const projectUsers: Partial<UserProjectPermission>[] =
@@ -336,6 +341,7 @@ class ProjectApiUtils {
           .findAll({
             where: {
               projectId,
+              companyId: null,
             },
           })
           .then((ps) =>

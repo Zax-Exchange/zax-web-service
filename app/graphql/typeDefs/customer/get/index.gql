@@ -21,6 +21,10 @@ input GetPurchaseOrderInput {
   projectBidId: String!
 }
 
+input GetCustomerProjectInvitationsInput {
+  projectId: String!
+}
+
 type Query {
   getCustomerDetail(data: GetCustomerDetailInput!): CustomerDetail!
   getCustomerProject(data: GetCustomerProjectInput!): CustomerProject!
@@ -29,4 +33,7 @@ type Query {
   ): [CustomerProjectOverview!]!
   getPurchaseOrder(data: GetPurchaseOrderInput!): PurchaseOrder
   getCustomerPos(data: GetCustomerPosInput!): [CustomerPo!]!
+  getCustomerProjectInvitations(
+    data: GetCustomerProjectInvitationsInput!
+  ): [ProjectInvitation!]!
 }
