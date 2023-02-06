@@ -22,16 +22,19 @@ jobs:
           buildtag="zax-webservice-${version}-${gittag}"
           echo "Final buildtag ${buildtag}"
           echo "buildtag=$buildtag" >> $GITHUB_OUTPUT
-      - name: Build Image
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Build and Push Image
         env: 
           buildtag: ${{ steps.tag_step.outputs.buildtag }}
         run: |
           docker build -t ${buildtag} .
           docker tag ${buildtag} 878684683110.dkr.ecr.us-east-1.amazonaws.com/zax-exchange-webapp-repository:${buildtag}
-      - name: Login to ECR
-        run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 878684683110.dkr.ecr.us-east-1.amazonaws.com
-      - name: Push Image
-        env:
-          buildtag: ${{ steps.tag_step.outputs.buildtag }}
-        run: |
           docker push 878684683110.dkr.ecr.us-east-1.amazonaws.com/zax-exchange-webapp-repository:${buildtag}
