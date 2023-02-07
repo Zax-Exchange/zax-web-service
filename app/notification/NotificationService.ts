@@ -13,9 +13,12 @@ interface NotificationRequestBody {
   data: NotificationData;
 }
 
+const port = process.env.NOTIFICATION_SERVICE_PORT;
+const host = process.env.NOTIFICATION_SERVICE_HOST;
+
 export default class NotificationService {
-  static host = "localhost";
-  static port = 8080;
+  static host = host;
+  static port = port;
 
   static sendNotification(path: string, body: NotificationRequestBody) {
     var options: RequestOptions = {
