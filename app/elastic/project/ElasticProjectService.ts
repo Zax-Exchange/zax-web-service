@@ -6,6 +6,7 @@ import sequelize from "../../postgres/dbconnection";
 import { projectsAttributes } from "../../db/models/projects";
 import ProjectApiUtils from "../../utils/projectUtils";
 import { Project } from "../../graphql/resolvers-types.generated";
+import { DEFAULT_PAGE_SIZE, DEFAULT_SEARCH_START_INDEX } from "../ElasticSearchUtils";
 
 const PROJECT_INDEX_NAME = "project";
 export default class ElasticProjectService {
@@ -136,7 +137,11 @@ export default class ElasticProjectService {
       .catch((e) => console.error(e));
   }
 
-  static async searchProjectDocuments(query: any) {
+  static async searchProjectDocuments(
+    query: any, 
+    from: number = DEFAULT_SEARCH_START_INDEX, 
+    size: number = DEFAULT_PAGE_SIZE
+  ) {
     return await elasticClient
       .search({
         index: PROJECT_INDEX_NAME,
@@ -146,9 +151,11 @@ export default class ElasticProjectService {
             products: {},
           },
         },
+        from,
+        size
       })
       .then((res) => {
-        return res.hits.hits;
+        return res.hits;
       })
       .catch((e) => {
         console.error(e);

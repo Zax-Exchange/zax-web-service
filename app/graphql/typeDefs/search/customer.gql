@@ -3,10 +3,14 @@ input SearchVendorCompanyInput {
   countries: [String!]
   factoryLocations: [String!]
   leadTime: String
+  from: Int
+  size: Int
 }
 
 input SearchVendorByNameInput {
   userInput: String!
+  from: Int
+  size: Int
 }
 
 type VendorSearchHighlight {
@@ -19,7 +23,12 @@ type VendorSearchItem {
   highlight: VendorSearchHighlight!
 }
 
+type VendorSearchResult {
+  hits: [VendorSearchItem!]!
+  totalHits: Int!
+}
+
 type Query {
-  searchVendorCompanies(data: SearchVendorCompanyInput!): [VendorSearchItem!]!
-  searchVendorByName(data: SearchVendorByNameInput!): [VendorSearchItem!]!
+  searchVendorCompanies(data: SearchVendorCompanyInput!): VendorSearchResult!
+  searchVendorByName(data: SearchVendorByNameInput!): VendorSearchResult!
 }

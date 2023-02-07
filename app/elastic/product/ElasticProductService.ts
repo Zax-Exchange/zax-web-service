@@ -1,5 +1,6 @@
 import { ALL_PRODUCTS } from "../../constants/products";
 import elasticClient from "../elasticConnection"
+import { DEFAULT_SEARCH_START_INDEX, DEFAULT_PAGE_SIZE } from "../ElasticSearchUtils";
 
 const PRODUCT_INDEX = "products"
 
@@ -45,7 +46,11 @@ export default class ElasticProductService {
 		}
 	}
 
-	static async productAutoComplete(searchText: string) {
+	static async productAutoComplete(
+		searchText: string,
+		from: number = DEFAULT_SEARCH_START_INDEX, 
+    size: number = DEFAULT_PAGE_SIZE
+	) {
 		return await elasticClient.search({
 			index: PRODUCT_INDEX,
 			query: {
@@ -77,7 +82,9 @@ export default class ElasticProductService {
 						}
 					]
 				}
-			}
+			},
+			from,
+			size
 		})
 		.then((res) => {
 			return res.hits.hits;
