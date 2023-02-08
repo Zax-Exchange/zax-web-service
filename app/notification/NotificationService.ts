@@ -36,3 +36,5 @@ export default class NotificationService {
     req.end();
   }
 }
+
+console.log(`Notification Service configured to connect to ${NotificationService.host}:${NotificationService.port}`)
