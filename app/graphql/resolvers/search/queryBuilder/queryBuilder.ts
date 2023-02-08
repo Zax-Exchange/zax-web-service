@@ -211,30 +211,7 @@ export default class QueryBuilder {
                   ],
                 },
               },
-              {
-                multi_match: {
-                  query: decodedInput,
-                  type: "bool_prefix",
-                  fields: [
-                    "name",
-                    "name._2gram",
-                    "name._3gram",
-                    "name._index_prefix",
-                  ],
-                },
-              },
-              {
-                multi_match: {
-                  query: decodedInput,
-                  fuzziness: 2,
-                  fields: [
-                    "name",
-                    "name._2gram",
-                    "name._3gram",
-                    "name._index_prefix",
-                  ],
-                },
-              },
+              ...this.getVendorNameMatchers(decodedInput),
             ],
           },
         },
@@ -242,5 +219,41 @@ export default class QueryBuilder {
       },
     };
     return query;
+  }
+
+  static buildVendorSearchByNameQuery(data: string) {
+    const decodedInput = decodeURIComponent(data);
+    return {
+      bool: {
+        should: this.getVendorNameMatchers(decodedInput)
+      }
+    }                                                                                                                                                                                       
+  }
+
+  private static getVendorNameMatchers(name:string) {
+    return [{
+      multi_match: {
+        query: name,
+        type: "bool_prefix",
+        fields: [
+          "name",
+          "name._2gram",
+          "name._3gram",
+          "name._index_prefix",
+        ],
+      },
+    },
+    {
+      multi_match: {
+        query: name,
+        fuzziness: 2,
+        fields: [
+          "name",
+          "name._2gram",
+          "name._3gram",
+          "name._index_prefix",
+        ],
+      },
+    }]
   }
 }

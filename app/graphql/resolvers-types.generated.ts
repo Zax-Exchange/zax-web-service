@@ -1340,6 +1340,7 @@ export type Query = {
   searchCategories: Array<Category>;
   searchCustomerProjects: Array<ProjectOverview>;
   searchProducts: Array<Scalars['String']>;
+  searchVendorByName: Array<VendorSearchItem>;
   searchVendorCompanies: Array<VendorSearchItem>;
 };
 
@@ -1539,6 +1540,11 @@ export type QuerySearchProductsArgs = {
 };
 
 
+export type QuerySearchVendorByNameArgs = {
+  data: SearchVendorByNameInput;
+};
+
+
 export type QuerySearchVendorCompaniesArgs = {
   data: SearchVendorCompanyInput;
 };
@@ -1572,6 +1578,10 @@ export type SearchCustomerProjectInput = {
 
 export type SearchProductsInput = {
   searchText: Scalars['String'];
+};
+
+export type SearchVendorByNameInput = {
+  userInput: Scalars['String'];
 };
 
 export type SearchVendorCompanyInput = {
