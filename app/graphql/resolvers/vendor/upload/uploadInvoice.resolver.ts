@@ -23,7 +23,6 @@ const uploadInvoice = async (_parent: any, { file }: any) => {
     await sequelize.models.invoices.create({
       id: fileId,
       fileName: filename,
-      url: `${process.env.AWS_CDN_URL}/${process.env.AWS_S3_INVOICES_FOLDER}/${fileId}`,
       status: InvoiceStatus.Open,
     });
 

@@ -26,7 +26,6 @@ const uploadPurchaseOrder = async (_parent: any, { file }: any) => {
     await sequelize.models.purchase_orders.create({
       id: fileId,
       fileName: filename,
-      url: `${process.env.AWS_CDN_URL}/${process.env.AWS_S3_PURCHASE_ORDERS_FOLDER}/${fileId}`,
       status: PurchaseOrderStatus.Open,
     });
 

@@ -25,7 +25,6 @@ const uploadProjectDesign = async (_parent: any, { file }: any) => {
     await sequelize.models.project_designs.create({
       id: fileId,
       fileName: filename,
-      url: `${process.env.AWS_CDN_URL}/${process.env.AWS_S3_COMPONENT_DESIGNS_FOLDER}/${fileId}`,
     });
 
     return {

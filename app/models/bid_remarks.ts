@@ -8,7 +8,6 @@ export interface bid_remarksAttributes {
   projectId?: string;
   projectBidId?: string;
   fileName: string;
-  url: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -33,7 +32,6 @@ export class bid_remarks
   projectBidId?: string;
   projectId?: string;
   fileName!: string;
-  url!: string;
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -74,10 +72,6 @@ export class bid_remarks
           onDelete: "cascade",
         },
         fileName: {
-          type: DataTypes.STRING,
-          allowNull: false,
-        },
-        url: {
           type: DataTypes.STRING,
           allowNull: false,
         },

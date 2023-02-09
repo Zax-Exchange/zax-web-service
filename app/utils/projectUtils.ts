@@ -181,7 +181,7 @@ class ProjectApiUtils {
                 designs: designs.map((design) => ({
                   fileId: design.id,
                   filename: design.fileName,
-                  url: design.url,
+                  url: `${process.env.AWS_CDN_URL}/${process.env.AWS_S3_COMPONENT_DESIGNS_FOLDER}/${design.id}`,
                 })),
               } as ProjectComponent;
             })
@@ -233,7 +233,7 @@ class ProjectApiUtils {
                 ? {
                     fileId: remarkFile.id,
                     filename: remarkFile.fileName,
-                    url: remarkFile.url,
+                    url: `${process.env.AWS_CDN_URL}/${process.env.AWS_S3_BID_REMARKS_FOLDER}/${remarkFile.id}`,
                   }
                 : null,
             });
@@ -294,7 +294,7 @@ class ProjectApiUtils {
           ? {
               fileId: remarkFile.id,
               filename: remarkFile.fileName,
-              url: remarkFile.url,
+              url: `${process.env.AWS_CDN_URL}/${process.env.AWS_S3_BID_REMARKS_FOLDER}/${remarkFile.id}`,
             }
           : null,
         permission,

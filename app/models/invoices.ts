@@ -9,7 +9,6 @@ export interface invoicesAttributes {
   projectId?: string;
   projectBidId?: string;
   fileName: string;
-  url: string;
   status: InvoiceStatus;
   createdAt: Date;
   updatedAt: Date;
@@ -35,7 +34,6 @@ export class invoices
   projectBidId?: string;
   projectId?: string;
   fileName!: string;
-  url!: string;
   status!: InvoiceStatus;
   createdAt!: Date;
   updatedAt!: Date;
@@ -80,10 +78,7 @@ export class invoices
           type: DataTypes.STRING,
           allowNull: false,
         },
-        url: {
-          type: DataTypes.STRING,
-          allowNull: false,
-        },
+
         status: {
           type: DataTypes.STRING,
           allowNull: false,

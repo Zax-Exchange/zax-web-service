@@ -8,7 +8,6 @@ export interface project_designsAttributes {
   projectId?: string;
   projectComponentId?: string;
   fileName: string;
-  url: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -32,7 +31,6 @@ export class project_designs
   projectId?: string;
   projectComponentId?: string;
   fileName!: string;
-  url!: string;
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -73,10 +71,6 @@ export class project_designs
           },
         },
         fileName: {
-          type: DataTypes.STRING,
-          allowNull: false,
-        },
-        url: {
           type: DataTypes.STRING,
           allowNull: false,
         },

@@ -23,7 +23,7 @@ const getInvoice = async (
       return {
         fileId: invoiceFile.id,
         filename: invoiceFile.fileName,
-        url: invoiceFile.url,
+        url: `${process.env.AWS_CDN_URL}/${process.env.AWS_S3_INVOICES_FOLDER}/${invoiceFile.id}`,
         status: invoiceFile.status,
       };
     }

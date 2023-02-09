@@ -24,7 +24,6 @@ const uploadBidRemark = async (_parent: any, { file }: any) => {
     await sequelize.models.bid_remarks.create({
       id: fileId,
       fileName: filename,
-      url: `${process.env.AWS_CDN_URL}/${process.env.AWS_S3_BID_REMARKS_FOLDER}/${fileId}`,
     });
 
     return {

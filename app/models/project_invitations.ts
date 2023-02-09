@@ -56,8 +56,6 @@ export class project_invitations
             model: "companies",
             key: "id",
           },
-          unique:
-            "project_invitations_id_projectId_customerCompanyId_vendorCompanyId_key",
         },
         projectId: {
           type: DataTypes.UUID,
@@ -66,8 +64,7 @@ export class project_invitations
             model: "projects",
             key: "id",
           },
-          unique:
-            "project_invitations_id_projectId_customerCompanyId_vendorCompanyId_key",
+          unique: "project_invitations_id_projectId_vendorCompanyId_key",
         },
         vendorCompanyId: {
           type: DataTypes.UUID,
@@ -76,8 +73,7 @@ export class project_invitations
             model: "companies",
             key: "id",
           },
-          unique:
-            "project_invitations_id_projectId_customerCompanyId_vendorCompanyId_key",
+          unique: "project_invitations_id_projectId_vendorCompanyId_key",
         },
       },
       {
@@ -86,13 +82,9 @@ export class project_invitations
         timestamps: true,
         indexes: [
           {
-            name: "project_invitations_id_projectId_customerCompanyId_vendorCompanyId_key",
+            name: "project_invitations_id_projectId_vendorCompanyId_key",
             unique: true,
-            fields: [
-              { name: "projectId" },
-              { name: "customerCompanyId" },
-              { name: "vendorCompanyId" },
-            ],
+            fields: [{ name: "projectId" }, { name: "vendorCompanyId" }],
           },
         ],
       }

@@ -25,7 +25,7 @@ const getPurchaseOrder = async (
       return {
         fileId: poFile.id,
         filename: poFile.fileName,
-        url: poFile.url,
+        url: `${process.env.AWS_CDN_URL}/${process.env.AWS_S3_PURCHASE_ORDERS_FOLDER}/${poFile.id}`,
         status: poFile.status,
       };
     }

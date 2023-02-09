@@ -48,7 +48,7 @@ const getProjectBid = async (
         ? {
             fileId: file.id,
             filename: file.fileName,
-            url: file.url,
+            url: `${process.env.AWS_CDN_URL}/${process.env.AWS_S3_BID_REMARKS_FOLDER}/${file.id}`,
           }
         : null,
     };

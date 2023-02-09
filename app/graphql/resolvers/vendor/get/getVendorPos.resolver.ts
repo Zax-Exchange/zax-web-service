@@ -67,14 +67,18 @@ const getVendorPos = async (
                 fileId: poFile.get("id"),
                 filename: poFile.get("fileName"),
                 status: poFile.get("status"),
-                url: poFile.get("url"),
+                url: `${process.env.AWS_CDN_URL}/${
+                  process.env.AWS_S3_PURCHASE_ORDERS_FOLDER
+                }/${poFile.get("id")}`,
               },
               invoiceFile: invoiceFile
                 ? {
                     fileId: invoiceFile.get("id"),
                     filename: invoiceFile.get("fileName"),
                     status: invoiceFile.get("status"),
-                    url: invoiceFile.get("url"),
+                    url: `${process.env.AWS_CDN_URL}/${
+                      process.env.AWS_S3_INVOICES_FOLDER
+                    }/${invoiceFile.get("id")}`,
                   }
                 : null,
             } as VendorPoDetail;
