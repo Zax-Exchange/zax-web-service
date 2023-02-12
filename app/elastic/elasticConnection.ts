@@ -5,9 +5,7 @@ import { Client } from '@elastic/elasticsearch'
 
 const client: Client = (process.env.ELASTIC_CLOUD_ENDPOINT) ? 
   new Client({
-    node: {
-      url: new URL(process.env.ELASTIC_CLOUD_ENDPOINT),
-    },
+    node: process.env.ELASTIC_CLOUD_ENDPOINT,
     auth: { 
       username: process.env.ELASTIC_USERNAME!,
       password: process.env.ELASTIC_PASSWORD!
