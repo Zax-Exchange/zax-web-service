@@ -1,0 +1,36 @@
+name: Set verion to this build
+run-name: ${{ github.actor }} is Setting Version and Pushing Image to EKS
+on:
+  workflow_dispatch:
+    inputs:
+      deploymentEnvironment:
+        description: 'dev|stg|prod'
+        required: true
+        type: string
+        options:
+        - stg
+jobs:
+  Set-Version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate build tag
+        id: tag_step
+        run: |
+          echo "Generating build tag pipeline on branch ${{ github.ref }}"
+          gittag=${{github.sha}}
+          echo "  Found hash ${gittag}"
+          version=$(npm pkg get version | tr -d '"')
+          echo "  Found package version ${version}"
+          buildtag="zax-webservice-${version}-${gittag}"
+          echo "Final buildtag ${buildtag}"
+          echo "buildtag=$buildtag" >> $GITHUB_OUTPUT
+      - name: Update tag 
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+  Deploy:
+    uses: Zax-Exchange/zax-cdks/.github/workflows/cdk-deploy.yml@master
+    with: 
+      deploymentVersion: ${{ inputs.deploymentEnvironment }}

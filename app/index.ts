@@ -81,15 +81,15 @@ const startServer = async () => {
   app.use(graphqlUploadExpress());
   // app.use(bodyParser.json());
 
+  const frontendUrl = process.env.FRONTEND_URL;
+  const origins = [
+    (frontendUrl) ? frontendUrl: "http://localhost:3000",
+    "https://studio.apollographql.com",
+    "https://api.stripe.com",
+  ];
   server.applyMiddleware({
     app,
-    cors: {
-      origin: [
-        "http://localhost:3000",
-        "https://studio.apollographql.com",
-        "https://api.stripe.com",
-      ],
-    },
+    cors: {origin: origins},
   });
 
   app.use("/api", apiRouters);
