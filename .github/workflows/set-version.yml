@@ -10,7 +10,7 @@ on:
         options:
         - stg
 jobs:
-  Set-Version-and-Deploy:
+  Set-Version:
     runs-on: ubuntu-latest
     steps:
       - name: Generate build tag
@@ -30,7 +30,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - name: Run CDK Pipeline to ${{ inputs.deploymentEnvironment }}
-        uses: Zax-Exchange/zax-cdks/.github/workflows/cdk-deploy.yml@master
-        with:
-          deploymentEnvironment: ${{ inputs.deploymentEnvironment }}
+  Deploy:
+    uses: Zax-Exchange/zax-cdks/.github/workflows/cdk-deploy.yml@master
+    with: 
+      deploymentVersion: ${{ inputs.deploymentEnvironment }}
