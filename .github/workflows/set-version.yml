@@ -10,7 +10,7 @@ on:
         options:
         - stg
 jobs:
-  Build-Docker-Image:
+  Set-Version-and-Deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Generate build tag
