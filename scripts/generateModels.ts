@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
 }
-process.env.NODE_ENV = "test";
 
 const port = parseInt(process.env.RDS_PORT || "5432");
 let name = process.env.TEST_RDS_NAME;
