@@ -18,7 +18,7 @@ jobs:
     with: 
       deploymentEnvironment: ${{ inputs.deploymentEnvironment }}
       varName: ZAX_WEBSERVICE_DEPLOY_IMAGE_TAG
-      varValue: ${{ needs.Generate-Build-Tag.outputs.buildtag }}
+      varValue: ${{ needs.Generate-Build-Tag.outputs.build-tag }}
     secrets: inherit
   Run-CDK-and-Deploy:
     uses: Zax-Exchange/zax-cdks/.github/workflows/cdk-deploy.yml@master
