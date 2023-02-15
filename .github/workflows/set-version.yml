@@ -22,6 +22,7 @@ jobs:
     secrets: inherit
   Run-CDK-and-Deploy:
     uses: Zax-Exchange/zax-cdks/.github/workflows/cdk-deploy.yml@master
+    needs: Set-Version-in-CDK-Configuration
     with: 
       deploymentEnvironment: ${{ inputs.deploymentEnvironment }}
     secrets: inherit
