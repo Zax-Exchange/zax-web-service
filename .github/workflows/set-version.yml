@@ -34,4 +34,3 @@ jobs:
     uses: Zax-Exchange/zax-cdks/.github/workflows/cdk-deploy.yml@master
     with: 
       deploymentEnvironment: ${{ inputs.deploymentEnvironment }}
-    secrets: inherit
