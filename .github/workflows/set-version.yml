@@ -1,4 +1,4 @@
-name: Set verion to this build
+name: Deploy Docker Image
 run-name: ${{ github.actor }} is Setting Version and Pushing Image to EKS
 on:
   workflow_dispatch:
@@ -12,7 +12,6 @@ on:
 jobs:
   Generate-Build-Tag:
     uses: ./.github/workflows/generate-build-tag.yml
-    runs-on: ubuntu-latest
   Set-Version-in-CDK-Configuration:
     uses: Zax-Exchange/zax-cdks/.github/workflows/set-version.yml@master
     needs: Generate-Build-Tag
