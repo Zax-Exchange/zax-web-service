@@ -115,7 +115,7 @@ export default class ElasticCompanyService {
           const company = await CompanyApiUtils.getCompanyWithCompanyId(vendor.companyId);
           syncJobs.push(elasticClient.index({
             index: VENDOR_INDEX_NAME,
-            id: vendor.id,
+            id: vendor.companyId,
             document: {
               name: company.name,
               country: company.country,
