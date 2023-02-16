@@ -157,8 +157,10 @@ export default class QueryBuilder {
     }
     if (factoryLocations) {
       const terms = factoryLocations.map((location) => {
-        term: {
-          locations: location;
+        return { 
+          term: {
+            locations: location.toLowerCase()
+         }
         }
       });
       const locationsFilter = {
