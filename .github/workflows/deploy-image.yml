@@ -1,5 +1,5 @@
 name: Deploy Docker Image
-run-name: ${{ github.actor }} is Setting Version and Pushing Image to EKS
+run-name: ${{ github.actor }} is Setting Version and Deploying Image to EKS
 on:
   workflow_dispatch:
     inputs:
@@ -7,8 +7,6 @@ on:
         description: 'dev|stg|prod'
         required: true
         type: string
-        options:
-        - stg
 jobs:
   Generate-Build-Tag:
     uses: ./.github/workflows/generate-build-tag.yml
