@@ -1,6 +1,6 @@
 import express from "express";
 import Stripe from "stripe";
-import { stripe_customers } from "../../../models/stripe_customers";
+import { stripe_customers } from "../../../db/models/stripe_customers";
 import sequelize from "../../../postgres/dbconnection";
 import { stripe } from "../../../stripe/StripeService";
 

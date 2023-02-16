@@ -5,7 +5,7 @@ import {
   GetCustomerProjectInvitationsInput,
   ProjectInvitation,
 } from "../../../resolvers-types.generated";
-import { project_invitationsAttributes } from "../../../../models/project_invitations";
+import { project_invitationsAttributes } from "../../../../db/models/project_invitations";
 import CompanyApiUtils from "../../../../utils/companyUtils";
 
 const getCustomerProjectInvitations = async (

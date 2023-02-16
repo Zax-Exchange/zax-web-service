@@ -1,5 +1,5 @@
 import emailService from "../../../../gcp/EmailService";
-import { stripe_customers } from "../../../../models/stripe_customers";
+import { stripe_customers } from "../../../../db/models/stripe_customers";
 import sequelize from "../../../../postgres/dbconnection";
 import stripeService from "../../../../stripe/StripeService";
 import { UpdateCompanyPlanSubscriptionInfoInput } from "../../../resolvers-types.generated";
@@ -37,8 +37,8 @@ const updateCompanyPlanSubscriptionInfo = async (
       html: `
           <p>Please follow the link below to complete sign up for your account.</p>
           <a href="${process.env.FRONTEND_URL}/user-signup/${companyPlan?.get(
-            "companyId"
-          )}">Click here</a>
+        "companyId"
+      )}">Click here</a>
         `,
     };
 

@@ -4,7 +4,7 @@ import {
   CompanySize,
   PlanTier,
   Pricings,
-} from "../graphql/resolvers-types.generated";
+} from "../../graphql/resolvers-types.generated";
 import type { company_plans, company_plansId } from "./company_plans";
 
 export interface plansAttributes {

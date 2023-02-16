@@ -1,6 +1,6 @@
 import { createClient } from "redis";
 import { GenericUser, Project } from "../graphql/resolvers-types.generated";
-import { projectsAttributes } from "../models/projects";
+import { projectsAttributes } from "../db/models/projects";
 
 const port = process.env.CACHE_PORT;
 const host = process.env.CACHE_HOST;

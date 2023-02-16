@@ -11,7 +11,7 @@ import type {
 } from "./project_bid_permissions";
 import type { projects, projectsId } from "./projects";
 import type { users, usersId } from "./users";
-import { BidStatus } from "../graphql/resolvers-types.generated";
+import { BidStatus } from "../../graphql/resolvers-types.generated";
 import { bid_remarks } from "./bid_remarks";
 import { invoices } from "./invoices";
 import { purchase_orders } from "./purchase_orders";

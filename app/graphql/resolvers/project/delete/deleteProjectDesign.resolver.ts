@@ -1,5 +1,5 @@
 import s3 from "../../../../aws/s3";
-import { project_designs } from "../../../../models/project_designs";
+import { project_designs } from "../../../../db/models/project_designs";
 import sequelize from "../../../../postgres/dbconnection";
 import cacheService from "../../../../redis/CacheService";
 import { DeleteProjectDesignInput } from "../../../resolvers-types.generated";

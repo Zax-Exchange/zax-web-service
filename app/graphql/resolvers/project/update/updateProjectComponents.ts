@@ -3,12 +3,12 @@ import { v4 as uuidv4 } from "uuid";
 import {
   project_components,
   project_componentsAttributes,
-} from "../../../../models/project_components";
+} from "../../../../db/models/project_components";
 import {
   component_specs,
   component_specsAttributes,
-} from "../../../../models/component_specs";
-import { project_component_changelogs } from "../../../../models/project_component_changelogs";
+} from "../../../../db/models/component_specs";
+import { project_component_changelogs } from "../../../../db/models/project_component_changelogs";
 import sequelize from "../../../../postgres/dbconnection";
 
 import streamService from "../../../../stream/StreamService";
@@ -21,7 +21,7 @@ import {
   UpdateProjectComponentSpecData,
 } from "../../../resolvers-types.generated";
 import { deleteProjectDesign } from "../delete/deleteProjectDesign.resolver";
-import { project_designs } from "../../../../models/project_designs";
+import { project_designs } from "../../../../db/models/project_designs";
 
 // if change this, please also update the same method in createProject.resolver.ts
 const processComponentSpecChanges = (spec: UpdateProjectComponentSpecData) => {

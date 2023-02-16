@@ -1,4 +1,4 @@
-import { project_permissionsAttributes } from "../../../../models/project_permissions";
+import { project_permissionsAttributes } from "../../../../db/models/project_permissions";
 import sequelize from "../../../../postgres/dbconnection";
 import ErrorUtils from "../../../../utils/ErrorUtils";
 import ProjectApiUtils from "../../../../utils/projectUtils";

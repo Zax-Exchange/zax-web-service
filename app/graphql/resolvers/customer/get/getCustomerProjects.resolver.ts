@@ -1,5 +1,5 @@
-import { projects, projectsAttributes } from "../../../../models/projects";
-import { project_permissionsAttributes } from "../../../../models/project_permissions";
+import { projects, projectsAttributes } from "../../../../db/models/projects";
+import { project_permissionsAttributes } from "../../../../db/models/project_permissions";
 import sequelize from "../../../../postgres/dbconnection";
 import ProjectApiUtils from "../../../../utils/projectUtils";
 import {

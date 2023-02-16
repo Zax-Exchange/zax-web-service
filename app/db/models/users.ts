@@ -11,7 +11,7 @@ import type {
   project_permissionsId,
 } from "./project_permissions";
 import type { projects, projectsId } from "./projects";
-import { UserPower, UserStatus } from "../graphql/resolvers-types.generated";
+import { UserPower, UserStatus } from "../../graphql/resolvers-types.generated";
 
 export interface usersAttributes {
   id: string;

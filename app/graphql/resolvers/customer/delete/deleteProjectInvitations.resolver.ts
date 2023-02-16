@@ -9,7 +9,7 @@ import {
   ProjectPermission,
 } from "../../../resolvers-types.generated";
 import { v4 as uuidv4 } from "uuid";
-import { project_invitationsAttributes } from "../../../../models/project_invitations";
+import { project_invitationsAttributes } from "../../../../db/models/project_invitations";
 import CompanyApiUtils from "../../../../utils/companyUtils";
 import UserApiUtils from "../../../../utils/userUtils";
 

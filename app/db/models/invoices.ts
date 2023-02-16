@@ -1,6 +1,6 @@
 import * as Sequelize from "sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
-import { InvoiceStatus } from "../graphql/resolvers-types.generated";
+import { InvoiceStatus } from "../../graphql/resolvers-types.generated";
 import type { projects, projectsId } from "./projects";
 import type { project_bids } from "./project_bids";
 

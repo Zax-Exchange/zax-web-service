@@ -1,4 +1,4 @@
-import { companies } from "../../../../models/companies";
+import { companies } from "../../../../db/models/companies";
 import sequelize from "../../../../postgres/dbconnection";
 import {
   GenericUser,

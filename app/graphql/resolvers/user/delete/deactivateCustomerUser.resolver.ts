@@ -1,5 +1,5 @@
-import { stripe_customers } from "../../../../models/stripe_customers";
-import { users } from "../../../../models/users";
+import { stripe_customers } from "../../../../db/models/stripe_customers";
+import { users } from "../../../../db/models/users";
 import { USER_LOGOUT_ROUTE } from "../../../../notification/notificationRoutes";
 import NotificationService from "../../../../notification/NotificationService";
 import sequelize from "../../../../postgres/dbconnection";

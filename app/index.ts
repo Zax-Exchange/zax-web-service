@@ -2,7 +2,7 @@ import { ApolloServer, gql } from "apollo-server-express";
 import express from "express";
 import getResolvers from "./graphql/resolvers";
 import sequelize from "./postgres/dbconnection";
-import { initModels } from "./models/init-models";
+import { initModels } from "./db/models/init-models";
 import dotenv from "dotenv";
 import cors from "cors";
 import http from "http";
@@ -70,13 +70,13 @@ const startServer = async () => {
 
   const frontendUrl = process.env.FRONTEND_URL;
   const origins = [
-    (frontendUrl) ? frontendUrl: "http://localhost:3000",
+    frontendUrl ? frontendUrl : "http://localhost:3000",
     "https://studio.apollographql.com",
     "https://api.stripe.com",
   ];
   server.applyMiddleware({
     app,
-    cors: {origin: origins},
+    cors: { origin: origins },
   });
 
   app.use("/api", apiRouters);

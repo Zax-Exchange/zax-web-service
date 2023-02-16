@@ -1,4 +1,4 @@
-import { usersAttributes } from "../../../../models/users";
+import { usersAttributes } from "../../../../db/models/users";
 import sequelize from "../../../../postgres/dbconnection";
 import streamService from "../../../../stream/StreamService";
 import {

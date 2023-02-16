@@ -12,7 +12,7 @@ import createOrUpdateProjectPermission from "./createOrUpdateProjectPermission";
 import ElasticProjectService from "../../../../elastic/project/ElasticProjectService";
 import { Transaction } from "sequelize/types";
 import cacheService from "../../../../redis/CacheService";
-import { component_specs } from "../../../../models/component_specs";
+import { component_specs } from "../../../../db/models/component_specs";
 
 // if change this, please also update the same method in updateProjectComponents.ts
 const processComponentSpec = (

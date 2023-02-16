@@ -1,6 +1,5 @@
 import * as Sequelize from "sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
-import { ProductAndMoq } from "../graphql/resolvers-types.generated";
 import type { companies, companiesId } from "./companies";
 
 export interface vendorsAttributes {

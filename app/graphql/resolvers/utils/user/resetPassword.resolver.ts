@@ -3,7 +3,7 @@ import sequelize from "../../../../postgres/dbconnection";
 import UserApiUtils from "../../../../utils/userUtils";
 import { ResetPasswordInput } from "../../../resolvers-types.generated";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { users } from "../../../../models/users";
+import { users } from "../../../../db/models/users";
 import bcrypt from "bcryptjs";
 import cacheService from "../../../../redis/CacheService";
 

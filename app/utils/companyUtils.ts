@@ -1,9 +1,9 @@
 import sequelize from "../postgres/dbconnection";
-import { companiesAttributes } from "../models/companies";
+import { companiesAttributes } from "../db/models/companies";
 import jwt from "jsonwebtoken";
 import { CompanyPlan, UserPower } from "../graphql/resolvers-types.generated";
-import { vendorsAttributes } from "../models/vendors";
-import { customersAttributes } from "../models/customers";
+import { vendorsAttributes } from "../db/models/vendors";
+import { customersAttributes } from "../db/models/customers";
 import ErrorUtils from "./ErrorUtils";
 
 class CompanyApiUtils {

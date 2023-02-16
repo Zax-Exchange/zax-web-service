@@ -1,5 +1,5 @@
-import { project_changelogs } from "../../../../models/project_changelogs";
-import { project_component_changelogs } from "../../../../models/project_component_changelogs";
+import { project_changelogs } from "../../../../db/models/project_changelogs";
+import { project_component_changelogs } from "../../../../db/models/project_component_changelogs";
 import sequelize from "../../../../postgres/dbconnection";
 import {
   GetProjectChangelogInput,

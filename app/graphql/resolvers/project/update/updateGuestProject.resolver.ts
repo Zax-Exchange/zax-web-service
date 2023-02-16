@@ -1,7 +1,7 @@
 import { UserInputError } from "apollo-server-core";
 import { v4 as uuidv4 } from "uuid";
-import { projects, projectsAttributes } from "../../../../models/projects";
-import { project_changelogs } from "../../../../models/project_changelogs";
+import { projects, projectsAttributes } from "../../../../db/models/projects";
+import { project_changelogs } from "../../../../db/models/project_changelogs";
 import ElasticProjectService from "../../../../elastic/project/ElasticProjectService";
 import { UpdateProjectDocumentWithProjectSpecInput } from "../../../../elastic/types/project";
 import sequelize from "../../../../postgres/dbconnection";
@@ -31,7 +31,7 @@ import {
   project_bid_components,
   project_bid_componentsAttributes,
   project_bid_componentsCreationAttributes,
-} from "../../../../models/project_bid_components";
+} from "../../../../db/models/project_bid_components";
 import updateProjectComponents from "./updateProjectComponents";
 import deleteProjectComponents from "../delete/deleteProjectComponent";
 import { createProjectComponents } from "../create/createProject.resolver";

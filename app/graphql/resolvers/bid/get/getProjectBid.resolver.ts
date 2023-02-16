@@ -1,8 +1,8 @@
-import { bid_remarks } from "../../../../models/bid_remarks";
+import { bid_remarks } from "../../../../db/models/bid_remarks";
 import {
   project_bids,
   project_bidsAttributes,
-} from "../../../../models/project_bids";
+} from "../../../../db/models/project_bids";
 import sequelize from "../../../../postgres/dbconnection";
 import {
   BidStatus,

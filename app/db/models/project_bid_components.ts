@@ -1,6 +1,6 @@
 import * as Sequelize from "sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
-import { QuantityPrice } from "../graphql/resolvers-types.generated";
+import { QuantityPrice } from "../../graphql/resolvers-types.generated";
 import type { project_bids, project_bidsId } from "./project_bids";
 import type {
   project_components,

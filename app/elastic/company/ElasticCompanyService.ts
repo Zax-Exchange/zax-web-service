@@ -1,10 +1,10 @@
-import { vendorsAttributes } from "../../models/vendors";
+import { vendorsAttributes } from "../../db/models/vendors";
 import sequelize from "../../postgres/dbconnection";
 import CompanyApiUtils from "../../utils/companyUtils";
 import elasticClient from "../elasticConnection";
 import * as companyTypes from "../types/company";
 
-const VENDOR_INDEX_NAME = "vendor"
+const VENDOR_INDEX_NAME = "vendor";
 export default class ElasticCompanyService {
   static async createVendorIndex() {
     return elasticClient.indices.create({
@@ -25,7 +25,9 @@ export default class ElasticCompanyService {
   static async createVendorDocument(data: companyTypes.VendorDocument) {
     try {
       // await elasticClient.indices.delete({ index: "vendor" });
-      const exist = await elasticClient.indices.exists({ index: VENDOR_INDEX_NAME });
+      const exist = await elasticClient.indices.exists({
+        index: VENDOR_INDEX_NAME,
+      });
 
       if (!exist) {
         await this.createVendorIndex();
@@ -77,8 +79,8 @@ export default class ElasticCompanyService {
           fields: {
             name: {},
             products: {},
-          }
-        }
+          },
+        },
       })
       .then((res) => {
         return res.hits.hits;
@@ -91,7 +93,9 @@ export default class ElasticCompanyService {
 
   static async syncVendorsWithES() {
     try {
-      const exist = await elasticClient.indices.exists({ index: VENDOR_INDEX_NAME });
+      const exist = await elasticClient.indices.exists({
+        index: VENDOR_INDEX_NAME,
+      });
       if (!exist) {
         await this.createVendorIndex();
       } else {
@@ -99,34 +103,41 @@ export default class ElasticCompanyService {
           index: VENDOR_INDEX_NAME,
           body: {
             query: {
-              match_all: {}
-            }
-          }
+              match_all: {},
+            },
+          },
         });
       }
-  
+
       const syncJobs: Promise<any>[] = [];
       const res = await sequelize.models.vendors.findAll();
       for (const item of res) {
         const vendor = item.get({ plain: true }) as vendorsAttributes;
         if (vendor) {
-          const productsAndMoq = JSON.parse(vendor.productsAndMoq) as {product: string, moq: string}[];
+          const productsAndMoq = JSON.parse(vendor.productsAndMoq) as {
+            product: string;
+            moq: string;
+          }[];
           const products: string[] = productsAndMoq.map((it) => it.product);
-          const company = await CompanyApiUtils.getCompanyWithCompanyId(vendor.companyId);
-          syncJobs.push(elasticClient.index({
-            index: VENDOR_INDEX_NAME,
-            id: vendor.companyId,
-            document: {
-              name: company.name,
-              country: company.country,
-              locations: vendor.locations,
-              leadTime: vendor.leadTime,
-              products,
-            }
-          }));
-        }        
+          const company = await CompanyApiUtils.getCompanyWithCompanyId(
+            vendor.companyId
+          );
+          syncJobs.push(
+            elasticClient.index({
+              index: VENDOR_INDEX_NAME,
+              id: vendor.companyId,
+              document: {
+                name: company.name,
+                country: company.country,
+                locations: vendor.locations,
+                leadTime: vendor.leadTime,
+                products,
+              },
+            })
+          );
+        }
       }
-      await Promise.all(syncJobs);      
+      await Promise.all(syncJobs);
     } catch (error) {
       console.log(error);
     }

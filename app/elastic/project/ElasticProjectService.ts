@@ -3,10 +3,9 @@ import * as projectTypes from "../types/project";
 import UserApiUtils from "../../utils/userUtils";
 import CompanyApiUtils from "../../utils/companyUtils";
 import sequelize from "../../postgres/dbconnection";
-import { projectsAttributes } from "../../models/projects";
+import { projectsAttributes } from "../../db/models/projects";
 import ProjectApiUtils from "../../utils/projectUtils";
 import { Project } from "../../graphql/resolvers-types.generated";
-
 
 const PROJECT_INDEX_NAME = "project";
 export default class ElasticProjectService {
@@ -26,7 +25,7 @@ export default class ElasticProjectService {
           products: { type: "search_as_you_type" },
           deleted: { type: "boolean" },
         },
-      }
+      },
     });
   }
   static async createProjectDocument(
@@ -79,8 +78,15 @@ export default class ElasticProjectService {
   static async updateProjectDocumentWithProjectSpec(
     data: projectTypes.UpdateProjectDocumentWithProjectSpecInput
   ) {
-    const { projectId, deliveryAddress, country, deliveryDate, targetPrice, orderQuantities, category } =
-      data;
+    const {
+      projectId,
+      deliveryAddress,
+      country,
+      deliveryDate,
+      targetPrice,
+      orderQuantities,
+      category,
+    } = data;
     await elasticClient
       .update({
         index: PROJECT_INDEX_NAME,
@@ -91,11 +97,11 @@ export default class ElasticProjectService {
           country,
           deliveryDate,
           targetPrice,
-          orderQuantities
+          orderQuantities,
         },
       })
       .catch((e) => {
-        console.error(e)
+        console.error(e);
       });
   }
 
@@ -152,7 +158,9 @@ export default class ElasticProjectService {
 
   static async syncProjectsWithES() {
     try {
-      const exist = await elasticClient.indices.exists({ index: PROJECT_INDEX_NAME });
+      const exist = await elasticClient.indices.exists({
+        index: PROJECT_INDEX_NAME,
+      });
       if (!exist) {
         await this.createProjectIndex();
       } else {
@@ -160,38 +168,48 @@ export default class ElasticProjectService {
           index: PROJECT_INDEX_NAME,
           body: {
             query: {
-              match_all: {}
-            }
-          }
+              match_all: {},
+            },
+          },
         });
       }
-  
+
       const syncJobs: Promise<any>[] = [];
       const res = await sequelize.models.projects.findAll();
       for (const item of res) {
-        const projectAttributes = item.get({ plain: true }) as projectsAttributes;
+        const projectAttributes = item.get({
+          plain: true,
+        }) as projectsAttributes;
         if (projectAttributes) {
-          const project: Project = await ProjectApiUtils.getProject(projectAttributes.id) as Project;
-          const products: string[] = project.components.map(component => component.componentSpec.productName);
-          const company = await CompanyApiUtils.getCompanyWithCompanyId(project.companyId);
-          syncJobs.push(elasticClient.index({
-            index: PROJECT_INDEX_NAME,
-            id: project.id,
-            document: {
-              companyName: company.name,
-              category: project.category,
-              deliveryAddress: project.deliveryAddress,
-              deliveryDate: project.deliveryDate,
-              country: project.country,
-              targetPrice: project.targetPrice,
-              orderQuantities: project.orderQuantities,
-              products,
-              deleted: false, // db doesn't keep deleted projects
-            }
-          }));
-        }        
+          const project: Project = (await ProjectApiUtils.getProject(
+            projectAttributes.id
+          )) as Project;
+          const products: string[] = project.components.map(
+            (component) => component.componentSpec.productName
+          );
+          const company = await CompanyApiUtils.getCompanyWithCompanyId(
+            project.companyId
+          );
+          syncJobs.push(
+            elasticClient.index({
+              index: PROJECT_INDEX_NAME,
+              id: project.id,
+              document: {
+                companyName: company.name,
+                category: project.category,
+                deliveryAddress: project.deliveryAddress,
+                deliveryDate: project.deliveryDate,
+                country: project.country,
+                targetPrice: project.targetPrice,
+                orderQuantities: project.orderQuantities,
+                products,
+                deleted: false, // db doesn't keep deleted projects
+              },
+            })
+          );
+        }
       }
-      await Promise.all(syncJobs);      
+      await Promise.all(syncJobs);
     } catch (error) {
       console.log(error);
     }

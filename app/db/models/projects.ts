@@ -4,7 +4,7 @@ import {
   ProjectCreationMode,
   ProjectStatus,
   ProjectVisibility,
-} from "../graphql/resolvers-types.generated";
+} from "../../graphql/resolvers-types.generated";
 import { bid_remarks } from "./bid_remarks";
 import type { companies, companiesId } from "./companies";
 import { invoices } from "./invoices";

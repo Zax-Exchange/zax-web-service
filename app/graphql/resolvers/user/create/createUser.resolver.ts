@@ -14,12 +14,12 @@ import streamService from "../../../../stream/StreamService";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import ErrorUtils from "../../../../utils/ErrorUtils";
 import stripeService, { stripe } from "../../../../stripe/StripeService";
-import { company_plans } from "../../../../models/company_plans";
-import { stripe_customers } from "../../../../models/stripe_customers";
-import { companies } from "../../../../models/companies";
+import { company_plans } from "../../../../db/models/company_plans";
+import { stripe_customers } from "../../../../db/models/stripe_customers";
+import { companies } from "../../../../db/models/companies";
 import NotificationService from "../../../../notification/NotificationService";
 import { USER_SIGNUP_ROUTE } from "../../../../notification/notificationRoutes";
-import { expiring_jwt_tokens } from "../../../../models/expiring_jwt_tokens";
+import { expiring_jwt_tokens } from "../../../../db/models/expiring_jwt_tokens";
 
 const createUser = async (
   parent: any,

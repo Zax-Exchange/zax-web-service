@@ -3,7 +3,7 @@ import sequelize from "../../../../postgres/dbconnection";
 import UserApiUtils from "../../../../utils/userUtils";
 import { SendPasswordResetLinkInput } from "../../../resolvers-types.generated";
 import jwt from "jsonwebtoken";
-import { users } from "../../../../models/users";
+import { users } from "../../../../db/models/users";
 
 const sendPasswordResetLink = async (
   parent: any,
