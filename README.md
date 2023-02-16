@@ -2,13 +2,26 @@
 
 Project setup
 
-1. clone zax-exchange-db (If you plan on changing seed data)
+1. clone Notification-Server repo and start local server
 2. clone this repo
-3. Make sure your node version is >= 16
-4. create `.env` file and put necessary credentials (Request joseph@zaxexchange.com for credentials)
-5. run `npm install`
-6. run `npm run start`
-7. should see `db synced` and `server ready` log when server starts successfully
+3. make sure your node version is >= 16
+4. install docker and run local redis instance (POC: william@zaxexchange.com)
+5. create `.env` file (see env repo) and put necessary credentials
+6. run `npm install`
+7. run `npm run start`
+8. should see `connected to redis`, `notification server connected`, `db connected` and `server ready` log when server starts successfully
+
+Sequelize migration
+
+* Running migration created by other people
+   1. run `npm run migrate`
+* Creat your own migration
+   1. run `npm run generate-migration-skeleton` and a new template will be generated in migrations folder.
+   2. change the generated template file extension to `.cjs`
+   3. rename the generated template and follow the same format as the example one.
+   4. add your migration logic in the file
+   5. run `npm run migrate` and verify db
+   6. run `npm run unmigrate` if you need to revert the migration
 
 VS Code Extensions
 - Required
