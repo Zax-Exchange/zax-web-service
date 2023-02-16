@@ -1,4 +1,4 @@
-import { purchase_orders } from "../../../../models/purchase_orders";
+import { purchase_orders } from "../../../../db/models/purchase_orders";
 import sequelize from "../../../../postgres/dbconnection";
 
 import {

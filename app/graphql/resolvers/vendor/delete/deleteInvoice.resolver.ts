@@ -1,5 +1,5 @@
 import s3 from "../../../../aws/s3";
-import { invoices } from "../../../../models/invoices";
+import { invoices } from "../../../../db/models/invoices";
 import sequelize from "../../../../postgres/dbconnection";
 import cacheService from "../../../../redis/CacheService";
 import { DeleteInvoiceInput } from "../../../resolvers-types.generated";

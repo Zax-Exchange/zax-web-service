@@ -1,10 +1,10 @@
 import { Model, ModelStatic, Op, Transaction } from "sequelize";
 import sequelize from "../postgres/dbconnection";
-import { project_bids } from "../models/project_bids";
-import { users } from "../models/users";
-import { project_bid_permissionsAttributes } from "../models/project_bid_permissions";
-import { project_permissionsAttributes } from "../models/project_permissions";
-import { projects, projectsAttributes } from "../models/projects";
+import { project_bids } from "../db/models/project_bids";
+import { users } from "../db/models/users";
+import { project_bid_permissionsAttributes } from "../db/models/project_bid_permissions";
+import { project_permissionsAttributes } from "../db/models/project_permissions";
+import { projects, projectsAttributes } from "../db/models/projects";
 import {
   CustomerProject,
   CustomerProjectOverview,
@@ -23,13 +23,13 @@ import {
   VendorProject,
   VendorProjectOverview,
 } from "../graphql/resolvers-types.generated";
-import { project_changelogs } from "../models/project_changelogs";
-import { project_component_changelogs } from "../models/project_component_changelogs";
+import { project_changelogs } from "../db/models/project_changelogs";
+import { project_component_changelogs } from "../db/models/project_component_changelogs";
 import cacheService from "../redis/CacheService";
 import {
   component_specs,
   component_specsAttributes,
-} from "../models/component_specs";
+} from "../db/models/component_specs";
 
 class ProjectApiUtils {
   // Returns a list of vendor user ids that have bids for the project

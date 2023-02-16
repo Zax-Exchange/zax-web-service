@@ -1,6 +1,6 @@
 import s3 from "../../../../aws/s3";
-import { invoices } from "../../../../models/invoices";
-import { purchase_orders } from "../../../../models/purchase_orders";
+import { invoices } from "../../../../db/models/invoices";
+import { purchase_orders } from "../../../../db/models/purchase_orders";
 import sequelize from "../../../../postgres/dbconnection";
 import cacheService from "../../../../redis/CacheService";
 import { DeletePurchaseOrderInput } from "../../../resolvers-types.generated";

@@ -1,6 +1,6 @@
 import * as Sequelize from "sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
-import { ProjectPermission } from "../graphql/resolvers-types.generated";
+import { ProjectPermission } from "../../graphql/resolvers-types.generated";
 import type { projects, projectsId } from "./projects";
 import type { users, usersId } from "./users";
 

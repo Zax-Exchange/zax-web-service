@@ -1,5 +1,5 @@
 import sequelize from "../postgres/dbconnection";
-import { users } from "../models/users";
+import { users } from "../db/models/users";
 import { UserPower } from "../graphql/resolvers-types.generated";
 
 class UserApiUtils {

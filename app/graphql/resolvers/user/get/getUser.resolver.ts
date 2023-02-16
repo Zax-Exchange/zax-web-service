@@ -1,4 +1,4 @@
-import { users } from "../../../../models/users";
+import { users } from "../../../../db/models/users";
 import sequelize from "../../../../postgres/dbconnection";
 import cacheService from "../../../../redis/CacheService";
 import { GetUserInput } from "../../../resolvers-types.generated";

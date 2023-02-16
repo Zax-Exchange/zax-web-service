@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { stripe_customers } from "../../../../models/stripe_customers";
+import { stripe_customers } from "../../../../db/models/stripe_customers";
 import sequelize from "../../../../postgres/dbconnection";
 import stripeService, { stripe } from "../../../../stripe/StripeService";
 import ErrorUtils from "../../../../utils/ErrorUtils";

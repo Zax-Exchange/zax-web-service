@@ -1,5 +1,5 @@
-import { company_plans } from "../../../../models/company_plans";
-import { plansAttributes } from "../../../../models/plans";
+import { company_plans } from "../../../../db/models/company_plans";
+import { plansAttributes } from "../../../../db/models/plans";
 import sequelize from "../../../../postgres/dbconnection";
 import { stripeTimeToUTC } from "../../../../utils/timeUtils";
 import {

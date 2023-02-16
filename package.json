@@ -12,7 +12,10 @@
     "generate": "node --loader ts-node/esm scripts/generateModels.ts",
     "seedAll": "npm --prefix ../zax-exchange-db run seedAll",
     "unseed-users": "npm --prefix ../zax-exchange-db run unseed-users",
-    "jest-setup-project-testing": "npm --prefix ../zax-exchange-db run seed-users"
+    "jest-setup-project-testing": "npm --prefix ../zax-exchange-db run seed-users",
+    "generate-migration-skeleton": "npx sequelize-cli migration:generate --name migration-skeleton",
+    "migrate": "npx sequelize-cli db:migrate",
+    "unmigrate": "npx sequelize-cli db:migrate:undo"
   },
   "keywords": [],
   "author": "",

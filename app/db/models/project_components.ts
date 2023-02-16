@@ -7,7 +7,7 @@ import type {
 import type { projects, projectsId } from "./projects";
 import { component_specs, component_specsId } from "./component_specs";
 import { project_designs } from "./project_designs";
-import { deleteProjectDesign } from "../graphql/resolvers/project/delete/deleteProjectDesign.resolver";
+import { deleteProjectDesign } from "../../graphql/resolvers/project/delete/deleteProjectDesign.resolver";
 
 export interface project_componentsAttributes {
   id: string;

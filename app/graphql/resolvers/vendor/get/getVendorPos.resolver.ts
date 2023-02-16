@@ -1,5 +1,5 @@
-import { projects, projectsAttributes } from "../../../../models/projects";
-import { purchase_orders } from "../../../../models/purchase_orders";
+import { projects, projectsAttributes } from "../../../../db/models/projects";
+import { purchase_orders } from "../../../../db/models/purchase_orders";
 import sequelize from "../../../../postgres/dbconnection";
 import CompanyApiUtils from "../../../../utils/companyUtils";
 import ProjectApiUtils from "../../../../utils/projectUtils";

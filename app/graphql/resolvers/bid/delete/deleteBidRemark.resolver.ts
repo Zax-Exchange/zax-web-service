@@ -1,5 +1,5 @@
 import s3 from "../../../../aws/s3";
-import { bid_remarks } from "../../../../models/bid_remarks";
+import { bid_remarks } from "../../../../db/models/bid_remarks";
 import sequelize from "../../../../postgres/dbconnection";
 import cacheService from "../../../../redis/CacheService";
 import { DeleteBidRemarkInput } from "../../../resolvers-types.generated";

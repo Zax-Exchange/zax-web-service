@@ -1,6 +1,6 @@
 import { UserInputError } from "apollo-server-core";
 import { Transaction } from "sequelize/types";
-import { project_components } from "../../../../models/project_components";
+import { project_components } from "../../../../db/models/project_components";
 import { PROJECT_UPDATE_ROUTE } from "../../../../notification/notificationRoutes";
 import NotificationService from "../../../../notification/NotificationService";
 import sequelize from "../../../../postgres/dbconnection";

@@ -1,4 +1,4 @@
-import { project_bids } from "../../../../models/project_bids";
+import { project_bids } from "../../../../db/models/project_bids";
 import { BID_UPDATE_ROUTE } from "../../../../notification/notificationRoutes";
 import NotificationService from "../../../../notification/NotificationService";
 import sequelize from "../../../../postgres/dbconnection";
