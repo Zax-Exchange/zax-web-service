@@ -1,9 +1,12 @@
-name: Build and Push Docker Image
+name: Build Docker Image
 run-name: ${{ github.actor }} is Building and Pushing Docker image to ECR
 on: workflow_dispatch
 jobs:
-  Build-Docker-Image:
+  Generate-Build-Tag:
+    uses: ./.github/workflows/generate-build-tag.yml
+  Build-and-Push-Docker-Image-to-ECR:
     runs-on: ubuntu-latest
+    needs: Generate-Build-Tag
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -11,17 +14,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: Generate build tag
-        id: tag_step
-        run: |
-          echo "Generating build tag pipeline on branch ${{ github.ref }}"
-          gittag=${{github.sha}}
-          echo "  Found hash ${gittag}"
-          version=$(npm pkg get version | tr -d '"')
-          echo "  Found package version ${version}"
-          buildtag="zax-webservice-${version}-${gittag}"
-          echo "Final buildtag ${buildtag}"
-          echo "buildtag=$buildtag" >> $GITHUB_OUTPUT
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -32,8 +24,8 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
       - name: Build and Push Image
-        env: 
-          buildtag: ${{ steps.tag_step.outputs.buildtag }}
+        env:
+          buildtag: ${{ needs.Generate-Build-Tag.outputs.build-tag }}
         run: |
           docker build -t ${buildtag} .
           docker tag ${buildtag} 878684683110.dkr.ecr.us-east-1.amazonaws.com/zax-exchange-webservice-repository:${buildtag}
