@@ -1,13 +1,17 @@
-"use strict";
-const { DataTypes } = require("sequelize");
+/**
+ * THIS IS A TEMPLATE. DO NOT RUN MIGRATION ON THIS.
+ */
 
-/** @type {import('sequelize-cli').Migration} */
-module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("testTable", { name: DataTypes.STRING });
-  },
+// "use strict";
+// const { DataTypes } = require("sequelize");
 
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("testTable");
-  },
-};
+// /** @type {import('sequelize-cli').Migration} */
+// module.exports = {
+//   async up(queryInterface, Sequelize) {
+//     await queryInterface.createTable("testTable", { name: DataTypes.STRING });
+//   },
+
+//   async down(queryInterface, Sequelize) {
+//     await queryInterface.dropTable("testTable");
+//   },
+// };
