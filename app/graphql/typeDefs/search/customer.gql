@@ -5,6 +5,10 @@ input SearchVendorCompanyInput {
   leadTime: String
 }
 
+input SearchVendorByNameInput {
+  userInput: String!
+}
+
 type VendorSearchHighlight {
   products: [String]
   name: [String]
@@ -17,4 +21,5 @@ type VendorSearchItem {
 
 type Query {
   searchVendorCompanies(data: SearchVendorCompanyInput!): [VendorSearchItem!]!
+  searchVendorByName(data: SearchVendorByNameInput!): [VendorSearchItem!]!
 }
