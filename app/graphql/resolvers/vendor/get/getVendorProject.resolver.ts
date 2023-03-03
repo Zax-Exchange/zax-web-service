@@ -30,6 +30,8 @@ const getVendorProject = async (
       sequelize.models.projects.findByPk(projectId),
     ]);
 
+    // check project exists first because if project doesn't exist there will be no permission
+    // so project not found will be masked as permission denied which we don't want
     if (!foundProject) {
       throw ErrorUtils.notFoundError();
     }
@@ -44,9 +46,6 @@ const getVendorProject = async (
     );
     const project = await ProjectApiUtils.getPermissionedProject(bid.projectId);
 
-    if (!project) {
-      throw ErrorUtils.notFoundError();
-    }
     return {
       ...project,
       bidInfo: bid,
