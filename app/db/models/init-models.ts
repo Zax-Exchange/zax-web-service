@@ -598,9 +598,15 @@ export function initModels(sequelize: Sequelize) {
     onDelete: "CASCADE",
   });
 
-  project_invitations.belongsTo(vendors, {
+  project_invitations.belongsTo(companies, {
     as: "vendor",
     foreignKey: "vendorCompanyId",
+    onDelete: "CASCADE",
+  });
+
+  project_invitations.belongsTo(companies, {
+    as: "customer",
+    foreignKey: "customerCompanyId",
     onDelete: "CASCADE",
   });
 

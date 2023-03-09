@@ -41,8 +41,12 @@ export class project_invitations
   getProject!: Sequelize.BelongsToGetAssociationMixin<projects>;
 
   // project_invitations belongsTo vendors via vendorCompanyId
-  vendor!: vendors;
-  getVendor!: Sequelize.BelongsToGetAssociationMixin<vendors>;
+  vendor!: companies;
+  getVendor!: Sequelize.BelongsToGetAssociationMixin<companies>;
+
+  // project_invitations belongsTo customers via customerCompanyId
+  customer!: companies;
+  getCustomer!: Sequelize.BelongsToGetAssociationMixin<companies>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof project_invitations {
     return sequelize.define(
