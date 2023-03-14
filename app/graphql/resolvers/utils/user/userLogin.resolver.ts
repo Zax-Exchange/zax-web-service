@@ -61,7 +61,7 @@ const login = async (
         loggedInUser,
         process.env.USER_SESSION_TOKEN_SECRET!,
         {
-          expiresIn: "8h",
+          expiresIn: "12h",
         }
       );
 

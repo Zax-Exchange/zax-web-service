@@ -3,6 +3,7 @@ import { DataTypes, Model, Optional } from "sequelize";
 import { BidIntentStatus } from "../../graphql/resolvers-types.generated";
 import type { companies, companiesId } from "./companies";
 import { projects } from "./projects";
+import { vendors } from "./vendors";
 
 export interface project_invitationsAttributes {
   id: string;
@@ -38,6 +39,14 @@ export class project_invitations
   // project_invitations belongsTo projects via projectId
   project!: projects;
   getProject!: Sequelize.BelongsToGetAssociationMixin<projects>;
+
+  // project_invitations belongsTo vendors via vendorCompanyId
+  vendor!: companies;
+  getVendor!: Sequelize.BelongsToGetAssociationMixin<companies>;
+
+  // project_invitations belongsTo customers via customerCompanyId
+  customer!: companies;
+  getCustomer!: Sequelize.BelongsToGetAssociationMixin<companies>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof project_invitations {
     return sequelize.define(

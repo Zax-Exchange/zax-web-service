@@ -1119,6 +1119,12 @@ export type ProjectBidForPo = {
   projectBidId: Scalars['String'];
 };
 
+export type ProjectBidInfo = {
+  __typename?: 'ProjectBidInfo';
+  biddedByUserCompany: Scalars['Boolean'];
+  hasBids: Scalars['Boolean'];
+};
+
 export type ProjectBidInterface = {
   companyId: Scalars['String'];
   createdAt: Scalars['Date'];
@@ -1338,7 +1344,7 @@ export type Query = {
   getVendorProjects: Array<VendorProjectOverview>;
   login: LoggedInUser;
   searchCategories: Array<Category>;
-  searchCustomerProjects: Array<ProjectOverview>;
+  searchCustomerProjects: Array<SearchResultProjectOverview>;
   searchProducts: Array<Scalars['String']>;
   searchVendorByName: Array<VendorSearchItem>;
   searchVendorCompanies: Array<VendorSearchItem>;
@@ -1573,11 +1579,26 @@ export type SearchCustomerProjectInput = {
   deliveryDate?: InputMaybe<Scalars['String']>;
   orderQuantities?: InputMaybe<Array<Scalars['String']>>;
   targetPriceRange?: InputMaybe<Array<Scalars['String']>>;
+  userId: Scalars['String'];
   userInput: Scalars['String'];
 };
 
 export type SearchProductsInput = {
   searchText: Scalars['String'];
+};
+
+export type SearchResultProjectOverview = {
+  __typename?: 'SearchResultProjectOverview';
+  bidInfo: ProjectBidInfo;
+  category: Scalars['String'];
+  createdAt: Scalars['Date'];
+  deliveryAddress: Scalars['String'];
+  deliveryDate: Scalars['String'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  orderQuantities: Array<Scalars['Int']>;
+  products: Array<Scalars['String']>;
+  targetPrice: Scalars['String'];
 };
 
 export type SearchVendorByNameInput = {

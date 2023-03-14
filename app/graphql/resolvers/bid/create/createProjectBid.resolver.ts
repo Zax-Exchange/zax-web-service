@@ -11,6 +11,7 @@ import ProjectApiUtils from "../../../../utils/projectUtils";
 import createOrUpdateProjectBidPermission from "./createOrUpdateProjectBidPermission";
 import NotificationService from "../../../../notification/NotificationService";
 import { BID_CREATE_ROUTE } from "../../../../notification/notificationRoutes";
+import cacheService from "../../../../redis/CacheService";
 
 // Creates a project bid instance associated with projectId in db
 // TODO: handle race condition when project updated right before bid creation
@@ -96,7 +97,8 @@ const createProjectBid = async (
     Promise.all([
       ProjectApiUtils.getProjectUsers(projectId),
       ProjectApiUtils.getProjectInstance(projectId),
-    ]).then(([users, project]) => {
+      cacheService.invalidateProjectInCache(projectId),
+    ]).then(([users, project, _]) => {
       if (!users.length || !project) return;
 
       NotificationService.sendNotification(BID_CREATE_ROUTE, {

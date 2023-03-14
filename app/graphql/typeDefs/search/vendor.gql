@@ -1,9 +1,28 @@
 input SearchCustomerProjectInput {
   userInput: String!
+  userId: String!
   targetPriceRange: [String!]
   orderQuantities: [String!]
   deliveryDate: String
-  countries: [String!]
+  countries: [String!] 
+}
+
+type SearchResultProjectOverview {
+  id: String!
+  name: String!
+  category: String!
+  deliveryDate: String!
+  deliveryAddress: String!
+  targetPrice: String!
+  orderQuantities: [Int!]!
+  products: [String!]!
+  createdAt: Date!
+  bidInfo: ProjectBidInfo!
+}
+
+type ProjectBidInfo {
+  hasBids: Boolean!
+  biddedByUserCompany: Boolean!
 }
 
 input SearchProductsInput {
@@ -15,7 +34,7 @@ input SearchCategoriesInput {
 }
 
 type Query {
-  searchCustomerProjects(data: SearchCustomerProjectInput!): [ProjectOverview!]!
+  searchCustomerProjects(data: SearchCustomerProjectInput!): [SearchResultProjectOverview!]!
   searchProducts(data: SearchProductsInput): [String!]!
   searchCategories(data: SearchCategoriesInput): [Category!]!
 }

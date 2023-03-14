@@ -126,7 +126,7 @@ const createVendor = async (
         country,
         leadTime,
         locations,
-        products: Object.keys(productsAndMoq),
+        products: productsAndMoq.map((productAndMoq) => productAndMoq.product),
       });
     });
 

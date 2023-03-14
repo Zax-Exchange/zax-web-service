@@ -166,8 +166,16 @@ class ProjectApiUtils {
         ]).then(async (res) => {
           const [componentInstances, companyInstance] = res;
 
+          // sort from new to old
+          const sortedComps = componentInstances.sort((a, b) => {
+            return a.createdAt < b.createdAt
+              ? 1
+              : a.createdAt > b.createdAt
+              ? -1
+              : 0;
+          });
           const components = await Promise.all(
-            componentInstances.map(async (comp) => {
+            sortedComps.map(async (comp) => {
               const componentSpec = await comp.getComponent_spec();
               const designs = await comp.getProject_designs();
 
