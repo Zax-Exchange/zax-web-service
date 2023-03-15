@@ -36,12 +36,15 @@ const getStatementsLink = async (
           allowed_updates: ["email", "address"],
           enabled: true,
         },
+        subscription_cancel: {
+          enabled: true,
+        },
       },
     });
 
     const session = await stripe.billingPortal.sessions.create({
       customer: stripeCustomerInstance.customerId,
-      // configuration: configuration.id,
+      configuration: configuration.id,
     });
 
     return session.url;
