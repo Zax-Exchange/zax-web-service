@@ -3,14 +3,13 @@ import Stripe from "stripe";
 import { stripe_customers } from "../../../db/models/stripe_customers";
 import sequelize from "../../../postgres/dbconnection";
 import { stripe } from "../../../stripe/StripeService";
+import emailService from "../../../gcp/EmailService";
 
 const router = express.Router();
-const endpointSecret =
-  "whsec_91b4af3f2ef960a57afe75b734da1b2e83e779a7ae02696457ee52e961b24fd2";
+const endpointSecret = process.env.STRIPE_WEBHOOK_ENDPOINT_SECRET!;
 
 router.post("", async (request, response) => {
   const sig = request.headers["stripe-signature"];
-  console.log("webhookk hit");
   let event;
 
   try {
@@ -22,9 +21,36 @@ router.post("", async (request, response) => {
   }
 
   try {
+    console.log(event.type);
+
     switch (event.type) {
+      case "charge.failed":
+        const chargeFailed = event.data.object;
+        // Then define and call a function to handle the event charge.failed
+        break;
+      case "customer.subscription.updated":
+        const sub = event.data.object as Stripe.Subscription;
+        const cus = (await stripe.customers.retrieve(
+          sub.customer as string
+        )) as Stripe.Customer;
+
+        // if (sub.cancel_at_period_end) {
+        //   const options = {
+        //     from: `Zax Exchange <${process.env.NODE_MAILER_USERNAME}>`,
+        //     to: cus.email || "",
+        //     subject: "Subscription Cancellation Request",
+        //     html: `
+        //     <p>We have received your request to cancel your subscription. You're subscription will be cancelled on ${new Date(
+        //       (sub.cancel_at as number) * 1000
+        //     ).toLocaleDateString()}. You will still have access in the mean time.</p>
+        //     <p>If you wish to resume your subscription, please login and navigate to Manage Subscription/Billing in the Settings page.</p>
+        //   `,
+        //   };
+        //   emailService.sendMail(options);
+        // }
+        break;
       case "customer.subscription.deleted":
-        // when subscription ends, refund the customer balance
+        // when subscription ends, refund the customer balance if any
         const subscription = event.data.object as Stripe.Subscription;
         const customerId = subscription.customer as string;
         const customer = (await stripe.customers.retrieve(
@@ -41,6 +67,17 @@ router.post("", async (request, response) => {
             },
           })) as stripe_customers;
 
+        if (customer.balance < 0) {
+          await Promise.all([
+            stripe.refunds.create({
+              charge: payedInvoicesList.data[0].charge as string,
+              amount: customer.balance * -1,
+            }),
+            stripe.customers.update(customerId, {
+              balance: 0,
+            }),
+          ]);
+        }
         await Promise.all([
           sequelize.models.companies.update(
             {
@@ -52,18 +89,12 @@ router.post("", async (request, response) => {
               },
             }
           ),
-          stripe.refunds.create({
-            charge: payedInvoicesList.data[0].charge as string,
-            amount: customer.balance,
-          }),
-          stripe.customers.update(customerId, {
-            balance: 0,
-          }),
         ]);
-        // Then define and call a function to handle the event customer.subscription.deleted
         break;
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 export default router;
