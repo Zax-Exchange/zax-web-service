@@ -1,10 +1,11 @@
 import sequelize from "../../../postgres/dbconnection";
+import { SearchTotalHits } from "@elastic/elasticsearch/lib/api/types";
 import ElasticProjectService from "../../../elastic/project/ElasticProjectService";
 import { project_bids } from "../../../db/models/project_bids";
 import ProjectApiUtils from "../../../utils/projectUtils";
 import {
   ProjectBidInfo,
-  ProjectOverview,
+  CustomerProjectSearchResult,
   SearchCustomerProjectInput,
   SearchResultProjectOverview,
 } from "../../resolvers-types.generated";
@@ -15,38 +16,41 @@ const searchCustomerProjects = async (
   { data }: { data: SearchCustomerProjectInput },
   context: any
 ) => {
-  try {
+  try {    
+    const res: CustomerProjectSearchResult = {
+      hits: [],
+      totalHits: 0
+    };
+
     // ProjectDocument -> ProjectOverview -> Project
     const query = QueryBuilder.buildProjectSearchQuery(data);
-    const projectDocs = await ElasticProjectService.searchProjectDocuments(
-      query
+    const searchResult = await ElasticProjectService.searchProjectDocuments(
+      query,
+      data.from?.valueOf(),
+      data.size?.valueOf()
     );
-    const projectOverviews = await Promise.all(
-      projectDocs.map(async (project) => {
-        const proj = await ProjectApiUtils.getProjectInstance(project._id);
-        const userCompanyId = await UserApiUtils.getUserCompanyId(data.userId);
-        const bidInfo = await hasProjectBids(project._id, userCompanyId);
 
-        if (!proj) return null;
-
-        return {
-          id: project._id,
+    res.totalHits = (searchResult.total as SearchTotalHits).value;
+    for (const projectDoc of searchResult.hits) {
+      const proj = await ProjectApiUtils.getProjectInstance(projectDoc._id);
+      const userCompanyId = await UserApiUtils.getUserCompanyId(data.userId);
+      const bidInfo = await hasProjectBids(projectDoc._id, userCompanyId);
+      if (proj) {
+        res.hits.push({
+          id: projectDoc._id,
           name: proj.name,
           category: proj.category,
           deliveryDate: proj.deliveryDate,
           deliveryAddress: proj.deliveryAddress,
           targetPrice: proj.targetPrice,
           orderQuantities: proj.orderQuantities,
-          products: (project._source as any).products,
+          products: (projectDoc._source as any).products,
           createdAt: proj.createdAt,
           bidInfo
-        } as ProjectOverview;
-      })
-    );
-
-    const res = projectOverviews.filter((overview) => !!overview);
-
-    return res as SearchResultProjectOverview[];
+        } as SearchResultProjectOverview;
+      }
+    }  
+    return res as CustomerProjectSearchResult;
   } catch (e) {
     console.error(e);
     return Promise.reject(e);

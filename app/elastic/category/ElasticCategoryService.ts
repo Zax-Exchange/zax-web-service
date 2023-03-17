@@ -1,5 +1,6 @@
 import { getAllCategories } from "../../graphql/resolvers/category/get/getAllCategories.resolver";
 import elasticClient from "../elasticConnection"
+import { DEFAULT_SEARCH_START_INDEX, DEFAULT_PAGE_SIZE } from "../ElasticSearchUtils";
 
 const CATEGORY_INDEX = "categories"
 
@@ -47,7 +48,11 @@ export default class ElasticCategoryService {
 		}
 	}
 
-	static async categoryAutoComplete(searchText: string) {
+	static async categoryAutoComplete(
+    searchText: string, 
+    from: number = DEFAULT_SEARCH_START_INDEX, 
+    size: number = DEFAULT_PAGE_SIZE
+  ) {
     return await elasticClient.search({
       index: CATEGORY_INDEX,
       query: {
@@ -79,7 +84,9 @@ export default class ElasticCategoryService {
             }
           ]
         }
-      }
+      },
+      from,
+      size
     })
     .then((res) => {
       return res.hits.hits;

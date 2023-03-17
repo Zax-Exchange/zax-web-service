@@ -2,6 +2,7 @@ import { vendorsAttributes } from "../../db/models/vendors";
 import sequelize from "../../postgres/dbconnection";
 import CompanyApiUtils from "../../utils/companyUtils";
 import elasticClient from "../elasticConnection";
+import { DEFAULT_SEARCH_START_INDEX, DEFAULT_PAGE_SIZE } from "../ElasticSearchUtils";
 import * as companyTypes from "../types/company";
 
 const VENDOR_INDEX_NAME = "vendor";
@@ -70,7 +71,11 @@ export default class ElasticCompanyService {
     }
   }
 
-  static async searchVendorDocuments(query: any) {
+  static async searchVendorDocuments(
+    query: any,
+    from: number = DEFAULT_SEARCH_START_INDEX, 
+    size: number = DEFAULT_PAGE_SIZE
+  ) {
     return await elasticClient
       .search({
         index: "vendor",
@@ -81,9 +86,11 @@ export default class ElasticCompanyService {
             products: {},
           },
         },
+        from,
+        size
       })
       .then((res) => {
-        return res.hits.hits;
+        return res.hits;
       })
       .catch((e) => {
         console.error(e);
