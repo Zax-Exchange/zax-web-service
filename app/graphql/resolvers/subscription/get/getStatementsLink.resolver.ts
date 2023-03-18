@@ -43,7 +43,7 @@ const getStatementsLink = async (
     });
 
     const session = await stripe.billingPortal.sessions.create({
-      customer: stripeCustomerInstance.customerId,
+      customer: stripeCustomerInstance.customerId || "",
       configuration: configuration.id,
     });
 

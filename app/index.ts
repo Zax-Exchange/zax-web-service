@@ -18,8 +18,8 @@ import apiRouters from "./rest";
 import { syncElasticWithDB } from "./elastic/ElasticSyncUtils";
 
 if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
 }
+dotenv.config();
 
 const startServer = async () => {
   initModels(sequelize);
@@ -63,7 +63,7 @@ const startServer = async () => {
   await server.start();
 
   // Note: though works, figure out why we can't define this on the router itself
-  app.use("/api/webhooks/stripe", express.raw({ type: "*/*" }));
+  app.use("/api/webhooks/stripe", express.raw({ type: "application/json" }));
   app.use(express.json());
   app.use(graphqlUploadExpress());
   // app.use(bodyParser.json());

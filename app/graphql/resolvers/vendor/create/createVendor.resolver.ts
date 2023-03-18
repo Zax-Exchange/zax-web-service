@@ -56,6 +56,7 @@ const createVendor = async (
         { transaction }
       );
 
+      // stripeCustomerInfo.customerId and stripeCustomerInfo.subscriptionId will be empty string here since we're not actually charging vendors yet
       await Promise.all([
         vendors.create(
           {
@@ -70,8 +71,8 @@ const createVendor = async (
         stripe_customers.create(
           {
             id: stripeCustomerId,
-            customerId: stripeCustomerInfo.customerId,
-            subscriptionId: stripeCustomerInfo.subscriptionId,
+            // customerId: stripeCustomerInfo.customerId,
+            // subscriptionId: stripeCustomerInfo.subscriptionId,
             companyId,
           },
           { transaction }
@@ -82,7 +83,7 @@ const createVendor = async (
         {
           id: uuidv4(),
           companyId,
-          planId,
+          // planId,
           stripeCustomerId,
         },
         { transaction }

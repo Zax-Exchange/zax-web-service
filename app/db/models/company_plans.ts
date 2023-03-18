@@ -6,7 +6,7 @@ import { stripe_customers, stripe_customersId } from "./stripe_customers";
 
 export interface company_plansAttributes {
   id: string;
-  planId: string;
+  planId?: string;
   companyId: string;
   stripeCustomerId?: string;
   createdAt: Date;
@@ -26,7 +26,7 @@ export class company_plans
   implements company_plansAttributes
 {
   id!: string;
-  planId!: string;
+  planId?: string;
   companyId!: string;
   stripeCustomerId?: string;
   createdAt!: Date;
@@ -62,7 +62,7 @@ export class company_plans
         },
         planId: {
           type: DataTypes.UUID,
-          allowNull: false,
+          allowNull: true,
           references: {
             model: "plans",
             key: "id",
