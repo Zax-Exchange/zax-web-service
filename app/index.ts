@@ -16,6 +16,7 @@ import getTypeDefs from "./graphql/typeDefs";
 import jwt from "jsonwebtoken";
 import apiRouters from "./rest";
 import { syncElasticWithDB } from "./elastic/ElasticSyncUtils";
+import stripeWhRouter from "./rest/webhooks/stripe/stripeWebhook";
 
 if (process.env.NODE_ENV !== "production") {
 }
@@ -63,7 +64,12 @@ const startServer = async () => {
   await server.start();
 
   // Note: though works, figure out why we can't define this on the router itself
-  app.use("/api/webhooks/stripe", express.raw({ type: "application/json" }));
+  app.use("/api", apiRouters);
+  // app.use(
+  //   "/api/webhooks/stripe",
+  //   express.raw({ type: "application/json" }),
+  //   stripeWhRouter
+  // );
   app.use(express.json());
   app.use(graphqlUploadExpress());
   // app.use(bodyParser.json());
@@ -78,8 +84,6 @@ const startServer = async () => {
     app,
     cors: { origin: origins },
   });
-
-  app.use("/api", apiRouters);
 
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: 4000 }, resolve)
