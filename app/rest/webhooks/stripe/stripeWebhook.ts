@@ -154,6 +154,4 @@ router.post(
   }
 );
 
-router.use(express.json());
-
 export default router;
