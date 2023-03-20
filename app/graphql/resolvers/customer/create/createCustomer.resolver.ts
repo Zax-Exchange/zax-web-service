@@ -71,6 +71,7 @@ const createCustomer = async (
         {
           id: tokenId,
           companyId,
+          userEmail,
         },
         process.env.USER_SIGNUP_TOKEN_SECRET!,
         {

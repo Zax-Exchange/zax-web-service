@@ -38,7 +38,7 @@ export class expiring_jwt_tokens
           primaryKey: true,
         },
         token: {
-          type: DataTypes.STRING,
+          type: DataTypes.TEXT,
           allowNull: false,
         },
       },

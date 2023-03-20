@@ -27,11 +27,16 @@ input ResetPasswordInput {
   token: String!
 }
 
+input ResendAccountSetupLinkInput {
+  token: String!
+}
+
 type Mutation {
   requestToJoin(data: RequestToJoinInput!): Boolean!
   inviteUsers(data: [InviteUserInput!]!): Boolean!
   sendPasswordResetLink(data: SendPasswordResetLinkInput!): Boolean!
-  resetPassword(data: ResetPasswordInput!): Boolean
+  resetPassword(data: ResetPasswordInput!): Boolean!
+  resendAccountSetupLink(data: ResendAccountSetupLinkInput!): Boolean!
 }
 
 type Query {

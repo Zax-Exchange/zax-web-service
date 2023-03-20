@@ -48,6 +48,16 @@ const createUser = async (
   try {
     const { id: tokenId, companyId } = decodedJwt;
 
+    // since we only allow one account per company for now, throw error if user tries to sign up multiple times through resending signup link
+    const hasUsers = await sequelize.models.users.findOne({
+      where: {
+        companyId,
+      },
+    });
+    if (hasUsers) {
+      throw ErrorUtils.restrictedForFreePlanError();
+    }
+
     const foundUser = await users.findOne({
       where: {
         email,
