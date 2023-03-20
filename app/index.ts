@@ -25,7 +25,7 @@ dotenv.config();
 const startServer = async () => {
   initModels(sequelize);
 
-  await syncElasticWithDB();
+  // await syncElasticWithDB();
 
   try {
     await sequelize.sync({ alter: true }).then(() => console.log("db synced"));
