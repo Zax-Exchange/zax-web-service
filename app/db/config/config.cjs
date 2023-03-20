@@ -14,7 +14,7 @@ module.exports = {
   stage: {
     username: process.env.RDS_USERNAME,
     password: process.env.RDS_PASSWORD,
-    database: process.env.STAGE_RDS_NAME,
+    database: process.env.RDS_NAME,
     host: process.env.STAGE_RDS_HOSTNAME,
     port: process.env.RDS_PORT,
     dialect: "postgres",
@@ -22,7 +22,7 @@ module.exports = {
   production: {
     username: process.env.RDS_USERNAME,
     password: process.env.RDS_PASSWORD,
-    database: process.env.STAGE_RDS_NAME,
+    database: process.env.RDS_NAME,
     host: process.env.PROD_RDS_HOSTNAME,
     port: process.env.RDS_PORT,
     dialect: "postgres",
