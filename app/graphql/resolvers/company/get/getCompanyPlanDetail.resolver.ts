@@ -21,6 +21,8 @@ const getCompanyPlanDetail = async (
       },
     })) as company_plans;
 
+    if (!companyPlan) return null;
+
     const [plan, subId] = await Promise.all([
       companyPlan
         .getPlan()
@@ -39,8 +41,6 @@ const getCompanyPlanDetail = async (
       memberSince: stripeTimeToUTC(sub.start_date)!,
       subscriptionStartDate: stripeTimeToUTC(sub.current_period_start)!,
       subscriptionEndDate: stripeTimeToUTC(sub.current_period_end)!,
-      trialStartDate: stripeTimeToUTC(sub.trial_start),
-      trialEndDate: stripeTimeToUTC(sub.trial_end),
     } as CompanyPlanDetail;
 
     return res;

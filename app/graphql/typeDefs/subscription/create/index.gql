@@ -1,5 +1,5 @@
 input CreateStripeCustomerInStripeForCustomerInput {
-  email: String!
+  companyId: String!
   priceId: String!
 }
 

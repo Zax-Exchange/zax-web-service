@@ -34,4 +34,8 @@ export default class ErrorUtils {
   static invalidTokenError() {
     return new Error("invalid token");
   }
+
+  static restrictedForFreePlanError() {
+    return new Error("restricted for free plan");
+  }
 }

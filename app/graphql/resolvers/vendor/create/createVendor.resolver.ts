@@ -68,26 +68,27 @@ const createVendor = async (
           },
           { transaction }
         ),
-        stripe_customers.create(
-          {
-            id: stripeCustomerId,
-            // customerId: stripeCustomerInfo.customerId,
-            // subscriptionId: stripeCustomerInfo.subscriptionId,
-            companyId,
-          },
-          { transaction }
-        ),
+        // NOTE: the steps below should follow what createCustomer.resolver.ts does when we implement upgrade flow for vendors
+        // stripe_customers.create(
+        //   {
+        //     id: stripeCustomerId,
+        //     customerId: stripeCustomerInfo.customerId,
+        //     subscriptionId: stripeCustomerInfo.subscriptionId,
+        //     companyId,
+        //   },
+        //   { transaction }
+        // ),
+        // company_plans.create(
+        //   {
+        //     id: uuidv4(),
+        //     companyId,
+        //     planId,
+        //     stripeCustomerId,
+        //   },
+        //   { transaction }
+        // ),
       ]);
 
-      await company_plans.create(
-        {
-          id: uuidv4(),
-          companyId,
-          // planId,
-          stripeCustomerId,
-        },
-        { transaction }
-      );
       const tokenId = uuidv4();
       const expiringToken = TokenUtils.generateJwtToken(
         {

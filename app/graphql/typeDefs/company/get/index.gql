@@ -6,7 +6,12 @@ input GetCompanyPlanDetailInput {
   companyId: String!
 }
 
+input GetCompanyPlanInput {
+  companyId: String!
+}
+
 type Query {
-  getCompanyPlanDetail(data: GetCompanyPlanDetailInput!): CompanyPlanDetail!
+  getCompanyPlanDetail(data: GetCompanyPlanDetailInput!): CompanyPlanDetail
+  getCompanyPlan(data: GetCompanyPlanInput!): CompanyPlan
   getCompanyDetail(data: GetCompanyDetailInput): CompanyDetail
 }

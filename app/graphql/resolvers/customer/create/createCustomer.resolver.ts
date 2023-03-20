@@ -32,9 +32,9 @@ const createCustomer = async (
   const stripe_customers = sequelize.models.stripe_customers;
 
   try {
-    const subscription = await stripeService.getSubscription(
-      stripeCustomerInfo.subscriptionId
-    );
+    // const subscription = await stripeService.getSubscription(
+    //   stripeCustomerInfo.subscriptionId
+    // );
     const companyId = uuidv4();
     const stripeCustomerId = uuidv4();
 
@@ -56,7 +56,6 @@ const createCustomer = async (
         { transaction }
       );
 
-      // the stripeCustomerId here is the uuid of stripe_customers instance in zax
       await Promise.all([
         customers.create(
           {
@@ -65,26 +64,8 @@ const createCustomer = async (
           },
           { transaction }
         ),
-        stripe_customers.create(
-          {
-            id: stripeCustomerId,
-            customerId: stripeCustomerInfo.customerId,
-            subscriptionId: stripeCustomerInfo.subscriptionId,
-            companyId,
-          },
-          { transaction }
-        ),
       ]);
 
-      await company_plans.create(
-        {
-          id: uuidv4(),
-          companyId,
-          planId,
-          stripeCustomerId,
-        },
-        { transaction }
-      );
       const tokenId = uuidv4();
       const expiringToken = TokenUtils.generateJwtToken(
         {

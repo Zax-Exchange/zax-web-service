@@ -2,6 +2,7 @@ type CompanyPlan {
   id: String!
   planId: String!
   companyId: String!
+  planType: CompanyPlanType!
 }
 type CompanyPlanDetail {
   tier: PlanTier!
@@ -10,8 +11,6 @@ type CompanyPlanDetail {
   memberSince: String!
   subscriptionStartDate: String!
   subscriptionEndDate: String!
-  trialStartDate: String
-  trialEndDate: String
 }
 type PermissionedCompany {
   id: String!
@@ -67,4 +66,9 @@ enum CompanySize {
   S
   M
   L
+}
+
+enum CompanyPlanType {
+  FREE
+  PAID
 }

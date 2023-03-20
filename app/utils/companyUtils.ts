@@ -1,10 +1,18 @@
 import sequelize from "../postgres/dbconnection";
 import { companiesAttributes } from "../db/models/companies";
 import jwt from "jsonwebtoken";
-import { CompanyPlan, UserPower } from "../graphql/resolvers-types.generated";
+import {
+  CompanyPlan,
+  CompanyPlanType,
+  UserPower,
+} from "../graphql/resolvers-types.generated";
 import { vendorsAttributes } from "../db/models/vendors";
 import { customersAttributes } from "../db/models/customers";
 import ErrorUtils from "./ErrorUtils";
+import {
+  company_plans,
+  company_plansAttributes,
+} from "../db/models/company_plans";
 
 class CompanyApiUtils {
   static async getAllCompanyAdmins(companyId: string) {
@@ -147,6 +155,18 @@ class CompanyApiUtils {
         expiresIn: "24h",
       }
     );
+  }
+
+  static async isFreePlan(companyId: string) {
+    const plan = (await sequelize.models.company_plans.findOne({
+      where: {
+        companyId,
+      },
+    })) as company_plans;
+
+    if (!plan || plan.planType === CompanyPlanType.Free) return true;
+
+    return false;
   }
 }
 

@@ -2,7 +2,14 @@ input UpdateStripeSubscriptionInput {
   subscriptionId: String!
 }
 
+input UpdateCustomerUpgradeToPaidPlanInput {
+  companyId: String!
+}
+
 type Mutation {
+  updateCustomerUpgradeToPaidPlan(
+    data: UpdateCustomerUpgradeToPaidPlanInput!
+  ): Boolean!
   # this is not used
   updateStripeSubscription(data: UpdateStripeSubscriptionInput!): Boolean!
 }

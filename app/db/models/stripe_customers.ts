@@ -6,8 +6,8 @@ import { company_plans, company_plansId } from "./company_plans";
 export interface stripe_customersAttributes {
   id: string;
   companyId: string;
-  customerId?: string;
-  subscriptionId?: string;
+  customerId: string;
+  subscriptionId: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -26,8 +26,8 @@ export class stripe_customers
 {
   id!: string;
   companyId!: string;
-  customerId?: string;
-  subscriptionId?: string;
+  customerId!: string;
+  subscriptionId!: string;
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -62,11 +62,11 @@ export class stripe_customers
         },
         customerId: {
           type: DataTypes.STRING,
-          allowNull: true,
+          allowNull: false,
         },
         subscriptionId: {
           type: DataTypes.STRING,
-          allowNull: true,
+          allowNull: false,
         },
       },
       {

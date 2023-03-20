@@ -13,6 +13,8 @@ import ElasticProjectService from "../../../../elastic/project/ElasticProjectSer
 import { Transaction } from "sequelize/types";
 import cacheService from "../../../../redis/CacheService";
 import { component_specs } from "../../../../db/models/component_specs";
+import CompanyApiUtils from "../../../../utils/companyUtils";
+import ErrorUtils from "../../../../utils/ErrorUtils";
 
 // if change this, please also update the same method in updateProjectComponents.ts
 const processComponentSpec = (
@@ -115,14 +117,25 @@ const createProject = async (
     visibility,
   } = data;
   try {
+    const user = await users.findByPk(userId);
+    const companyId = await user!.getDataValue("companyId");
+    const isFreePlan = await CompanyApiUtils.isFreePlan(companyId);
+
+    if (isFreePlan) {
+      const allProjects = await projects.findAndCountAll({
+        where: {
+          companyId,
+        },
+      });
+      if (allProjects.count >= 3) {
+        throw ErrorUtils.restrictedForFreePlanError();
+      }
+    }
+
     const projectId = uuidv4();
     const products: string[] = [];
 
     await sequelize.transaction(async (transaction) => {
-      const user = await users.findByPk(userId, {
-        transaction,
-      });
-      const companyId = await user?.getDataValue("companyId");
       await projects.create(
         {
           id: projectId,

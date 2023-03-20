@@ -13,6 +13,7 @@ const createStripeCustomerInStripeForVendor = async (
 ) => {
   const { email, subscriptionPriceId, perUserPriceId } = data;
   try {
+    // TODO: when we implement paid plans for vendors, change email to companyId
     const customer = await stripeService.createCustomer(email);
     const subscription = await stripe.subscriptions.create({
       customer: customer.id,

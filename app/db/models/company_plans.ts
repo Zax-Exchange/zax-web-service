@@ -3,12 +3,14 @@ import { DataTypes, Model, Optional } from "sequelize";
 import type { companies, companiesId } from "./companies";
 import type { plans, plansId } from "./plans";
 import { stripe_customers, stripe_customersId } from "./stripe_customers";
+import { CompanyPlanType } from "../../graphql/resolvers-types.generated";
 
 export interface company_plansAttributes {
   id: string;
   planId?: string;
   companyId: string;
   stripeCustomerId?: string;
+  planType: CompanyPlanType;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -29,6 +31,7 @@ export class company_plans
   planId?: string;
   companyId!: string;
   stripeCustomerId?: string;
+  planType!: CompanyPlanType;
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -85,6 +88,10 @@ export class company_plans
             key: "id",
           },
           unique: "company_plans_stripe_customerId_key",
+        },
+        planType: {
+          type: DataTypes.STRING,
+          allowNull: false,
         },
       },
       {
