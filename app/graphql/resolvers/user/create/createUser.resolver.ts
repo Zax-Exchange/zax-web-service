@@ -91,42 +91,42 @@ const createUser = async (
         .then((u) => u.get({ plain: true }));
 
       // If user is not the first one, we need to update in stripe to add one more user monthly charge
-      if (!isFirst) {
-        const stripeCustomer = await (
-          companyPlan as company_plans
-        ).getStripe_customer();
+      // if (!isFirst) {
+      //   const stripeCustomer = await (
+      //     companyPlan as company_plans
+      //   ).getStripe_customer();
 
-        const sub = await stripeService.getSubscription(
-          stripeCustomer.subscriptionId!
-        );
+      //   const sub = await stripeService.getSubscription(
+      //     stripeCustomer.subscriptionId!
+      //   );
 
-        if (!isVendor) {
-          // always_invoice here will charge the company directly of the prorated amount based on billing cycle
-          // and starting with next billing cycle charge the full amount
-          await stripe.subscriptions.update(sub.id, {
-            proration_behavior: "always_invoice",
-            items: sub.items.data.map((item) => {
-              return {
-                id: item.id,
-                quantity: item.quantity! + 1,
-              };
-            }),
-          });
-        } else {
-          await stripe.subscriptions.update(sub.id, {
-            proration_behavior: "always_invoice",
-            items: [
-              {
-                id: sub.items.data[0].id,
-              },
-              {
-                id: sub.items.data[1].id,
-                quantity: sub.items.data[1].quantity! + 1,
-              },
-            ],
-          });
-        }
-      }
+      //   if (!isVendor) {
+      //     // always_invoice here will charge the company directly of the prorated amount based on billing cycle
+      //     // and starting with next billing cycle charge the full amount
+      //     await stripe.subscriptions.update(sub.id, {
+      //       proration_behavior: "always_invoice",
+      //       items: sub.items.data.map((item) => {
+      //         return {
+      //           id: item.id,
+      //           quantity: item.quantity! + 1,
+      //         };
+      //       }),
+      //     });
+      //   } else {
+      //     await stripe.subscriptions.update(sub.id, {
+      //       proration_behavior: "always_invoice",
+      //       items: [
+      //         {
+      //           id: sub.items.data[0].id,
+      //         },
+      //         {
+      //           id: sub.items.data[1].id,
+      //           quantity: sub.items.data[1].quantity! + 1,
+      //         },
+      //       ],
+      //     });
+      //   }
+      // }
 
       await sequelize.models.expiring_jwt_tokens.destroy({
         where: {

@@ -9,7 +9,7 @@ export interface company_plansAttributes {
   id: string;
   planId?: string;
   companyId: string;
-  stripeCustomerId?: string;
+  stripeCustomerId: string;
   planType: CompanyPlanType;
   createdAt: Date;
   updatedAt: Date;
@@ -30,7 +30,7 @@ export class company_plans
   id!: string;
   planId?: string;
   companyId!: string;
-  stripeCustomerId?: string;
+  stripeCustomerId!: string;
   planType!: CompanyPlanType;
   createdAt!: Date;
   updatedAt!: Date;
