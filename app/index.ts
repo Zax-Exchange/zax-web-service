@@ -65,11 +65,7 @@ const startServer = async () => {
 
   // Note: though works, figure out why we can't define this on the router itself
   // app.use("/api", apiRouters);
-  app.use(
-    "/api/webhooks/stripe",
-    express.raw({ type: "application/json" }),
-    stripeWhRouter
-  );
+  app.use("/api/webhooks/stripe", express.raw({ type: "*/*" }), stripeWhRouter);
   app.use(express.json());
   app.use(graphqlUploadExpress());
   // app.use(bodyParser.json());
