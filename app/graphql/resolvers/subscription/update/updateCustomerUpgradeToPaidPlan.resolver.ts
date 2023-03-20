@@ -19,6 +19,8 @@ const updateCustomerUpgradeToPaidPlan = async (
   let PLAN_ID = "3d0fd1d3-3ce9-4359-bee2-30e3c6ccb411";
   if (process.env.NODE_ENV === "production") {
     PLAN_ID = "d7e075ef-ecb2-4d94-ac0d-20765f1e18fb";
+  } else if (process.env.NODE_ENV === "stage") {
+    PLAN_ID = "0f6fd0a3-70c7-4154-a490-b077761d1cf3";
   }
 
   try {
