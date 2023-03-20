@@ -8,9 +8,6 @@ dotenv.config();
 const port = parseInt(process.env.RDS_PORT || "4000");
 let database = process.env.RDS_NAME;
 
-if (process.env.NODE_ENV === "test") {
-  database = process.env.TEST_RDS_NAME;
-}
 const sequelize = new Sequelize({
   database,
   dialect: "postgres",
