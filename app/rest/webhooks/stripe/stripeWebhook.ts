@@ -148,8 +148,10 @@ router.post(
           }
           break;
       }
+      return response.sendStatus(200);
     } catch (error) {
       console.log(error);
+      return response.status(500).send(error);
     }
   }
 );
