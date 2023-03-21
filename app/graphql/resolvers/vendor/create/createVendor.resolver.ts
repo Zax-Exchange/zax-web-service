@@ -115,9 +115,12 @@ const createVendor = async (
         to: userEmail,
         subject: "Zax Exchange Account Signup",
         html: `
+            <p>Thanks for signing up with Zax!</p>
             <p>Please follow the link below to complete sign up for your account. The link will expire in 24 hours.</p>
-            <a href="${process.env.FRONTEND_URL}/user-signup/${expiringToken}">Click here</a>
-          `,
+            <a href="${process.env.FRONTEND_URL}/user-signup/${expiringToken}">Setup your account</a>
+            <br/>
+            <p>- Zax Exchange Team</p>
+            `,
       };
 
       await emailService.sendMail(options);

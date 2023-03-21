@@ -67,10 +67,13 @@ const createGuestProjectLink = async (
         to: guestEmail,
         subject: "Zax Exchange Guest Project Form",
         html: `
-          <p>You have an invitation from ${company.name} to create a project!</p>
-          <p>Please follow the link below to complete the project form.</p>
-          <a href="${process.env.FRONTEND_URL}/guest-project/${projectId}">Click here</a>
-        `,
+          <p>Hi there, </p>
+          <p>You have an invitation from ${company.name} to complete the RFQ form!</p>
+          <p>Please follow the link below to complete the form.</p>
+          <a href="${process.env.FRONTEND_URL}/guest-project/${projectId}">Access RFQ form</a>
+          <br/>
+          <p>- Zax Exchange Team</p>
+          `,
       };
 
       await emailService.sendMail(options);
