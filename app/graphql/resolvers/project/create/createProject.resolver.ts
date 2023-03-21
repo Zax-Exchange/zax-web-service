@@ -127,7 +127,7 @@ const createProject = async (
           companyId,
         },
       });
-      if (allProjects.count >= 3) {
+      if (allProjects.count >= 2) {
         throw ErrorUtils.restrictedForFreePlanError();
       }
     }
