@@ -115,6 +115,12 @@ import type {
   project_invitationsCreationAttributes,
 } from "./project_invitations";
 
+import { vendor_certifications as _vendor_certifications } from "./vendor_certifications";
+import type {
+  vendor_certificationsAttributes,
+  vendor_certificationsCreationAttributes,
+} from "./vendor_certifications";
+
 export {
   _sequelize_meta as sequelize_meta,
   _companies as companies,
@@ -141,6 +147,7 @@ export {
   _expiring_jwt_tokens as expiring_jwt_tokens,
   _bid_intents as bid_intents,
   _project_invitations as project_invitations,
+  _vendor_certifications as vendor_certifications,
 };
 
 export type {
@@ -190,6 +197,8 @@ export type {
   bid_intentsCreationAttributes,
   project_invitationsAttributes,
   project_invitationsCreationAttributes,
+  vendor_certificationsAttributes,
+  vendor_certificationsCreationAttributes,
 };
 
 export function initModels(sequelize: Sequelize) {
@@ -224,6 +233,8 @@ export function initModels(sequelize: Sequelize) {
   const bid_intents = _bid_intents.initModel(sequelize);
 
   const project_invitations = _project_invitations.initModel(sequelize);
+
+  const vendor_certifications = _vendor_certifications.initModel(sequelize);
 
   company_plans.belongsTo(companies, {
     as: "company",
@@ -610,6 +621,12 @@ export function initModels(sequelize: Sequelize) {
     onDelete: "CASCADE",
   });
 
+  vendor_certifications.belongsTo(companies, {
+    as: "company",
+    foreignKey: "companyId",
+    onDelete: "CASCADE",
+  });
+
   return {
     sequelize_meta,
     companies,
@@ -636,5 +653,6 @@ export function initModels(sequelize: Sequelize) {
     expiring_jtw_tokens,
     bid_intents,
     project_invitations,
+    vendor_certifications,
   };
 }

@@ -376,6 +376,10 @@ export type DeleteBidRemarkInput = {
   fileId: Scalars['String'];
 };
 
+export type DeleteCertificationInput = {
+  fileId: Scalars['String'];
+};
+
 export type DeleteInvoiceInput = {
   fileId: Scalars['String'];
 };
@@ -449,6 +453,10 @@ export type GetAllUsersWithinCompanyInput = {
 
 export type GetCategoryInput = {
   id: Scalars['String'];
+};
+
+export type GetCertificationsInput = {
+  companyId: Scalars['String'];
 };
 
 export type GetCompanyDetailInput = {
@@ -628,6 +636,7 @@ export type Mutation = {
   createVendorSubscription: StripeSubscription;
   deactivateCustomerUser: Scalars['Boolean'];
   deleteBidRemark: Scalars['Boolean'];
+  deleteCertification: Scalars['Boolean'];
   deleteInvoice: Scalars['Boolean'];
   deletePendingJoinRequests: Scalars['Boolean'];
   deleteProject: Scalars['Boolean'];
@@ -660,6 +669,7 @@ export type Mutation = {
   updateUserPower: Scalars['Boolean'];
   updateVendorInfo: Scalars['Boolean'];
   uploadBidRemark: BidRemark;
+  uploadCertification: FileInterface;
   uploadInvoice: Invoice;
   uploadProjectDesign: ProjectDesign;
   uploadPurchaseOrder: PurchaseOrder;
@@ -754,6 +764,11 @@ export type MutationDeactivateCustomerUserArgs = {
 
 export type MutationDeleteBidRemarkArgs = {
   data: DeleteBidRemarkInput;
+};
+
+
+export type MutationDeleteCertificationArgs = {
+  data: DeleteCertificationInput;
 };
 
 
@@ -913,6 +928,11 @@ export type MutationUpdateVendorInfoArgs = {
 
 
 export type MutationUploadBidRemarkArgs = {
+  file: Scalars['Upload'];
+};
+
+
+export type MutationUploadCertificationArgs = {
   file: Scalars['Upload'];
 };
 
@@ -1334,6 +1354,7 @@ export type Query = {
   getAllPlans: Array<Plan>;
   getAllUsersWithinCompany: Array<GenericUser>;
   getCategory?: Maybe<Category>;
+  getCertifications: Array<FileInterface>;
   getCompanyDetail?: Maybe<CompanyDetail>;
   getCompanyPlan?: Maybe<CompanyPlan>;
   getCompanyPlanDetail?: Maybe<CompanyPlanDetail>;
@@ -1404,6 +1425,11 @@ export type QueryGetAllUsersWithinCompanyArgs = {
 
 export type QueryGetCategoryArgs = {
   data: GetCategoryInput;
+};
+
+
+export type QueryGetCertificationsArgs = {
+  data: GetCertificationsInput;
 };
 
 
