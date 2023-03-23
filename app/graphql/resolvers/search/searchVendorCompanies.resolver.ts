@@ -2,7 +2,7 @@ import { SearchHit } from "@elastic/elasticsearch/lib/api/types";
 import ElasticCompanyService from "../../../elastic/company/ElasticCompanyService";
 import CompanyApiUtils from "../../../utils/companyUtils";
 import {
-  ProductAndMoq,
+  FactoryProductDetail,
   SearchVendorCompanyInput,
   VendorSearchHighlight,
   VendorSearchItem,
@@ -51,7 +51,10 @@ async function buildSearchItemsFromHits(hits: SearchHit<unknown>[]) {
     // if somehow elastic search and db is inconsistent, we won't be able to find company in our db
     if (!company) continue;
 
-    const vendor = await CompanyApiUtils.getVendorWithCompanyId(company.id);
+    const vendors = await CompanyApiUtils.getVendorFactoriesWithCompanyId(
+      company.id
+    );
+
     res.push({
       vendor: {
         id: company.id,
@@ -60,11 +63,14 @@ async function buildSearchItemsFromHits(hits: SearchHit<unknown>[]) {
         logo: company.logo,
         country: company.country,
         isVerified: company.isVerified,
-        locations: vendor.locations,
-        products: (JSON.parse(vendor.productsAndMoq) as ProductAndMoq[]).map(
-          (productAndMoq) => productAndMoq.product
+        locations: vendors.map((vendor) => vendor.location),
+        products: ElasticCompanyService.combineFactoryProducts(
+          vendors.map((ven) => {
+            return JSON.parse(
+              ven.factoryProductsDetail
+            ) as FactoryProductDetail[];
+          })
         ),
-        leadTime: vendor.leadTime,
       },
       highlight: buildHighlightResponse(doc.highlight),
     });
@@ -89,8 +95,8 @@ function buildHighlightResponse(
 }
 
 export default {
-  Query: { 
-    searchVendorCompanies, 
+  Query: {
+    searchVendorCompanies,
     searchVendorByName,
   },
 };

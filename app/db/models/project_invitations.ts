@@ -3,7 +3,6 @@ import { DataTypes, Model, Optional } from "sequelize";
 import { BidIntentStatus } from "../../graphql/resolvers-types.generated";
 import type { companies, companiesId } from "./companies";
 import { projects } from "./projects";
-import { vendors } from "./vendors";
 
 export interface project_invitationsAttributes {
   id: string;

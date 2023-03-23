@@ -13,9 +13,16 @@ enum InvoiceStatus {
   REJECTED
 }
 
-type ProductAndMoq {
+type FactoryProductDetail {
   product: String!
   moq: String!
+  leadTime: String!
+}
+
+type FactoryDetail {
+  id: String!
+  factoryProductsDetail: [FactoryProductDetail!]!
+  location: String!
 }
 
 type VendorOverview {
@@ -27,8 +34,8 @@ type VendorOverview {
   isVerified: Boolean!
   locations: [String!]!
   products: [String!]!
-  leadTime: Int!
 }
+
 type VendorDetail {
   id: String!
   name: String!
@@ -40,10 +47,6 @@ type VendorDetail {
   companyUrl: String
   fax: String
   isVerified: Boolean!
-
-  locations: [String!]!
-  productsAndMoq: [ProductAndMoq!]!
-  leadTime: Int!
 }
 
 type VendorGuestProjectOverview {

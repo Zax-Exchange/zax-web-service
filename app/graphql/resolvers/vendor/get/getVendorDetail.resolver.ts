@@ -1,7 +1,8 @@
 import CompanyApiUtils from "../../../../utils/companyUtils";
 import {
+  FactoryDetail,
+  FactoryProductDetail,
   GetVendorDetailInput,
-  ProductAndMoq,
   VendorDetail,
 } from "../../../resolvers-types.generated";
 
@@ -12,13 +13,11 @@ const getVendorDetail = async (
 ): Promise<VendorDetail | null> => {
   const { companyId } = data;
   try {
-    const [company, vendor] = await Promise.all([
+    const [company] = await Promise.all([
       CompanyApiUtils.getCompanyWithCompanyId(companyId),
-      CompanyApiUtils.getVendorWithCompanyId(companyId),
     ]);
-    if (!company || !vendor) return null;
+    if (!company) return null;
 
-    const { locations, productsAndMoq, leadTime } = vendor;
     const {
       id,
       name,
@@ -31,6 +30,7 @@ const getVendorDetail = async (
       isVerified,
       companyUrl,
     } = company;
+
     const res = {
       id,
       name,
@@ -41,11 +41,9 @@ const getVendorDetail = async (
       fax,
       isVerified,
       isActive,
-      leadTime,
-      locations,
-      productsAndMoq: JSON.parse(productsAndMoq) as ProductAndMoq[],
       companyUrl,
     };
+
     return res;
   } catch (e) {
     return Promise.reject(e);

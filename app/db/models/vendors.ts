@@ -5,9 +5,8 @@ import type { companies, companiesId } from "./companies";
 export interface vendorsAttributes {
   id: string;
   companyId: string;
-  leadTime: number;
-  productsAndMoq: string;
-  locations: string[];
+  factoryProductsDetail: string;
+  location: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -26,9 +25,8 @@ export class vendors
 {
   id!: string;
   companyId!: string;
-  leadTime!: number;
-  productsAndMoq!: string;
-  locations!: string[];
+  factoryProductsDetail!: string;
+  location!: string;
   createdAt!: Date;
   updatedAt!: Date;
 
@@ -54,18 +52,13 @@ export class vendors
             model: "companies",
             key: "id",
           },
-          unique: "vendors_companyId_id_key",
         },
-        leadTime: {
-          type: DataTypes.INTEGER,
-          allowNull: false,
-        },
-        productsAndMoq: {
+        factoryProductsDetail: {
           type: DataTypes.JSON,
           allowNull: false,
         },
-        locations: {
-          type: DataTypes.ARRAY(DataTypes.STRING),
+        location: {
+          type: DataTypes.STRING,
           allowNull: false,
         },
       },
@@ -74,11 +67,6 @@ export class vendors
         schema: "public",
         timestamps: true,
         indexes: [
-          {
-            name: "vendors_companyId_id_key",
-            unique: true,
-            fields: [{ name: "companyId" }, { name: "id" }],
-          },
           {
             name: "vendors_pkey",
             unique: true,

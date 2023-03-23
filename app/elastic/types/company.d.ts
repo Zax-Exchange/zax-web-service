@@ -4,7 +4,18 @@ export interface VendorDocument {
   country: string;
   locations: string[];
   products: string[];
-  leadTime: number;
+}
+
+export interface UpdateVendorDocumentInputData {
+  name?: string;
+  country?: string;
+  locations?: string[];
+  products?: string[];
+}
+
+export interface UpdateVendorDocumentInput {
+  id: string;
+  data: UpdateVendorDocumentInputData;
 }
 
 export interface CustomerDocument {

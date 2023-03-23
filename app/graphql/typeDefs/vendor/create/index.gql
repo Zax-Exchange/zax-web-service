@@ -1,6 +1,13 @@
-input ProductAndMoqInput {
+input FactoryProductDetailInput {
   product: String!
   moq: String!
+  leadTime: String!
+}
+
+input CreateFactoryInput {
+  companyId: String!
+  location: String!
+  factoryProductsDetail: [FactoryProductDetailInput!]!
 }
 
 input CreateVendorInput {
@@ -14,9 +21,6 @@ input CreateVendorInput {
   isActive: Boolean!
   isVendor: Boolean!
   isVerified: Boolean!
-  leadTime: Int!
-  locations: [String!]!
-  productsAndMoq: [ProductAndMoqInput!]!
   companyUrl: String
   userEmail: String!
   stripeCustomerInfo: StripeCustomerInfo!
@@ -51,4 +55,5 @@ type Mutation {
   createInvoice(data: CreateInvoiceInput!): Boolean!
   createGuestProjectLink(data: CreateGuestProjectLinkInput!): Boolean!
   createCertifications(data: CreateCertificationsInput!): Boolean!
+  createFactory(data: CreateFactoryInput!): Boolean!
 }

@@ -7,11 +7,16 @@ input UpdateVendorInfoInput {
   fax: String
   country: String!
   companyUrl: String
-  leadTime: Int!
-  locations: [String!]!
-  productsAndMoq: [ProductAndMoqInput!]!
+}
+
+input UpdateFactoryInput {
+  id: String!
+  companyId: String!
+  location: String!
+  factoryProductsDetail: [FactoryProductDetailInput!]!
 }
 
 type Mutation {
   updateVendorInfo(data: UpdateVendorInfoInput!): Boolean!
+  updateFactory(data: UpdateFactoryInput!): Boolean!
 }

@@ -6,7 +6,13 @@ input DeleteCertificationsInput {
   fileIds: [String!]!
 }
 
+input DeleteFactoryInput {
+  id: String!
+  companyId: String!
+}
+
 type Mutation {
   deleteInvoice(data: DeleteInvoiceInput!): Boolean!
   deleteCertifications(data: DeleteCertificationsInput!): Boolean!
+  deleteFactory(data: DeleteFactoryInput!): Boolean!
 }

@@ -1,4 +1,6 @@
+import { companiesAttributes } from "../../db/models/companies";
 import { vendorsAttributes } from "../../db/models/vendors";
+import { FactoryProductDetail } from "../../graphql/resolvers-types.generated";
 import sequelize from "../../postgres/dbconnection";
 import CompanyApiUtils from "../../utils/companyUtils";
 import elasticClient from "../elasticConnection";
@@ -15,7 +17,6 @@ export default class ElasticCompanyService {
           name: { type: "search_as_you_type" },
           country: { type: "text" },
           locations: { type: "text" },
-          leadTime: { type: "integer" },
           products: { type: "search_as_you_type" },
         },
       },
@@ -33,7 +34,7 @@ export default class ElasticCompanyService {
         await this.createVendorIndex();
       }
 
-      const { id, name, locations, leadTime, products, country } = data;
+      const { id, name, locations, products, country } = data;
 
       await elasticClient.index({
         index: VENDOR_INDEX_NAME,
@@ -42,7 +43,6 @@ export default class ElasticCompanyService {
           name,
           country,
           locations,
-          leadTime,
           products,
         },
       });
@@ -51,18 +51,17 @@ export default class ElasticCompanyService {
     }
   }
 
-  static async updateVendorDocument(data: companyTypes.VendorDocument) {
+  static async updateVendorDocument(
+    input: companyTypes.UpdateVendorDocumentInput
+  ) {
     try {
-      const { id, name, locations, leadTime, products } = data;
+      const { id, data } = input;
 
       await elasticClient.update({
         index: VENDOR_INDEX_NAME,
         id,
         doc: {
-          name,
-          locations,
-          leadTime,
-          products,
+          ...data,
         },
       });
     } catch (e) {
@@ -91,6 +90,28 @@ export default class ElasticCompanyService {
       });
   }
 
+  static extractAllFactoryDetails(vendors: vendorsAttributes[]) {
+    return vendors.map((vendor) => {
+      const productsDetail = JSON.parse(vendor.factoryProductsDetail) as {
+        product: string;
+        moq: string;
+        leadTime: string;
+      }[];
+      return {
+        productsDetail,
+        location: vendor.location,
+      };
+    });
+  }
+
+  static combineFactoryProducts(productsDetails: FactoryProductDetail[][]) {
+    const res: Set<string> = new Set();
+    productsDetails.forEach((p) =>
+      p.forEach((detail) => res.add(detail.product))
+    );
+    return Array.from(res);
+  }
+
   static async syncVendorsWithES() {
     try {
       const exist = await elasticClient.indices.exists({
@@ -110,32 +131,45 @@ export default class ElasticCompanyService {
       }
 
       const syncJobs: Promise<any>[] = [];
-      const res = await sequelize.models.vendors.findAll();
-      for (const item of res) {
-        const vendor = item.get({ plain: true }) as vendorsAttributes;
-        if (vendor) {
-          const productsAndMoq = JSON.parse(vendor.productsAndMoq) as {
-            product: string;
-            moq: string;
-          }[];
-          const products: string[] = productsAndMoq.map((it) => it.product);
-          const company = await CompanyApiUtils.getCompanyWithCompanyId(
-            vendor.companyId
+
+      const allVendorCompanies = await sequelize.models.companies.findAll({
+        where: {
+          isVendor: true,
+        },
+      });
+
+      for (const item of allVendorCompanies) {
+        const vendorCompany = item.get({ plain: true }) as companiesAttributes;
+        const vendors = await sequelize.models.vendors
+          .findAll({
+            where: {
+              companyId: vendorCompany.id,
+            },
+          })
+          .then((vs) =>
+            vs.map((v) => v.get({ plain: true }) as vendorsAttributes)
           );
-          syncJobs.push(
-            elasticClient.index({
-              index: VENDOR_INDEX_NAME,
-              id: vendor.companyId,
-              document: {
-                name: company.name,
-                country: company.country,
-                locations: vendor.locations,
-                leadTime: vendor.leadTime,
-                products,
-              },
-            })
-          );
-        }
+
+        const factoriesDetails = this.extractAllFactoryDetails(vendors);
+
+        const products: string[] = this.combineFactoryProducts(
+          factoriesDetails.map((fact) => {
+            return fact.productsDetail;
+          })
+        );
+
+        syncJobs.push(
+          elasticClient.index({
+            index: VENDOR_INDEX_NAME,
+            id: vendorCompany.id,
+            document: {
+              name: vendorCompany.name,
+              country: vendorCompany.country,
+              locations: factoriesDetails.map((fact) => fact.location),
+              products,
+            },
+          })
+        );
       }
       await Promise.all(syncJobs);
     } catch (error) {

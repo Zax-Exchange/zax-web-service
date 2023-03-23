@@ -40,8 +40,13 @@ input GetCertificationsInput {
   companyId: String!
 }
 
+input GetVendorFactoriesInput {
+  vendorCompanyId: String!
+}
+
 type Query {
   getVendorDetail(data: GetVendorDetailInput): VendorDetail
+  getVendorFactories(data: GetVendorFactoriesInput): [FactoryDetail!]!
   getVendorProject(data: GetVendorProjectInput!): VendorProject
   getVendorProjects(data: GetVendorProjectsInput!): [VendorProjectOverview!]!
   getVendorGuestProjects(

@@ -1,5 +1,9 @@
 import sequelize from "../../../../postgres/dbconnection";
-import { CreateVendorInput } from "../../../resolvers-types.generated";
+import {
+  CreateFactoryInput,
+  CreateVendorInput,
+  FactoryDetail,
+} from "../../../resolvers-types.generated";
 import { v4 as uuidv4 } from "uuid";
 import ElasticCompanyService from "../../../../elastic/company/ElasticCompanyService";
 import emailService from "../../../../gcp/EmailService";
@@ -20,11 +24,8 @@ const createVendor = async (
     isActive,
     isVendor,
     isVerified,
-    leadTime,
     companyUrl,
     planId,
-    locations,
-    productsAndMoq,
     userEmail,
     stripeCustomerInfo,
   } = data;
@@ -58,16 +59,16 @@ const createVendor = async (
 
       // stripeCustomerInfo.customerId and stripeCustomerInfo.subscriptionId will be empty string here since we're not actually charging vendors yet
       await Promise.all([
-        vendors.create(
-          {
-            id: uuidv4(),
-            companyId,
-            leadTime,
-            locations,
-            productsAndMoq: JSON.stringify(productsAndMoq),
-          },
-          { transaction }
-        ),
+        // vendors.create(
+        //   {
+        //     id: uuidv4(),
+        //     companyId,
+        //     leadTime,
+        //     locations,
+        //     productsAndMoq: JSON.stringify(productsAndMoq),
+        //   },
+        //   { transaction }
+        // ),
         // NOTE: the steps below should follow what createCustomer.resolver.ts does when we implement upgrade flow for vendors
         // stripe_customers.create(
         //   {
@@ -129,9 +130,8 @@ const createVendor = async (
         id: companyId,
         name,
         country,
-        leadTime,
-        locations,
-        products: productsAndMoq.map((productAndMoq) => productAndMoq.product),
+        locations: [],
+        products: [],
       });
     });
 

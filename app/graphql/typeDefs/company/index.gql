@@ -24,10 +24,7 @@ type PermissionedCompany {
   isActive: Boolean!
   isVendor: Boolean!
   isVerified: Boolean!
-  leadTime: Int
-  locations: [String!]
-  moq: Int
-  products: [String!]
+
   power: UserPower!
   companyUrl: String!
   createdAt: Date!
@@ -46,11 +43,6 @@ type CompanyDetail {
   isVendor: Boolean!
   isVerified: Boolean!
   companyUrl: String
-
-  locations: [String!]
-  products: [String!]
-  moq: String
-  leadTime: Int
 
   createdAt: Date!
   updatedAt: Date!

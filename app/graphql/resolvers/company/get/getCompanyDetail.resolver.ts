@@ -15,11 +15,17 @@ const getCompanyDetail = async (
     const company = await CompanyApiUtils.getCompanyWithCompanyId(companyId);
 
     if (company.isVendor) {
-      const vendor = await CompanyApiUtils.getVendorWithCompanyId(companyId);
+      const factories = await CompanyApiUtils.getVendorFactoriesWithCompanyId(
+        companyId
+      );
       return {
         ...company,
-        ...vendor,
-        productsAndMoq: JSON.parse(vendor.productsAndMoq),
+        factories: factories.map((fact) => {
+          return {
+            ...fact,
+            factoryProductsDetail: JSON.parse(fact.factoryProductsDetail),
+          };
+        }),
       } as VendorDetail;
     } else {
       const customer = await CompanyApiUtils.getCustomerWithCompanyId(

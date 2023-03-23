@@ -108,12 +108,12 @@ class CompanyApiUtils {
     }
   }
 
-  static async getVendorWithCompanyId(
+  static async getVendorFactoriesWithCompanyId(
     companyId: string
-  ): Promise<vendorsAttributes> {
+  ): Promise<vendorsAttributes[]> {
     const vendors = sequelize.models.vendors;
     try {
-      const res = await vendors.findOne({
+      const res = await vendors.findAll({
         where: {
           companyId,
         },
@@ -122,7 +122,7 @@ class CompanyApiUtils {
       if (!res) {
         throw ErrorUtils.notFoundError();
       }
-      return res.get({ plain: true });
+      return res.map((fac) => fac.get({ plain: true }) as vendorsAttributes);
     } catch (e) {
       return Promise.reject(e);
     }
