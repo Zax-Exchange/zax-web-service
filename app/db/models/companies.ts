@@ -69,9 +69,7 @@ export class companies
   createCustomer!: Sequelize.HasOneCreateAssociationMixin<customers>;
 
   vendor!: vendors;
-  getVendor!: Sequelize.HasOneGetAssociationMixin<vendors>;
-  setVendor!: Sequelize.HasOneSetAssociationMixin<vendors, vendorsId>;
-  createVendor!: Sequelize.HasOneCreateAssociationMixin<vendors>;
+  getVendor!: Sequelize.HasManyGetAssociationsMixin<vendors>;
 
   // companies hasOne company_plans via companyId
   company_plan!: company_plans;

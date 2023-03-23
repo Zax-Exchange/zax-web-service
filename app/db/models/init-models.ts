@@ -314,7 +314,7 @@ export function initModels(sequelize: Sequelize) {
     foreignKey: "companyId",
     onDelete: "CASCADE",
   });
-  companies.hasOne(vendors, {
+  companies.hasMany(vendors, {
     as: "vendor",
     foreignKey: "companyId",
     onDelete: "CASCADE",
