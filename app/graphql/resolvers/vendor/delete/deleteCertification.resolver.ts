@@ -1,28 +1,37 @@
 import s3 from "../../../../aws/s3";
 import sequelize from "../../../../postgres/dbconnection";
-import { DeleteCertificationInput } from "../../../resolvers-types.generated";
+import { DeleteCertificationsInput } from "../../../resolvers-types.generated";
 
-export const deleteCertification = async (
+export const deleteCertifications = async (
   _parent: any,
-  { data }: { data: DeleteCertificationInput }
+  { data }: { data: DeleteCertificationsInput }
 ) => {
   try {
-    const { fileId } = data;
+    const { fileIds } = data;
 
-    await sequelize.models.vendor_certifications.destroy({
-      where: {
-        id: fileId,
-      },
+    await sequelize.transaction(async (transaction) => {
+      await Promise.all(
+        fileIds.map((fileId) => {
+          return sequelize.models.vendor_certifications.destroy({
+            where: {
+              id: fileId,
+            },
+          });
+        })
+      );
+      await Promise.all(
+        fileIds.map((fileId) => {
+          return s3
+            .deleteObject({
+              Bucket: `${process.env.AWS_S3_VENDOR_FILES_BUCKET!}/${
+                process.env.AWS_S3_CERT_FOLDER
+              }`,
+              Key: fileId,
+            })
+            .promise();
+        })
+      );
     });
-
-    await s3
-      .deleteObject({
-        Bucket: `${process.env.AWS_S3_VENDOR_FILES_BUCKET!}/${
-          process.env.AWS_S3_CERT_FOLDER
-        }`,
-        Key: fileId,
-      })
-      .promise();
 
     return true;
   } catch (error: any) {
@@ -32,6 +41,6 @@ export const deleteCertification = async (
 
 export default {
   Mutation: {
-    deleteCertification,
+    deleteCertifications,
   },
 };

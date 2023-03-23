@@ -1,7 +1,7 @@
 import { vendor_certificationsAttributes } from "../../../../db/models/vendor_certifications";
 import sequelize from "../../../../postgres/dbconnection";
 import {
-  FileInterface,
+  GenericFile,
   GetCertificationsInput,
 } from "../../../resolvers-types.generated";
 
@@ -9,7 +9,7 @@ const getCertifications = async (
   parent: any,
   { data }: { data: GetCertificationsInput },
   context: any
-): Promise<FileInterface[]> => {
+): Promise<GenericFile[]> => {
   const { companyId } = data;
 
   try {

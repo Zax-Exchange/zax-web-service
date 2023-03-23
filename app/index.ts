@@ -27,13 +27,13 @@ const startServer = async () => {
 
   // await syncElasticWithDB();
 
-  try {
-    await sequelize.sync({ alter: true }).then(() => console.log("db synced"));
-    await sequelize.authenticate();
-    console.log("Db connection has been established successfully.");
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
-  }
+  // try {
+  //   await sequelize.sync({ alter: true }).then(() => console.log("db synced"));
+  //   await sequelize.authenticate();
+  //   console.log("Db connection has been established successfully.");
+  // } catch (error) {
+  //   console.error("Unable to connect to the database:", error);
+  // }
   const app = express();
   const httpServer = http.createServer(app);
   const [typeDefs, resolvers] = await Promise.all([

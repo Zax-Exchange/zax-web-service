@@ -39,6 +39,10 @@ input CreateGuestProjectLinkInput {
   userId: String!
 }
 
+input CreateCertificationsInput {
+  companyId: String!
+  fileIds: [String!]!
+}
 type Mutation {
   createVendor(data: CreateVendorInput!): String!
   createVendorSubscription(
@@ -46,4 +50,5 @@ type Mutation {
   ): StripeSubscription!
   createInvoice(data: CreateInvoiceInput!): Boolean!
   createGuestProjectLink(data: CreateGuestProjectLinkInput!): Boolean!
+  createCertifications(data: CreateCertificationsInput!): Boolean!
 }

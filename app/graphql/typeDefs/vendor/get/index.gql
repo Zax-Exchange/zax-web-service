@@ -54,5 +54,5 @@ type Query {
     data: GetVendorProjectInvitationsInput!
   ): [ProjectInvitation!]!
 
-  getCertifications(data: GetCertificationsInput!): [FileInterface!]!
+  getCertifications(data: GetCertificationsInput!): [GenericFile!]!
 }

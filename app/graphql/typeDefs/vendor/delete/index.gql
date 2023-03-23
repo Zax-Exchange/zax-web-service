@@ -2,11 +2,11 @@ input DeleteInvoiceInput {
   fileId: String!
 }
 
-input DeleteCertificationInput {
-  fileId: String!
+input DeleteCertificationsInput {
+  fileIds: [String!]!
 }
 
 type Mutation {
   deleteInvoice(data: DeleteInvoiceInput!): Boolean!
-  deleteCertification(data: DeleteCertificationInput!): Boolean!
+  deleteCertifications(data: DeleteCertificationsInput!): Boolean!
 }

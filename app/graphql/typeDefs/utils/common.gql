@@ -9,3 +9,9 @@ interface FileInterface {
   filename: String!
   url: String!
 }
+
+type GenericFile implements FileInterface {
+  fileId: String!
+  filename: String!
+  url: String!
+}
