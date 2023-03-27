@@ -47,6 +47,13 @@ input CreateCertificationsInput {
   companyId: String!
   fileIds: [String!]!
 }
+
+input CreateProductImagesInput {
+  companyId: String!
+  productType: String!
+  fileIds: [String!]!
+}
+
 type Mutation {
   createVendor(data: CreateVendorInput!): String!
   createVendorSubscription(
@@ -55,5 +62,6 @@ type Mutation {
   createInvoice(data: CreateInvoiceInput!): Boolean!
   createGuestProjectLink(data: CreateGuestProjectLinkInput!): Boolean!
   createCertifications(data: CreateCertificationsInput!): Boolean!
+  createProductImages(data: CreateProductImagesInput!): Boolean!
   createFactory(data: CreateFactoryInput!): Boolean!
 }

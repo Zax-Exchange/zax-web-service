@@ -2,45 +2,47 @@ import * as Sequelize from "sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
 import { companies } from "./companies";
 
-export interface vendor_certificationsAttributes {
+export interface vendor_product_imagesAttributes {
   id: string;
   companyId?: string;
   fileName: string;
+  productType?: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export type vendor_certificationsPk = "id";
-export type vendor_certificationsId =
-  vendor_certifications[vendor_certificationsPk];
-export type vendor_certificationsOptionalAttributes = "createdAt" | "updatedAt";
-export type vendor_certificationsCreationAttributes = Optional<
-  vendor_certificationsAttributes,
-  vendor_certificationsOptionalAttributes
+export type vendor_product_imagesPk = "id";
+export type vendor_product_imagesId =
+  vendor_product_images[vendor_product_imagesPk];
+export type vendor_product_imagesOptionalAttributes = "createdAt" | "updatedAt";
+export type vendor_product_imagesCreationAttributes = Optional<
+  vendor_product_imagesAttributes,
+  vendor_product_imagesOptionalAttributes
 >;
 
-export class vendor_certifications
+export class vendor_product_images
   extends Model<
-    vendor_certificationsAttributes,
-    vendor_certificationsCreationAttributes
+    vendor_product_imagesAttributes,
+    vendor_product_imagesCreationAttributes
   >
-  implements vendor_certificationsAttributes
+  implements vendor_product_imagesAttributes
 {
   id!: string;
   companyId?: string;
   fileName!: string;
+  productType?: string;
   createdAt!: Date;
   updatedAt!: Date;
 
-  // vendor_certifications belongsTo projects via projectId
+  // vendor_product_images belongsTo projects via projectId
   company!: companies;
-  getCompany!: Sequelize.BelongsToGetAssociationMixin<companies>;
+  getProject!: Sequelize.BelongsToGetAssociationMixin<companies>;
 
   static initModel(
     sequelize: Sequelize.Sequelize
-  ): typeof vendor_certifications {
+  ): typeof vendor_product_images {
     return sequelize.define(
-      "vendor_certifications",
+      "vendor_product_images",
       {
         id: {
           type: DataTypes.UUID,
@@ -59,19 +61,23 @@ export class vendor_certifications
           type: DataTypes.STRING,
           allowNull: false,
         },
+        productType: {
+          type: DataTypes.STRING,
+          allowNull: true,
+        },
       },
       {
-        tableName: "vendor_certifications",
+        tableName: "vendor_product_images",
         schema: "public",
         timestamps: true,
         indexes: [
           {
-            name: "vendor_certifications_pKey",
+            name: "vendor_product_images_pKey",
             unique: true,
             fields: [{ name: "id" }],
           },
         ],
       }
-    ) as typeof vendor_certifications;
+    ) as typeof vendor_product_images;
   }
 }

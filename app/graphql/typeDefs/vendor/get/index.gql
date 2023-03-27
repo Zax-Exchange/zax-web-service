@@ -44,6 +44,10 @@ input GetVendorFactoriesInput {
   vendorCompanyId: String!
 }
 
+input GetProductImagesInput {
+  companyId: String!
+}
+
 type Query {
   getVendorDetail(data: GetVendorDetailInput): VendorDetail
   getVendorFactories(data: GetVendorFactoriesInput): [FactoryDetail!]!
@@ -60,4 +64,5 @@ type Query {
   ): [ProjectInvitation!]!
 
   getCertifications(data: GetCertificationsInput!): [GenericFile!]!
+  getProductImages(data: GetProductImagesInput!): [ProductImageFile!]!
 }

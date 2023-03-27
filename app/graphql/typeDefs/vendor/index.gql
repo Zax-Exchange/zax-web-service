@@ -5,6 +5,13 @@ type Invoice implements FileInterface {
   status: InvoiceStatus!
 }
 
+type ProductImageFile implements FileInterface {
+  fileId: String!
+  filename: String!
+  url: String!
+  productType: String!
+}
+
 enum InvoiceStatus {
   OPEN
   OUTDATED

@@ -1,4 +1,5 @@
 type Mutation {
   uploadInvoice(file: Upload!): Invoice!
   uploadCertification(file: Upload!): GenericFile!
+  uploadProductImage(file: Upload!): GenericFile!
 }

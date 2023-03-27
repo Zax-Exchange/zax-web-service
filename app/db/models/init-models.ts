@@ -121,6 +121,12 @@ import type {
   vendor_certificationsCreationAttributes,
 } from "./vendor_certifications";
 
+import { vendor_product_images as _vendor_product_images } from "./vendor_product_images";
+import type {
+  vendor_product_imagesAttributes,
+  vendor_product_imagesCreationAttributes,
+} from "./vendor_product_images";
+
 export {
   _sequelize_meta as sequelize_meta,
   _companies as companies,
@@ -148,6 +154,7 @@ export {
   _bid_intents as bid_intents,
   _project_invitations as project_invitations,
   _vendor_certifications as vendor_certifications,
+  _vendor_product_images as vendor_product_images,
 };
 
 export type {
@@ -199,6 +206,8 @@ export type {
   project_invitationsCreationAttributes,
   vendor_certificationsAttributes,
   vendor_certificationsCreationAttributes,
+  vendor_product_imagesAttributes,
+  vendor_product_imagesCreationAttributes,
 };
 
 export function initModels(sequelize: Sequelize) {
@@ -235,6 +244,7 @@ export function initModels(sequelize: Sequelize) {
   const project_invitations = _project_invitations.initModel(sequelize);
 
   const vendor_certifications = _vendor_certifications.initModel(sequelize);
+  const vendor_product_images = _vendor_product_images.initModel(sequelize);
 
   company_plans.belongsTo(companies, {
     as: "company",
@@ -627,6 +637,12 @@ export function initModels(sequelize: Sequelize) {
     onDelete: "CASCADE",
   });
 
+  vendor_product_images.belongsTo(companies, {
+    as: "company",
+    foreignKey: "companyId",
+    onDelete: "CASCADE",
+  });
+
   return {
     sequelize_meta,
     companies,
@@ -654,5 +670,6 @@ export function initModels(sequelize: Sequelize) {
     bid_intents,
     project_invitations,
     vendor_certifications,
+    vendor_product_images,
   };
 }
