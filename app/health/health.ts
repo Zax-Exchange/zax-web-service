@@ -18,8 +18,13 @@ const get503AfterTimeout = async (timeInMillis: number) => {
 }
 
 const getStatusCode = async (endpoint: string) => {
-  const response = await fetch(endpoint);
-  return response.status;
+  try {
+    const response = await fetch(endpoint);
+    return response.status;
+  } catch (err) {
+    console.log(err);
+    return -1;
+  }
 }
 
 const fetchStatusOrTimeoutWithin10Seconds = async (endpoint: string) => {
