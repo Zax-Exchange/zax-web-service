@@ -17,6 +17,7 @@ import jwt from "jsonwebtoken";
 import apiRouters from "./rest";
 import { syncElasticWithDB } from "./elastic/ElasticSyncUtils";
 import stripeWhRouter from "./rest/webhooks/stripe/stripeWebhook";
+import { health, healthz } from "./health/health";
 
 if (process.env.NODE_ENV !== "production") {
 }
@@ -68,6 +69,8 @@ const startServer = async () => {
   app.use("/api/webhooks/stripe", express.raw({ type: "*/*" }), stripeWhRouter);
   app.use(express.json());
   app.use(graphqlUploadExpress());
+  app.get("/healthz", healthz)
+  app.get("/health", health)
   // app.use(bodyParser.json());
 
   const frontendUrl = process.env.FRONTEND_URL;
