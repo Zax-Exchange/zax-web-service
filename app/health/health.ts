@@ -2,7 +2,7 @@ import { Request, Response } from "express"
 import fetch from "node-fetch";
 
 
-const notificationServiceHealthEndpoint = `${process.env.NOTIFICATION_SERVICE_HOST}:${process.env.NOTIFICATION_SERVICE_PORT}/api/health`;
+const notificationServiceHealthEndpoint = `https://${process.env.NOTIFICATION_SERVICE_HOST}:${process.env.NOTIFICATION_SERVICE_PORT}/api/health`;
 const webappHomePage = `${process.env.FRONTEND_URL}/login`
 const webstaticHomePage = `${process.env.WEBSTATIC_URL}`
 
