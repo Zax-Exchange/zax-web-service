@@ -21,8 +21,7 @@ COPY codegen.yml ./codegen.yml
 # build image
 RUN npm install
 RUN npm run codegen
-RUN npm run build
 
 EXPOSE 4000
 
-CMD [ "node", "--experimental-specifier-resolution=node", "dist/app/index.js" ]
+CMD [ "node", "--experimental-specifier-resolution=node", "--loader", "ts-node/esm", "app/index.ts" ]
