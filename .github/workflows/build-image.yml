@@ -33,4 +33,4 @@ jobs:
         env:
           buildtag: ${{ needs.Generate-Build-Tag.outputs.build-tag }}
         run: |
-          docker buildx build --push -t 878684683110.dkr.ecr.us-east-1.amazonaws.com/zax-exchange-webservice-repository:${buildtag} .
+          docker buildx build -t 878684683110.dkr.ecr.us-east-1.amazonaws.com/zax-exchange-webservice-repository:${buildtag} --platform linux/amd64,linux/arm64 --push .
