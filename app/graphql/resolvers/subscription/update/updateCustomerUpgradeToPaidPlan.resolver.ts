@@ -16,7 +16,7 @@ const updateCustomerUpgradeToPaidPlan = async (
   const { companyId } = data;
 
   // TODO: refactor this so we don't use hardcoded plan id
-  let PLAN_ID = "3d0fd1d3-3ce9-4359-bee2-30e3c6ccb411";
+  let PLAN_ID = "12516729-143f-4fde-b842-c2f93fdf7d7e";
   if (process.env.NODE_ENV === "production") {
     PLAN_ID = "d7e075ef-ecb2-4d94-ac0d-20765f1e18fb";
   } else if (process.env.NODE_ENV === "stage") {

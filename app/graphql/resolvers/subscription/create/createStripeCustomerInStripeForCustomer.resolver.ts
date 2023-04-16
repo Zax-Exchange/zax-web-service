@@ -42,7 +42,7 @@ const createStripeCustomerInStripeForCustomer = async (
       let invoice = existingSub.latest_invoice as Stripe.Invoice;
       let intent = invoice.payment_intent as Stripe.PaymentIntent;
 
-      if (intent.status === "succeeded") {
+      if (intent.status === "succeeded" || intent.status === "canceled") {
         // if user cancels plan, we cannot use the existing payment intent, so create a new one
         const newSub = await stripe.subscriptions.create({
           customer: customer.id,
