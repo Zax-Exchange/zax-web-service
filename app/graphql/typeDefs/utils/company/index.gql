@@ -2,6 +2,14 @@ input CheckCompanyNameInput {
   companyName: String!
 }
 
+input SendVendorSignupInvitationInput {
+  email: String!
+}
+
+type Mutation {
+  sendVendorSignupInvitation(data: SendVendorSignupInvitationInput!): Boolean!
+}
+
 type Query {
   checkCompanyName(data: CheckCompanyNameInput!): Boolean!
 }
