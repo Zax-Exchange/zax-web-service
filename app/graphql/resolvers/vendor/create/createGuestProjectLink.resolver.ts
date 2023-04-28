@@ -65,10 +65,10 @@ const createGuestProjectLink = async (
       const options = {
         from: `Zax Exchange <${process.env.NODE_MAILER_USERNAME}>`,
         to: guestEmail,
-        subject: "Zax Exchange Guest Project Form",
+        subject: `Zax Exchange RFQ Form`,
         html: `
           <p>Hi there, </p>
-          <p>You have an invitation from ${company.name} to complete the RFQ form!</p>
+          <p>You have an invitation from ${company.name} to complete its RFQ form!</p>
           <p>Please follow the link below to complete the form.</p>
           <a href="${process.env.FRONTEND_URL}/guest-project/${projectId}">Access RFQ form</a>
           <br/>
